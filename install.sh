@@ -6,7 +6,7 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 echo "install.sh: Own directory is $DIR"
 
-if [ "$IS_TRAVIS" = "true" ]; then
+if [ "$TRAVIS" = "true" ]; then
     # http://doc.owncloud.org/server/6.0/admin_manual/installation/installation_source.html#installation-of-packages-on-ubuntu-12-04-4-lts-server
     sudo add-apt-repository -y ppa:ondrej/php5
     # who cares if one or two repos are down. As long as i'm able to install
