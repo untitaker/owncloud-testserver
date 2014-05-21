@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-OWNCLOUD_VERSION="6.0.2"
+OWNCLOUD_VERSION="6.0.3"
 OC_DOWNLOAD_URL="http://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2"
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
@@ -20,10 +20,12 @@ if [ "$TRAVIS" = "true" ]; then
 fi
 
 if [ ! -d "$DIR/owncloud/" ]; then
-    echo "Downloading owncloud version: $OWNCLOUD_VERSION"
-    wget -q "$OC_DOWNLOAD_URL" -O "$DIR/owncloud.tar.bz2"
+    if [ ! -f "$DIR/owncloud.tar.bz2" ]; then
+        echo "Downloading owncloud version: $OWNCLOUD_VERSION"
+        wget "$OC_DOWNLOAD_URL" -O "$DIR/owncloud.tar.bz2"
+    fi
     echo "Extracting ownCloud"
-    tar -xjf "$DIR/owncloud.tar.bz2" "$DIR/owncloud"
+    tar xjf "$DIR/owncloud.tar.bz2"
 fi
 
 sh $DIR/reset.sh
