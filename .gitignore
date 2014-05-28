@@ -1,3 +1,4 @@
 *.tar.bz2
-owncloud/data/*journal*
+owncloud/data/*
+owncloud/config/*
 *.pyc

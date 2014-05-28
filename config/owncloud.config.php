@@ -1,7 +1,6 @@
 <?php
 $CONFIG = array (
-  'datadirectory' => './data/',
-  'dbtype' => 'sqlite3',
+  'dbtype' => 'sqlite',
   'dbname' => 'owncloud',
   'dbhost' => '',
   'dbtableprefix' => '',
