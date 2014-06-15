@@ -12,11 +12,11 @@ php_sh = os.path.abspath(os.path.join(owncloud_repo, 'php.sh'))
 
 
 def wait():
-    for i in range(10):
+    for i in range(5):
         try:
             requests.get('http://127.0.0.1:8080/')
         except requests.exceptions.ConnectionError:
-            time.sleep(1)
+            time.sleep(2 ** i)
         else:
             return True
     return False
