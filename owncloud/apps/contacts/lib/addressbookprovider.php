@@ -3,7 +3,7 @@
  * ownCloud - AddressbookProvider
  *
  * @author Thomas Tanghus
- * @copyright 2012 Thomas Tanghus (thomas@tanghus.net)
+ * @copyright 2012-2014 Thomas Tanghus (thomas@tanghus.net)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -46,7 +46,7 @@ class AddressbookProvider implements \OCP\IAddressBook {
 
 	/**
 	 * Constructor
-	 * @param integer $id
+	 * @param AddressBook $addressBook
 	 */
 	public function __construct($addressBook) {
 		$this->addressBook = $addressBook;
@@ -103,7 +103,7 @@ class AddressbookProvider implements \OCP\IAddressBook {
 				break;
 		}
 		
-		if(in_array($row['name'], Properties::$multi_properties)) {
+		if(in_array($row['name'], Properties::$multiProperties)) {
 			if(!isset($results[$row['contactid']])) {
 				$results[$row['contactid']] = array('id' => $row['contactid'], $row['name'] => array($value));
 			} elseif(!isset($results[$row['contactid']][$row['name']])) {
@@ -175,12 +175,16 @@ class AddressbookProvider implements \OCP\IAddressBook {
 	*/
 	public function createOrUpdate($properties) {
 		$id = null;
+
+		/**
+		 * @var \OCA\Contacts\VObject\VCard
+		 */
 		$vcard = null;
 		if(array_key_exists('id', $properties)) {
 			// TODO: test if $id belongs to this addressbook
 			$id = $properties['id'];
 			// TODO: Test $vcard
-			$vcard = App::getContactVCard($properties['id']);
+			$vcard = $this->addressBook->getChild($properties['id']);
 			foreach(array_keys($properties) as $name) {
 				if(isset($vcard->{$name})) {
 					unset($vcard->{$name});
@@ -191,8 +195,8 @@ class AddressbookProvider implements \OCP\IAddressBook {
 			$uid = substr(md5(rand().time()), 0, 10);
 			$vcard->add('UID', $uid);
 			try {
-				$id = VCard::add($this->id, $vcard, null, true);
-			} catch(Exception $e) {
+				$id = $this->addressBook->addChild($vcard);
+			} catch(\Exception $e) {
 				\OCP\Util::writeLog('contacts', __METHOD__ . ' ' . $e->getMessage(), \OCP\Util::ERROR);
 				return false;
 			}
@@ -235,7 +239,7 @@ class AddressbookProvider implements \OCP\IAddressBook {
 
 		try {
 			VCard::edit($id, $vcard);
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			\OCP\Util::writeLog('contacts', __METHOD__ . ' ' . $e->getMessage(), \OCP\Util::ERROR);
 			return false;
 		}
@@ -251,7 +255,7 @@ class AddressbookProvider implements \OCP\IAddressBook {
 	*/
 	public function delete($id) {
 		try {
-			$query = 'SELECT * FROM `*PREFIX*contacts_cards` WHERE `id` = ? AND `addressbookid` = ?';
+			$query = 'SELECT COUNT(*) as `count` FROM `*PREFIX*contacts_cards` WHERE `id` = ? AND `addressbookid` = ?';
 			$stmt = \OCP\DB::prepare($query);
 			$result = $stmt->execute(array($id, $this->id));
 			if (\OCP\DB::isError($result)) {
@@ -259,7 +263,7 @@ class AddressbookProvider implements \OCP\IAddressBook {
 					\OCP\Util::ERROR);
 				return false;
 			}
-			if($result->numRows() === 0) {
+			if((int)$result['count'] === 0) {
 				\OCP\Util::writeLog('contacts', __METHOD__
 					. 'Contact with id ' . $id . 'doesn\'t belong to addressbook with id ' . $this->id, 
 					\OCP\Util::ERROR);

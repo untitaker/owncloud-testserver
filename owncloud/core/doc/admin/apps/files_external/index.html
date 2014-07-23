@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>External storage support &mdash; ownCloud Administrators Manual 6.0 documentation</title>
+    <title>External storage support &mdash; ownCloud Administrators Manual 7.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '6.0',
+        VERSION:     '7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Administrators Manual 6.0 documentation" href="../../index.html" />
+    <link rel="top" title="ownCloud Administrators Manual 7.0 documentation" href="../../index.html" />
     <link rel="up" title="Apps" href="../index.html" />
     <link rel="next" title="Sharing" href="../files_sharing/index.html" />
     <link rel="prev" title="Encryption" href="../files_encryption/index.html" />
@@ -113,7 +113,7 @@
 										<li><a href="../../contents.html">Overview</a></li>
 									</ul>
                   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">ownCloud 6.0 Admin Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">ownCloud 7.0 Admin Documentation</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
@@ -161,6 +161,11 @@ The external storage devices serves as a secondary storage device within ownClou
 <p>The ownCloud Admin has the ability to create such a mount.
 In addition, the ownCloud Admin may decide to provide the end user the ability to create the mount.
 The mounts may be created on a per-user, per group, or all user basis.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Using <tt class="docutils literal"><span class="pre">$user</span></tt> in any option gets replaced by the current user. This can be used e.g to
+specify users&#8217; own paths easily by just writing <tt class="docutils literal"><span class="pre">/home/$user/</span></tt>.</p>
+</div>
 <div class="section" id="supported-mounts">
 <h2>Supported mounts<a class="headerlink" href="#supported-mounts" title="Permalink to this headline">¶</a></h2>
 <p>The following lists the supported storage types.</p>

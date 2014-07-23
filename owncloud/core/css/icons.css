@@ -22,11 +22,6 @@
 	background-image: url('../img/loading-small.gif');
 }
 
-.icon-noise {
-	background-image: url('../img/noise.png');
-	background-repeat: repeat;
-}
-
 
 
 
@@ -93,6 +88,10 @@
 
 .icon-mail {
 	background-image: url('../img/actions/mail.svg');
+}
+
+.icon-menu {
+	background-image: url('../img/actions/menu.svg');
 }
 
 .icon-more {
@@ -230,6 +229,12 @@
 }
 .icon-folder {
 	background-image: url('../img/places/folder.svg');
+}
+.icon-filetype-text {
+	background-image: url('../img/filetypes/text.svg');
+}
+.icon-filetype-folder {
+	background-image: url('../img/filetypes/folder.svg');
 }
 
 .icon-home {

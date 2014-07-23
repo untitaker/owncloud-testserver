@@ -14,5 +14,7 @@ $CONFIG = array (
   array (
     0 => '127.0.0.1:8080',
   ),
-  'version' => '6.0.2.2',
+  'version' => '7.0.0.8',
+  'theme' => '',
+  'maintenance' => false,
 );
