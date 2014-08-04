@@ -113,7 +113,7 @@
 										<li><a href="../contents.html">Overview</a></li>
 									</ul>
                   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 7.0 Admin Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
@@ -134,12 +134,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../apps/index.html">Apps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cron/index.html">Driving Events with Cron</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../quota/index.html">Quota Calculation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../sharing_api/index.html">Sharing API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../config/index.html">The Configuration File</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues</a></li>
 </ul>
 
@@ -201,8 +196,8 @@ visible!</li>
 <ul class="simple">
 <li>For a guideline on which database system to choose, and on pointers how to
 set them up for being available for php/ownCloud, see
-<a class="reference internal" href="../configuration/configuration_database.html"><em>MySQL/Postgres/SQLite Support</em></a></li>
-<li>Note that you will only be able to choose among the php database connectors
+<a class="reference internal" href="../configuration/configuration_database.html"><em>Database Configuration</em></a></li>
+<li>Note that you will only be able to choose among the PHP database connectors
 which are actually installed on the system.</li>
 <li>It is not easily possible to migrate to another database system once you have
 set up your ownCloud to use a specific one. So make sure to carefully
@@ -247,14 +242,18 @@ name you specify.</li>
 <div class="section" id="note">
 <h2>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h2>
 <p>ownCloud will take the URL used to access the Installation Wizard and insert
-that into the config.php file for the ‘trusted_domains’ setting.</p>
-<p>Users will only be able to log into ownCloud when they are using a domain name
-listed in the ‘trusted_domans’ setting.</p>
+that into the config.php file for the ‘trusted_domains’ setting.
+All needed domain names of the owncloud server go into the
+&#8216;trusted_domains&#8217; setting. No domain names of clients go there.</p>
+<p>Users will only be able to log into ownCloud when they point their browsers to a
+domain name listed in the ‘trusted_domains’ setting. An IPv4 address can be
+specified instead of a domain name.</p>
 <p>In the event that a load balancer is in place, there will be no issues, as long
 as it sends the correct X-Forwarded-Host header.</p>
-<p>It should be noted that the loopback address, 127.0.0.1, is whitelisted and
+<p>It should be noted that the loopback address, &#8216;127.0.0.1&#8217;, is whitelisted and
 therefore users on the ownCloud server who access ownCloud with the loopback
-will successfully login. In the event that an improper URL is used, the
+interface will be able to successfully login.
+In the event that an improper URL is used, the
 following error will appear:</p>
 <img alt="../_images/untrusted-domain.png" src="../_images/untrusted-domain.png" />
 <p>For configuration examples, refer to the <tt class="file docutils literal"><span class="pre">config/config.sample.php</span></tt>
