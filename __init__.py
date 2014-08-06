@@ -48,5 +48,5 @@ class ServerMixin(object):
                                   'test5', 'test6', 'test7', 'test8', 'test9',
                                   'test10')
 
-        return {'url': url, 'collection': collection,
-                'username': 'asdf', 'password': 'asdf'}
+        return {'url': url, 'collection': collection, 'username': 'asdf',
+                'password': 'asdf', 'unsafe_href_chars': ''}
