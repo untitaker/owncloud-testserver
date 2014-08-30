@@ -15,7 +15,11 @@ def wait():
     for i in range(5):
         try:
             requests.get('http://127.0.0.1:8080/')
-        except requests.exceptions.ConnectionError:
+        except Exception as e:
+            # Don't know exact exception class, don't care.
+            # Also, https://github.com/kennethreitz/requests/issues/2192
+            if 'connection refused' not in str(e).lower():
+                raise
             time.sleep(2 ** i)
         else:
             return True
