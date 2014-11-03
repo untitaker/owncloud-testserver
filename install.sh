@@ -19,13 +19,15 @@ if [ "$TRAVIS" = "true" ]; then
         php5-intl php5-mcrypt
 fi
 
-if [ ! -d "$DIR/owncloud/" ]; then
-    if [ ! -f "$DIR/owncloud.tar.bz2" ]; then
+cd "$DIR"
+
+if [ ! -d owncloud ]; then
+    if [ ! -f owncloud.tar.bz2 ]; then
         echo "Downloading owncloud version: $OWNCLOUD_VERSION"
-        wget "$OC_DOWNLOAD_URL" -O "$DIR/owncloud.tar.bz2"
+        wget "$OC_DOWNLOAD_URL" -O owncloud.tar.bz2
     fi
     echo "Extracting ownCloud"
-    tar xjf "$DIR/owncloud.tar.bz2"
+    tar xjf owncloud.tar.bz2
 fi
 
 sh $DIR/reset.sh
