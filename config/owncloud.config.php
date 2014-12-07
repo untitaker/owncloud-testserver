@@ -1,20 +1,13 @@
 <?php
 $CONFIG = array (
-  'dbtype' => 'sqlite',
-  'dbname' => 'owncloud',
-  'dbhost' => '',
-  'dbtableprefix' => '',
-  'dbuser' => '',
-  'dbpassword' => '',
-  'installed' => true,
-  'loglevel' => '0',
-  'instanceid' => 'ocianh3spfgc',
-  'passwordsalt' => '06fdeecb00da51964133e32e50878e',
+  'instanceid' => 'oc26e8523e55',
+  'passwordsalt' => '35f730eb71515ece4b5e514a5c53e1',
   'trusted_domains' => 
   array (
     0 => '127.0.0.1:8080',
   ),
+  'datadirectory' => '/home/untitaker/projects/owncloud-testserver/owncloud/data',
+  'dbtype' => 'sqlite3',
   'version' => '7.0.1.1',
-  'theme' => '',
-  'maintenance' => false,
+  'installed' => true,
 );
