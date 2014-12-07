@@ -41,20 +41,31 @@ class ServerMixin(object):
     @pytest.fixture
     def get_storage_args(self):
         def inner(collection='test'):
-            url = 'http://127.0.0.1:8080'
-            if self.storage_class.fileext == '.vcf':
-                url += '/remote.php/carddav/addressbooks/asdf/'
-            elif self.storage_class.fileext == '.ics':
-                url += '/remote.php/caldav/calendars/asdf/'
+            base = 'http://127.0.0.1:8080'
+            fileext = self.storage_class.fileext
+            if fileext == '.vcf':
+                dav_path = '/remote.php/carddav/addressbooks/asdf/'
+            elif fileext == '.ics':
+                dav_path = '/remote.php/caldav/calendars/asdf/'
             else:
-                raise RuntimeError(self.storage_class.fileext)
+                raise RuntimeError(fileext)
 
-            # the following collections are setup in ownCloud
             if collection is not None:
-                assert collection in ('test', 'test1', 'test2', 'test3',
-                                      'test4', 'test5', 'test6', 'test7',
-                                      'test8', 'test9', 'test10')
+                if fileext == '.ics':
+                    requests.post(
+                        base + '/index.php/apps/calendar/ajax/calendar/new.php',
+                        data=dict(active=0, color='#ff0000', id='new',
+                                  name=collection),
+                        auth=('asdf', 'asdf')
+                    )
+                else:
+                    requests.post(
+                        base + '/index.php/apps/contacts/addressbook/local/add',
+                        data=dict(displayname=collection, description=''),
+                        auth=('asdf', 'asdf')
+                    )
 
-            return {'url': url, 'collection': collection, 'username': 'asdf',
-                    'password': 'asdf', 'unsafe_href_chars': ''}
+            return {'url': base + dav_path, 'collection': collection,
+                    'username': 'asdf', 'password': 'asdf',
+                    'unsafe_href_chars': ''}
         return inner
