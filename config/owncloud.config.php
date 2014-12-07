@@ -6,7 +6,6 @@ $CONFIG = array (
   array (
     0 => '127.0.0.1:8080',
   ),
-  'datadirectory' => '/home/untitaker/projects/owncloud-testserver/owncloud/data',
   'dbtype' => 'sqlite3',
   'version' => '7.0.1.1',
   'installed' => true,
