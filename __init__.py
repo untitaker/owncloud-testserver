@@ -52,18 +52,20 @@ class ServerMixin(object):
 
             if collection is not None:
                 if fileext == '.ics':
-                    requests.post(
+                    r = requests.post(
                         base + '/index.php/apps/calendar/ajax/calendar/new.php',
                         data=dict(active=0, color='#ff0000', id='new',
                                   name=collection),
                         auth=('asdf', 'asdf')
-                    )
+                    ).json()
+                    assert r.get('status', None) == 'success', r
                 else:
-                    requests.post(
+                    r = requests.post(
                         base + '/index.php/apps/contacts/addressbook/local/add',
                         data=dict(displayname=collection, description=''),
                         auth=('asdf', 'asdf')
-                    )
+                    ).json()
+                    assert r.get('uri', None) == collection, r
 
             return {'url': base + dav_path, 'collection': collection,
                     'username': 'asdf', 'password': 'asdf',
