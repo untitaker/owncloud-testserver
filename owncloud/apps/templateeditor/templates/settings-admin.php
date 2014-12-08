@@ -1,6 +1,6 @@
 <div class="section" id="mailTemplateSettings" >
 
-	<h2><?php p($l->t('Mail templates'));?></h2>
+	<h2><?php p($l->t('Mail Templates'));?></h2>
 
 	<div class="actions">
 
@@ -16,7 +16,7 @@
 		<div>
 			<label for="mts-template"><?php p($l->t('Template'));?></label>
 			<select id="mts-template">
-				<option value="" disabled selected><?php p($l->t('Please choose a template')); ?></option>
+				<option value="" selected><?php p($l->t('Please choose a template')); ?></option>
 				<?php foreach($_['editableTemplates'] as $template => $caption): ?>
 				<option value="<?php p($template); ?>"><?php p($caption); ?></option>
 				<?php endforeach; ?>

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Encrypting Files &mdash; ownCloud User Manual 7.0 documentation</title>
+    <title>Encrypting Your ownCloud Files &mdash; ownCloud User Manual 7.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -116,7 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 7.0 User Documentation</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">New in ownCloud 7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New for Users in ownCloud 7</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The ownCloud Web Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Files &amp; Synchronization</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="filesweb.html">Accessing your Files Using the Web Interface</a></li>
@@ -125,10 +125,11 @@
 <li class="toctree-l2"><a class="reference internal" href="server_to_server_using.html">Using Server-to-Server Sharing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deletedfiles.html">Managing Deleted Files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sync.html">Desktop Synchronization</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Encrypting Files</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#enabling-the-encryption-app">Enabling the Encryption App</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#decrypting-encrypted-files">Decrypting Encrypted Files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#settings">Settings</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Encrypting Your ownCloud Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-encryption">Using Encryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sharing-encrypted-files">Sharing Encrypted Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#removing-encryption">Removing Encryption</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#files-not-encrypted">Files Not Encrypted</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="quota.html">Storage Quota</a></li>
@@ -136,10 +137,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../documents.html">Collaborative Document Editing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bookmarks.html">Using the Bookmarks App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../documents.html">Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../migration.html">User Account Migration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Changing Preferences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Setting Your Preferences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../external_storage/google_drive.html">Configuring External Storage</a></li>
 </ul>
 
@@ -153,81 +153,107 @@
 				<div class="span9">
 					<div class="page-content">
 						
-  <div class="section" id="encrypting-files">
-<h1>Encrypting Files<a class="headerlink" href="#encrypting-files" title="Permalink to this headline">¶</a></h1>
-<p>By default, ownCloud provides an Encryption app.  This app enables encryption
-of all files stored in your ownCloud. Once enabled by the administrator, all of
-your files are encrypted automatically.</p>
-<p>Encryption and decryption always occurs on the server side. This enables you to
-continue to use all other apps to view and edit data. However, this method of
-encryption also means that the server administrator can intercept your data.
-Server-side encryption is especially useful if you use external storage. It
-ensures that the external storage provider is not able to read your data.</p>
+  <div class="section" id="encrypting-your-owncloud-files">
+<h1>Encrypting Your ownCloud Files<a class="headerlink" href="#encrypting-your-owncloud-files" title="Permalink to this headline">¶</a></h1>
+<p>ownCloud includes an Encryption app, and when it is enabled by your ownCloud
+administrator all of your ownCloud data files are automatically encrypted.
+Encryption is server-wide, so when it is enabled you cannot choose to keep your
+files unencrypted. You don&#8217;t have to do anything special, as it uses your
+ownCloud login as the password for your unique private encryption key. Just log
+in and out and manage and share your files as you normally do, and you can
+still change your password whenever you want.</p>
+<p>Its main purpose is to encrypt files on remote storage services that are
+connected to your ownCloud server, such as Dropbox and Google Drive. This is an
+easy and seamless way to protect your files on remote storage. You can share
+your remote files through ownCloud in the usual way, however you cannot share
+your encrypted files directly from Dropbox, Google Drive, or whatever remote
+service you are using, because the encryption keys are stored on your ownCloud
+server, and are never exposed to outside service providers.</p>
+<p>If your ownCloud server is not connected to any remote storage services, then
+it is better to use some other form of encryption such as file-level or whole
+disk encryption. Because the keys are kept on your ownCloud server, it is
+possible for your ownCloud admin to snoop in your files, and if the server is
+compromised the intruder may get access to your files. (Read
+<a class="reference external" href="https://owncloud.org/blog/how-owncloud-uses-encryption-to-protect-your-data/">How ownCloud uses encryption to protect your data</a>
+to learn more.)</p>
+<div class="section" id="using-encryption">
+<h2>Using Encryption<a class="headerlink" href="#using-encryption" title="Permalink to this headline">¶</a></h2>
+<p>ownCloud encryption is pretty much set it and forget it, but you have a few
+options you can use.</p>
+<p>When your ownCloud admin enables encryption for the first time, you must log
+out and then log back in to create your encryption keys and encrypt your files.
+When encryption has been enabled on your ownCloud server you will see a yellow
+banner on your Files page warning you to log out and then log back in.</p>
+<div class="figure">
+<img alt="../_images/encryption1.png" src="../_images/encryption1.png" />
+</div>
+<p>When you log back it takes a few minutes to work, depending on how many
+files you have, and then you are returned to your default ownCloud page.</p>
+<div class="figure">
+<img alt="../_images/encryption2.png" src="../_images/encryption2.png" />
+</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Once the Encryption app is enabled, your log-in password is required
-to decrypt and access your data. By default, your data will be lost if you
-cannot use your log-in password to retrieve it. If you want to protect yourself
-against password loss, store your log-in password in a secure place or enable
-the recovery-key feature as described below.</p>
+<p class="last">You must never lose your ownCloud password, because you will lose
+access to your files. Though there is an optional recovery option that your
+ownCloud administrator may enable; see the Recovery Key Password section to
+learn about this.</p>
 </div>
-<p>The current version of the Encryption app encrypts all files stored in ownCloud except the following:</p>
+</div>
+<div class="section" id="sharing-encrypted-files">
+<h2>Sharing Encrypted Files<a class="headerlink" href="#sharing-encrypted-files" title="Permalink to this headline">¶</a></h2>
+<p>Only users who have private encryption keys have access to shared encrypted
+files and folders. Users who have not yet created their private encryption keys
+will not have access to encrypted shared files; they will see folders and
+filenames, but will not be able to open or download the files. They will see a
+yellow warning banner that says &#8220;Encryption App is enabled but your keys are not
+initialized, please log-out and log-in again.&#8221;</p>
+<p>Share owners may need to re-share files after encryption is enabled; users
+trying to access the share will see a message advising them to ask the share
+owner to re-share the file with them. For individual shares, un-share and
+re-share the file. For group shares, share with any individuals who can&#8217;t access
+the share. This updates the encryption, and then the share owner can remove the
+individual shares.</p>
+<div class="section" id="recovery-key-password">
+<h3>Recovery Key Password<a class="headerlink" href="#recovery-key-password" title="Permalink to this headline">¶</a></h3>
+<p>If your ownCloud administrator has enabled the recovery key feature, you can
+choose to use this feature for your account. If you enable &#8220;Password recovery&#8221;
+the administrator can read your data with a special password. This feature
+enables the administrator to recover your files in the event you lose your
+ownCloud password. If the recovery key is not enabled, then there is no way to
+restore your files if you lose your login password.</p>
+<div class="figure">
+<img alt="../_images/encryption3.png" src="../_images/encryption3.png" />
+</div>
+</div>
+</div>
+<div class="section" id="removing-encryption">
+<h2>Removing Encryption<a class="headerlink" href="#removing-encryption" title="Permalink to this headline">¶</a></h2>
+<p>If your ownCloud administrator elects to disable the Encryption app, you will
+be prompted to go to your Personal page and enter your password on the
+Encryption form to decrypt your files.</p>
+<div class="figure">
+<img alt="../_images/encryption4.png" src="../_images/encryption4.png" />
+</div>
+<p>If your files decrypt successfully, you can click the <tt class="docutils literal"><span class="pre">Delete</span> <span class="pre">encryption</span>
+<span class="pre">keys</span></tt> button. There is no reason to save them after disabling decryption,
+because if encryption is enabled again you&#8217;ll generate a new set of keys. Your
+keys are preserved in case something goes wrong with the decryption and you
+need your keys to access your files. Which is not likely to happen.</p>
+</div>
+<div class="section" id="files-not-encrypted">
+<h2>Files Not Encrypted<a class="headerlink" href="#files-not-encrypted" title="Permalink to this headline">¶</a></h2>
+<p>Only the data in your files is encrypted, and not the filenames or folder
+structures. These files are never encrypted:</p>
 <ul class="simple">
-<li>Old files in the trash bin (files that were deleted prior to the encryption app being enabled).</li>
+<li>Old files in the trash bin.</li>
 <li>Image thumbnails from the Gallery app.</li>
 <li>Previews from the Files app.</li>
 <li>The search index from the full text search app.</li>
+<li>Third-party app data</li>
 </ul>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">All data is stored directly on the ownCloud server, eliminating
-exposure of  your data to third party storage providers.</p>
-</div>
-<div class="section" id="enabling-the-encryption-app">
-<h2>Enabling the Encryption App<a class="headerlink" href="#enabling-the-encryption-app" title="Permalink to this headline">¶</a></h2>
-<p>Though ownCloud provides the Encryption app in the server download, it is
-disabled by default.  To enable the Encryption app:</p>
-<ol class="arabic">
-<li><p class="first">Access the ownCloud server as administrator.</p>
-</li>
-<li><p class="first">In the Apps Selection Menu, click &#8220;+&#8221;.</p>
-<p>All apps appear in the Apps Information field.</p>
-</li>
-<li><p class="first">Scroll down the apps list and click the Encryption app.</p>
-<div class="figure">
-<img alt="../_images/encryption_enabling.png" src="../_images/encryption_enabling.png" />
-</div>
-<p><strong>Encryption app (Enabling)</strong></p>
-</li>
-<li><p class="first">Click the <em class="guilabel">Enable</em> button.</p>
-<p>The Encryption app is enabled.</p>
-</li>
-</ol>
-</div>
-<div class="section" id="decrypting-encrypted-files">
-<h2>Decrypting Encrypted Files<a class="headerlink" href="#decrypting-encrypted-files" title="Permalink to this headline">¶</a></h2>
-<p>If the Encryption app is disabled after users have already stored encrypted
-data, users are prompted to decrypt their files again in their personal
-settings. Once done, users can continue to use their ownCloud without
-encryption.</p>
-</div>
-<div class="section" id="settings">
-<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
-<p>Once the encryption app is enabled, additional settings appear on the Admin
-settings page.  These settings include the ability to:</p>
-<ul class="simple">
-<li>Set a recovery key password.</li>
-<li>Enable or disable the use of the recovery key password.</li>
-</ul>
-<div class="section" id="recovery-key-password">
-<h3>Recovery Key Password<a class="headerlink" href="#recovery-key-password" title="Permalink to this headline">¶</a></h3>
-<p>If the administrator enabled the recovery key feature, you can choose to use
-this feature for your account. If you enable &#8220;Password recovery&#8221; the
-administrator can read your data with a special password. This feature enables
-the administrator to recover your files in the event you lose your password. If
-the recovery key is not enabled, then there is no way to restore your files if
-you lose your login password.</p>
-</div>
+<p>There may be other files that are not encrypted; only files that are exposed to
+third-party storage providers are guaranteed to be encrypted.</p>
 <div class="section" id="change-private-key-password">
 <h3>Change Private Key Password<a class="headerlink" href="#change-private-key-password" title="Permalink to this headline">¶</a></h3>
 <p>This option is only available if your log-in password, but not your encryption

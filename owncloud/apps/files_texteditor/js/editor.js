@@ -158,7 +158,7 @@ function doFileSave() {
 				if (jsondata.status != 'success') {
 					// Save failed
 					$('#editor_save').text(t('files_texteditor', 'Save'));
-					$('#notification').html(t('files_texteditor', 'Failed to save file'));
+					$('#notification').text(jsondata.data.message);
 					$('#notification').fadeIn();
 					$('#editor').attr('data-edited', 'true');
 					$('#editor').attr('data-saving', 'false');
@@ -189,7 +189,7 @@ function giveEditorFocus() {
 // Loads the file editor. Accepts two parameters, dir and filename.
 function showFileEditor(dir, filename) {
 	// Check if unsupported file format
-	if(FileActions.getCurrentMimeType() === 'text/rtf') {
+	if(FileActions.currentFile && FileActions.getCurrentMimeType() === 'text/rtf') {
 		// Download the file instead.
 		window.location = OC.filePath('files', 'ajax', 'download.php') + '?files=' + encodeURIComponent(filename) + '&dir=' + encodeURIComponent($('#dir').val());
 	} else {
@@ -213,6 +213,7 @@ function showFileEditor(dir, filename) {
 					if (result.status === 'success') {
 						// Save mtime
 						$('#editor').attr('data-mtime', result.data.mtime);
+						$('#editor').attr('data-saving', 'false');
 						// Initialise the editor
 						if (window.FileList){
 							FileList.setViewerMode(true);
@@ -260,7 +261,7 @@ function showFileEditor(dir, filename) {
 								sender: "editor"
 							},
 							exec: function () {
-								if(!$('#editor').attr('data-saving')){
+								if($('#editor').attr('data-saving') == 'false'){
 									doFileSave();
 								}
 							}
@@ -382,7 +383,7 @@ $(document).ready(function () {
 		FileActions.setDefault('application/x-tex', 'Edit');
 
 	}
-	
+
 	//legacy search result customization
 	OC.search.customResults.Text = function (row, item) {
 		var text = item.link.substr(item.link.indexOf('download') + 8);

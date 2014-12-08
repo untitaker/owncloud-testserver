@@ -21,7 +21,6 @@ require_once 'preview/mp3.php';
 require_once 'preview/pdf.php';
 require_once 'preview/svg.php';
 require_once 'preview/txt.php';
-require_once 'preview/unknown.php';
 require_once 'preview/office.php';
 
 class Preview {
@@ -59,6 +58,7 @@ class Preview {
 	//preview providers
 	static private $providers = array();
 	static private $registeredProviders = array();
+	static private $enabledProviders = array();
 
 	/**
 	 * @var \OCP\Files\FileInfo
@@ -537,7 +537,9 @@ class Preview {
 		if (is_null($this->preview)) {
 			$this->getPreview();
 		}
-		$this->preview->show($mimeType);
+		if ($this->preview instanceof \OC_Image) {
+			$this->preview->show($mimeType);
+		}
 	}
 
 	/**
@@ -663,7 +665,37 @@ class Preview {
 	 * @return void
 	 */
 	public static function registerProvider($class, $options = array()) {
-		self::$registeredProviders[] = array('class' => $class, 'options' => $options);
+		/**
+		* Only register providers that have been explicitly enabled
+		*
+		* The following providers are enabled by default:
+		*  - OC\Preview\Image
+		*  - OC\Preview\MP3
+		*  - OC\Preview\TXT
+		*  - OC\Preview\MarkDown
+		*
+		* The following providers are disabled by default due to performance or privacy concerns:
+		*  - OC\Preview\MSOfficeDoc
+		*  - OC\Preview\MSOffice2003
+		*  - OC\Preview\MSOffice2007
+		*  - OC\Preview\OpenDocument
+		*  - OC\Preview\StarOffice
+		*  - OC\Preview\SVG
+		*  - OC\Preview\Movies
+		*  - OC\Preview\PDF
+		*/
+		if(empty(self::$enabledProviders)) {
+				self::$enabledProviders = \OC_Config::getValue('enabledPreviewProviders', array(
+						'OC\Preview\Image',
+						'OC\Preview\MP3',
+						'OC\Preview\TXT',
+						'OC\Preview\MarkDown',
+					));
+			}
+
+		if(in_array($class, self::$enabledProviders)) {
+			self::$registeredProviders[] = array('class' => $class, 'options' => $options);
+		}
 	}
 
 	/**
@@ -672,8 +704,7 @@ class Preview {
 	 */
 	private static function initProviders() {
 		if (!\OC_Config::getValue('enable_previews', true)) {
-			$provider = new Preview\Unknown(array());
-			self::$providers = array($provider->getMimeType() => $provider);
+			self::$providers = array();
 			return;
 		}
 
@@ -745,10 +776,18 @@ class Preview {
 			self::initProviders();
 		}
 
-		//remove last element because it has the mimetype *
-		$providers = array_slice(self::$providers, 0, -1);
-		foreach ($providers as $supportedMimeType => $provider) {
-			if (preg_match($supportedMimeType, $mimeType)) {
+		// FIXME: Ugly hack to prevent SVG of being returned if the SVG
+		// provider is not enabled.
+		// This is required because the preview system is designed in a
+		// bad way and relies on opt-in with asterisks (i.e. image/*)
+		// which will lead to the fact that a SVG will also match the image
+		// provider.
+		if($mimeType === 'image/svg+xml' && !array_key_exists('/image\/svg\+xml/', self::$providers)) {
+			return false;
+		}
+
+		foreach(self::$providers as $supportedMimetype => $provider) {
+			if(preg_match($supportedMimetype, $mimeType)) {
 				return true;
 			}
 		}

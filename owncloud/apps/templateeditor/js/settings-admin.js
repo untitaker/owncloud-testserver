@@ -18,7 +18,13 @@ $(document).ready(function() {
 		function() {
 			var theme = $( '#mts-theme' ).val();
 			var template = $( this ).val();
-			loadTemplate(theme, template);
+			if (template) {
+				loadTemplate(theme, template);
+			} else {
+				//hide editor
+				$( '#mailTemplateSettings .templateEditor').hide(400);
+				$( '#mailTemplateSettings .templateEditor + .actions').hide(400);
+			}
 		}
 	);
 
@@ -56,7 +62,7 @@ $(document).ready(function() {
 			OC.msg.startSaving('#mts-msg');
 			$.ajax({
 				type: "DELETE",
-				url: OC.generateUrl('apps/files_sharing/settings/mailtemplate'),
+				url: OC.generateUrl('apps/templateeditor/settings/mailtemplate'),
 				data: { theme: theme, template: template }
 			}).done(function() {
 				var data = { status:'success', data:{message:t('files_sharing', 'Reset')} };

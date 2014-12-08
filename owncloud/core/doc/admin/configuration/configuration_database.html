@@ -29,7 +29,7 @@
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
     <link rel="top" title="ownCloud Administrators Manual 7.0 documentation" href="../index.html" />
     <link rel="up" title="Configuration" href="index.html" />
-    <link rel="next" title="Use Server-Side Encryption" href="configuration_encryption.html" />
+    <link rel="next" title="Using Server-Side Encryption" href="configuration_encryption.html" />
     <link rel="prev" title="Custom Client Configuration" href="configuration_custom_clients.html" />
 <script type="text/javascript">
 (function () {
@@ -116,15 +116,19 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 </ul>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 7</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Configuration</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="configuration_apps.html">Apps Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_users.html">User Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auth_ldap.html">User Authentication with LDAP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="server_to_server_managing.html">Managing Server-to-Server Sharing Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server_to_server_managing.html">Configuring Server-to-Server Sharing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="background_jobs.html">Defining Background Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuring_documents.html">Configuring the Collaborative Documents App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuring_documents.html#enabling-the-documents-app">Enabling the Documents App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_assets.html">Asset Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_3rdparty.html">Using Third Party Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration-antivirus.html">Configuring the ClamAV Antivirus Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_automation.html">Defining Automatic Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_custom_clients.html">Custom Client Configuration</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Database Configuration</a><ul>
@@ -133,19 +137,22 @@
 <li class="toctree-l3"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_encryption.html">Use Server-Side Encryption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_encryption.html">Using Server-Side Encryption</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_knowledgebase.html">Knowledge Base Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_language.html">Language Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_logging.html">Logging Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_mail.html">Mail Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_preview.html">Preview Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_reverseproxy.html">Reverse Proxy Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_file_sharing.html">File Sharing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuring_big_file_upload.html">Uploading big files &gt; 512MB (as set by default)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuring_big_file_upload.html#enabling-uploading-big-files">Enabling uploading big files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="custom_mount_config_gui.html">Custom Mount Configuration (GUI)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="custom_mount_config.html">Custom Mount Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_mount_config_gui.html">Configuring External Storage (GUI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_mount_config.html">Configuring External Storage (Configuration File)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="custom_user_backend.html">Custom User Backend Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="xsendfile.html">Serving static files via web server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuring_search.html">Enabling Full-Text Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_config_sample_php.html">Config.php Parameters</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
@@ -298,7 +305,39 @@ like this:</p>
 <span class="na">pgsql.log_notice</span> <span class="o">=</span> <span class="s">0</span>
 </pre></div>
 </div>
-<p>Now you need to create a database user and the database itself by using the
+<p>The default configuration for PostgreSQL (at least in Ubuntu 14.04) is to use the peer authentication method. Check <tt class="file docutils literal"><span class="pre">/etc/postgresql/9.3/main/pg_hba.conf</span></tt> to find out which authentication method is used in your setup.
+To start the postgres command line mode use:</p>
+<div class="highlight-python"><pre>sudo -u postgres psql -d template1</pre>
+</div>
+<p>Then a <strong>template1=#</strong> prompt will appear. Now enter the following lines and confirm them with the enter key:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">USER</span> <span class="n">username</span> <span class="k">CREATEDB</span><span class="p">;</span>
+<span class="k">CREATE</span> <span class="k">DATABASE</span> <span class="n">owncloud</span> <span class="k">OWNER</span> <span class="n">username</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>You can quit the prompt by entering:</p>
+<div class="highlight-python"><pre>\q</pre>
+</div>
+<p>An ownCloud instance configured with PostgreSQL would contain the path to the socket on
+which the database is running as the hostname, the system username the php process is using,
+and an empty password to access it, and the name of the database. The <tt class="file docutils literal"><span class="pre">config/config.php</span></tt> as
+created by the <a class="reference internal" href="../installation/installation_wizard.html"><em>Installation Wizard</em></a> would therefore contain entries like
+this:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+
+  <span class="s2">&quot;dbtype&quot;</span>        <span class="o">=&gt;</span> <span class="s2">&quot;pgsql&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dbname&quot;</span>        <span class="o">=&gt;</span> <span class="s2">&quot;owncloud&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dbuser&quot;</span>        <span class="o">=&gt;</span> <span class="s2">&quot;username&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dbpassword&quot;</span>    <span class="o">=&gt;</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dbhost&quot;</span>        <span class="o">=&gt;</span> <span class="s2">&quot;/var/run/postgresql&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dbtableprefix&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;oc_&quot;</span><span class="p">,</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The host actually points to the socket that is used to connect to the database. Using localhost here will not work if postgreSQL is configured to use peer authentication. Also note, that no password is specified, because this authentication method doesn&#8217;t use a password.</p>
+</div>
+<p>If you use another authentication method (not peer), you&#8217;ll need to use the following steps to get the database setup:
+Now you need to create a database user and the database itself by using the
 PostgreSQL command line interface. The database tables will be created by
 ownCloud when you login for the first time.</p>
 <p>To start the postgres command line mode use:</p>

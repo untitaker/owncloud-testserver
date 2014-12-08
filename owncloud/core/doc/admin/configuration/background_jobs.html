@@ -29,8 +29,8 @@
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
     <link rel="top" title="ownCloud Administrators Manual 7.0 documentation" href="../index.html" />
     <link rel="up" title="Configuration" href="index.html" />
-    <link rel="next" title="Asset Management" href="configuration_assets.html" />
-    <link rel="prev" title="Managing Server-to-Server Sharing Access" href="server_to_server_managing.html" />
+    <link rel="next" title="Configuring the Collaborative Documents App" href="configuring_documents.html" />
+    <link rel="prev" title="Configuring Server-to-Server Sharing" href="server_to_server_managing.html" />
 <script type="text/javascript">
 (function () {
   /**
@@ -116,35 +116,42 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 </ul>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 7</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Configuration</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="configuration_apps.html">Apps Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_users.html">User Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="auth_ldap.html">User Authentication with LDAP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="server_to_server_managing.html">Managing Server-to-Server Sharing Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server_to_server_managing.html">Configuring Server-to-Server Sharing</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Defining Background Jobs</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#parameters">Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#cron-jobs">Cron Jobs</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="configuring_documents.html">Configuring the Collaborative Documents App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuring_documents.html#enabling-the-documents-app">Enabling the Documents App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_assets.html">Asset Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_3rdparty.html">Using Third Party Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration-antivirus.html">Configuring the ClamAV Antivirus Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_automation.html">Defining Automatic Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_custom_clients.html">Custom Client Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_database.html">Database Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_encryption.html">Use Server-Side Encryption</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_encryption.html">Using Server-Side Encryption</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_knowledgebase.html">Knowledge Base Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_language.html">Language Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_logging.html">Logging Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_mail.html">Mail Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_preview.html">Preview Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_reverseproxy.html">Reverse Proxy Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_file_sharing.html">File Sharing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuring_big_file_upload.html">Uploading big files &gt; 512MB (as set by default)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuring_big_file_upload.html#enabling-uploading-big-files">Enabling uploading big files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="custom_mount_config_gui.html">Custom Mount Configuration (GUI)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="custom_mount_config.html">Custom Mount Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_mount_config_gui.html">Configuring External Storage (GUI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="custom_mount_config.html">Configuring External Storage (Configuration File)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="custom_user_backend.html">Custom User Backend Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="xsendfile.html">Serving static files via web server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuring_search.html">Enabling Full-Text Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_config_sample_php.html">Config.php Parameters</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
@@ -197,7 +204,7 @@ your server using the Internet. For example:</p>
 <p>Using the operating system cron feature is the preferred method for executing regular tasks.  This method enables the execution of scheduled jobs without the inherent limitations the web server might have.  For example:</p>
 <p>To run a cron job on a *nix system, every 15 minutes, under the default web server user (often, <tt class="docutils literal"><span class="pre">www-data</span></tt> or <tt class="docutils literal"><span class="pre">wwwrun</span></tt>), you must set up the following cron job to call the <strong>cron.php</strong> script:</p>
 <div class="highlight-python"><pre># crontab -u www-data -e
-*/15  *  *  *  * php -f /var/www/owncloud/cron.php</pre>
+*/15  *  *  *  * php -f /var/www/owncloud/cron.php &gt; /dev/null 2&gt;&amp;1</pre>
 </div>
 <p>You can verify if the cron job has been added and scheduled by executing:</p>
 <div class="highlight-python"><pre># crontab -u www-data -l

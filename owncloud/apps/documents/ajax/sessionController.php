@@ -23,7 +23,10 @@ class SessionController extends Controller{
 		try {
 			$token = Helper::getArrayValueByKey($args, 'token');
 			$file = File::getByShareToken($token);
-			$session = Db_Session::start($uid, $file, true);
+			if ($file->isPasswordProtected() && !$file->checkPassword('')){
+				throw new \Exception('Not authorized');
+			}
+			$session = Db\Session::start($uid, $file);
 			\OCP\JSON::success($session);
 		} catch (\Exception $e){
 			Helper::warnLog('Starting a session failed. Reason: ' . $e->getMessage());
@@ -42,10 +45,10 @@ class SessionController extends Controller{
 			
 			if ($view->isUpdatable($path)) {
 				$file = new File($fileId);
-				$session = Db_Session::start($uid, $file);
+				$session = Db\Session::start($uid, $file);
 				\OCP\JSON::success($session);
 			} else {
-				$info = $view->getFileInfo();
+				$info = $view->getFileInfo($path);
 				\OCP\JSON::success(array(
 					'permissions' => $info['permissions'],
 					'id' => $fileId
@@ -71,7 +74,7 @@ class SessionController extends Controller{
 			}
 			
 			$memberId = @$_SERVER['HTTP_WEBODF_MEMBER_ID'];
-			$currentMember = new Db_Member();
+			$currentMember = new Db\Member();
 			$currentMember->load($memberId);
 			if (is_null($currentMember->getIsGuest()) || $currentMember->getIsGuest()){
 				self::preDispatchGuest();
@@ -93,7 +96,7 @@ class SessionController extends Controller{
 			}
 			$content = stream_get_contents($stream);
 
-			$session = new Db_Session();
+			$session = new Db\Session();
 			$session->load($esId);
 			
 			if (!$session->getEsId()){
@@ -119,7 +122,7 @@ class SessionController extends Controller{
 				}
 			}
 			
-			$member = new Db_Member();
+			$member = new Db\Member();
 			$members = $member->getActiveCollection($esId);
 			$memberIds = array_map(
 				function($x){
@@ -157,7 +160,7 @@ class SessionController extends Controller{
 					$session->updateGenesisHash($esId, sha1($data['content']));
 				} else {
 					// Last user. Kill session data
-					Db_Session::cleanUp($esId);
+					Db\Session::cleanUp($esId);
 				}
 				
 				$view->touch($path);
@@ -170,35 +173,4 @@ class SessionController extends Controller{
 		}
 		exit();
 	}
-	
-	public static function info(){
-		self::preDispatch();
-		$items = @$_POST['items'];
-		$info = array();
-
-		if (is_array($items)){
-			$session = new Db_Session();
-			$info = $session->getInfoByFileId($items);
-		}
-
-		\OCP\JSON::success(array(
-			"info" => $info
-		));
-	}
-	
-	public static function listAll(){
-		self::preDispatch();
-		$session = new Db_Session();
-		$sessions = $session->getCollection();
-
-		$preparedSessions = array_map(
-				function($x){
-					return ($x['es_id']);
-				}, $sessions
-		);
-		\OCP\JSON::success(array(
-			"session_list" => $preparedSessions
-		));
-	}
-
 }

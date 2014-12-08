@@ -30,7 +30,29 @@ class Helper {
 	}
 	
 	/**
-	 * Copy recoursive 
+	 * Check permissions recursive
+	 * @param string $src  - path to check
+	 * @param string $src  - path to check
+	 */
+	public static function checkr($src, $collection) {
+		if (!is_writable($src)){
+			$collection->addNotWritable($src);
+		}
+		if (!is_readable($src)){
+			$collection->addNotReadable($src);
+		}
+		if(is_dir($src)) {
+			$files = scandir($src);
+			foreach ($files as $file) {
+				if ($file != "." && $file != "..") {
+					self::checkr("$src/$file", $collection);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Copy recursive
 	 * @param string $src  - source path
 	 * @param string $dest - destination path
 	 * @throws \Exception on error
@@ -62,11 +84,11 @@ class Helper {
 	/**
 	 * Wrapper for mkdir
 	 * @param string $path
-	 * @param bool $isRecoursive
+	 * @param bool $isRecursive
 	 * @throws \Exception on error
 	 */
-	public static function mkdir($path, $isRecoursive = false) {
-		if (!mkdir($path, 0755, $isRecoursive)) {
+	public static function mkdir($path, $isRecursive = false) {
+		if (!mkdir($path, 0755, $isRecursive)) {
 			throw new \Exception("Unable to create $path");
 		}
 	}

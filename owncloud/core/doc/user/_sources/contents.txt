@@ -1,8 +1,8 @@
 .. _contents:
 
-===============================
-ownCloud documentation contents
-===============================
+====================
+ownCloud User Manual 
+====================
 
 .. toctree::
     :hidden:
@@ -16,15 +16,15 @@ ownCloud documentation contents
     webinterface
     files/index
     pim/index
-    bookmarks
     documents
+    bookmarks
     migration
     userpreferences
     external_storage/google_drive
 
 
 
-Indices and tables
-==================
+.. Indices and tables
+.. ==================
 
-* :ref:`genindex`
+.. * :ref:`genindex`

@@ -10,8 +10,10 @@ Configuration
    auth_ldap
    server_to_server_managing
    background_jobs
+   configuring_documents
    configuration_assets
    configuration_3rdparty
+   configuration-antivirus
    configuration_automation
    configuration_custom_clients
    configuration_database
@@ -22,8 +24,11 @@ Configuration
    configuration_mail
    configuration_preview
    configuration_reverseproxy
+   configuration_file_sharing
    configuring_big_file_upload
    custom_mount_config_gui
    custom_mount_config
    custom_user_backend
    xsendfile
+   configuring_search
+   configuration_config_sample_php

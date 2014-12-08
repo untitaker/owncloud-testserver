@@ -10,7 +10,7 @@
  * later.
  */
 
-namespace OCA\Documents;
+namespace OCA\Documents\Db;
 
 /**
  * @method boolean getIsGuest()
@@ -19,7 +19,7 @@ namespace OCA\Documents;
  * @method int getStatus()
  */
 
-class Db_Member extends Db{
+class Member extends \OCA\Documents\Db{
 
 	const DB_TABLE = '`*PREFIX*documents_member`';
 
@@ -36,7 +36,7 @@ class Db_Member extends Db{
 	protected $loadStatement = 'SELECT * FROM `*PREFIX*documents_member` WHERE `member_id`= ?';
 
 	public static function getGuestPostfix(){
-		return '(' . Config::getL10n()->t('guest') . ')';
+		return '(' . \OCA\Documents\Config::getL10n()->t('guest') . ')';
 	}
 
 

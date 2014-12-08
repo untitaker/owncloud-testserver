@@ -116,7 +116,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 7.0 User Documentation</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">New in ownCloud 7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New for Users in ownCloud 7</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The ownCloud Web Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Files &amp; Synchronization</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="filesweb.html">Accessing your Files Using the Web Interface</a></li>
@@ -132,16 +132,15 @@
 <li class="toctree-l2"><a class="reference internal" href="server_to_server_using.html">Using Server-to-Server Sharing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deletedfiles.html">Managing Deleted Files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sync.html">Desktop Synchronization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="encryption.html">Encrypting Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encryption.html">Encrypting Your ownCloud Files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quota.html">Storage Quota</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuring_big_file_upload.html">Managing Big Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../documents.html">Collaborative Document Editing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bookmarks.html">Using the Bookmarks App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../documents.html">Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../migration.html">User Account Migration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Changing Preferences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Setting Your Preferences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../external_storage/google_drive.html">Configuring External Storage</a></li>
 </ul>
 
@@ -257,8 +256,11 @@ The resulting dialog should appear with WebDAV already selected.</li>
 <div class="highlight-python"><pre>use_locks 0</pre>
 </div>
 <p><strong>Problem:</strong> Certificate warnings</p>
-<p><strong>Solution:</strong> If you use a self-signed certificate, you will get a warning. If you are willing to take the risk of a man in the middle attack, run this command instead:</p>
-<div class="highlight-python"><pre>echo "y" | mount ~/owncloud &gt; /dev/null 2&gt;&amp;1</pre>
+<p><strong>Solution:</strong> If you use a self-signed certificate, you will get a warning. To change this, you need to adress the &#8220;pem&#8221;-file of your certificate.
+At first copy <tt class="docutils literal"><span class="pre">mycertificate.pem</span></tt> to  - for example - <tt class="docutils literal"><span class="pre">/etc/davfs2/certs/</span></tt>. After that edit <tt class="file docutils literal"><span class="pre">/etc/davfs2/davfs2.conf</span></tt> and uncomment the line <tt class="docutils literal"><span class="pre">servercert</span></tt> (or add it).
+Now add the path of your certificate. In this this example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">servercert</span>   <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">davfs2</span><span class="o">/</span><span class="n">certs</span><span class="o">/</span><span class="n">mycertificate</span><span class="o">.</span><span class="n">pem</span>
+</pre></div>
 </div>
 </div>
 </div>
@@ -294,7 +296,7 @@ The resulting dialog should appear with WebDAV already selected.</li>
 </div>
 <div class="section" id="accessing-files-using-microsoft-windows">
 <h2>Accessing Files Using Microsoft Windows<a class="headerlink" href="#accessing-files-using-microsoft-windows" title="Permalink to this headline">¶</a></h2>
-<p>When using Microsoft Windows, a seperate WebDAV client is recommended to access
+<p>When using Microsoft Windows, a separate WebDAV client is recommended to access
 the files from your server.You can choose a suitable WebDav client from the
 <a class="reference external" href="http://www.webdav.org/projects/">WebDav Project page</a> .</p>
 <p>If you must use the native implementation, you can map ownCloud to a new drive.

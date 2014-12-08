@@ -311,8 +311,8 @@ Class Properties {
 				$app = new App();
 				$vcard = $app->getContact($backendName, $addressBookId, $contactId);
 			}
-			$image = $vcard->getPhoto();
-			if (is_null($image)) {
+			$image = new \OCP\Image();
+			if (!isset($vcard->PHOTO) || !$image->loadFromBase64((string)$vcard->PHOTO)) {
 				return false;
 			}
 		}
@@ -333,7 +333,6 @@ Class Properties {
 
 		 // Cache as base64 for around a month
 		$cache->set($key, strval($image), 3000000);
-		\OCP\Util::writeLog('contacts', 'Caching ' . $key, \OCP\Util::DEBUG);
 		return $cache->get($key);
 	}
 

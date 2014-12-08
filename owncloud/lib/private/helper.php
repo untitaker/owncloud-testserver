@@ -578,8 +578,20 @@ class OC_Helper {
 	public static function tmpFile($postfix = '') {
 		$file = get_temp_dir() . '/' . md5(time() . rand()) . $postfix;
 		$fh = fopen($file, 'w');
-		fclose($fh);
-		self::$tmpFiles[] = $file;
+		if ($fh!==false){
+			fclose($fh);
+			self::$tmpFiles[] = $file;
+		} else {
+			OC_Log::write(
+				'OC_Helper',
+				sprintf(
+					'Can not create a temporary file in directory %s. Check it exists and has correct permissions',
+					get_temp_dir()
+				),
+				OC_Log::WARN
+			);
+			$file = false;
+		}
 		return $file;
 	}
 
@@ -631,15 +643,33 @@ class OC_Helper {
 		if (file_exists($leftoversFile)) {
 			$leftovers = file($leftoversFile);
 			foreach ($leftovers as $file) {
-				self::rmdirr($file);
+				try {
+					self::rmdirr($file);
+				} catch (UnexpectedValueException $ex) {
+					// not really much we can do here anymore
+					if (!is_null(\OC::$server)) {
+						$message = $ex->getMessage();
+						\OC::$server->getLogger()->error("Error deleting file/folder: $file - Reason: $message",
+							array('app' => 'core'));
+					}
+				}
 			}
 			unlink($leftoversFile);
 		}
 
 		foreach (self::$tmpFiles as $file) {
 			if (file_exists($file)) {
-				if (!self::rmdirr($file)) {
-					file_put_contents($leftoversFile, $file . "\n", FILE_APPEND);
+				try {
+					if (!self::rmdirr($file)) {
+						file_put_contents($leftoversFile, $file . "\n", FILE_APPEND);
+					}
+				} catch (UnexpectedValueException $ex) {
+					// not really much we can do here anymore
+					if (!is_null(\OC::$server)) {
+						$message = $ex->getMessage();
+						\OC::$server->getLogger()->error("Error deleting file/folder: $file - Reason: $message",
+							array('app' => 'core'));
+					}
 				}
 			}
 		}

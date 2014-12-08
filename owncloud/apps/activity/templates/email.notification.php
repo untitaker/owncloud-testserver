@@ -1,12 +1,9 @@
 <?php
-/* Copyright (c) 2014, Joas Schilling nickvergessen@owncloud.com
- * This file is licensed under the Affero General Public License version 3
- * or later. See the COPYING-README file. */
-
 /** @var OC_L10N $l */
 /** @var array $_ */
+$l = $_['overwriteL10N'];
 
-p($l->t('Hello %s,', array($_['username'])));
+print_unescaped($l->t('Hello %s,', array($_['username'])));
 p("\n");
 p("\n");
 
@@ -20,8 +17,8 @@ if ($_['timeframe'] == \OCA\Activity\UserSettings::EMAIL_SEND_HOURLY) {
 p("\n");
 p("\n");
 
-foreach ($_['activities'] as $activity) {
-	p($l->t('* %s', array($activity)));
+foreach ($_['activities'] as $activityData) {
+	print_unescaped($l->t('* %1$s - %2$s', $activityData));
 	p("\n");
 }
 p("\n");

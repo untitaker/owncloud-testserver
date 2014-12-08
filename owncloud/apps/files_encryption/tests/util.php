@@ -22,6 +22,9 @@ use OCA\Encryption;
 class Test_Encryption_Util extends \PHPUnit_Framework_TestCase {
 
 	const TEST_ENCRYPTION_UTIL_USER1 = "test-util-user1";
+	const TEST_ENCRYPTION_UTIL_USER2 = "test-util-user2";
+	const TEST_ENCRYPTION_UTIL_GROUP1 = "test-util-group1";
+	const TEST_ENCRYPTION_UTIL_GROUP2 = "test-util-group2";
 	const TEST_ENCRYPTION_UTIL_LEGACY_USER = "test-legacy-user";
 
 	public $userId;
@@ -50,16 +53,19 @@ class Test_Encryption_Util extends \PHPUnit_Framework_TestCase {
 		\OC_User::clearBackends();
 		\OC_User::useBackend('database');
 
-		// Filesystem related hooks
-		\OCA\Encryption\Helper::registerFilesystemHooks();
-
-		// clear and register hooks
-		\OC_FileProxy::clearProxies();
-		\OC_FileProxy::register(new OCA\Encryption\Proxy());
+		self::setupHooks();
 
 		// create test user
 		\Test_Encryption_Util::loginHelper(\Test_Encryption_Util::TEST_ENCRYPTION_UTIL_USER1, true);
+		\Test_Encryption_Util::loginHelper(\Test_Encryption_Util::TEST_ENCRYPTION_UTIL_USER2, true);
 		\Test_Encryption_Util::loginHelper(\Test_Encryption_Util::TEST_ENCRYPTION_UTIL_LEGACY_USER, true);
+
+		// create groups
+		\OC_Group::createGroup(self::TEST_ENCRYPTION_UTIL_GROUP1);
+		\OC_Group::createGroup(self::TEST_ENCRYPTION_UTIL_GROUP2);
+
+		// add user 1 to group1
+		\OC_Group::addToGroup(self::TEST_ENCRYPTION_UTIL_USER1, self::TEST_ENCRYPTION_UTIL_GROUP1);
 	}
 
 
@@ -116,7 +122,29 @@ class Test_Encryption_Util extends \PHPUnit_Framework_TestCase {
 	public static function tearDownAfterClass() {
 		// cleanup test user
 		\OC_User::deleteUser(\Test_Encryption_Util::TEST_ENCRYPTION_UTIL_USER1);
+		\OC_User::deleteUser(\Test_Encryption_Util::TEST_ENCRYPTION_UTIL_USER2);
 		\OC_User::deleteUser(\Test_Encryption_Util::TEST_ENCRYPTION_UTIL_LEGACY_USER);
+
+		//cleanup groups
+		\OC_Group::deleteGroup(self::TEST_ENCRYPTION_UTIL_GROUP1);
+		\OC_Group::deleteGroup(self::TEST_ENCRYPTION_UTIL_GROUP2);
+
+		\OC_Hook::clear();
+		\OC_FileProxy::clearProxies();
+
+		// Delete keys in /data/
+		$view = new \OC\Files\View('/');
+		$view->rmdir('public-keys');
+		$view->rmdir('owncloud_private_key');
+	}
+
+	public static function setupHooks() {
+		// Filesystem related hooks
+		\OCA\Encryption\Helper::registerFilesystemHooks();
+
+		// clear and register hooks
+		\OC_FileProxy::clearProxies();
+		\OC_FileProxy::register(new OCA\Encryption\Proxy());
 	}
 
 	/**
@@ -411,6 +439,48 @@ class Test_Encryption_Util extends \PHPUnit_Framework_TestCase {
 
 	}
 
+	/**
+	 * test if all keys get moved to the backup folder correctly
+	 */
+	function testBackupAllKeys() {
+		self::loginHelper(self::TEST_ENCRYPTION_UTIL_USER1);
+
+		// create some dummy key files
+		$encPath = '/' . self::TEST_ENCRYPTION_UTIL_USER1 . '/files_encryption';
+		$this->view->file_put_contents($encPath . '/keyfiles/foo.key', 'key');
+		$this->view->file_put_contents($encPath . '/share-keys/foo.user1.shareKey', 'share key');
+
+		$util = new \OCA\Encryption\Util($this->view, self::TEST_ENCRYPTION_UTIL_USER1);
+
+		$util->backupAllKeys('testing');
+
+		$encFolderContent = $this->view->getDirectoryContent($encPath);
+
+		$backupPath = '';
+		foreach ($encFolderContent as $c) {
+			$name = $c['name'];
+			if (substr($name, 0, strlen('backup'))  === 'backup') {
+				$backupPath = $encPath . '/'. $c['name'];
+				break;
+			}
+		}
+
+		$this->assertTrue($backupPath !== '');
+
+		// check backupDir Content
+		$this->assertTrue($this->view->is_dir($backupPath . '/keyfiles'));
+		$this->assertTrue($this->view->is_dir($backupPath . '/share-keys'));
+		$this->assertTrue($this->view->file_exists($backupPath . '/keyfiles/foo.key'));
+		$this->assertTrue($this->view->file_exists($backupPath . '/share-keys/foo.user1.shareKey'));
+		$this->assertTrue($this->view->file_exists($backupPath . '/' . self::TEST_ENCRYPTION_UTIL_USER1 . '.private.key'));
+		$this->assertTrue($this->view->file_exists($backupPath . '/' . self::TEST_ENCRYPTION_UTIL_USER1 . '.public.key'));
+
+		//cleanup
+		$this->view->deleteAll($backupPath);
+		$this->view->unlink($encPath . '/keyfiles/foo.key', 'key');
+		$this->view->unlink($encPath . '/share-keys/foo.user1.shareKey', 'share key');
+	}
+
 
 	function testDescryptAllWithBrokenFiles() {
 
@@ -538,6 +608,29 @@ class Test_Encryption_Util extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * @dataProvider dataProviderFortestIsMountPointApplicableToUser
+	 */
+	function testIsMountPointApplicableToUser($mount, $expectedResult) {
+		self::loginHelper(self::TEST_ENCRYPTION_UTIL_USER1);
+		$dummyClass = new DummyUtilClass($this->view, self::TEST_ENCRYPTION_UTIL_USER1);
+		$result = $dummyClass->testIsMountPointApplicableToUser($mount);
+
+		$this->assertSame($expectedResult, $result);
+	}
+
+	function dataProviderFortestIsMountPointApplicableToUser() {
+		return array(
+			array(array('applicable' => array('groups' => array(), 'users' => array(self::TEST_ENCRYPTION_UTIL_USER1))), true),
+			array(array('applicable' => array('groups' => array(), 'users' => array(self::TEST_ENCRYPTION_UTIL_USER2))), false),
+			array(array('applicable' => array('groups' => array(self::TEST_ENCRYPTION_UTIL_GROUP1), 'users' => array())), true),
+			array(array('applicable' => array('groups' => array(self::TEST_ENCRYPTION_UTIL_GROUP1), 'users' => array(self::TEST_ENCRYPTION_UTIL_USER2))), true),
+			array(array('applicable' => array('groups' => array(self::TEST_ENCRYPTION_UTIL_GROUP2), 'users' => array(self::TEST_ENCRYPTION_UTIL_USER2))), false),
+			array(array('applicable' => array('groups' => array(self::TEST_ENCRYPTION_UTIL_GROUP2), 'users' => array(self::TEST_ENCRYPTION_UTIL_USER2, 'all'))), true),
+			array(array('applicable' => array('groups' => array(self::TEST_ENCRYPTION_UTIL_GROUP2), 'users' => array('all'))), true),
+		);
+	}
+
+	/**
 	 * @param string $user
 	 * @param bool $create
 	 * @param bool $password
@@ -570,7 +663,7 @@ class Test_Encryption_Util extends \PHPUnit_Framework_TestCase {
 
 	public static function logoutHelper() {
 		\OC_Util::tearDownFS();
-		\OC_User::setUserId('');
+		\OC_User::setUserId(false);
 		\OC\Files\Filesystem::tearDown();
 	}
 
@@ -586,4 +679,13 @@ class Test_Encryption_Util extends \PHPUnit_Framework_TestCase {
 		return \OC_Preferences::setValue($user, 'files_encryption', 'migration_status', (string)$status);
 	}
 
+}
+
+/**
+ * dummy class extends  \OCA\Encryption\Util to access protected methods for testing
+ */
+class DummyUtilClass extends \OCA\Encryption\Util {
+	public function testIsMountPointApplicableToUser($mount) {
+		return $this->isMountPointApplicableToUser($mount);
+	}
 }

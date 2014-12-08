@@ -77,6 +77,7 @@ class OC_Connector_Sabre_CalDAV extends \Sabre\CalDAV\Backend\AbstractBackend {
 				'{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}getctag' => $ctag,
 				'{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set'
 					=> new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
+				'{http://apple.com/ns/ical/}calendar-color' => '#CCCCCC',
 			);
 		}
 		return $calendars;
@@ -289,8 +290,36 @@ class OC_Connector_Sabre_CalDAV extends \Sabre\CalDAV\Backend\AbstractBackend {
 				}
 			}
 		} else {
+			$calendar = OC_Calendar_Calendar::find($calendarId);
+			$isShared = ($calendar['userid'] !== OCP\USER::getUser());
+
 			foreach(OC_Calendar_Object::all($calendarId) as $row) {
-				$data[] = $this->OCAddETag($row);
+				if (!$isShared) {
+					$data[] = $this->OCAddETag($row);
+				} else {
+					if (substr_count($row['calendardata'], 'CLASS') === 0) {
+						$data[] = $this->OCAddETag($row);
+					} else {
+						$object = OC_VObject::parse($row['calendardata']);
+						if(!$object) {
+							return false;
+						}
+
+						$isPrivate = false;
+						$toCheck = array('VEVENT', 'VJOURNAL', 'VTODO');
+						foreach ($toCheck as $type) {
+							foreach ($object->select($type) as $vobject) {
+								if (isset($vobject->{'CLASS'}) && $vobject->{'CLASS'}->getValue() === 'PRIVATE') {
+									$isPrivate = true;
+								}
+							}
+						}
+
+						if ($isPrivate === false) {
+							$data[] = $this->OCAddETag($row);
+						}
+					}
+				}
 			}
 		}
 		return $data;

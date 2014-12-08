@@ -69,6 +69,8 @@ class DataHelper
 					return $this->l->t('You created %1$s', $preparedParams);
 				case 'created_by':
 					return $this->l->t('%2$s created %1$s', $preparedParams);
+				case 'created_public':
+					return $this->l->t('%1$s was created in a public folder', $preparedParams);
 				case 'changed_self':
 					return $this->l->t('You changed %1$s', $preparedParams);
 				case 'changed_by':
@@ -77,6 +79,10 @@ class DataHelper
 					return $this->l->t('You deleted %1$s', $preparedParams);
 				case 'deleted_by':
 					return $this->l->t('%2$s deleted %1$s', $preparedParams);
+				case 'restored_self':
+					return $this->l->t('You restored %1$s', $preparedParams);
+				case 'restored_by':
+					return $this->l->t('%2$s restored %1$s', $preparedParams);
 				case 'shared_user_self':
 					return $this->l->t('You shared %1$s with %2$s', $preparedParams);
 				case 'shared_group_self':

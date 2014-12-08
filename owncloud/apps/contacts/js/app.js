@@ -217,7 +217,7 @@ OC.notify = function(params) {
 					if(!contacts_properties_indexed) {
 						// Wait a couple of mins then check if contacts are indexed.
 						setTimeout(function() {
-								$.when($.post(OC.generateUrl('apps/contacts/indexproperties/{user}/')))
+								$.when($.post(OC.generateUrl('apps/contacts/indexproperties/{user}/', {user: OC.currentUser})))
 									.then(function(response) {
 										if(!response.isIndexed) {
 											OC.notify({message:t('contacts', 'Indexing contacts'), timeout:20});
@@ -266,6 +266,7 @@ OC.notify = function(params) {
 				this.$contactListHeader.find('.'+act.join(',.')).css('display', '');
 			} else {
 				this.$contactListHeader.find('.actions').css('display', 'none');
+				this.$contactListHeader.find('.action').css('display', '');
 				this.$contactListHeader.find('.name').attr('colspan', '1');
 				this.$contactListHeader.find('.info').css('display', '');
 				this.$contactList.removeClass('multiselect');
@@ -1174,7 +1175,8 @@ OC.notify = function(params) {
 						}
 						targets[contact.backend][contact.addressBookId].push(contact.contactId);
 					});
-					var url = OC.generateUrl('exportSelected', {t:targets});
+					targets = JSON.stringify(targets);
+					var url = OC.generateUrl('apps/contacts/exportSelected?t={t}', {t:targets});
 					//console.log('export url', url);
 					document.location.href = url;
 				};

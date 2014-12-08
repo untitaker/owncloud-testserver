@@ -116,28 +116,28 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 7.0 User Documentation</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">New in ownCloud 7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New for Users in ownCloud 7</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The ownCloud Web Interface</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Files &amp; Synchronization</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="filesweb.html">Accessing your Files Using the Web Interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="files.html">Accessing Files Using WebDAV</a></li>
 <li class="toctree-l2"><a class="reference internal" href="versioncontrol.html">Version Control</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Using Server-to-Server Sharing</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#sharing-files-and-folders-across-servers">Sharing Files and Folders Across Servers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-new-share">Creating a New Share</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#connecting-to-a-remote-share">Connecting to a Remote Share</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="deletedfiles.html">Managing Deleted Files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sync.html">Desktop Synchronization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="encryption.html">Encrypting Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encryption.html">Encrypting Your ownCloud Files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="quota.html">Storage Quota</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuring_big_file_upload.html">Managing Big Files</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../documents.html">Collaborative Document Editing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bookmarks.html">Using the Bookmarks App</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../documents.html">Documents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../migration.html">User Account Migration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Changing Preferences</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Setting Your Preferences</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../external_storage/google_drive.html">Configuring External Storage</a></li>
 </ul>
 
@@ -153,69 +153,70 @@
 						
   <div class="section" id="using-server-to-server-sharing">
 <h1>Using Server-to-Server Sharing<a class="headerlink" href="#using-server-to-server-sharing" title="Permalink to this headline">¶</a></h1>
-<p>ownCloud supports server-to-server sharing.  By mounting a share from another
-ownCloud instance, this feature enables you to:</p>
+<p>ownCloud 7 introduces a powerful new feature, server-to-server sharing.  With
+just a few clicks you can easily access shares from other ownCloud 7 servers,
+link them to your account, and create your own shares. This feature enables you
+to:</p>
 <ul class="simple">
-<li>Seamlessly collaborate and share files from within two ownCloud instances.</li>
+<li>Selectively share files or directories.</li>
 <li>Combine two private clouds into a single public cloud.</li>
-<li>Locally synchronize the folder through the client.</li>
-<li>Eliminate the need to create user accounts on multiple instances.</li>
+<li>Eliminate the need to create user accounts on multiple ownCloud servers.</li>
+<li>View files in a Web browser or ownCloud client.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Server-to-server sharing requires that both servers are running
-versions of ownCloud that support this feature.</p>
+versions of ownCloud that support this feature; currently this is ownCloud 7.</p>
 </div>
-<p>For information about managing server-to-server sharing functions for internal
-and external users and groups see <a href="#id1"><span class="problematic" id="id2">`Managing Server-to-Server Sharing Access`_</span></a>.</p>
-<div class="section" id="sharing-files-and-folders-across-servers">
-<h2>Sharing Files and Folders Across Servers<a class="headerlink" href="#sharing-files-and-folders-across-servers" title="Permalink to this headline">¶</a></h2>
-<p>Server-to-server sharing is enabled on new or upgraded ownCloud installations
-by default. However, you need to share folders in a particular way for
-server-to-server sharing to function.  When sharing files and folders across
-servers, two primary steps are required.  These steps include:</p>
-<ol class="arabic simple">
-<li>The originator sharing a file or folder from their server using a link.</li>
-<li>The receiver(s) of the shared file or folder adding the file or folder to their ownCloud instance.</li>
-</ol>
-<div class="section" id="sharing-from-a-server">
-<h3>Sharing From a Server<a class="headerlink" href="#sharing-from-a-server" title="Permalink to this headline">¶</a></h3>
-<p>To share a file or folder across servers as an originator:</p>
-<ol class="arabic">
-<li><p class="first">Access the Files app on your server.</p>
-</li>
-<li><p class="first">Select and share a file or folder by link.</p>
-<div class="figure">
-<img alt="../_images/share_link.png" src="../_images/share_link.png" />
-</div>
-<p><strong>Sharing a link</strong></p>
-</li>
-<li><p class="first">(Optional) Specify an alphanumeric password that you want others to use in order to accessing this share.</p>
-</li>
-<li><p class="first">(Optional) Specify an expiration date for the share.</p>
+<div class="section" id="creating-a-new-share">
+<h2>Creating a New Share<a class="headerlink" href="#creating-a-new-share" title="Permalink to this headline">¶</a></h2>
+<p>Server-to-server sharing is enabled on new or upgraded ownCloud 7 installations
+by default. (See &#8220;Configuring Server-to-Server Sharing&#8221; in the Administrators
+Manual.) Follow these steps to create a new share:</p>
+<p>1. Go to your <tt class="docutils literal"><span class="pre">Files</span></tt> page and hover your cursor over the file or directory
+you want to share to expose your administration options. Check the <tt class="docutils literal"><span class="pre">Share</span>
+<span class="pre">Link</span></tt> checkbox to create the share, and to expose all of your sharing options.</p>
+<p>2. Set any options that you want to apply to your new share: send an email
+notification, add password protection, allow users to upload files to the share,
+or set an expiration date. If you check <strong>Allow Public Upload</strong> then other
+users can overwrite, rename and delete files in the share.</p>
 <blockquote>
-<div><p>If set, the ability to access the link expires on the date specified.</p>
+<div><div class="figure">
+<img alt="../_images/s2s-create_public_share.png" src="../_images/s2s-create_public_share.png" />
+</div>
 </div></blockquote>
-</li>
-</ol>
-<ol class="arabic simple" start="3">
-<li>Send an email to the user or group to indicate the shared link.</li>
-</ol>
+<p>And that&#8217;s all there is to it. Your new public share is labeled with a chain
+link. If you do not protect it with a password, it is visible to anyone who has
+the URL. (ownCloud server admins have the option of requiring users to set
+passwords on shares in <tt class="docutils literal"><span class="pre">Admin</span> <span class="pre">&gt;</span> <span class="pre">Sharing.</span></tt>)</p>
 </div>
-<div class="section" id="adding-a-shared-file-or-folder-to-your-owncloud-instance">
-<h3>Adding a Shared File or Folder to Your ownCloud Instance<a class="headerlink" href="#adding-a-shared-file-or-folder-to-your-owncloud-instance" title="Permalink to this headline">¶</a></h3>
-<p>To add a file or folder to your ownCloud:</p>
+<div class="section" id="connecting-to-a-remote-share">
+<h2>Connecting to a Remote Share<a class="headerlink" href="#connecting-to-a-remote-share" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic">
-<li><p class="first">Access the shared link using a browser.</p>
-<p>The links opens the shared folder or file.</p>
+<li><p class="first">Open the share link in your Web browser.</p>
 <div class="figure">
-<img alt="../_images/share_link_adding.png" src="../_images/share_link_adding.png" />
+<img alt="../_images/s2s-connect-to-remote-share.png" src="../_images/s2s-connect-to-remote-share.png" />
 </div>
-</li>
-<li><p class="first">Click &#8220;Add to your owncloud&#8221; and specify the URL to your ownCloud instance.</p>
 </li>
 </ol>
+<p>2. Click the <tt class="docutils literal"><span class="pre">Add</span> <span class="pre">to</span> <span class="pre">your</span> <span class="pre">ownCloud</span></tt> button, and enter the URL of your ownCloud
+server. If you are not already logged in you will get a login window.</p>
+<p>3. After logging in you will see a dialogue asking you <tt class="docutils literal"><span class="pre">&quot;Do</span> <span class="pre">you</span> <span class="pre">want</span> <span class="pre">to</span> <span class="pre">add</span> <span class="pre">the</span>
+<span class="pre">remote</span> <span class="pre">share</span> <span class="pre">[share</span> <span class="pre">name]</span> <span class="pre">from</span> <span class="pre">[remote</span> <span class="pre">server</span> <span class="pre">name]?&quot;</span></tt></p>
+<blockquote>
+<div><div class="figure">
+<img alt="../_images/s2s-add-remote-share.png" src="../_images/s2s-add-remote-share.png" />
 </div>
+</div></blockquote>
+<p>4. Click the <tt class="docutils literal"><span class="pre">Add</span> <span class="pre">Remote</span> <span class="pre">Share</span></tt> button, and enjoy your new share. It is marked
+with a share icon, and the name of the share&#8217;s owner and originating server.</p>
+<blockquote>
+<div><div class="figure">
+<img alt="../_images/s2s-remote-share-labeled.png" src="../_images/s2s-remote-share-labeled.png" />
+</div>
+</div></blockquote>
+<p>Remove your linked share anytime by clicking the trash can icon. This only
+unlinks the share, and does not delete any files.</p>
 </div>
 </div>
 
