@@ -7,6 +7,8 @@ $CONFIG = array (
     0 => '127.0.0.1:8080',
   ),
   'dbtype' => 'sqlite3',
-  'version' => '7.0.1.1',
+  'version' => '7.0.3.4',
   'installed' => true,
+  'theme' => '',
+  'maintenance' => false,
 );
