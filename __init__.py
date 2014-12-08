@@ -40,8 +40,7 @@ def get_request_token(session):
     return tree.find('head').attrib['data-requesttoken']
 
 
-def create_address_book(name, session):
-    token = get_request_token(session)
+def create_address_book(name, token, session):
     r = request(
         'POST',
         base + '/index.php/apps/contacts/addressbook/local/add',
@@ -52,8 +51,7 @@ def create_address_book(name, session):
     assert r.get('uri', None) == name, r
 
 
-def create_calendar(name, session):
-    token = get_request_token(session)
+def create_calendar(name, token, session):
     r = request(
         'POST',
         base + '/index.php/apps/calendar/ajax/calendar/new.php',
@@ -76,8 +74,18 @@ class ServerMixin(object):
         xprocess.ensure('owncloud_server', preparefunc)
         subprocess.check_call([os.path.join(owncloud_repo, 'reset.sh')])
 
+    @pytest.fixture(scope='session')
+    def owncloud_session(self):
+        session = requests.session()
+        session.auth = (username, password)
+        return session
+
+    @pytest.fixture(scope='session')
+    def owncloud_csrf_token(self, owncloud_session):
+        return get_request_token(owncloud_session)
+
     @pytest.fixture
-    def get_storage_args(self):
+    def get_storage_args(self, owncloud_session, owncloud_csrf_token):
         def inner(collection='test'):
             fileext = self.storage_class.fileext
             if fileext == '.vcf':
@@ -90,12 +98,12 @@ class ServerMixin(object):
                 raise RuntimeError(fileext)
 
             if collection is not None:
-                session = requests.session()
-                session.auth = (username, password)
                 if fileext == '.ics':
-                    create_calendar(collection, session)
+                    create_calendar(collection, owncloud_csrf_token,
+                                    owncloud_session)
                 else:
-                    create_address_book(collection, session)
+                    create_address_book(collection, owncloud_csrf_token,
+                                        owncloud_session)
 
             return {'url': base + dav_path, 'collection': collection,
                     'username': username, 'password': password,
