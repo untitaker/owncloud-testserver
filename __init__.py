@@ -1,20 +1,28 @@
 # -*- coding: utf-8 -*-
 
-from vdirsyncer.utils import expand_path
-import subprocess
 import os
+import subprocess
 import time
+
+import lxml.html
+
 import pytest
+
 import requests
+
+from vdirsyncer.utils import request
+
 
 owncloud_repo = os.path.dirname(__file__)
 php_sh = os.path.abspath(os.path.join(owncloud_repo, 'php.sh'))
+base = 'http://127.0.0.1:8080'
+username, password = ('asdf', 'asdf')
 
 
 def wait():
     for i in range(5):
         try:
-            requests.get('http://127.0.0.1:8080/')
+            requests.get(base + '/')
         except Exception as e:
             # Don't know exact exception class, don't care.
             # Also, https://github.com/kennethreitz/requests/issues/2192
@@ -24,6 +32,36 @@ def wait():
         else:
             return True
     return False
+
+
+def get_request_token(session):
+    r = request('GET', base + '/', session=session)
+    tree = lxml.html.fromstring(r.content)
+    return tree.find('head').attrib['data-requesttoken']
+
+
+def create_address_book(name, session):
+    token = get_request_token(session)
+    r = request(
+        'POST',
+        base + '/index.php/apps/contacts/addressbook/local/add',
+        data=dict(displayname=name, description=''),
+        headers=dict(requesttoken=token),
+        session=session
+    ).json()
+    assert r.get('uri', None) == name, r
+
+
+def create_calendar(name, session):
+    token = get_request_token(session)
+    r = request(
+        'POST',
+        base + '/index.php/apps/calendar/ajax/calendar/new.php',
+        data=dict(active=0, color='#ff0000', id='new', name=name),
+        headers=dict(requesttoken=token),
+        session=session
+    ).json()
+    assert r.get('status', None) == 'success', r
 
 
 class ServerMixin(object):
@@ -41,33 +79,25 @@ class ServerMixin(object):
     @pytest.fixture
     def get_storage_args(self):
         def inner(collection='test'):
-            base = 'http://127.0.0.1:8080'
             fileext = self.storage_class.fileext
             if fileext == '.vcf':
-                dav_path = '/remote.php/carddav/addressbooks/asdf/'
+                dav_path = ('/remote.php/carddav/addressbooks/{}/'
+                            .format(username))
             elif fileext == '.ics':
-                dav_path = '/remote.php/caldav/calendars/asdf/'
+                dav_path = ('/remote.php/caldav/calendars/{}/'
+                            .format(username))
             else:
                 raise RuntimeError(fileext)
 
             if collection is not None:
+                session = requests.session()
+                session.auth = (username, password)
                 if fileext == '.ics':
-                    r = requests.post(
-                        base + '/index.php/apps/calendar/ajax/calendar/new.php',
-                        data=dict(active=0, color='#ff0000', id='new',
-                                  name=collection),
-                        auth=('asdf', 'asdf')
-                    ).json()
-                    assert r.get('status', None) == 'success', r
+                    create_calendar(collection, session)
                 else:
-                    r = requests.post(
-                        base + '/index.php/apps/contacts/addressbook/local/add',
-                        data=dict(displayname=collection, description=''),
-                        auth=('asdf', 'asdf')
-                    ).json()
-                    assert r.get('uri', None) == collection, r
+                    create_address_book(collection, session)
 
             return {'url': base + dav_path, 'collection': collection,
-                    'username': 'asdf', 'password': 'asdf',
+                    'username': username, 'password': password,
                     'unsafe_href_chars': ''}
         return inner
