@@ -98,6 +98,7 @@ class ServerMixin(object):
                 raise RuntimeError(fileext)
 
             if collection is not None:
+                dav_path += collection + '/'
                 if fileext == '.ics':
                     create_calendar(collection, owncloud_csrf_token,
                                     owncloud_session)
