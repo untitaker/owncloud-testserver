@@ -97,16 +97,14 @@ class ServerMixin(object):
             else:
                 raise RuntimeError(fileext)
 
-            if collection is not None:
-                dav_path += collection + '/'
-                if fileext == '.ics':
-                    create_calendar(collection, owncloud_csrf_token,
-                                    owncloud_session)
-                else:
-                    create_address_book(collection, owncloud_csrf_token,
-                                        owncloud_session)
+            rv = {'url': base + dav_path, 'collection': collection,
+                  'username': username, 'password': password,
+                  'unsafe_href_chars': ''}
 
-            return {'url': base + dav_path, 'collection': collection,
-                    'username': username, 'password': password,
-                    'unsafe_href_chars': ''}
+            if collection is not None:
+                return self.storage_class.create_collection(**rv)
+            else:
+                return rv
+
+
         return inner
