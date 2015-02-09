@@ -56,10 +56,10 @@ try {
 	// load all apps to get all api routes properly setup
 	OC_App::loadApps();
 
-	\OC::$session->close();
+	\OC::$server->getSession()->close();
 
 	// initialize a dummy memory session
-	\OC::$session = new \OC\Session\Memory('');
+	\OC::$server->setSession(new \OC\Session\Memory(''));
 
 	$logger = \OC_Log::$object;
 
@@ -71,8 +71,7 @@ try {
 	// Handle unexpected errors
 	register_shutdown_function('handleUnexpectedShutdown');
 
-	// Delete temp folder
-	OC_Helper::cleanTmpNoClean();
+	\OC::$server->getTempManager()->cleanOld();
 
 	// Exit if background jobs are disabled!
 	$appmode = OC_BackgroundJob::getExecutionType();
@@ -100,7 +99,7 @@ try {
 		if (file_exists(TemporaryCronClass::$lockfile)) {
 			TemporaryCronClass::$keeplock = true;
 			TemporaryCronClass::$sent = true;
-			echo "Another instance of cron.php is still running!";
+			echo "Another instance of cron.php is still running!" . PHP_EOL;
 			exit(1);
 		}
 
@@ -132,9 +131,9 @@ try {
 
 	// done!
 	TemporaryCronClass::$sent = true;
-	// Log the successfull cron exec
-	if (OC_Config::getValue('cron_log', true)) {
-		OC_Appconfig::setValue('core', 'lastcron', time());
+	// Log the successful cron execution
+	if (\OC::$server->getConfig()->getSystemValue('cron_log', true)) {
+		\OC::$server->getAppConfig()->setValue('core', 'lastcron', time());
 	}
 	exit();
 

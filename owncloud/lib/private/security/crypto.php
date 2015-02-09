@@ -12,6 +12,7 @@ namespace OC\Security;
 use Crypt_AES;
 use Crypt_Hash;
 use OCP\Security\ICrypto;
+use OCP\Security\ISecureRandom;
 use OCP\Security\StringUtils;
 use OCP\IConfig;
 
@@ -32,29 +33,13 @@ class Crypto implements ICrypto {
 	private $ivLength = 16;
 	/** @var IConfig */
 	private $config;
+	/** @var ISecureRandom */
+	private $random;
 
-	/**
-	 * @param IConfig $config
-	 */
-	function __construct(IConfig $config) {
+	function __construct(IConfig $config, ISecureRandom $random) {
 		$this->cipher = new Crypt_AES();
 		$this->config = $config;
-	}
-
-	/**
-	 * Custom implementation of hex2bin since the function is only available starting
-	 * with PHP 5.4
-	 *
-	 * @TODO Remove this once 5.3 support for ownCloud is dropped
-	 * @param $message
-	 * @return string
-	 */
-	protected static function hexToBin($message) {
-		if (function_exists('hex2bin')) {
-			return hex2bin($message);
-		}
-
-		return pack("H*", $message);
+		$this->random = $random;
 	}
 
 	/**
@@ -87,7 +72,7 @@ class Crypto implements ICrypto {
 		}
 		$this->cipher->setPassword($password);
 
-		$iv = \OC_Util::generateRandomBytes($this->ivLength);
+		$iv = $this->random->getLowStrengthGenerator()->generate($this->ivLength);
 		$this->cipher->setIV($iv);
 
 		$ciphertext = bin2hex($this->cipher->encrypt($plaintext));
@@ -114,9 +99,9 @@ class Crypto implements ICrypto {
 			throw new \Exception('Authenticated ciphertext could not be decoded.');
 		}
 
-		$ciphertext = self::hexToBin($parts[0]);
+		$ciphertext = hex2bin($parts[0]);
 		$iv = $parts[1];
-		$hmac = self::hexToBin($parts[2]);
+		$hmac = hex2bin($parts[2]);
 
 		$this->cipher->setIV($iv);
 

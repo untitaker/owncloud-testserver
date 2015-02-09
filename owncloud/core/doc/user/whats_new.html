@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>What’s New for Users in ownCloud 7 &mdash; ownCloud User Manual 7.0 documentation</title>
+    <title>What’s New for Users in ownCloud 8 &mdash; ownCloud User Manual 8.0 documentation</title>
     
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '7.0',
+        VERSION:     '8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,9 +27,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud User Manual 7.0 documentation" href="index.html" />
+    <link rel="top" title="ownCloud User Manual 8.0 documentation" href="index.html" />
     <link rel="next" title="The ownCloud Web Interface" href="webinterface.html" />
-    <link rel="prev" title="ownCloud 7.0 User Documentation" href="index.html" />
+    <link rel="prev" title="ownCloud 8.0 User Documentation" href="index.html" />
 <script type="text/javascript">
 (function () {
   /**
@@ -112,18 +112,16 @@
 										<li><a href="contents.html">Overview</a></li>
 									</ul>
                   <ul>
-<li class="toctree-l1"><a class="reference internal" href="index.html">ownCloud 7.0 User Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">ownCloud 8.0 User Documentation</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="">What&#8217;s New for Users in ownCloud 7</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#no-more-shared-folder">No More Shared Folder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#selective-sync">Selective Sync</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#server-to-server-sharing">Server to Server Sharing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#file-and-activity-notifications">File and Activity Notifications</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#owncloud-documents-with-word-conversion">ownCloud Documents with Word Conversion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mobile-web-browser-support">Mobile Web Browser Support</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#lazy-loading-files">Lazy Loading Files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#change-in-share-expiration-date">Change in Share Expiration Date</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">What&#8217;s New for Users in ownCloud 8</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#desktop-sync-client-shares-from-file-manager-selective-sync">Desktop Sync Client Shares From File Manager, Selective Sync</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#favorites">Favorites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#improved-server-to-server-sharing">Improved Server-to-Server Sharing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#improved-search">Improved Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#web-interface-enhancements">Web Interface Enhancements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-broker-improves-performance">Download Broker Improves Performance</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="webinterface.html">The ownCloud Web Interface</a></li>
@@ -145,60 +143,47 @@
 				<div class="span9">
 					<div class="page-content">
 						
-  <div class="section" id="what-s-new-for-users-in-owncloud-7">
-<h1>What&#8217;s New for Users in ownCloud 7<a class="headerlink" href="#what-s-new-for-users-in-owncloud-7" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="no-more-shared-folder">
-<h2>No More Shared Folder<a class="headerlink" href="#no-more-shared-folder" title="Permalink to this headline">¶</a></h2>
-<p>The Shared folder has been removed from ownCloud 7. If you are upgrading
-from older ownCloud versions you will still have your old Shared folder,
-but new shares will appear in the top-level of your Files page, and the Shared
-folder is no longer required. You can now create your own folders for
-storing shared files, and organize and move them around like any other files.</p>
+  <div class="section" id="what-s-new-for-users-in-owncloud-8">
+<h1>What&#8217;s New for Users in ownCloud 8<a class="headerlink" href="#what-s-new-for-users-in-owncloud-8" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="desktop-sync-client-shares-from-file-manager-selective-sync">
+<h2>Desktop Sync Client Shares From File Manager, Selective Sync<a class="headerlink" href="#desktop-sync-client-shares-from-file-manager-selective-sync" title="Permalink to this headline">¶</a></h2>
+<p>The Desktop Sync Client now allows you to share files directly from your file
+manager, and has a new graphical selective sync file chooser. See the
+<a class="reference external" href="http://doc.owncloud.org/desktop/1.8/">ownCloud Desktop Client Manual</a> for
+more information.</p>
 </div>
-<div class="section" id="selective-sync">
-<h2>Selective Sync<a class="headerlink" href="#selective-sync" title="Permalink to this headline">¶</a></h2>
-<p>The desktop client now makes it easier for users to configure which folders
-on their ownCloud instances should be syncing with the desktop, and can easily
-make changes for special circumstances such as travel and special projects.</p>
+<div class="section" id="favorites">
+<h2>Favorites<a class="headerlink" href="#favorites" title="Permalink to this headline">¶</a></h2>
+<p>Users can now assign a favorite icon to files and folders. Look for
+improvements in this feature in future ownCloud editions to make finding and
+managing files even easier.</p>
 </div>
-<div class="section" id="server-to-server-sharing">
-<h2>Server to Server Sharing<a class="headerlink" href="#server-to-server-sharing" title="Permalink to this headline">¶</a></h2>
-<p>ownCloud 7 servers can now connect shares directly with each other. With just a
-few clicks you can easily and securely connect to public shares on other
-ownCloud servers, and optionally create public shares for sharing your own files
-if your admin allows it.</p>
+<div class="section" id="improved-server-to-server-sharing">
+<h2>Improved Server-to-Server Sharing<a class="headerlink" href="#improved-server-to-server-sharing" title="Permalink to this headline">¶</a></h2>
+<p>Server-to-Server Sharing, introduced in ownCloud 7, allows you to mount file
+shares from remote ownCloud servers, and create a &#8220;cloud of ownClouds&#8221;. In
+ownCloud 8 the process for creating a new Server-to-Server link is easier and more
+streamlined.</p>
 </div>
-<div class="section" id="file-and-activity-notifications">
-<h2>File and Activity Notifications<a class="headerlink" href="#file-and-activity-notifications" title="Permalink to this headline">¶</a></h2>
-<p>In ownCloud 7 you can set up automatic notifications on your ownCloud
-Personal page of tracked activities such as new shares, and changed or deleted
-files.</p>
+<div class="section" id="improved-search">
+<h2>Improved Search<a class="headerlink" href="#improved-search" title="Permalink to this headline">¶</a></h2>
+<p>The search interface has been streamlined and simplified, with more features
+including enhanced result set reporting and additional search parameters.</p>
 </div>
-<div class="section" id="owncloud-documents-with-word-conversion">
-<h2>ownCloud Documents with Word Conversion<a class="headerlink" href="#owncloud-documents-with-word-conversion" title="Permalink to this headline">¶</a></h2>
-<p>You can convert Word documents on the fly: open them in ownCloud for
-editing, and live editing with other users, and when you close it reverts
-to its original Word format with all of your changes embedded.</p>
+<div class="section" id="web-interface-enhancements">
+<h2>Web Interface Enhancements<a class="headerlink" href="#web-interface-enhancements" title="Permalink to this headline">¶</a></h2>
+<p>The ownCloud Web interface has been improved to make it easier for all users to
+access, edit, sync and share their files.</p>
 </div>
-<div class="section" id="mobile-web-browser-support">
-<h2>Mobile Web Browser Support<a class="headerlink" href="#mobile-web-browser-support" title="Permalink to this headline">¶</a></h2>
-<p>ownCloud 7 is friendly to small screens, and can be used on most tablet and
-mobile browsers without requiring the use of a native mobile app. This provides
-support for devices that do not have a native app, like Microsoft and
-Blackberry.</p>
-</div>
-<div class="section" id="lazy-loading-files">
-<h2>Lazy Loading Files<a class="headerlink" href="#lazy-loading-files" title="Permalink to this headline">¶</a></h2>
-<p>Viewing your Files page is faster now thanks to &#8220;lazy loading&#8221;, which loads
-files as you scroll down the page instead of loading all of them when you open
-the page.</p>
-</div>
-<div class="section" id="change-in-share-expiration-date">
-<h2>Change in Share Expiration Date<a class="headerlink" href="#change-in-share-expiration-date" title="Permalink to this headline">¶</a></h2>
-<p>In older versions of ownCloud, you could set an expiration date on both local
-and public shares. Now you can set an expiration date only on public shares,
-and local shares do not expire when public shares expire. The only way to
-&#8220;expire&#8221; a local share is to click the trash can icon to un-share your files.</p>
+<div class="section" id="download-broker-improves-performance">
+<h2>Download Broker Improves Performance<a class="headerlink" href="#download-broker-improves-performance" title="Permalink to this headline">¶</a></h2>
+<p>When ownCloud delivers universal file access to end users, files from many
+different document sources are aggregated into a single interface and served to
+end users. In some cases, passing all of the files aggregated in this interface
+through a single server, ownCloud, slows down data access. ownCloud now
+supports direct downloads of files from select storage back-ends, reducing the
+load on the ownCloud server without sacrificing control over the files that are
+stored in the various back end systems.</p>
 </div>
 </div>
 

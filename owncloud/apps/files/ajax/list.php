@@ -1,8 +1,8 @@
 <?php
 
 OCP\JSON::checkLoggedIn();
-\OC::$session->close();
-$l = OC_L10N::get('files');
+\OC::$server->getSession()->close();
+$l = \OC::$server->getL10N('files');
 
 // Load the files
 $dir = isset($_GET['dir']) ? $_GET['dir'] : '';
@@ -26,6 +26,7 @@ try {
 	// make filelist
 
 	$files = \OCA\Files\Helper::getFiles($dir, $sortAttribute, $sortDirection);
+	$files = \OCA\Files\Helper::populateTags($files);
 	$data['directory'] = $dir;
 	$data['files'] = \OCA\Files\Helper::formatFileInfos($files);
 	$data['permissions'] = $permissions;

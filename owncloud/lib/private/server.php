@@ -2,15 +2,25 @@
 
 namespace OC;
 
+use bantu\IniGetWrapper\IniGetWrapper;
 use OC\AppFramework\Http\Request;
 use OC\AppFramework\Db\Db;
 use OC\AppFramework\Utility\SimpleContainer;
 use OC\Cache\UserCache;
-use OC\DB\ConnectionWrapper;
+use OC\Diagnostics\NullQueryLogger;
+use OC\Diagnostics\EventLogger;
+use OC\Diagnostics\QueryLogger;
+use OC\Files\Config\StorageManager;
+use OC\Security\CertificateManager;
 use OC\Files\Node\Root;
 use OC\Files\View;
-use OCP\IServerContainer;
 use OC\Security\Crypto;
+use OC\Security\Hasher;
+use OC\Security\SecureRandom;
+use OC\Diagnostics\NullEventLogger;
+use OCP\IServerContainer;
+use OCP\ISession;
+use OC\Tagging\TagMapper;
 
 /**
  * Class Server
@@ -20,20 +30,27 @@ use OC\Security\Crypto;
  * TODO: hookup all manager classes
  */
 class Server extends SimpleContainer implements IServerContainer {
+	/** @var string */
+	private $webRoot;
 
-	function __construct() {
+	/**
+	 * @param string $webRoot
+	 */
+	function __construct($webRoot) {
+		$this->webRoot = $webRoot;
+
 		$this->registerService('ContactsManager', function ($c) {
 			return new ContactsManager();
 		});
-		$this->registerService('Request', function ($c) {
+		$this->registerService('Request', function (Server $c) {
 			if (isset($c['urlParams'])) {
 				$urlParams = $c['urlParams'];
 			} else {
 				$urlParams = array();
 			}
 
-			if (\OC::$session->exists('requesttoken')) {
-				$requestToken = \OC::$session->get('requesttoken');
+			if ($c->getSession()->exists('requesttoken')) {
+				$requestToken = $c->getSession()->get('requesttoken');
 			} else {
 				$requestToken = false;
 			}
@@ -55,8 +72,8 @@ class Server extends SimpleContainer implements IServerContainer {
 					'env' => $_ENV,
 					'cookies' => $_COOKIE,
 					'method' => (isset($_SERVER) && isset($_SERVER['REQUEST_METHOD']))
-							? $_SERVER['REQUEST_METHOD']
-							: null,
+						? $_SERVER['REQUEST_METHOD']
+						: null,
 					'urlParams' => $urlParams,
 					'requesttoken' => $requestToken,
 				), $stream
@@ -65,11 +82,14 @@ class Server extends SimpleContainer implements IServerContainer {
 		$this->registerService('PreviewManager', function ($c) {
 			return new PreviewManager();
 		});
-		$this->registerService('TagManager', function ($c) {
-			$user = \OC_User::getUser();
-			return new TagManager($user);
+		$this->registerService('TagMapper', function(Server $c) {
+			return new TagMapper($c->getDb());
 		});
-		$this->registerService('RootFolder', function ($c) {
+		$this->registerService('TagManager', function (Server $c) {
+			$tagMapper = $c->query('TagMapper');
+			return new TagManager($tagMapper, $c->getUserSession());
+		});
+		$this->registerService('RootFolder', function (Server $c) {
 			// TODO: get user and user manager from container as well
 			$user = \OC_User::getUser();
 			/** @var $c SimpleContainer */
@@ -79,29 +99,35 @@ class Server extends SimpleContainer implements IServerContainer {
 			$view = new View();
 			return new Root($manager, $view, $user);
 		});
-		$this->registerService('UserManager', function ($c) {
-			/**
-			 * @var SimpleContainer $c
-			 * @var \OC\AllConfig $config
-			 */
-			$config = $c->query('AllConfig');
+		$this->registerService('UserManager', function (Server $c) {
+			$config = $c->getConfig();
 			return new \OC\User\Manager($config);
 		});
-		$this->registerService('GroupManager', function ($c) {
-			/**
-			 * @var SimpleContainer $c
-			 * @var \OC\User\Manager $userManager
-			 */
-			$userManager = $c->query('UserManager');
-			return new \OC\Group\Manager($userManager);
+		$this->registerService('GroupManager', function (Server $c) {
+			$groupManager = new \OC\Group\Manager($this->getUserManager());
+			$groupManager->listen('\OC\Group', 'preCreate', function ($gid) {
+				\OC_Hook::emit('OC_Group', 'pre_createGroup', array('run' => true, 'gid' => $gid));
+			});
+			$groupManager->listen('\OC\Group', 'postCreate', function (\OC\Group\Group $gid) {
+				\OC_Hook::emit('OC_User', 'post_createGroup', array('gid' => $gid->getGID()));
+			});
+			$groupManager->listen('\OC\Group', 'preDelete', function (\OC\Group\Group $group) {
+				\OC_Hook::emit('OC_Group', 'pre_deleteGroup', array('run' => true, 'gid' => $group->getGID()));
+			});
+			$groupManager->listen('\OC\Group', 'postDelete', function (\OC\Group\Group $group) {
+				\OC_Hook::emit('OC_User', 'post_deleteGroup', array('gid' => $group->getGID()));
+			});
+			$groupManager->listen('\OC\Group', 'preAddUser', function (\OC\Group\Group $group, \OC\User\User $user) {
+				\OC_Hook::emit('OC_Group', 'pre_addToGroup', array('run' => true, 'uid' => $user->getUID(), 'gid' => $group->getGID()));
+			});
+			$groupManager->listen('\OC\Group', 'postAddUser', function (\OC\Group\Group $group, \OC\User\User $user) {
+				\OC_Hook::emit('OC_Group', 'post_addToGroup', array('uid' => $user->getUID(), 'gid' => $group->getGID()));
+			});
+			return $groupManager;
 		});
-		$this->registerService('UserSession', function ($c) {
-			/**
-			 * @var SimpleContainer $c
-			 * @var \OC\User\Manager $manager
-			 */
-			$manager = $c->query('UserManager');
-			$userSession = new \OC\User\Session($manager, \OC::$session);
+		$this->registerService('UserSession', function (Server $c) {
+			$manager = $c->getUserManager();
+			$userSession = new \OC\User\Session($manager, new \OC\Session\Memory(''));
 			$userSession->listen('\OC\User', 'preCreateUser', function ($uid, $password) {
 				\OC_Hook::emit('OC_User', 'pre_createUser', array('run' => true, 'uid' => $uid, 'password' => $password));
 			});
@@ -140,8 +166,13 @@ class Server extends SimpleContainer implements IServerContainer {
 		$this->registerService('NavigationManager', function ($c) {
 			return new \OC\NavigationManager();
 		});
-		$this->registerService('AllConfig', function ($c) {
-			return new \OC\AllConfig();
+		$this->registerService('AllConfig', function (Server $c) {
+			return new \OC\AllConfig(
+				$c->getSystemConfig()
+			);
+		});
+		$this->registerService('SystemConfig', function ($c) {
+			return new \OC\SystemConfig();
 		});
 		$this->registerService('AppConfig', function ($c) {
 			return new \OC\AppConfig(\OC_DB::getConnection());
@@ -149,9 +180,8 @@ class Server extends SimpleContainer implements IServerContainer {
 		$this->registerService('L10NFactory', function ($c) {
 			return new \OC\L10N\Factory();
 		});
-		$this->registerService('URLGenerator', function ($c) {
-			/** @var $c SimpleContainer */
-			$config = $c->query('AllConfig');
+		$this->registerService('URLGenerator', function (Server $c) {
+			$config = $c->getConfig();
 			return new \OC\URLGenerator($config);
 		});
 		$this->registerService('AppHelper', function ($c) {
@@ -170,25 +200,18 @@ class Server extends SimpleContainer implements IServerContainer {
 		$this->registerService('AvatarManager', function ($c) {
 			return new AvatarManager();
 		});
-		$this->registerService('Logger', function ($c) {
-			/** @var $c SimpleContainer */
+		$this->registerService('Logger', function (Server $c) {
 			$logClass = $c->query('AllConfig')->getSystemValue('log_type', 'owncloud');
 			$logger = 'OC_Log_' . ucfirst($logClass);
 			call_user_func(array($logger, 'init'));
 
 			return new Log($logger);
 		});
-		$this->registerService('JobList', function ($c) {
-			/**
-			 * @var Server $c
-			 */
+		$this->registerService('JobList', function (Server $c) {
 			$config = $c->getConfig();
 			return new \OC\BackgroundJob\JobList($c->getDatabaseConnection(), $config);
 		});
-		$this->registerService('Router', function ($c) {
-			/**
-			 * @var Server $c
-			 */
+		$this->registerService('Router', function (Server $c) {
 			$cacheFactory = $c->getMemCacheFactory();
 			if ($cacheFactory->isAvailable()) {
 				$router = new \OC\Route\CachingRouter($cacheFactory->create('route'));
@@ -200,15 +223,79 @@ class Server extends SimpleContainer implements IServerContainer {
 		$this->registerService('Search', function ($c) {
 			return new Search();
 		});
-		$this->registerService('Crypto', function ($c) {
-			return new Crypto(\OC::$server->getConfig());
+		$this->registerService('SecureRandom', function ($c) {
+			return new SecureRandom();
 		});
-		$this->registerService('Db', function ($c) {
-			return new Db();
+		$this->registerService('Crypto', function (Server $c) {
+			return new Crypto($c->getConfig(), $c->getSecureRandom());
 		});
-		$this->registerService('HTTPHelper', function (SimpleContainer $c) {
-			$config = $c->query('AllConfig');
-			return new HTTPHelper($config);
+		$this->registerService('Hasher', function (Server $c) {
+			return new Hasher($c->getConfig());
+		});
+		$this->registerService('DatabaseConnection', function (Server $c) {
+			$factory = new \OC\DB\ConnectionFactory();
+			$systemConfig = $c->getSystemConfig();
+			$type = $systemConfig->getValue('dbtype', 'sqlite');
+			if (!$factory->isValidType($type)) {
+				throw new \OC\DatabaseException('Invalid database type');
+			}
+			$connectionParams = $factory->createConnectionParams($systemConfig);
+			$connection = $factory->getConnection($type, $connectionParams);
+			$connection->getConfiguration()->setSQLLogger($c->getQueryLogger());
+			return $connection;
+		});
+		$this->registerService('Db', function (Server $c) {
+			return new Db($c->getDatabaseConnection());
+		});
+		$this->registerService('HTTPHelper', function (Server $c) {
+			$config = $c->getConfig();
+			$user = $c->getUserSession()->getUser();
+			$uid = $user ? $user->getUID() : null;
+			return new HTTPHelper($config, new \OC\Security\CertificateManager($uid, new \OC\Files\View()));
+		});
+		$this->registerService('EventLogger', function (Server $c) {
+			if (defined('DEBUG') and DEBUG) {
+				return new EventLogger();
+			} else {
+				return new NullEventLogger();
+			}
+		});
+		$this->registerService('QueryLogger', function ($c) {
+			if (defined('DEBUG') and DEBUG) {
+				return new QueryLogger();
+			} else {
+				return new NullQueryLogger();
+			}
+		});
+		$this->registerService('TempManager', function (Server $c) {
+			return new TempManager(get_temp_dir(), $c->getLogger());
+		});
+		$this->registerService('AppManager', function(Server $c) {
+			$userSession = $c->getUserSession();
+			$appConfig = $c->getAppConfig();
+			$groupManager = $c->getGroupManager();
+			return new \OC\App\AppManager($userSession, $appConfig, $groupManager);
+		});
+		$this->registerService('DateTimeZone', function(Server $c) {
+			return new DateTimeZone(
+				$c->getConfig(),
+				$c->getSession()
+			);
+		});
+		$this->registerService('DateTimeFormatter', function(Server $c) {
+			$language = $c->getConfig()->getUserValue($c->getSession()->get('user_id'), 'core', 'lang', null);
+
+			return new DateTimeFormatter(
+				$c->getDateTimeZone()->getTimeZone(),
+				$c->getL10N('lib', $language)
+			);
+		});
+		$this->registerService('MountConfigManager', function () {
+			$loader = \OC\Files\Filesystem::getLoader();
+			return new \OC\Files\Config\MountProviderCollection($loader);
+		});
+		$this->registerService('IniWrapper', function ($c) {
+			return new IniGetWrapper();
 		});
 	}
 
@@ -274,7 +361,7 @@ class Server extends SimpleContainer implements IServerContainer {
 	 * @return \OCP\Files\Folder
 	 */
 	function getUserFolder($userId = null) {
-		if($userId === null) {
+		if ($userId === null) {
 			$user = $this->getUserSession()->getUser();
 			if (!$user) {
 				return null;
@@ -283,6 +370,7 @@ class Server extends SimpleContainer implements IServerContainer {
 		} else {
 			$user = $this->getUserManager()->get($userId);
 		}
+		\OC\Files\Filesystem::initMountPoints($userId);
 		$dir = '/' . $userId;
 		$root = $this->getRootFolder();
 		$folder = null;
@@ -322,7 +410,6 @@ class Server extends SimpleContainer implements IServerContainer {
 	 * @return \OCP\Files\Folder
 	 */
 	function getAppFolder() {
-
 		$dir = '/' . \OC_App::getCurrentApp();
 		$root = $this->getRootFolder();
 		$folder = null;
@@ -356,6 +443,20 @@ class Server extends SimpleContainer implements IServerContainer {
 	}
 
 	/**
+	 * @return \OCP\ISession
+	 */
+	function getSession() {
+		return $this->query('UserSession')->getSession();
+	}
+
+	/**
+	 * @param \OCP\ISession $session
+	 */
+	function setSession(\OCP\ISession $session) {
+		return $this->query('UserSession')->setSession($session);
+	}
+
+	/**
 	 * @return \OC\NavigationManager
 	 */
 	function getNavigationManager() {
@@ -367,6 +468,15 @@ class Server extends SimpleContainer implements IServerContainer {
 	 */
 	function getConfig() {
 		return $this->query('AllConfig');
+	}
+
+	/**
+	 * For internal use only
+	 *
+	 * @return \OC\SystemConfig
+	 */
+	function getSystemConfig() {
+		return $this->query('SystemConfig');
 	}
 
 	/**
@@ -382,10 +492,11 @@ class Server extends SimpleContainer implements IServerContainer {
 	 * get an L10N instance
 	 *
 	 * @param string $app appid
+	 * @param string $lang
 	 * @return \OC_L10N
 	 */
-	function getL10N($app) {
-		return $this->query('L10NFactory')->get($app);
+	function getL10N($app, $lang = null) {
+		return $this->query('L10NFactory')->get($app, $lang);
 	}
 
 	/**
@@ -423,19 +534,10 @@ class Server extends SimpleContainer implements IServerContainer {
 	/**
 	 * Returns the current session
 	 *
-	 * @return \OCP\ISession
-	 */
-	function getSession() {
-		return \OC::$session;
-	}
-
-	/**
-	 * Returns the current session
-	 *
 	 * @return \OCP\IDBConnection
 	 */
 	function getDatabaseConnection() {
-		return new ConnectionWrapper(\OC_DB::getConnection());
+		return $this->query('DatabaseConnection');
 	}
 
 	/**
@@ -484,12 +586,30 @@ class Server extends SimpleContainer implements IServerContainer {
 	}
 
 	/**
+	 * Returns a SecureRandom instance
+	 *
+	 * @return \OCP\Security\ISecureRandom
+	 */
+	function getSecureRandom() {
+		return $this->query('SecureRandom');
+	}
+
+	/**
 	 * Returns a Crypto instance
 	 *
 	 * @return \OCP\Security\ICrypto
 	 */
 	function getCrypto() {
 		return $this->query('Crypto');
+	}
+
+	/**
+	 * Returns a Hasher instance
+	 *
+	 * @return \OCP\Security\IHasher
+	 */
+	function getHasher() {
+		return $this->query('Hasher');
 	}
 
 	/**
@@ -503,10 +623,116 @@ class Server extends SimpleContainer implements IServerContainer {
 
 	/**
 	 * Returns an instance of the HTTP helper class
+	 *
 	 * @return \OC\HTTPHelper
 	 */
 	function getHTTPHelper() {
 		return $this->query('HTTPHelper');
 	}
 
+	/**
+	 * Get the certificate manager for the user
+	 *
+	 * @param string $uid (optional) if not specified the current loggedin user is used
+	 * @return \OCP\ICertificateManager
+	 */
+	function getCertificateManager($uid = null) {
+		if (is_null($uid)) {
+			$userSession = $this->getUserSession();
+			$user = $userSession->getUser();
+			if (is_null($user)) {
+				return null;
+			}
+			$uid = $user->getUID();
+		}
+		return new CertificateManager($uid, new \OC\Files\View());
+	}
+
+	/**
+	 * Create a new event source
+	 *
+	 * @return \OCP\IEventSource
+	 */
+	function createEventSource() {
+		return new \OC_EventSource();
+	}
+
+	/**
+	 * Get the active event logger
+	 *
+	 * The returned logger only logs data when debug mode is enabled
+	 *
+	 * @return \OCP\Diagnostics\IEventLogger
+	 */
+	function getEventLogger() {
+		return $this->query('EventLogger');
+	}
+
+	/**
+	 * Get the active query logger
+	 *
+	 * The returned logger only logs data when debug mode is enabled
+	 *
+	 * @return \OCP\Diagnostics\IQueryLogger
+	 */
+	function getQueryLogger() {
+		return $this->query('QueryLogger');
+	}
+
+	/**
+	 * Get the manager for temporary files and folders
+	 *
+	 * @return \OCP\ITempManager
+	 */
+	function getTempManager() {
+		return $this->query('TempManager');
+	}
+
+	/**
+	 * Get the app manager
+	 *
+	 * @return \OCP\App\IAppManager
+	 */
+	function getAppManager() {
+		return $this->query('AppManager');
+	}
+
+	/**
+	 * Get the webroot
+	 *
+	 * @return string
+	 */
+	function getWebRoot() {
+		return $this->webRoot;
+	}
+
+	/**
+	 * @return \OCP\IDateTimeZone
+	 */
+	public function getDateTimeZone() {
+		return $this->query('DateTimeZone');
+	}
+
+	/**
+	 * @return \OCP\IDateTimeFormatter
+	 */
+	public function getDateTimeFormatter() {
+		return $this->query('DateTimeFormatter');
+	}
+
+	/**
+	 * @return \OCP\Files\Config\IMountProviderCollection
+	 */
+	function getMountProviderCollection(){
+		return $this->query('MountConfigManager');
+	}
+
+	/**
+	 * Get the IniWrapper
+	 *
+	 * @return IniGetWrapper
+	 */
+	public function getIniWrapper() {
+		return $this->query('IniWrapper');
+	}
 }

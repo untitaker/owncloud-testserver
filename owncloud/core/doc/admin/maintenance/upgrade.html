@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Upgrading Your ownCloud Server &mdash; ownCloud Administrators Manual 7.0 documentation</title>
+    <title>Upgrading Your ownCloud Server &mdash; ownCloud Administrators Manual 8.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0',
+        VERSION:     '8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Administrators Manual 7.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Administrators Manual 8.0 documentation" href="../index.html" />
     <link rel="up" title="Maintenance" href="index.html" />
     <link rel="next" title="Restoring ownCloud" href="restore.html" />
     <link rel="prev" title="Updating ownCloud with the Updater App" href="update.html" />
@@ -116,7 +116,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos.html">ownCloud Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-8-only">Enterprise 8 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#owncloud-7-release-notes">ownCloud 7 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-7-only">Enterprise 7 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Maintenance</a><ul class="current">
@@ -132,7 +137,7 @@
 <li class="toctree-l2"><a class="reference internal" href="convert_db.html">Converting Database Type</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
 </ul>
 
 								</ul>
@@ -149,26 +154,21 @@
 <h1>Upgrading Your ownCloud Server<a class="headerlink" href="#upgrading-your-owncloud-server" title="Permalink to this headline">¶</a></h1>
 <p>Updating and upgrading your ownCloud installation are two different tasks.
 Updating means updating to the next point release, which is indicated
-by the third digit of the version number. For example, 4.5.1, 5.0.17, 6.0.4 and
-7.0.1 are point releases. (Look at the bottom of your Admin page to see your
-version number.)</p>
-<p>Major releases are indicated by the first and second digits. So 4.5.0, 5.0.0,
-6.0.0, and 7.0.0 are major releases. You may use the Updater app for staying
-current with new point releases (Community Edition only), but not for upgrading
-to a major release. Please see <a class="reference internal" href="update.html"><em>Updating ownCloud with the Updater App</em></a> for instructions on using the
-Updater app.</p>
-<p>You cannot skip major releases; for example, upgrading from 5.0 to 7.0. This is
-unsupported, and you&#8217;ll likely experience unpredictable results. It is best to
-install all upgrades and updates in order.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">If you installed ownCloud from your Linux distribution repositories
-using your package manager, then it is best to update/upgrade ownCloud using
-your package manager and staying in sync with your distro updates, rather
-than using the Updater app or upgrading manually. You should still
-maintain regular backups (see <a class="reference internal" href="backup.html"><em>Backing up ownCloud</em></a>), and make a backup before every
-update/upgrade.</p>
-</div>
+by the third digit of the version number. For example, 6.0.4 and
+7.0.4 are point releases. (Look at the bottom of your Admin page to see your
+version number.) Please see <a class="reference internal" href="update.html"><em>Updating ownCloud with the Updater App</em></a> for instructions on using the
+Updater app (Server only).</p>
+<p>Upgrading your ownCloud server means upgrading to the next major ownCloud release. Major releases
+are indicated by the first and second digits. So 6.0, 7.0 and 8.0 are major releases. You may use
+the Updater app for staying current with new point releases (Server only), but not for upgrading to
+a major release.</p>
+<p>The best method for keeping your ownCloud server on Linux servers current is by configuring your
+system to use the <a class="reference external" href="http://software.opensuse.org/download.html?project=isv:ownCloud:community&amp;package=owncloud">openSUSE Build Service</a>, and
+then stay current by using your package manager to upgrade. You should still maintain regular
+backups (see <a class="reference internal" href="backup.html"><em>Backing up ownCloud</em></a>), and make a backup before every update/upgrade.</p>
+<p>Windows server admins must use the manual upgrade procedure.</p>
+<p>You cannot skip major releases; for example, upgrading from 5.0 to 7.0. This is unsupported, and
+you&#8217;ll experience unpredictable results. It is best to install all upgrades and updates in order.</p>
 <div class="section" id="manual-upgrade-procedure">
 <h2>Manual Upgrade Procedure<a class="headerlink" href="#manual-upgrade-procedure" title="Permalink to this headline">¶</a></h2>
 <p>Start by putting your server in maintenance mode. Do this by entering your
@@ -182,18 +182,10 @@ ownCloud version.</li>
 compatibility with your new ownCloud version.</li>
 <li>Back up your existing ownCloud Server database, data directory, and
 <tt class="docutils literal"><span class="pre">config.php</span></tt> file. (See <a class="reference internal" href="backup.html"><em>Backing up ownCloud</em></a>.)</li>
-<li>Download the latest ownCloud Server version into an empty directory outside
+<li>Download and unpack the latest ownCloud Server version from <a class="reference external" href="https://owncloud.org/install/">owncloud.org/install/</a> into an empty directory outside
 of your current installation. For example, if your current ownCloud is
 installed in <tt class="docutils literal"><span class="pre">/var/www/owncloud/</span></tt> you could create a new directory called
 <tt class="docutils literal"><span class="pre">/var/www/owncloud2/</span></tt></li>
-</ol>
-<p>On Linux operating systems, change to your new directory and download the
-current ownCloud tarball with <tt class="docutils literal"><span class="pre">wget</span></tt>:</p>
-<blockquote>
-<div><tt class="docutils literal"><span class="pre">wget</span> <span class="pre">http://download.owncloud.org/community/owncloud-latest.tar.bz2</span></tt></div></blockquote>
-<p>For Windows operating systems. see the installation instruction in
-<a class="reference internal" href="../installation/windows_installation.html"><em>Windows 7 and Windows Server 2008</em></a>.</p>
-<ol class="arabic simple" start="5">
 <li>Stop your web server.</li>
 </ol>
 <p>Depending on your environment, you will be running either an Apache server or
@@ -386,11 +378,10 @@ log in as usual. You have a couple more steps to go: You should see a
 all the steps click the <strong>Start Update</strong> button.</p>
 <p>If you are an enterprise customer, or are running a large installation with
 a lot of files and users, you should launch the update from the command
-line. The <tt class="docutils literal"><span class="pre">occ</span></tt> command is in your <tt class="docutils literal"><span class="pre">owncloud/</span></tt> directory, so on a
-typical Linux installation you could run this command:</p>
-<blockquote>
-<div><p><tt class="docutils literal"><span class="pre">php</span> <span class="pre">/var/www/owncloud/occ</span> <span class="pre">upgrade</span></tt></p>
-</div></blockquote>
+line using <tt class="docutils literal"><span class="pre">occ</span></tt> to avoid timeouts, like this example on Ubuntu Linux:</p>
+<div class="highlight-python"><pre>$ sudo -u www-data php occ upgrade</pre>
+</div>
+<p>Please see <a class="reference internal" href="../configuration/occ_command.html"><em>Using the occ Command</em></a> to learn more about <tt class="docutils literal"><span class="pre">occ</span></tt>.</p>
 </li>
 <li><p class="first">The upgrade operation takes a few minutes, depending on the size of your
 installation. When it is finished you will see a success message, or an

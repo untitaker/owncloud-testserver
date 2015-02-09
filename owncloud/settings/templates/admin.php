@@ -8,6 +8,13 @@
  * @var array $_
  * @var \OCP\IL10N $l
  */
+
+style('settings', 'settings');
+script('settings', [ 'settings', 'admin', 'log'] );
+script('core', ['multiselect', 'setupchecks']);
+vendor_script('select2/select2');
+vendor_style('select2/select2');
+
 $levels = array('Debug', 'Info', 'Warning', 'Error', 'Fatal');
 $levelLabels = array(
 	$l->t( 'Everything (fatal issues, errors, warnings, info, debug)' ),
@@ -40,9 +47,23 @@ if ($_['sendmail_is_available']) {
 if ($_['mail_smtpmode'] == 'qmail') {
 	$mail_smtpmode[] = 'qmail';
 }
-
 ?>
 
+<div id="app-navigation">
+	<ul>
+		<?php foreach($_['forms'] as $form) {
+			if (isset($form['anchor'])) {
+				$anchor = '#' . $form['anchor'];
+				$sectionName = $form['section-name'];
+				print_unescaped(sprintf("<li><a href='%s'>%s</a></li>", OC_Util::sanitizeHTML($anchor), OC_Util::sanitizeHTML($sectionName)));
+			}
+		}?>
+	</ul>
+</div>
+
+<div id="app-content">
+
+<div id="security-warning">
 <?php
 
 // is ssl working ?
@@ -59,20 +80,6 @@ if (!$_['isConnectedViaHTTPS']) {
 <?php
 }
 
-// is htaccess working ?
-if (!$_['htaccessworking']) {
-	?>
-	<div class="section">
-		<h2><?php p($l->t('Security Warning')); ?></h2>
-
-	<span class="securitywarning">
-		<?php p($l->t('Your data directory and your files are probably accessible from the internet. The .htaccess file is not working. We strongly suggest that you configure your webserver in a way that the data directory is no longer accessible or you move the data directory outside the webserver document root.')); ?>
-	</span>
-
-	</div>
-<?php
-}
-
 // is read only config enabled
 if ($_['readOnlyConfigEnabled']) {
 ?>
@@ -86,7 +93,6 @@ if ($_['readOnlyConfigEnabled']) {
 	</div>
 <?php
 }
-
 // Are doc blocks accessible?
 if (!$_['isAnnotationsWorking']) {
 	?>
@@ -108,8 +114,32 @@ if ($_['databaseOverload']) {
 <div class="section">
 	<h2><?php p($l->t('Database Performance Info'));?></h2>
 
+	<p>
+		<strong>
+			<?php p($l->t('SQLite is used as database. For larger installations we recommend to switch to a different database backend.')); ?>
+		</strong>
+	</p>
+	<p>
+		<strong>
+			<?php p($l->t('Especially when using the desktop client for file syncing the use of SQLite is discouraged.')); ?>
+		</strong>
+	</p>
+	<p>
+		<?php p($l->t('To migrate to another database use the command line tool: \'occ db:convert-type\'')); ?>
+	</p>
+
+</div>
+<?php
+}
+
+// Windows Warning
+if ($_['WindowsWarning']) {
+	?>
+<div class="section">
+	<h2><?php p($l->t('Microsoft Windows Platform'));?></h2>
+
 	<p class="securitywarning">
-		<?php p($l->t('SQLite is used as database. For larger installations we recommend to change this. To migrate to another database use the command line tool: \'occ db:convert-type\'')); ?>
+		<?php p($l->t('Your server is running on Microsoft Windows. We highly recommend Linux for optimal user experience.')); ?>
 	</p>
 
 </div>
@@ -130,17 +160,17 @@ if (!$_['has_fileinfo']) {
 <?php
 }
 
-// is PHP at least at 5.3.8?
-if ($_['old_php']) {
+// is PHP charset set to UTF8?
+if (!$_['isPhpCharSetUtf8']) {
 	?>
-<div class="section">
-	<h2><?php p($l->t('Your PHP version is outdated'));?></h2>
+	<div class="section">
+		<h2><?php p($l->t('PHP charset is not set to UTF-8'));?></h2>
 
 		<span class="connectionwarning">
-		<?php p($l->t('Your PHP version is outdated. We strongly recommend to update to 5.3.8 or newer because older versions are known to be broken. It is possible that this installation is not working correctly.')); ?>
+		<?php p($l->t("PHP charset is not set to UTF-8. This can cause major issues with non-ASCII characters in file names. We highly recommend to change the value of 'default_charset' php.ini to 'UTF-8'.")); ?>
 	</span>
 
-</div>
+	</div>
 <?php
 }
 
@@ -161,7 +191,7 @@ if (!$_['isLocaleWorking']) {
 		?>
 			<br>
 			<?php
-			p($l->t('We strongly suggest to install the required packages on your system to support one of the following locales: %s.', array($locales)));
+			p($l->t('We strongly suggest installing the required packages on your system to support one of the following locales: %s.', array($locales)));
 			?>
 	</span>
 
@@ -169,13 +199,13 @@ if (!$_['isLocaleWorking']) {
 <?php
 }
 
-if ($_['suggestedOverwriteWebroot']) {
+if ($_['suggestedOverwriteCliUrl']) {
 	?>
 	<div class="section">
 		<h2><?php p($l->t('URL generation in notification emails'));?></h2>
 
 		<span class="connectionwarning">
-		<?php p($l->t('If your installation is not installed in the root of the domain and uses system cron, there can be issues with the URL generation. To avoid these problems, please set the "overwritewebroot" option in your config.php file to the webroot path of your installation (Suggested: "%s")', $_['suggestedOverwriteWebroot'])); ?>
+		<?php p($l->t('If your installation is not installed in the root of the domain and uses system cron, there can be issues with the URL generation. To avoid these problems, please set the "overwrite.cli.url" option in your config.php file to the webroot path of your installation (Suggested: "%s")', $_['suggestedOverwriteCliUrl'])); ?>
 	</span>
 
 	</div>
@@ -183,7 +213,7 @@ if ($_['suggestedOverwriteWebroot']) {
 }
 ?>
 <div id="postsetupchecks" class="section">
-	<h2><?php p($l->t('Connectivity Checks'));?></h2>
+	<h2><?php p($l->t('Configuration Checks'));?></h2>
 	<div class="loading"></div>
 	<div class="success hidden"><?php p($l->t('No problems found'));?></div>
 	<div class="errors hidden"></div>
@@ -193,10 +223,12 @@ if ($_['suggestedOverwriteWebroot']) {
 		?></span>
 	</div>
 </div>
-<?php foreach ($_['forms'] as $form) {
-	print_unescaped($form);
-}
-;?>
+</div>
+<?php foreach($_['forms'] as $form) {
+	if (isset($form['form'])) {?>
+		<div id="<?php isset($form['anchor']) ? p($form['anchor']) : p('');?>"><?php print_unescaped($form['form']);?></div>
+	<?php }
+};?>
 
 <div class="section" id="backgroundjobs">
 	<h2 class="inlineblock"><?php p($l->t('Cron'));?></h2>
@@ -260,9 +292,14 @@ if ($_['suggestedOverwriteWebroot']) {
 				<input type="checkbox" name="shareapi_enforce_links_password" id="enforceLinkPassword"
 						   value="1" <?php if ($_['enforceLinkPassword']) print_unescaped('checked="checked"'); ?> />
 				<label for="enforceLinkPassword"><?php p($l->t('Enforce password protection'));?></label><br/>
+
 				<input type="checkbox" name="shareapi_allow_public_upload" id="allowPublicUpload"
 				       value="1" <?php if ($_['allowPublicUpload'] == 'yes') print_unescaped('checked="checked"'); ?> />
 				<label for="allowPublicUpload"><?php p($l->t('Allow public uploads'));?></label><br/>
+
+				<input type="checkbox" name="shareapi_allow_public_notification" id="allowPublicMailNotification"
+					value="1" <?php if ($_['allowPublicMailNotification'] == 'yes') print_unescaped('checked="checked"'); ?> />
+				<label for="allowPublicMailNotification"><?php p($l->t('Allow users to send mail notification for shared files'));?></label><br/>
 
 				<input type="checkbox" name="shareapi_default_expire_date" id="shareapiDefaultExpireDate"
 				       value="1" <?php if ($_['shareDefaultExpireDateSet'] === 'yes') print_unescaped('checked="checked"'); ?> />
@@ -291,7 +328,7 @@ if ($_['suggestedOverwriteWebroot']) {
 		<p class="<?php if ($_['shareAPIEnabled'] === 'no') p('hidden');?>">
 			<input type="checkbox" name="shareapi_allow_mail_notification" id="allowMailNotification"
 				   value="1" <?php if ($_['allowMailNotification'] === 'yes') print_unescaped('checked="checked"'); ?> />
-			<label for="allowMailNotification"><?php p($l->t('Allow users to send mail notification for shared files'));?></label><br/>
+			<label for="allowMailNotification"><?php p($l->t('Allow users to send mail notification for shared files to other users'));?></label><br/>
 		</p>
 		<p class="<?php if ($_['shareAPIEnabled'] === 'no') p('hidden');?>">
 			<input type="checkbox" name="shareapi_exclude_groups" id="shareapiExcludeGroups"
@@ -311,9 +348,9 @@ if ($_['suggestedOverwriteWebroot']) {
 		<input type="checkbox" name="forcessl"  id="forcessl"
 			<?php if ($_['enforceHTTPSEnabled']) {
 				print_unescaped('checked="checked" ');
-				print_unescaped('value="false"');
-			}  else {
 				print_unescaped('value="true"');
+			}  else {
+				print_unescaped('value="false"');
 			}
 			?>
 			<?php if (!$_['isConnectedViaHTTPS']) p('disabled'); ?> />
@@ -321,7 +358,23 @@ if ($_['suggestedOverwriteWebroot']) {
 		<em><?php p($l->t(
 			'Forces the clients to connect to %s via an encrypted connection.',
 			$theme->getName()
-		)); ?></em>
+		)); ?></em><br/>
+		<span id="forceSSLforSubdomainsSpan" <?php if(!$_['enforceHTTPSEnabled']) { print_unescaped('class="hidden"'); } ?>>
+			<input type="checkbox" name="forceSSLforSubdomains"  id="forceSSLforSubdomains"
+				<?php if ($_['forceSSLforSubdomainsEnabled']) {
+					print_unescaped('checked="checked" ');
+					print_unescaped('value="true"');
+				}  else {
+					print_unescaped('value="false"');
+				}
+				?>
+				<?php if (!$_['isConnectedViaHTTPS']) { p('disabled'); } ?> />
+			<label for="forceSSLforSubdomains"><?php p($l->t('Enforce HTTPS for subdomains'));?></label><br/>
+			<em><?php p($l->t(
+					'Forces the clients to connect to %s and subdomains via an encrypted connection.',
+					$theme->getName()
+				)); ?></em>
+		</span>
 		<?php if (!$_['isConnectedViaHTTPS']) {
 			print_unescaped("<br/><em>");
 			p($l->t(
@@ -371,7 +424,7 @@ if ($_['suggestedOverwriteWebroot']) {
 		<p>
 			<label for="mail_from_address"><?php p($l->t( 'From address' )); ?></label>
 			<input type="text" name='mail_from_address' id="mail_from_address" placeholder="<?php p($l->t('mail'))?>"
-				   value='<?php p($_['mail_from_address']) ?>' />
+				   value='<?php p($_['mail_from_address']) ?>' />@
 			<input type="text" name='mail_domain' id="mail_domain" placeholder="example.com"
 				   value='<?php p($_['mail_domain']) ?>' />
 		</p>
@@ -419,7 +472,7 @@ if ($_['suggestedOverwriteWebroot']) {
 	<span id="sendtestmail_msg" class="msg"></span>
 </div>
 
-<div class="section">
+<div class="section" id="log-section">
 	<h2><?php p($l->t('Log'));?></h2>
 	<?php p($l->t('Log level'));?> <select name='loglevel' id='loglevel'>
 <?php for ($i = 0; $i < 5; $i++):
@@ -430,6 +483,7 @@ if ($_['suggestedOverwriteWebroot']) {
 		<option value='<?php p($i)?>' <?php p($selected) ?>><?php p($levelLabels[$i])?></option>
 <?php endfor;?>
 </select>
+<?php if ($_['showLog'] && $_['doesLogFileExist']): ?>
 	<table id="log" class="grid">
 		<?php foreach ($_['entries'] as $entry): ?>
 		<tr>
@@ -452,11 +506,20 @@ if ($_['suggestedOverwriteWebroot']) {
 		</tr>
 		<?php endforeach;?>
 	</table>
+	<?php if ($_['logFileSize'] > 0): ?>
+	<a href="<?php print_unescaped(OC::$server->getURLGenerator()->linkToRoute('settings.LogSettings.download')); ?>" class="button" id="downloadLog"><?php p($l->t('Download logfile'));?></a>
+	<?php endif; ?>
 	<?php if ($_['entriesremain']): ?>
 	<input id="moreLog" type="button" value="<?php p($l->t('More'));?>...">
 	<input id="lessLog" type="button" value="<?php p($l->t('Less'));?>...">
 	<?php endif; ?>
-
+	<?php if ($_['logFileSize'] > (100 * 1024 * 1024)): ?>
+	<br>
+	<em>
+		<?php p($l->t('The logfile is bigger than 100MB. Downloading it may take some time!')); ?>
+	</em>
+	<?php endif; ?>
+	<?php endif; ?>
 </div>
 
 <div class="section">
@@ -471,4 +534,5 @@ if ($_['suggestedOverwriteWebroot']) {
 
 <div class="section credits-footer">
 	<p><?php print_unescaped($theme->getShortFooter()); ?></p>
+</div>
 </div>

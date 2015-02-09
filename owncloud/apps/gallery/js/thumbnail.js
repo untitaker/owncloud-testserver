@@ -1,7 +1,9 @@
-function Thumbnail (path, square) {
+/* global Gallery */
+function Thumbnail (path, square, token) {
+	this.token = token;
 	this.square = square;
 	this.path = path;
-	this.url = Thumbnail.getUrl(path, square);
+	this.url = Thumbnail.getUrl(path, square, token);
 	this.image = null;
 	this.loadingDeferred = new $.Deferred();
 	this.ratio = null;
@@ -9,21 +11,65 @@ function Thumbnail (path, square) {
 
 Thumbnail.map = {};
 Thumbnail.squareMap = {};
+Thumbnail.height = 200;
+Thumbnail.width = 400;
 
-Thumbnail.get = function (path, square) {
+Thumbnail.get = function (path, square, token) {
 	var map = (square) ? Thumbnail.squareMap : Thumbnail.map;
 	if (!map[path]) {
-		map[path] = new Thumbnail(path, square);
+		map[path] = new Thumbnail(path, square, token);
 	}
 	return map[path];
 };
 
-Thumbnail.getUrl = function (path, square) {
-	if (square) {
-		return OC.filePath('gallery', 'ajax', 'thumbnail.php') + '?file=' + encodeURIComponent(path) + '&square=1';
-	} else {
-		return OC.filePath('gallery', 'ajax', 'thumbnail.php') + '?file=' + encodeURIComponent(path);
+Thumbnail.getUrl = function (path, square, token) {
+	if (path.substr(path.length - 4) === '.svg' || path.substr(path.length - 5) === '.svgz') {
+		return Gallery.getImage(path);
 	}
+	return OC.generateUrl('apps/gallery/ajax/thumbnail?file={file}&scale={scale}&square={square}&token={token}', {
+		file: encodeURIComponent(path),
+		scale: window.devicePixelRatio,
+		square: (square) ? 1 : 0,
+		token: (token) ? token : ''
+	});
+};
+
+Thumbnail.loadBatch = function (paths, square, token) {
+	var map = (square) ? Thumbnail.squareMap : Thumbnail.map;
+	paths = paths.filter(function (path) {
+		return !map[path];
+	});
+	var thumbnails = {};
+	if (paths.length) {
+		paths.forEach(function (path) {
+			var thumb = new Thumbnail(path, square, token);
+			thumb.image = new Image();
+			map[path] = thumbnails[path] = thumb;
+		});
+
+		var url = OC.generateUrl(
+			'apps/gallery/ajax/thumbnail/batch?token={token}&image={images}&scale={scale}&square={square}', {
+			images: paths.map(encodeURIComponent).join(';'),
+			scale: window.devicePixelRatio,
+			square: (square) ? 1 : 0,
+			token: (token) ? token : ''
+		});
+
+		var eventSource = new OC.EventSource(url);
+		eventSource.listen('preview', function (data) {
+			var path = data.image;
+			var extension = path.substr(path.length - 3);
+			var thumb = thumbnails[path];
+			thumb.image.onload = function () {
+				Thumbnail.loadingCount--;
+				thumb.image.ratio = thumb.image.width / thumb.image.height;
+				thumb.image.originalWidth = 200 * thumb.image.ratio;
+				thumb.loadingDeferred.resolve(thumb.image);
+			};
+			thumb.image.src = 'data:image/' + extension + ';base64,' + data.preview;
+		});
+	}
+	return thumbnails;
 };
 
 Thumbnail.prototype.load = function () {
@@ -33,6 +79,7 @@ Thumbnail.prototype.load = function () {
 		this.image.onload = function () {
 			Thumbnail.loadingCount--;
 			that.image.ratio = that.image.width / that.image.height;
+			that.image.originalWidth = that.image.width / window.devicePixelRatio;
 			that.loadingDeferred.resolve(that.image);
 			Thumbnail.processQueue();
 		};

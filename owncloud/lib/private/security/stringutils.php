@@ -33,7 +33,7 @@ class StringUtils {
 			return hash_equals($expected, $input);
 		}
 
-		$randomString = \OC_Util::generateRandomBytes(10);
+		$randomString = \OC::$server->getSecureRandom()->getLowStrengthGenerator()->generate(10);
 
 		if(hash('sha512', $expected.$randomString) === hash('sha512', $input.$randomString)) {
 			if($expected === $input) {

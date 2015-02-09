@@ -55,14 +55,22 @@ class Navigation {
 	 * @param \OC_L10N $l
 	 * @param \OCP\Activity\IManager $manager
 	 * @param \OCP\IURLGenerator $URLGenerator
+	 * @param string $rssToken
 	 * @param null|string $active Navigation entry that should be marked as active
 	 */
-	public function __construct(\OC_L10N $l, IManager $manager, IURLGenerator $URLGenerator, $active = 'all') {
+	public function __construct(\OC_L10N $l, IManager $manager, IURLGenerator $URLGenerator, $rssToken, $active = 'all') {
 		$this->l = $l;
 		$this->activityManager = $manager;
 		$this->URLGenerator = $URLGenerator;
 		$this->active = $active;
-		$this->rssLink = '';
+
+		if ($rssToken) {
+			$this->rssLink = $this->URLGenerator->getAbsoluteURL(
+				$this->URLGenerator->linkToRoute('activity.rss', array('token' => $rssToken))
+			);
+		} else {
+			$this->rssLink = '';
+		}
 	}
 
 	/**
@@ -90,17 +98,6 @@ class Navigation {
 		return $template;
 	}
 
-	public function setRSSToken($rssToken) {
-		if ($rssToken) {
-			$this->rssLink = $this->URLGenerator->getAbsoluteURL(
-				$this->URLGenerator->linkToRoute('activity.rss', array('token' => $rssToken))
-			);
-		}
-		else {
-			$this->rssLink = '';
-		}
-	}
-
 	/**
 	 * Get all items for the users we want to send an email to
 	 *
@@ -111,22 +108,22 @@ class Navigation {
 			array(
 				'id' => 'all',
 				'name' => (string) $this->l->t('All Activities'),
-				'url' => Util::linkToRoute('activity.index'),
+				'url' => $this->URLGenerator->linkToRoute('activity.Activities.showList'),
 			),
 			array(
 				'id' => 'self',
 				'name' => (string) $this->l->t('Activities by you'),
-				'url' => Util::linkToRoute('activity.index', array('filter' => 'self')),
+				'url' => $this->URLGenerator->linkToRoute('activity.Activities.showList', array('filter' => 'self')),
 			),
 			array(
 				'id' => 'by',
 				'name' => (string) $this->l->t('Activities by others'),
-				'url' => Util::linkToRoute('activity.index', array('filter' => 'by')),
+				'url' => $this->URLGenerator->linkToRoute('activity.Activities.showList', array('filter' => 'by')),
 			),
 			array(
 				'id' => 'shares',
 				'name' => (string) $this->l->t('Shares'),
-				'url' => Util::linkToRoute('activity.index', array('filter' => 'shares')),
+				'url' => $this->URLGenerator->linkToRoute('activity.Activities.showList', array('filter' => 'shares')),
 			),
 		);
 
@@ -134,7 +131,7 @@ class Navigation {
 			array(
 				'id' => 'files',
 				'name' => (string) $this->l->t('Files'),
-				'url' => Util::linkToRoute('activity.index', array('filter' => 'files')),
+				'url' => $this->URLGenerator->linkToRoute('activity.Activities.showList', array('filter' => 'files')),
 			),
 		);
 

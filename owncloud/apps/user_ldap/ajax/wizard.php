@@ -26,7 +26,7 @@ OCP\JSON::checkAdminUser();
 OCP\JSON::checkAppEnabled('user_ldap');
 OCP\JSON::callCheck();
 
-$l=OC_L10N::get('user_ldap');
+$l = \OC::$server->getL10N('user_ldap');
 
 if(!isset($_POST['action'])) {
 	\OCP\JSON::error(array('message' => $l->t('No action specified')));
@@ -52,7 +52,8 @@ $userManager = new \OCA\user_ldap\lib\user\Manager(
 	new \OCA\user_ldap\lib\FilesystemHelper(),
 	new \OCA\user_ldap\lib\LogWrapper(),
 	\OC::$server->getAvatarManager(),
-	new \OCP\Image());
+	new \OCP\Image(),
+	\OC::$server->getDatabaseConnection());
 
 $access = new \OCA\user_ldap\lib\Access($con, $ldapWrapper, $userManager);
 
@@ -62,6 +63,7 @@ switch($action) {
 	case 'guessPortAndTLS':
 	case 'guessBaseDN':
 	case 'detectEmailAttribute':
+	case 'detectUserDisplayNameAttribute':
 	case 'determineGroupMemberAssoc':
 	case 'determineUserObjectClasses':
 	case 'determineGroupObjectClasses':
@@ -115,4 +117,3 @@ switch($action) {
 		//TODO: return 4xx error
 		break;
 }
-

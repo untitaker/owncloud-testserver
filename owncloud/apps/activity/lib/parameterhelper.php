@@ -23,19 +23,23 @@
 
 namespace OCA\Activity;
 
-use \OCP\User;
-use \OCP\Util;
-use \OC\Files\View;
+use OCP\Activity\IManager;
+use OCP\User;
+use OCP\Util;
+use OC\Files\View;
 
-class ParameterHelper
-{
+class ParameterHelper {
+	/** @var \OCP\Activity\IManager */
+	protected $activityManager;
+
 	/** @var \OC\Files\View */
 	protected $rootView;
 
 	/** @var \OC_L10N */
 	protected $l;
 
-	public function __construct(View $rootView, \OC_L10N $l) {
+	public function __construct(IManager $activityManager, View $rootView, \OC_L10N $l) {
+		$this->activityManager = $activityManager;
 		$this->rootView = $rootView;
 		$this->l = $l;
 	}
@@ -126,6 +130,16 @@ class ParameterHelper
 	 * @return string
 	 */
 	protected function prepareUserParam($param, $highlightParams) {
+		// If the username is empty, the action has been performed by a remote
+		// user, or via a public share. We don't know the username in that case
+		if ($param === '') {
+			if ($highlightParams) {
+				return '<strong>' . $this->l->t('"remote user"') . '</strong>';
+			} else {
+				return $this->l->t('"remote user"');
+			}
+		}
+
 		$displayName = User::getDisplayName($param);
 		$param = Util::sanitizeHTML($param);
 		$displayName = Util::sanitizeHTML($displayName);
@@ -274,6 +288,13 @@ class ParameterHelper
 		else if ($app === 'files') {
 			return array(0 => 'file', 1 => 'username');
 		}
+
+		$specialParameters = $this->activityManager->getSpecialParameterList($app, $text);
+
+		if ($specialParameters !== false) {
+			return $specialParameters;
+		}
+
 		return array();
 	}
 }

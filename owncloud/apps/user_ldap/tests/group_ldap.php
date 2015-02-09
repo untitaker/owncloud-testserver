@@ -22,14 +22,12 @@
 
 namespace OCA\user_ldap\tests;
 
-namespace OCA\user_ldap\tests;
-
 use \OCA\user_ldap\GROUP_LDAP as GroupLDAP;
 use \OCA\user_ldap\lib\Access;
 use \OCA\user_ldap\lib\Connection;
 use \OCA\user_ldap\lib\ILDAPWrapper;
 
-class Test_Group_Ldap extends \PHPUnit_Framework_TestCase {
+class Test_Group_Ldap extends \Test\TestCase {
 	private function getAccessMock() {
 		static $conMethods;
 		static $accMethods;
@@ -47,7 +45,8 @@ class Test_Group_Ldap extends \PHPUnit_Framework_TestCase {
 				$this->getMock('\OCA\user_ldap\lib\FilesystemHelper'),
 				$this->getMock('\OCA\user_ldap\lib\LogWrapper'),
 				$this->getMock('\OCP\IAvatarManager'),
-				$this->getMock('\OCP\Image')
+				$this->getMock('\OCP\Image'),
+				$this->getMock('\OCP\IDBConnection')
 			);
 		$access = $this->getMock('\OCA\user_ldap\lib\Access',
 								 $accMethods,

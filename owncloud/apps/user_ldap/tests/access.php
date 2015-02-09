@@ -26,7 +26,7 @@ use \OCA\user_ldap\lib\Access;
 use \OCA\user_ldap\lib\Connection;
 use \OCA\user_ldap\lib\ILDAPWrapper;
 
-class Test_Access extends \PHPUnit_Framework_TestCase {
+class Test_Access extends \Test\TestCase {
 	private function getConnecterAndLdapMock() {
 		static $conMethods;
 		static $accMethods;
@@ -47,7 +47,8 @@ class Test_Access extends \PHPUnit_Framework_TestCase {
 				$this->getMock('\OCA\user_ldap\lib\FilesystemHelper'),
 				$this->getMock('\OCA\user_ldap\lib\LogWrapper'),
 				$this->getMock('\OCP\IAvatarManager'),
-				$this->getMock('\OCP\Image')));
+				$this->getMock('\OCP\Image'),
+				$this->getMock('\OCP\IDBConnection')));
 
 		return array($lw, $connector, $um);
 	}

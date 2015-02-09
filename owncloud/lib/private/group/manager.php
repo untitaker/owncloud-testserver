@@ -134,7 +134,7 @@ class Manager extends PublicEmitter implements IGroupManager {
 		} else {
 			$this->emit('\OC\Group', 'preCreate', array($gid));
 			foreach ($this->backends as $backend) {
-				if ($backend->implementsActions(OC_GROUP_BACKEND_CREATE_GROUP)) {
+				if ($backend->implementsActions(\OC_Group_Backend::CREATE_GROUP)) {
 					$backend->createGroup($gid);
 					$group = $this->getGroupObject($gid);
 					$this->emit('\OC\Group', 'postCreate', array($group));
@@ -170,7 +170,14 @@ class Manager extends PublicEmitter implements IGroupManager {
 	 * @return \OC\Group\Group[]
 	 */
 	public function getUserGroups($user) {
-		$uid = $user->getUID();
+		return $this->getUserIdGroups($user->getUID());
+	}
+
+	/**
+	 * @param string $uid the user id
+	 * @return \OC\Group\Group[]
+	 */
+	public function getUserIdGroups($uid) {
 		if (isset($this->cachedUserGroups[$uid])) {
 			return $this->cachedUserGroups[$uid];
 		}
@@ -184,7 +191,26 @@ class Manager extends PublicEmitter implements IGroupManager {
 		$this->cachedUserGroups[$uid] = $groups;
 		return $this->cachedUserGroups[$uid];
 	}
-	
+
+	/**
+	 * Checks if a userId is in the admin group
+	 * @param string $userId
+	 * @return bool if admin
+	 */
+	public function isAdmin($userId) {
+		return $this->isInGroup($userId, 'admin');
+	}
+
+	/**
+	 * Checks if a userId is in a group
+	 * @param string $userId
+	 * @param group $group
+	 * @return bool if in group
+	 */
+	public function isInGroup($userId, $group) {
+		return array_key_exists($group, $this->getUserIdGroups($userId));
+	}
+
 	/**
 	 * get a list of group ids for a user
 	 * @param \OC\User\User $user

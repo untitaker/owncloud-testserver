@@ -8,10 +8,15 @@
 
 OCP\JSON::checkAppEnabled('gallery');
 
-list($owner, $img) = explode('/', $_GET['file'], 2);
-$linkItem = \OCP\Share::getShareByToken($owner);
+$scale = isset($_GET['scale']) ? $_GET['scale'] : 1;
+$img = $_GET['file'];
 
-if (is_array($linkItem) && isset($linkItem['uid_owner'])) {
+
+if (!empty($_GET['token'])) {
+	$linkItem = \OCP\Share::getShareByToken($_GET['token']);
+	if (!(is_array($linkItem) && isset($linkItem['uid_owner']))) {
+		exit;
+	}
 	// seems to be a valid share
 	$rootLinkItem = \OCP\Share::resolveReShare($linkItem);
 	$user = $rootLinkItem['uid_owner'];
@@ -32,5 +37,10 @@ session_write_close();
 
 $square = isset($_GET['square']) ? (bool)$_GET['square'] : false;
 
-$image = new \OCA\Gallery\Thumbnail('/' . $img, $user, $square);
-$image->show();
+if ($square) {
+	$preview = new \OC\Preview($user, 'files', '/' . $img, 200 * $scale, 200 * $scale);
+} else {
+	$preview = new \OC\Preview($user, 'files', '/' . $img, 400 * $scale, 200 * $scale);
+	$preview->setKeepAspect(true);
+}
+$preview->showPreview();

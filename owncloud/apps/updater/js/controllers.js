@@ -6,7 +6,7 @@ function updateCtrl($scope, $http) {
 	$scope.url = '';
 
 	$scope.fail = function (data) {
-		var message = t('updater', 'The update was unsuccessful. Please check logs at admin page and report this issue to the <a href="https://github.com/owncloud/apps/issues" target="_blank">ownCloud community</a>.');
+		var message = t('updater', 'The update was unsuccessful. Please check logs at admin page and report this issue to the <a href="https://github.com/owncloud/updater/issues/new" target="_blank">ownCloud community</a>.');
 		if (data && data.message) {
 			message = data.message;
 		}
@@ -23,6 +23,8 @@ function updateCtrl($scope, $http) {
 			$('#upd-progress').empty().show();
 			$('#upd-step-title').show();
 			$('.track-progress li').first().addClass('current');
+			$('.updater-spinner').hide();
+			$('.updater-spinner:eq(0)').fadeIn();
 			$('#updater-start').hide();
 			$('#update-info').hide();
 
@@ -43,9 +45,12 @@ function updateCtrl($scope, $http) {
 
 		} else if ($scope.step === 1) {
 			$('.track-progress li.current').addClass('done');
+			$('.updater-spinner').fadeOut();
+			$('.updater-spinner:eq(1)').fadeIn();
 			$('.track-progress li.current').next().addClass('current');
 			$('.track-progress li.done').removeClass('current');
-			$('<p></p>').append(t('updater', 'Here is your backup: ') + $scope.backup).appendTo($('#upd-progress'));
+			$('<p></p>').append(t('updater', 'Here is your backup:') + ' ' + $scope.backup).appendTo($('#upd-progress'));
+			
 			$http.post(
 				OC.filePath('updater', 'ajax', 'download.php'), {
 					url: $scope.url,
@@ -64,8 +69,11 @@ function updateCtrl($scope, $http) {
 
 		} else if ($scope.step === 2) {
 			$('.track-progress li.current').addClass('done');
+			$('.updater-spinner').fadeOut();
+			$('.updater-spinner:eq(2)').fadeIn();
 			$('.track-progress li.current').next().addClass('current');
 			$('.track-progress li.done').removeClass('current');
+			
 			$http.post(
 				OC.filePath('updater', 'ajax', 'update.php'),
 				{
@@ -79,13 +87,14 @@ function updateCtrl($scope, $http) {
 						$scope.step = 3;
 						$('.track-progress li.current').addClass('done');
 						$('.track-progress li.done').removeClass('current');
+						$('.updater-spinner').fadeOut();
 						var href = '/',
 							title = t('updater', 'Proceed');
 						if (OC.webroot !== '') {
 							href = OC.webroot;
 						}
 						$('<p></p>').append(t('updater', 'All done. Click to the link below to start database upgrade.')).appendTo($('#upd-progress'));
-						$('<p></p>').addClass('bold').append('<a href="' + href + '">' + title + '</a>').appendTo($('#upd-progress'));
+						$('<p></p>').addClass('bold').append($('<a href="' + href + '">' + title + '</a>').addClass('button')).appendTo($('#upd-progress'));
 					} else {
 						$scope.fail(data);
 					}

@@ -1,3 +1,4 @@
+/* global Album, GalleryImage, SlideShow, Thumbnail, oc_requesttoken */
 var Gallery = {};
 Gallery.images = [];
 Gallery.currentAlbum = '';
@@ -5,15 +6,15 @@ Gallery.users = [];
 Gallery.albumMap = {};
 Gallery.imageMap = {};
 
-Gallery.getAlbum = function (path) {
+Gallery.getAlbum = function (path, token) {
 	if (!Gallery.albumMap[path]) {
-		Gallery.albumMap[path] = new Album(path, [], [], OC.basename(path));
+		Gallery.albumMap[path] = new Album(path, [], [], OC.basename(path), token);
 		if (path !== '') {
 			var parent = OC.dirname(path);
 			if (parent === path) {
 				parent = '';
 			}
-			Gallery.getAlbum(parent).subAlbums.push(Gallery.albumMap[path]);
+			Gallery.getAlbum(parent, token).subAlbums.push(Gallery.albumMap[path]);
 		}
 	}
 	return Gallery.albumMap[path];
@@ -26,21 +27,18 @@ Gallery.fillAlbums = function () {
 	};
 	var token = $('#gallery').data('token');
 	var album, image;
-	return $.getJSON(OC.filePath('gallery', 'ajax', 'getimages.php'), {token: token}).then(function (data) {
-		Gallery.users = data.users;
-		Gallery.displayNames = data.displayNames;
-		Gallery.images = data.images;
+	return $.getJSON(OC.generateUrl('apps/gallery/ajax/images'), {token: token}).then(function (data) {
+		Gallery.images = data;
 
+		var path = null;
 		for (var i = 0; i < Gallery.images.length; i++) {
-			var parts = Gallery.images[i].split('/');
-			parts.shift();
-			var path = parts.join('/');
-			image = new GalleryImage(Gallery.images[i], path);
-			var dir = OC.dirname(Gallery.images[i]);
-			parts = dir.split('/');
-			parts.shift();
-			dir = parts.join('/');
-			album = Gallery.getAlbum(dir);
+			path = Gallery.images[i];
+			image = new GalleryImage(Gallery.images[i], path, token);
+			var dir = OC.dirname(path);
+			if (dir === path) {
+				dir = '';
+			}
+			album = Gallery.getAlbum(dir, token);
 			album.images.push(image);
 			Gallery.imageMap[image.path] = image;
 		}
@@ -59,7 +57,7 @@ Gallery.getAlbumInfo = function (album) {
 	if (!Gallery.getAlbumInfo.cache[album]) {
 		var def = new $.Deferred();
 		Gallery.getAlbumInfo.cache[album] = def;
-		$.getJSON(OC.filePath('gallery', 'ajax', 'gallery.php'), {gallery: album}, function (data) {
+		$.getJSON(OC.generateUrl('apps/gallery/ajax/gallery?gallery={gallery}', {gallery: album}), function (data) {
 			def.resolve(data);
 		});
 	}
@@ -67,7 +65,11 @@ Gallery.getAlbumInfo = function (album) {
 };
 Gallery.getAlbumInfo.cache = {};
 Gallery.getImage = function (image) {
-	return OC.filePath('gallery', 'ajax', 'image.php') + '?file=' + encodeURIComponent(image);
+	var token = ($('#gallery').data('token')) ? $('#gallery').data('token') : '';
+	return OC.generateUrl('apps/gallery/ajax/image?file={file}&token={token}', {
+		file: encodeURIComponent(image),
+		token: token
+	});
 };
 Gallery.share = function (event) {
 	if (!OC.Share.droppedDown) {
@@ -163,17 +165,22 @@ Gallery.view.loadVisibleRows = function (album, path) {
 			Gallery.view.loadVisibleRows.loading = null;
 			return;
 		}
-		return album.getNextRow(Gallery.view.element.width()).then(function (row) {
+		return album.getNextRow($(window).width()).then(function (row) {
 			return row.getDom().then(function (dom) {
+				// defer removal of loading class to trigger CSS3 animation
+				_.defer(function () {
+					dom.removeClass('loading');
+				});
 				if (Gallery.currentAlbum !== path) {
 					Gallery.view.loadVisibleRows.loading = null;
 					return; //throw away the row if the user has navigated away in the meantime
 				}
-				if (Gallery.view.element.length == 1) {
+				if (Gallery.view.element.length === 1) {
 					Gallery.showNormal();
 				}
 				Gallery.view.element.append(dom);
-				if (album.viewedItems < album.subAlbums.length + album.images.length && Gallery.view.element.height() < targetHeight) {
+				if (album.viewedItems < album.subAlbums.length + album.images.length &&
+					Gallery.view.element.height() < targetHeight) {
 					return showRows(album);
 				} else {
 					Gallery.view.loadVisibleRows.loading = null;
@@ -200,7 +207,7 @@ Gallery.view.pushBreadCrumb = function (text, path) {
 Gallery.showEmpty = function () {
 	$('#controls').addClass('hidden');
 	$('#emptycontent').removeClass('hidden');
-	$('#loading').addClass('hidden');
+	$('#content').removeClass('icon-loading');
 };
 
 Gallery.showLoading = function () {
@@ -215,12 +222,39 @@ Gallery.showNormal = function () {
 	$('#content').removeClass('icon-loading');
 };
 
+Gallery.slideShow = function (images, startImage, autoPlay) {
+	var start = images.indexOf(startImage);
+
+	images = images.map(function (image) {
+		return {
+			name: OC.basename(image.path),
+			url: Gallery.getImage(image.src),
+			path: image.path
+		};
+	});
+
+	var slideShow = new SlideShow($('#slideshow'), images);
+	Thumbnail.concurrent = 1;
+	slideShow.onStop = function () {
+		Gallery.activeSlideShow = null;
+		$('#content').show();
+		location.hash = encodeURI(Gallery.currentAlbum);
+		Thumbnail.concurrent = 3;
+	};
+	Gallery.activeSlideShow = slideShow;
+
+	slideShow.init(autoPlay);
+	slideShow.show(start);
+};
+
+Gallery.activeSlideShow = null;
+
 $(document).ready(function () {
 	Gallery.showLoading();
 
 	Gallery.view.element = $('#gallery');
 	Gallery.fillAlbums().then(function () {
-		if(Gallery.images.length === 0) {
+		if (Gallery.images.length === 0) {
 			Gallery.showEmpty();
 		}
 		OC.Breadcrumb.container = $('#breadcrumbs');
@@ -228,32 +262,11 @@ $(document).ready(function () {
 		$('button.share').click(Gallery.share);
 	});
 
-	Gallery.view.element.on('click', 'a.image', function (event) {
-		event.preventDefault();
-		var path = $(this).data('path');
-		var album = Gallery.albumMap[Gallery.currentAlbum];
-		if (location.hash !== encodeURI(path)) {
-			location.hash = encodeURI(path);
-			Thumbnail.paused = true;
-			var images = album.images.map(function (image) {
-				return Gallery.getImage(image.src);
-			});
-			var clickedImage = Gallery.imageMap[path];
-			var i = images.indexOf(Gallery.getImage(clickedImage.src));
-			Slideshow.start(images, i);
-		}
+	$('#openAsFileListButton').click(function () {
+		window.location.href = OC.generateUrl('s/{token}', {
+			token: $('#gallery').data('token')
+		});
 	});
-
-	$('#openAsFileListButton').click(function (event) {
-		window.location.href = window.location.href.replace('service=gallery', 'service=files');
-	});
-
-	jQuery.fn.slideShow.onstop = function () {
-		$('#content').show();
-		Thumbnail.paused = false;
-		location.hash = encodeURI(Gallery.currentAlbum);
-		Thumbnail.concurrent = 3;
-	};
 
 	$(window).scroll(function () {
 		Gallery.view.loadVisibleRows(Gallery.albumMap[Gallery.currentAlbum], Gallery.currentAlbum);
@@ -265,18 +278,33 @@ $(document).ready(function () {
 	$(window).resize(_.throttle(function () {
 		Gallery.view.viewAlbum(Gallery.currentAlbum);
 	}, 500));
+
+	if ($('#gallery').data('requesttoken')) {
+		oc_requesttoken = $('#gallery').data('requesttoken');
+	}
 });
 
 window.onhashchange = function () {
-	var album = decodeURI(location.hash).substr(1);
-	if (!Gallery.imageMap[album]) {
-		Slideshow.end();
-		album = decodeURIComponent(album);
-		if (Gallery.currentAlbum !== album || album == '') {
-			Gallery.view.viewAlbum(album);
+	var path = decodeURI(location.hash).substr(1);
+	if (Gallery.albumMap[path]) {
+		if (Gallery.activeSlideShow) {
+			Gallery.activeSlideShow.stop();
 		}
-	} else {
-		Gallery.view.viewAlbum(OC.dirname(album));
-		$('#gallery').find('a.image[data-path="' + album + '"]').click();
+		path = decodeURIComponent(path);
+		if (Gallery.currentAlbum !== path || path === '') {
+			Gallery.view.viewAlbum(path);
+		}
+	} else if (!Gallery.activeSlideShow) {
+		var albumPath = OC.dirname(path);
+		if (albumPath === path) {
+			albumPath = '';
+		}
+		if (Gallery.currentAlbum !== albumPath || albumPath === '') {
+			Gallery.view.viewAlbum(albumPath);
+		}
+		var album = Gallery.albumMap[albumPath];
+		var images = album.images;
+		var startImage = Gallery.imageMap[path];
+		Gallery.slideShow(images, startImage);
 	}
 };

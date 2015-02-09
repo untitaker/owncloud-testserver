@@ -24,17 +24,14 @@
 // TODO: get rid of this using proper composer packages
 require_once 'mcnetic/phpzipstreamer/ZipStreamer.php';
 
-class GET_TYPE {
-	const FILE = 1;
-	const ZIP_FILES = 2;
-	const ZIP_DIR = 3;
-}
-
 /**
  * Class for file server access
  *
  */
 class OC_Files {
+	const FILE = 1;
+	const ZIP_FILES = 2;
+	const ZIP_DIR = 3;
 
 	/**
 	 * @param string $filename
@@ -76,7 +73,7 @@ class OC_Files {
 		}
 
 		if (is_array($files)) {
-			$get_type = GET_TYPE::ZIP_FILES;
+			$get_type = self::ZIP_FILES;
 			$basename = basename($dir);
 			if ($basename) {
 				$name = $basename . '.zip';
@@ -88,7 +85,7 @@ class OC_Files {
 		} else {
 			$filename = $dir . '/' . $files;
 			if (\OC\Files\Filesystem::is_dir($dir . '/' . $files)) {
-				$get_type = GET_TYPE::ZIP_DIR;
+				$get_type = self::ZIP_DIR;
 				// downloading root ?
 				if ($files === '') {
 					$name = 'download.zip';
@@ -97,12 +94,12 @@ class OC_Files {
 				}
 
 			} else {
-				$get_type = GET_TYPE::FILE;
+				$get_type = self::FILE;
 				$name = $files;
 			}
 		}
 
-		if ($get_type === GET_TYPE::FILE) {
+		if ($get_type === self::FILE) {
 			$zip = false;
 			if ($xsendfile && OC_App::isEnabled('files_encryption')) {
 				$xsendfile = false;
@@ -127,7 +124,7 @@ class OC_Files {
 		if ($zip) {
 			$executionTime = intval(ini_get('max_execution_time'));
 			set_time_limit(0);
-			if ($get_type === GET_TYPE::ZIP_FILES) {
+			if ($get_type === self::ZIP_FILES) {
 				foreach ($files as $file) {
 					$file = $dir . '/' . $file;
 					if (\OC\Files\Filesystem::is_file($file)) {
@@ -138,7 +135,7 @@ class OC_Files {
 						self::zipAddDir($file, $zip);
 					}
 				}
-			} elseif ($get_type === GET_TYPE::ZIP_DIR) {
+			} elseif ($get_type === self::ZIP_DIR) {
 				$file = $dir . '/' . $files;
 				self::zipAddDir($file, $zip);
 			}
@@ -164,12 +161,11 @@ class OC_Files {
 	 * @param false|string $filename
 	 */
 	private static function addSendfileHeader($filename) {
+		$filename = \OC\Files\Filesystem::getLocalFile($filename);
 		if (isset($_SERVER['MOD_X_SENDFILE_ENABLED'])) {
-			$filename = \OC\Files\Filesystem::getLocalFile($filename);
 			header("X-Sendfile: " . $filename);
  		}
  		if (isset($_SERVER['MOD_X_SENDFILE2_ENABLED'])) {
-			$filename = \OC\Files\Filesystem::getLocalFile($filename);
 			if (isset($_SERVER['HTTP_RANGE']) &&
 				preg_match("/^bytes=([0-9]+)-([0-9]*)$/", $_SERVER['HTTP_RANGE'], $range)) {
 				$filelength = filesize($filename);
@@ -185,7 +181,6 @@ class OC_Files {
 		}
 
 		if (isset($_SERVER['MOD_X_ACCEL_REDIRECT_ENABLED'])) {
-			$filename = \OC::$WEBROOT . '/data' . \OC\Files\Filesystem::getRoot() . $filename;
 			header("X-Accel-Redirect: " . $filename);
 		}
 	}
@@ -195,7 +190,7 @@ class OC_Files {
 	 * @param ZipStreamer $zip
 	 * @param string $internalDir
 	 */
-	public static function zipAddDir($dir, $zip, $internalDir='') {
+	public static function zipAddDir($dir, ZipStreamer $zip, $internalDir='') {
 		$dirname=basename($dir);
 		$rootDir = $internalDir.$dirname;
 		if (!empty($rootDir)) {

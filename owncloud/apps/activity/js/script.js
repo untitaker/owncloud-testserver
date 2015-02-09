@@ -40,21 +40,19 @@ $(function(){
 				OCActivity.Filter.currentPage++;
 
 				$.get(
-					OC.filePath('activity', 'ajax', 'fetch.php'),
+					OC.generateUrl('/apps/activity/activities/fetch'),
 					'filter=' + OCActivity.Filter.filter + '&page=' + OCActivity.Filter.currentPage,
-					function(data) {
-						if (data.length) {
+					function (data) {
+						if (data.trim().length) {
 							OCActivity.InfinitScrolling.appendContent(data);
 
 							// Continue prefill
 							OCActivity.InfinitScrolling.prefill();
-						}
-						else if (OCActivity.Filter.currentPage == 1) {
+						} else if (OCActivity.Filter.currentPage == 1) {
 							// First page is empty - No activities :(
 							$('#no_activities').removeClass('hidden');
 							$('#loading_activities').addClass('hidden');
-						}
-						else {
+						} else {
 							// Page is empty - No more activities :(
 							$('#no_more_activities').removeClass('hidden');
 							$('#loading_activities').addClass('hidden');
@@ -71,13 +69,13 @@ $(function(){
 
 				OCActivity.InfinitScrolling.ignoreScroll = true;
 				$.get(
-					OC.filePath('activity', 'ajax', 'fetch.php'),
+					OC.generateUrl('/apps/activity/activities/fetch'),
 					'filter=' + OCActivity.Filter.filter + '&page=' + OCActivity.Filter.currentPage,
-					function(data) {
+					function (data) {
 						OCActivity.InfinitScrolling.appendContent(data);
 						OCActivity.InfinitScrolling.ignoreScroll = false;
 
-						if (!data.length) {
+						if (!data.trim().length) {
 							// Page is empty - No more activities :(
 							$('#no_more_activities').removeClass('hidden');
 							$('#loading_activities').addClass('hidden');
@@ -138,7 +136,7 @@ $(function(){
 		} else {
 			$('#rssurl').addClass('hidden');
 		}
-		$.post(OC.filePath('activity', 'ajax', 'rssfeed.php'), 'enable=' + this.checked, function(data) {
+		$.post(OC.generateUrl('/apps/activity/settings/feed'), 'enable=' + this.checked, function(data) {
 			$('#rssurl').val(data.data.rsslink);
 		});
 	});

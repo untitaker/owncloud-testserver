@@ -7,6 +7,9 @@
 			type="password" id="newuserpassword"
 			placeholder="<?php p($l->t('Password'))?>"
 			autocomplete="off" autocapitalize="off" autocorrect="off" />
+		<input id="newemail" type="text" style="display:none"
+			   placeholder="<?php p($l->t('E-Mail'))?>"
+			   autocomplete="off" autocapitalize="off" autocorrect="off" />
 		<select
 			class="groupsselect" id="newusergroups" data-placeholder="groups"
 			title="<?php p($l->t('Groups'))?>" multiple="multiple">
@@ -29,6 +32,6 @@
 	</div>
 	<?php endif; ?>
 	<form autocomplete="off" id="usersearchform">
-		<input type="text" class="input userFilter" placeholder="<?php p($l->t('Search Users and Groups')); ?>" />
+		<input type="text" class="input userFilter" placeholder="<?php p($l->t('Search Users')); ?>" />
 	</form>
 </div>

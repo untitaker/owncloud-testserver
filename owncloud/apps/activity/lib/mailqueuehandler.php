@@ -23,6 +23,8 @@
 
 namespace OCA\Activity;
 
+use \OCP\IDateTimeFormatter;
+
 /**
  * Class MailQueueHandler
  * Gets the users from the database and
@@ -39,13 +41,26 @@ class MailQueueHandler {
 	/** @var string */
 	protected $senderName;
 
+	/** @var IDateTimeFormatter */
+	protected $dateFormatter;
+
+	/**
+	 * Constructor
+	 *
+	 * @param IDateTimeFormatter $dateFormatter
+	 */
+	public function __construct(IDateTimeFormatter $dateFormatter) {
+		$this->dateFormatter = $dateFormatter;
+	}
+
 	/**
 	 * Get the users we want to send an email to
 	 *
 	 * @param int|null $limit
+	 * @param int $latestSend
 	 * @return array
 	 */
-	public function getAffectedUsers($limit) {
+	public function getAffectedUsers($limit, $latestSend) {
 		$limit = (!$limit) ? null : (int) $limit;
 
 		$query = \OCP\DB::prepare(
@@ -55,7 +70,7 @@ class MailQueueHandler {
 			. ' GROUP BY `amq_affecteduser` '
 			. ' ORDER BY `amq_trigger_time` ASC',
 			$limit);
-		$result = $query->execute(array(time()));
+		$result = $query->execute(array($latestSend));
 
 		$affectedUsers = array();
 		if (\OCP\DB::isError($result)) {
@@ -160,19 +175,34 @@ class MailQueueHandler {
 	 * @param string $user Username of the recipient
 	 * @param string $email Email address of the recipient
 	 * @param string $lang Selected language of the recipient
+	 * @param string $timezone Selected timezone of the recipient
 	 * @param array $mailData Notification data we send to the user
 	 */
-	public function sendEmailToUser($user, $email, $lang, $mailData) {
+	public function sendEmailToUser($user, $email, $lang, $timezone, $mailData) {
 		$l = $this->getLanguage($lang);
-		$dataHelper = new DataHelper(\OC::$server->getActivityManager(), new ParameterHelper(new \OC\Files\View(''), $l), $l);
+		$dataHelper = new DataHelper(
+			\OC::$server->getActivityManager(),
+			new ParameterHelper(
+				\OC::$server->getActivityManager(),
+				new \OC\Files\View(''),
+				$l
+			),
+			$l
+		);
 
 		$activityList = array();
 		foreach ($mailData as $activity) {
+			$relativeDateTime = $this->dateFormatter->formatDateTimeRelativeDay(
+				$activity['amq_timestamp'],
+				'long', 'medium',
+				new \DateTimeZone($timezone), $l
+			);
+
 			$activityList[] = array(
 				$dataHelper->translation(
 					$activity['amq_appid'], $activity['amq_subject'], unserialize($activity['amq_subjectparams'])
 				),
-				$this->generateRelativeDatetime($l, $activity['amq_timestamp']),
+				$relativeDateTime,
 			);
 		}
 
@@ -193,29 +223,6 @@ class MailQueueHandler {
 		} catch (\Exception $e) {
 			\OCP\Util::writeLog('Activity', 'A problem occurred while sending the e-mail. Please revisit your settings.', \OCP\Util::ERROR);
 		}
-	}
-
-	/**
-	 * Creates a relative datetime string (with today, yesterday) or the normal date
-	 *
-	 * @param \OC_L10N $l
-	 * @param $timestamp
-	 * @return string
-	 */
-	protected function generateRelativeDatetime(\OC_L10N $l, $timestamp) {
-		$dateOfTimestamp = $l->l('date', $timestamp);
-		$dateOfToday = $l->l('date', time());
-		$dateOfYesterday = $l->l('date', time() - 3600 * 24);
-
-		if ($dateOfTimestamp === $dateOfToday) {
-			return (string) $l->t('Today %s', $l->l('time', $timestamp));
-		}
-
-		if ($dateOfTimestamp === $dateOfYesterday) {
-			return (string) $l->t('Yesterday %s', $l->l('time', $timestamp));
-		}
-
-		return (string) $l->l('datetime', $timestamp);
 	}
 
 	/**

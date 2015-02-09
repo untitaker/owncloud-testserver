@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Config.php Parameters &mdash; ownCloud Administrators Manual 7.0 documentation</title>
+    <title>Config.php Parameters &mdash; ownCloud Administrators Manual 8.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0',
+        VERSION:     '8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Administrators Manual 7.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Administrators Manual 8.0 documentation" href="../index.html" />
     <link rel="up" title="Configuration" href="index.html" />
     <link rel="next" title="Custom Client Configuration" href="custom_client_configuration.html" />
     <link rel="prev" title="Configuring the Collaborative Documents App" href="collaborative_documents_configuration.html" />
@@ -116,7 +116,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos.html">ownCloud Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-8-only">Enterprise 8 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#owncloud-7-release-notes">ownCloud 7 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-7-only">Enterprise 7 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Configuration</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="antivirus_configuration.html">Configuring the ClamAV Antivirus Scanner</a></li>
@@ -137,9 +142,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#alternate-code-locations">Alternate Code Locations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#apps">Apps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#previews">Previews</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ldap">LDAP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#maintenance">Maintenance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ssl">SSL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#miscellaneous">Miscellaneous</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#all-other-config-options">All other config options</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="custom_client_configuration.html">Custom Client Configuration</a></li>
@@ -154,6 +161,9 @@
 <li class="toctree-l2"><a class="reference internal" href="knowledgebase_configuration.html">Knowledge Base Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="language_configuration.html">Language Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="logging_configuration.html">Logging Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html">Using the occ Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tips.html">Performance Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#nginx-caching-owncloud-gallery-thumbnails-with-fastcgi-cache-purge">Nginx: caching ownCloud gallery thumbnails with fastcgi_cache_purge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="previews_configuration.html">Previews Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reverse_proxy_configuration.html">Reverse Proxy Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="search_configuration.html">Enabling Full-Text Search</a></li>
@@ -162,11 +172,14 @@
 <li class="toctree-l2"><a class="reference internal" href="thirdparty_php_configuration.html">Using Third Party PHP Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ftp_smb_imap.html">User Authentication with IMAP, SMB, and FTP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ldap.html">User Authentication with LDAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_auth_ldap_cleanup.html">LDAP User Cleanup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_configuration.html">User Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html">User Provisioning API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reset_admin_password.html">Resetting a Lost Admin Password</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
 </ul>
 
 								</ul>
@@ -203,7 +216,10 @@ is created when you install ownCloud.</p>
 installer. (There are also per-user salts.) If you lose this salt you lose
 all your passwords. This example is for documentation only,
 and you should never use it.</p>
-<p>&#8216;passwordsalt&#8217; =&gt; &#8216;d3c944a9af095aa08f&#8217;,</p>
+<div class="highlight-python"><pre>'hashingCost' =&gt; 10,</pre>
+</div>
+<p>The hashing cost used by hashes generated by ownCloud
+Using a higher value requires more time and CPU power to calculate the hashes</p>
 <div class="highlight-python"><pre>'trusted_domains' =&gt;
   array (
     'demo.example.org',
@@ -230,7 +246,7 @@ during installation and update, so you shouldn&#8217;t need to change it.</p>
 <dt>Available:</dt>
 <dd><ul class="first last simple">
 <li>sqlite (SQLite3 - Community Edition Only)</li>
-<li>mysql (MySQL)</li>
+<li>mysql (MySQL/MariaDB)</li>
 <li>pgsql (PostgreSQL)</li>
 <li>oci (Oracle - Enterprise Edition Only)</li>
 <li>mssql (Microsoft SQL Server - Enterprise Edition Only)</li>
@@ -265,6 +281,10 @@ you shouldn&#8217;t need to change it.</p>
 </div>
 <p>Additional driver options for the database connection, eg. to enable SSL
 encryption in MySQL.</p>
+<div class="highlight-python"><pre>'sqlite.journal_mode' =&gt; 'DELETE',</pre>
+</div>
+<p>sqlite3 journal mode can be specified using this config parameter - can be &#8216;WAL&#8217; or &#8216;DELETE&#8217;
+see for more details <a class="reference external" href="https://www.sqlite.org/wal.html">https://www.sqlite.org/wal.html</a></p>
 <div class="highlight-python"><pre>'installed' =&gt; false,</pre>
 </div>
 <p>Indicates whether the ownCloud instance was installed successfully; <tt class="docutils literal"><span class="pre">true</span></tt>
@@ -535,8 +555,10 @@ process.</p>
 <div class="highlight-python"><pre>'log_type' =&gt; 'owncloud',</pre>
 </div>
 <p>By default the ownCloud logs are sent to the <tt class="docutils literal"><span class="pre">owncloud.log</span></tt> file in the
-default ownCloud data directory. If syslogging is desired, set this parameter
-to <tt class="docutils literal"><span class="pre">syslog</span></tt>.</p>
+default ownCloud data directory.</p>
+<p>If syslogging is desired, set this parameter to <tt class="docutils literal"><span class="pre">syslog</span></tt>.
+Setting this parameter to <tt class="docutils literal"><span class="pre">errorlog</span></tt> will use the PHP error_log function
+for logging.</p>
 <div class="highlight-python"><pre>'logfile' =&gt; 'owncloud.log',</pre>
 </div>
 <p>Change the ownCloud logfile name from <tt class="docutils literal"><span class="pre">owncloud.log</span></tt> to something else.</p>
@@ -646,6 +668,14 @@ is no limit.</p>
 preview system generates blurry previews, you might want to consider setting
 a maximum scale factor. By default, pictures are upscaled to 10 times the
 original size. A value of <tt class="docutils literal"><span class="pre">1</span></tt> or <tt class="docutils literal"><span class="pre">null</span></tt> disables scaling.</p>
+<div class="highlight-python"><pre>'preview_max_filesize_image' =&gt; 50,</pre>
+</div>
+<p>max file size for generating image previews with imagegd (default behaviour)
+If the image is bigger, it&#8217;ll try other preview generators,
+but will most likely show the default mimetype icon</p>
+<p>Value represents the maximum filesize in megabytes
+Default is 50
+Set to -1 for no limit</p>
 <div class="highlight-python"><pre>'preview_libreoffice_path' =&gt; '/usr/bin/libreoffice',</pre>
 </div>
 <p>custom path for LibreOffice/OpenOffice binary</p>
@@ -675,16 +705,41 @@ original size. A value of <tt class="docutils literal"><span class="pre">1</span
 concerns:</p>
 <blockquote>
 <div><ul class="simple">
-<li>OCPreviewMovies</li>
+<li>OCPreviewIllustrator</li>
+<li>OCPreviewMovie</li>
 <li>OCPreviewMSOffice2003</li>
 <li>OCPreviewMSOffice2007</li>
 <li>OCPreviewMSOfficeDoc</li>
 <li>OCPreviewOpenDocument</li>
 <li>OCPreviewPDF</li>
+<li>OCPreviewPhotoshop</li>
+<li>OCPreviewPostscript</li>
 <li>OCPreviewStarOffice</li>
 <li>OCPreviewSVG</li>
+<li>OCPreviewTIFF</li>
 </ul>
 </div></blockquote>
+<p>The following providers are not available in Microsoft Windows:</p>
+<blockquote>
+<div><ul class="simple">
+<li>OCPreviewMovie</li>
+<li>OCPreviewMSOfficeDoc</li>
+<li>OCPreviewMSOffice2003</li>
+<li>OCPreviewMSOffice2007</li>
+<li>OCPreviewOpenDocument</li>
+<li>OCPreviewStarOffice</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="ldap">
+<h2>LDAP<a class="headerlink" href="#ldap" title="Permalink to this headline">¶</a></h2>
+<p>Global settings used by LDAP User and Group Backend</p>
+<div class="highlight-python"><pre>'ldapUserCleanupInterval' =&gt; 51,</pre>
+</div>
+<p>defines the interval in minutes for the background job that checks user
+existance and marks them as ready to be cleaned up. The number is always
+minutes. Setting it to 0 disables the feature.</p>
+<p>See command line (occ) methods <a class="reference external" href="ldap:show-remnants">ldap:show-remnants</a> and user:delete</p>
 </div>
 <div class="section" id="maintenance">
 <h2>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this headline">¶</a></h2>
@@ -708,6 +763,10 @@ who are not in the <tt class="docutils literal"><span class="pre">admin</span></
 </div>
 <p>Change this to <tt class="docutils literal"><span class="pre">true</span></tt> to require HTTPS for all connections, and to reject
 HTTP requests.</p>
+<div class="highlight-python"><pre>'forceSSLforSubdomains' =&gt; false,</pre>
+</div>
+<p>Change this to <tt class="docutils literal"><span class="pre">true</span></tt> to require HTTPS connections also for all subdomains.</p>
+<p>Works only together when <cite>forcessl</cite> is set to true.</p>
 <div class="highlight-python"><pre>'openssl' =&gt; array(
         'config' =&gt; '/absolute/location/of/openssl.cnf',
 ),</pre>
@@ -737,6 +796,15 @@ disable this, so leave it set at <tt class="docutils literal"><span class="pre">
 </div>
 <p>The default cipher for encrypting files. Currently AES-128-CFB and
 AES-256-CFB are supported.</p>
+<div class="highlight-python"><pre>'redis' =&gt; array(
+        'host' =&gt; 'localhost', // can also be a unix domain socket: '/tmp/redis.sock'
+        'port' =&gt; 6379,
+        'timeout' =&gt; 0.0
+),</pre>
+</div>
+<p>Connection details for redis to use for memory caching.</p>
+<p>Redis is only used if other memory cache options (xcache, apc, apcu) are
+not available.</p>
 <div class="highlight-python"><pre>'memcached_servers' =&gt; array(
         // hostname, port and optional weight. Also see:
         // http://www.php.net/manual/en/memcached.addservers.php
@@ -746,7 +814,7 @@ AES-256-CFB are supported.</p>
 ),</pre>
 </div>
 <p>Server details for one or more memcached servers to use for memory caching.</p>
-<p>Memcache is only used if other memory cache options (xcache, apc, apcu) are
+<p>Memcache is only used if other memory cache options (xcache, apc, apcu, redis) are
 not available.</p>
 <div class="highlight-python"><pre>'cache_path' =&gt; '',</pre>
 </div>
@@ -773,6 +841,14 @@ using external storages, not recommended for regular use.</p>
 </div>
 <p>All css and js files will be served by the web server statically in one js
 file and one css file if this is set to <tt class="docutils literal"><span class="pre">true</span></tt>.</p>
+<div class="highlight-python"><pre>'assetdirectory' =&gt; '/var/www/owncloud',</pre>
+</div>
+<p>The parent of the directory where css and js assets will be stored if
+piplelining is enabled; this defaults to the ownCloud directory. The assets
+will be stored in a subdirectory of this directory named &#8216;assets&#8217;. The
+server <em>must</em> be configured to serve that directory as $WEBROOT/assets.</p>
+<p>You will only likely need to change this if the main ownCloud directory
+is not writeable by the web server in your configuration.</p>
 <div class="highlight-python"><pre>'mount_file' =&gt; 'data/mount.json',</pre>
 </div>
 <p>Where <tt class="docutils literal"><span class="pre">mount.json</span></tt> file should be stored, defaults to <tt class="docutils literal"><span class="pre">data/mount.json</span></tt></p>
@@ -839,13 +915,36 @@ to be fetched in addition to any requested file.</p>
 <div class="highlight-python"><pre>'custom_csp_policy' =&gt;
         "default-src 'self'; script-src 'self' 'unsafe-eval'; ".
         "style-src 'self' 'unsafe-inline'; frame-src *; img-src *; ".
-        "font-src 'self' data:; media-src *",</pre>
+        "font-src 'self' data:; media-src *; connect-src *",</pre>
 </div>
 <p>Custom CSP policy, changing this will overwrite the standard policy</p>
-<div class="highlight-python"><pre>'secret' =&gt; 'ICertainlyShouldHaveChangedTheDefaultSecret',</pre>
+</div>
+<div class="section" id="all-other-config-options">
+<h2>All other config options<a class="headerlink" href="#all-other-config-options" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>'secret' =&gt; '',</pre>
 </div>
 <p>Secret used by ownCloud for various purposes, e.g. to encrypt data. If you
 lose this string there will be data corruption.</p>
+<div class="highlight-python"><pre>'trusted_proxies' =&gt; array('203.0.113.45', '198.51.100.128'),</pre>
+</div>
+<p>List of trusted proxy servers</p>
+<div class="highlight-python"><pre>'forwarded_for_headers' =&gt; array('HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR'),</pre>
+</div>
+<p>Headers that should be trusted as client IP address in combination with
+<cite>trusted_proxies</cite></p>
+<div class="highlight-python"><pre>'max_filesize_animated_gifs_public_sharing' =&gt; 10,</pre>
+</div>
+<p>max file size for animating gifs on public-sharing-site.</p>
+<p>If the gif is bigger, it&#8217;ll show a static preview</p>
+<p>Value represents the maximum filesize in megabytes
+Default is 10
+Set to -1 for no limit</p>
+<div class="highlight-python"><pre>'copied_sample_config' =&gt; true,</pre>
+</div>
+<p>This entry is just here to show a warning in case somebody copied the sample
+configuration. DO NOT ADD THIS SWITCH TO YOUR CONFIGURATION!</p>
+<p>If you, brave person, have read until here be aware that you should not
+modify <em>ANY</em> settings in this file without reading the documentation.</p>
 </div>
 </div>
 

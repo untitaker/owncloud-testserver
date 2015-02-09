@@ -22,19 +22,32 @@ class AdapterSqlite extends Adapter {
 		// NOTE: For SQLite we have to use this clumsy approach
 		// otherwise all fieldnames used must have a unique key.
 		$query = 'SELECT COUNT(*) FROM `' . $table . '` WHERE ';
-		foreach($input as $key => $value) {
-			$query .= '`' . $key . '` = ? AND ';
+		$inserts = array();
+		foreach ($input as $key => $value) {
+			$query .= '`' . $key . '`';
+			if (is_null($value)) {
+				$query .= ' IS NULL AND ';
+			} else {
+				$inserts[] = $value;
+				$query .= ' = ? AND ';
+			}
 		}
 		$query = substr($query, 0, strlen($query) - 5);
+
 		try {
 			$stmt = $this->conn->prepare($query);
-			$result = $stmt->execute(array_values($input));
+			$result = $stmt->execute($inserts);
 		} catch(\Doctrine\DBAL\DBALException $e) {
 			$entry = 'DB Error: "'.$e->getMessage() . '"<br />';
 			$entry .= 'Offending command was: ' . $query . '<br />';
 			\OC_Log::write('core', $entry, \OC_Log::FATAL);
-			error_log('DB error: '.$entry);
-			\OC_Template::printErrorPage( $entry );
+			$l = \OC::$server->getL10N('lib');
+			throw new \OC\HintException(
+				$l->t('Database Error'),
+				$l->t('Please contact your system administrator.'),
+				0,
+				$e
+			);
 		}
 
 		if ($stmt->fetchColumn() === '0') {
@@ -52,8 +65,13 @@ class AdapterSqlite extends Adapter {
 			$entry = 'DB Error: "'.$e->getMessage() . '"<br />';
 			$entry .= 'Offending command was: ' . $query.'<br />';
 			\OC_Log::write('core', $entry, \OC_Log::FATAL);
-			error_log('DB error: ' . $entry);
-			\OC_Template::printErrorPage( $entry );
+			$l = \OC::$server->getL10N('lib');
+			throw new \OC\HintException(
+				$l->t('Database Error'),
+				$l->t('Please contact your system administrator.'),
+				0,
+				$e
+			);
 		}
 
 		return $result;

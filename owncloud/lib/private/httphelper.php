@@ -8,17 +8,24 @@
 
 namespace OC;
 
+use OCP\IConfig;
+use OCP\ICertificateManager;
+
 class HTTPHelper {
 	const USER_AGENT = 'ownCloud Server Crawler';
 
-	/** @var \OC\AllConfig */
+	/** @var \OCP\IConfig */
 	private $config;
 
+	/** @var \OC\Security\CertificateManager */
+	private $certificateManager;
+
 	/**
-	 * @param \OC\AllConfig $config
+	 * @param \OCP\IConfig $config
 	 */
-	public function __construct(AllConfig $config) {
+	public function __construct(IConfig $config, ICertificateManager $certificateManager) {
 		$this->config = $config;
+		$this->certificateManager = $certificateManager;
 	}
 
 	/**
@@ -72,7 +79,7 @@ class HTTPHelper {
 				curl_setopt($curl, CURLOPT_PROXYUSERPWD, $proxyUserPwd);
 			}
 
-			if (ini_get('open_basedir') === '' && (ini_get('safe_mode') === false) || strtolower(ini_get('safe_mode')) === 'off') {
+			if (ini_get('open_basedir') === '') {
 				curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
 				curl_setopt($curl, CURLOPT_MAXREDIRS, $max_redirects);
 				$data = curl_exec($curl);
@@ -172,6 +179,52 @@ class HTTPHelper {
 		}
 
 		return $location;
+	}
+
+	/**
+	 * create string of parameters for post request
+	 *
+	 * @param array $parameters
+	 * @return string
+	 */
+	private function assemblePostParameters(array $parameters) {
+		$parameterString = '';
+		foreach ($parameters as $key => $value) {
+			$parameterString .= $key . '=' . urlencode($value) . '&';
+		}
+
+		return rtrim($parameterString, '&');
+	}
+
+	/**
+	 * send http post request
+	 *
+	 * @param string $url
+	 * @param array $fields data send by the request
+	 * @return bool
+	 */
+	public function post($url, array $fields) {
+
+		$fieldsString = $this->assemblePostParameters($fields);
+
+		$certBundle = $this->certificateManager->getCertificateBundle();
+
+		$ch = curl_init();
+
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_POST, count($fields));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $fieldsString);
+		if (is_readable($certBundle)) {
+			curl_setopt($ch, CURLOPT_CAINFO, $certBundle);
+		}
+
+		$result = curl_exec($ch);
+		$success = $result ? true : false;
+
+		curl_close($ch);
+
+		return array('success' => $success, 'result' => $result);
 	}
 
 }

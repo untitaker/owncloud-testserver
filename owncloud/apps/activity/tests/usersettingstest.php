@@ -22,47 +22,27 @@
 
 namespace OCA\Activity\Tests;
 
+use OC\ActivityManager;
 use OCA\Activity\UserSettings;
 use OCA\Activity\Data;
 
-class UserSettingsTest extends \PHPUnit_Framework_TestCase {
-	public function setUp() {
-		$preferences = array(
-			array('test1', 'activity', 'notify_stream_type1', '1'),
-			array('test1', 'activity', 'notify_stream_type2', '2'),
-			array('test2', 'activity', 'notify_stream_type1', '0'),
-			array('test2', 'activity', 'notify_stream_type2', '0'),
-			array('test3', 'activity', 'notify_stream_type1', ''),
-			array('test4', 'activity', 'notify_stream_type1', '3'),
-			array('test6', 'activity', 'notify_stream_file_nodefault', '1'),
-			array('test6', 'activity', 'notify_stream_file_created', '1'),
+class UserSettingsTest extends TestCase {
+	/** @var UserSettings */
+	protected $userSettings;
 
-			array('test1', 'activity', 'notify_email_type1', '1'),
-			array('test1', 'activity', 'notify_email_type2', '2'),
-			array('test2', 'activity', 'notify_email_type1', '0'),
-			array('test2', 'activity', 'notify_email_type2', '0'),
-			array('test3', 'activity', 'notify_email_type1', ''),
-			array('test4', 'activity', 'notify_email_type1', '3'),
-			array('test5', 'activity', 'notify_email_type1', '1'),
-			array('test6', 'activity', 'notify_email_shared', '1'),
-			array('test6', 'activity', 'notify_email_file_created', '1'),
+	/** @var \PHPUnit_Framework_MockObject_MockObject */
+	protected $config;
 
-			array('test1', 'activity', 'notify_setting_batchtime', '1'),
-			array('test2', 'activity', 'notify_setting_batchtime', '2'),
-			array('test3', 'activity', 'notify_setting_batchtime', '3'),
-			array('test4', 'activity', 'notify_setting_batchtime', '4'),
-			array('test6', 'activity', 'notify_setting_batchtime', '2700'),
-		);
+	protected function setUp() {
+		parent::setUp();
 
-		$query = \OCP\DB::prepare('INSERT INTO `*PREFIX*preferences`(`userid`, `appid`, `configkey`, `configvalue`)' . ' VALUES(?, ?, ?, ?)');
-		foreach ($preferences as $preference) {
-			$query->execute($preference);
-		}
+		$am = new ActivityManager();
+		$this->config = $this->getMock('OCP\IConfig');
+		$this->userSettings = new UserSettings($am, $this->config, new Data($am));
 	}
 
-	public function tearDown() {
-		$query = \OCP\DB::prepare('DELETE FROM `*PREFIX*preferences` WHERE `appid` = ?');
-		$query->execute(array('activity'));
+	protected function tearDown() {
+		parent::tearDown();
 	}
 
 	public function getDefaultSettingData() {
@@ -71,15 +51,22 @@ class UserSettingsTest extends \PHPUnit_Framework_TestCase {
 			array('stream', Data::TYPE_SHARE_CREATED, true),
 			array('email', Data::TYPE_SHARED, true),
 			array('email', Data::TYPE_SHARE_CREATED, false),
+			array('setting', 'self', true),
+			array('setting', 'selfemail', false),
 			array('setting', 'batchtime', 3600),
+			array('setting', 'not-exists', false),
 		);
 	}
 
 	/**
 	 * @dataProvider getDefaultSettingData
+	 *
+	 * @param string $method
+	 * @param string $type
+	 * @param mixed $expected
 	 */
 	public function testGetDefaultSetting($method, $type, $expected) {
-		$this->assertEquals($expected, UserSettings::getDefaultSetting($method, $type));
+		$this->assertEquals($expected, $this->userSettings->getDefaultSetting($method, $type));
 	}
 
 	public function getNotificationTypesData() {
@@ -91,9 +78,25 @@ class UserSettingsTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @dataProvider getNotificationTypesData
+	 *
+	 * @param string $user
+	 * @param string $method
+	 * @param array $expected
 	 */
 	public function testGetNotificationTypes($user, $method, $expected) {
-		$this->assertEquals($expected, UserSettings::getNotificationTypes($user, $method));
+		$this->config->expects($this->any())
+			->method('getUserValue')
+			->with($this->anything(), 'activity', $this->stringStartsWith('notify_'), $this->anything())
+			->willReturnMap([
+				['test1', 'activity', 'notify_stream_shared', true, true],
+				['test1', 'activity', 'notify_stream_file_created', true, true],
+				['test1', 'activity', 'notify_stream_file_changed', true, true],
+				['test1', 'activity', 'notify_stream_file_deleted', true, true],
+				['test1', 'activity', 'notify_stream_file_restored', true, true],
+				['noPreferences', 'activity', 'notify_email_shared', true, true],
+			]);
+
+		$this->assertEquals($expected, $this->userSettings->getNotificationTypes($user, $method));
 	}
 
 	public function filterUsersBySettingData() {
@@ -111,8 +114,31 @@ class UserSettingsTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @dataProvider filterUsersBySettingData
+	 *
+	 * @param array $users
+	 * @param string $method
+	 * @param string $type
+	 * @param array $expected
 	 */
 	public function testFilterUsersBySetting($users, $method, $type, $expected) {
-		$this->assertEquals($expected, UserSettings::filterUsersBySetting($users, $method, $type));
+		$this->config->expects($this->any())
+			->method('getUserValueForUsers')
+			->with($this->anything(), $this->anything(), $this->anything())
+			->willReturnMap([
+				['activity', 'notify_stream_file_created', ['test', 'test6'], ['test6' => '1']],
+				['activity', 'notify_stream_file_nodefault', ['test', 'test6'], ['test6' => '1']],
+				['activity', 'notify_stream_type1', ['test', 'test1', 'test2', 'test3', 'test4'], ['test1' => '1', 'test2' => '0', 'test3' => '', 'test4' => '1']],
+
+				['activity', 'notify_email_file_created', ['test', 'test6'], ['test6' => '1']],
+				['activity', 'notify_email_shared', ['test6'], ['test6' => '1']],
+				['activity', 'notify_email_shared', ['test', 'test6'], ['test6' => '1']],
+				['activity', 'notify_email_type1', ['test', 'test1', 'test2', 'test3', 'test4', 'test5'], ['test1' => '1', 'test2' => '0', 'test3' => '', 'test4' => '3', 'test5' => '1']],
+
+				['activity', 'notify_setting_batchtime', ['test6'], ['test6' => '2700']],
+				['activity', 'notify_setting_batchtime', ['test', 'test6'], ['test6' => '2700']],
+				['activity', 'notify_setting_batchtime', ['test1', 'test4', 'test5'], ['test1' => '1', 'test4' => '4']],
+			]);
+
+		$this->assertEquals($expected, $this->userSettings->filterUsersBySetting($users, $method, $type));
 	}
 }

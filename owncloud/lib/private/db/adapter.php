@@ -42,7 +42,8 @@ class Adapter {
 	/**
 	 * insert the @input values when they do not exist yet
 	 * @param string $table name
-	 * @param array $input key->value pairs
+	 * @param array $input key->value pair, key has to be sanitized properly
+	 * @throws \OC\HintException
 	 * @return int count of inserted rows
 	 */
 	public function insertIfNotExist($table, $input) {
@@ -51,13 +52,18 @@ class Adapter {
 			. str_repeat('?,', count($input)-1).'? ' // Is there a prettier alternative?
 			. 'FROM `' . $table . '` WHERE ';
 
+		$inserts = array_values($input);
 		foreach($input as $key => $value) {
-			$query .= '`' . $key . '` = ? AND ';
+			$query .= '`' . $key . '`';
+			if (is_null($value)) {
+				$query .= ' IS NULL AND ';
+			} else {
+				$inserts[] = $value;
+				$query .= ' = ? AND ';
+			}
 		}
 		$query = substr($query, 0, strlen($query) - 5);
 		$query .= ' HAVING COUNT(*) = 0';
-		$inserts = array_values($input);
-		$inserts = array_merge($inserts, $inserts);
 
 		try {
 			return $this->conn->executeUpdate($query, $inserts);
@@ -65,8 +71,13 @@ class Adapter {
 			$entry = 'DB Error: "'.$e->getMessage() . '"<br />';
 			$entry .= 'Offending command was: ' . $query.'<br />';
 			\OC_Log::write('core', $entry, \OC_Log::FATAL);
-			error_log('DB error: ' . $entry);
-			\OC_Template::printErrorPage( $entry );
+			$l = \OC::$server->getL10N('lib');
+			throw new \OC\HintException(
+				$l->t('Database Error'),
+				$l->t('Please contact your system administrator.'),
+				0,
+				$e
+			);
 		}
 	}
 }

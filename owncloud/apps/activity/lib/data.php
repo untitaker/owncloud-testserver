@@ -23,21 +23,16 @@
 
 namespace OCA\Activity;
 
-use \OCP\DB;
-use \OCP\User;
-use \OCP\Util;
+use OCP\Activity\IExtension;
+use OCP\DB;
+use OCP\User;
+use OCP\Util;
 
 /**
  * @brief Class for managing the data in the activities
  */
 class Data
 {
-	const PRIORITY_VERYLOW 	= 10;
-	const PRIORITY_LOW	= 20;
-	const PRIORITY_MEDIUM	= 30;
-	const PRIORITY_HIGH	= 40;
-	const PRIORITY_VERYHIGH	= 50;
-
 	const TYPE_SHARED = 'shared';
 	const TYPE_SHARE_EXPIRED = 'share_expired';
 	const TYPE_SHARE_UNSHARED = 'share_unshared';
@@ -64,10 +59,10 @@ class Data
 	protected $notificationTypes = array();
 
 	/**
-	 * @param \OC_L10N $l
+	 * @param \OCP\IL10N $l
 	 * @return array Array "stringID of the type" => "translated string description for the setting"
 	 */
-	public function getNotificationTypes(\OC_L10N $l) {
+	public function getNotificationTypes(\OCP\IL10N $l) {
 		if (isset($this->notificationTypes[$l->getLanguageCode()]))
 		{
 			return $this->notificationTypes[$l->getLanguageCode()];
@@ -112,7 +107,7 @@ class Data
 	 * @param int    $prio Priority of the notification
 	 * @return bool
 	 */
-	public static function send($app, $subject, $subjectparams = array(), $message = '', $messageparams = array(), $file = '', $link = '', $affecteduser = '', $type = '', $prio = Data::PRIORITY_MEDIUM) {
+	public static function send($app, $subject, $subjectparams = array(), $message = '', $messageparams = array(), $file = '', $link = '', $affecteduser = '', $type = '', $prio = IExtension::PRIORITY_MEDIUM) {
 		$timestamp = time();
 		$user = User::getUser();
 		
@@ -196,15 +191,16 @@ class Data
 	/**
 	 * @brief Read a list of events from the activity stream
 	 * @param GroupHelper $groupHelper Allows activities to be grouped
+	 * @param UserSettings $userSettings Gets the settings of the user
 	 * @param int $start The start entry
 	 * @param int $count The number of statements to read
 	 * @param string $filter Filter the activities
 	 * @return array
 	 */
-	public function read(GroupHelper $groupHelper, $start, $count, $filter = 'all') {
+	public function read(GroupHelper $groupHelper, UserSettings $userSettings, $start, $count, $filter = 'all') {
 		// get current user
 		$user = User::getUser();
-		$enabledNotifications = UserSettings::getNotificationTypes($user, 'stream');
+		$enabledNotifications = $userSettings->getNotificationTypes($user, 'stream');
 		$enabledNotifications = $this->filterNotificationTypes($enabledNotifications, $filter);
 
 		// We don't want to display any activities
@@ -288,12 +284,26 @@ class Data
 	/**
 	 * Get the filter from $_GET
 	 * @return string
+	 * @deprecated Use validateFilter() instead
 	 */
 	public function getFilterFromParam() {
 		if (!isset($_GET['filter']))
 			return 'all';
 
-		$filterValue = $_GET['filter'];
+		return $this->validateFilter($_GET['filter']);
+	}
+
+	/**
+	 * Verify that the filter is valid
+	 *
+	 * @param string $filter
+	 * @return string
+	 */
+	public function validateFilter($filterValue) {
+		if (!isset($filterValue)) {
+			return 'all';
+		}
+
 		switch ($filterValue) {
 			case 'by':
 			case 'self':

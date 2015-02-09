@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Manual Installation &mdash; ownCloud Administrators Manual 7.0 documentation</title>
+    <title>Manual Installation on Linux &mdash; ownCloud Administrators Manual 8.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0',
+        VERSION:     '8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Administrators Manual 7.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Administrators Manual 8.0 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="Univention Corporate Server" href="ucs_installation.html" />
     <link rel="prev" title="Other Installation Methods" href="others_installation.html" />
@@ -116,25 +116,31 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos.html">ownCloud Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-8-only">Enterprise 8 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#owncloud-7-release-notes">ownCloud 7 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-7-only">Enterprise 7 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Linux Installation Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appliance_installation.html">ownCloud Appliances</a></li>
 <li class="toctree-l2"><a class="reference internal" href="apps_management_installation.html">Installing and Managing Apps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hiawatha_configuration.html">Hiawatha Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="lighttpd_configuration.html">Lighttpd Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Linux Distributions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="macos_installation.html">Mac OS X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nginx_configuration.html">Nginx Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="others_installation.html">Other Installation Methods</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Manual Installation</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Manual Installation on Linux</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-installation-on-ubuntu-14-04-lts-server">Example installation on Ubuntu 14.04 LTS Server</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#setting-secure-directory-permissions">Setting Secure Directory Permissions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installation-wizard">Installation Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setting-strong-directory-permissions">Setting Strong Directory Permissions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#selinux">SELinux</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#apache-web-server-configuration">Apache Web Server Configuration</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enabling-ssl">Enabling SSL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#configuring-owncloud">Configuring ownCloud</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-wizard">Install Wizard</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#other-web-servers">Other Web Servers</a></li>
 </ul>
 </li>
@@ -146,7 +152,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
 </ul>
 
 								</ul>
@@ -159,11 +165,10 @@
 				<div class="span9">
 					<div class="page-content">
 						
-  <div class="section" id="manual-installation">
-<h1>Manual Installation<a class="headerlink" href="#manual-installation" title="Permalink to this headline">¶</a></h1>
-<p>If you do not want to use packages, here is how you setup ownCloud from
-scratch using a classic <abbr title="Linux, Apache, MySQL, PHP">LAMP</abbr> setup:</p>
-<p>This document provides a complete walk-through for installing ownCloud on Ubuntu
+  <div class="section" id="manual-installation-on-linux">
+<h1>Manual Installation on Linux<a class="headerlink" href="#manual-installation-on-linux" title="Permalink to this headline">¶</a></h1>
+<p>Installing ownCloud on Linux from the openSUSE Build Service packages is the preferred method (see <a class="reference internal" href="linux_installation.html"><em>Preferred Linux Installation Method</em></a>). These are maintained by ownCloud engineers, and you can use your package manager to keep your ownCloud server up-to-date.</p>
+<p>If there are no packages for your Linux distribution, or you prefer installing from sources, you can setup ownCloud from scratch using a classic LAMP stack (Linux, Apache, MySQL/MariaDB, PHP). This document provides a complete walk-through for installing ownCloud on Ubuntu
 14.04 LTS Server with Apache and MySQL.</p>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
@@ -171,12 +176,12 @@ scratch using a classic <abbr title="Linux, Apache, MySQL, PHP">LAMP</abbr> setu
 <p class="first admonition-title">Note</p>
 <p class="last">This tutorial assumes you have terminal access to the machine you want
 to install ownCloud on. Although this is not an absolute requirement,
-installation without it is highly likely to require contacting your
-hoster (e.g. for installing required modules).</p>
+installation without it is likely to require contacting your
+hoster (e.g. for installing required modules). Consult the <a class="reference external" href="http://php.net/manual/en/extensions.php">PHP manual</a> for information on modules. Your Linux distribution should have packages for all required modules.</p>
 </div>
 <p>To run ownCloud, your web server must have the following installed:</p>
 <ul class="simple">
-<li>php5 (&gt;= 5.3.8, minimum recommended 5.4)</li>
+<li>php5 (&gt;= 5.4)</li>
 <li>PHP module ctype</li>
 <li>PHP module dom</li>
 <li>PHP module GD</li>
@@ -184,6 +189,7 @@ hoster (e.g. for installing required modules).</p>
 <li>PHP module JSON</li>
 <li>PHP module libxml</li>
 <li>PHP module mb multibyte</li>
+<li>PHP module posix</li>
 <li>PHP module SimpleXML</li>
 <li>PHP module XMLWriter</li>
 <li>PHP module zip</li>
@@ -206,10 +212,9 @@ of non-ASCII characters)</li>
 <li>PHP module mcrypt (increases file encryption performance)</li>
 <li>PHP module openssl (required for accessing HTTPS resources)</li>
 </ul>
-<p>Required for specific apps (if you use the mentioned app, you must install that
-package):</p>
+<p>Required for specific apps:</p>
 <ul class="simple">
-<li>PHP module ldap (for ldap integration)</li>
+<li>PHP module ldap (for LDAP integration)</li>
 <li>smbclient (for SMB storage)</li>
 <li>PHP module ftp (for FTP storage)</li>
 </ul>
@@ -218,7 +223,7 @@ package):</p>
 <li>PHP module exif (for image rotation in pictures app)</li>
 <li>PHP module gmp (for SFTP storage)</li>
 </ul>
-<p>For enhanced performance (<em>optional</em> / select only one of the following):</p>
+<p>For enhanced server performance (<em>optional</em> / select only one of the following):</p>
 <ul class="simple">
 <li>PHP module apc</li>
 <li>PHP module apcu</li>
@@ -228,14 +233,14 @@ package):</p>
 <ul class="simple">
 <li>PHP module imagick</li>
 <li>avconv or ffmpeg</li>
-<li>OpenOffice or libreOffice</li>
+<li>OpenOffice or LibreOffice</li>
 </ul>
 <p><strong>Remarks:</strong></p>
 <ul>
 <li><p class="first">Please check your distribution, operating system or hosting partner
-documentation on how to install/enable these modules.</p>
+documentation on how to install and enable these modules.</p>
 </li>
-<li><p class="first">Make sure your distribution&#8217;s php version fulfils the version requirements
+<li><p class="first">Make sure your distribution&#8217;s PHP version fulfills the version requirements
 specified above. If it doesn&#8217;t, there might be custom repositories you can
 use. If you are e.g. running Ubuntu 10.04 LTS, you can update your PHP using
 a custom <a class="reference external" href="https://launchpad.net/~ondrej/+archive/php5">PHP PPA</a>:</p>
@@ -244,22 +249,21 @@ sudo apt-get update
 sudo apt-get install php5</pre>
 </div>
 </li>
-<li><p class="first">You don’t need any WebDAV support module for your web server (i.e. Apache’s
-mod_webdav) to access your ownCloud data via WebDAV. ownCloud has a built-in
-WebDAV server of its own.</p>
+<li><p class="first">You don’t need the WebDAV module for your web server (i.e. Apache’s
+<tt class="docutils literal"><span class="pre">mod_webdav</span></tt>) to access your ownCloud data via WebDAV. ownCloud has a built-in
+WebDAV server of its own, SabreDAV.</p>
 </li>
 </ul>
 </div>
 <div class="section" id="example-installation-on-ubuntu-14-04-lts-server">
 <h2>Example installation on Ubuntu 14.04 LTS Server<a class="headerlink" href="#example-installation-on-ubuntu-14-04-lts-server" title="Permalink to this headline">¶</a></h2>
-<p>On a machine running a pristine Ubuntu 14.04 LTS server, you would install the
+<p>On a machine running a pristine Ubuntu 14.04 LTS server, install the
 required and recommended modules for a typical ownCloud installation, using
-Apache and MySQL by issuing the following commands in a terminal:</p>
-<div class="highlight-python"><pre>apt-get install apache2 mysql-server libapache2-mod-php5
+Apache and MariaDB, by issuing the following commands in a terminal:</p>
+<div class="highlight-python"><pre>apt-get install apache2 mariadb-server libapache2-mod-php5
 apt-get install php5-gd php5-json php5-mysql php5-curl
 apt-get install php5-intl php5-mcrypt php5-imagick</pre>
 </div>
-<p><strong>Remarks:</strong></p>
 <ul class="simple">
 <li>This installs the packages for the ownCloud core system. If you are planning
 on running additional apps, keep in mind that they might require additional
@@ -268,13 +272,13 @@ packages.  See the Prerequisites section (above) for details.</li>
 you want to continue; press &#8220;Y&#8221; for Yes (that is if your system language is
 English. You might have to press a different key if you have a different
 system language).</li>
-<li>At the installation of the MySQL server, you will be prompted for a root
+<li>At the installation of the MySQL server, you will be prompted to create a root
 password. Be sure to remember the password you enter there for later use
 as you will need it during ownCloud database setup.</li>
 </ul>
 <p>Now download the archive of the latest ownCloud version:</p>
 <ul>
-<li><p class="first">Navigate to the <a class="reference external" href="http://owncloud.org/install">ownCloud Installation Page</a>.</p>
+<li><p class="first">Go to the <a class="reference external" href="http://owncloud.org/install">ownCloud Installation Page</a>.</p>
 </li>
 <li><p class="first">Click the <strong>Archive file for server owners</strong> button.</p>
 </li>
@@ -307,74 +311,30 @@ your web server:</p>
 <div class="highlight-python"><pre>cp -r owncloud /path/to/webserver/document-root</pre>
 </div>
 <p>where <tt class="docutils literal"><span class="pre">/path/to/webserver/document-root</span></tt> is replaced by the
-document root of your Web server. Typically, on Ubuntu systems this
+document root of your Web server. On Ubuntu systems this
 <tt class="docutils literal"><span class="pre">/var/www/owncloud</span></tt>, so your copying command is:</p>
 <div class="highlight-python"><pre>cp -r owncloud /var/www/</pre>
 </div>
 </li>
 </ul>
 </div>
-<div class="section" id="setting-secure-directory-permissions">
-<h2>Setting Secure Directory Permissions<a class="headerlink" href="#setting-secure-directory-permissions" title="Permalink to this headline">¶</a></h2>
-<p>Your HTTP user must own at least the <tt class="docutils literal"><span class="pre">config/</span></tt>, <tt class="docutils literal"><span class="pre">data/</span></tt>
-and <tt class="docutils literal"><span class="pre">apps/</span></tt> directories in your ownCloud directory so that you can
-configure ownCloud, create, modify and delete your data files, and install apps
-via the ownCloud Web interface. We recommend setting the directory
-permissions as strictly as possible for stronger security.</p>
-<p>You can find your HTTP user in your HTTP server configuration files. Or you can
-create a PHP page to find it for you. To do this, create a plain text file with
-a single line in it:</p>
-<blockquote>
-<div><tt class="docutils literal"><span class="pre">&lt;?php</span> <span class="pre">echo</span> <span class="pre">exec('whoami');</span> <span class="pre">?&gt;</span></tt></div></blockquote>
-<p>Name it <tt class="docutils literal"><span class="pre">whoami.php</span></tt> and place it in your <tt class="docutils literal"><span class="pre">/var/www/html</span></tt> directory, and
-then open it in a Web browser, for example <tt class="docutils literal"><span class="pre">http://localhost/whoami.php</span></tt>. You
-should see a single line in your browser page with the HTTP user name.</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">When using an NFS mount for the data directory, do not change
-ownership as above. The simple act of mounting the drive will set
-proper permissions for ownCloud to write to the directory. Changing
-ownership as above could result in some issues if the NFS mount is
-lost.</p>
+<div class="section" id="installation-wizard">
+<h2>Installation Wizard<a class="headerlink" href="#installation-wizard" title="Permalink to this headline">¶</a></h2>
+<p>Finish setting up your ownCloud server by following
+the <a class="reference internal" href="installation_wizard.html"><em>Installation Wizard</em></a>.</p>
+<p>After running the Installation Wizard your ownCloud installation is complete.
+However, you should perform the following steps to improve your server&#8217;s
+security.</p>
 </div>
-<p>The generic command to change ownership of all files and subdirectories in a
-directory is:</p>
-<div class="highlight-python"><pre>chown -R &lt;http-user&gt;:&lt;http-user&gt; /path/to/owncloud/</pre>
+<div class="section" id="setting-strong-directory-permissions">
+<h2>Setting Strong Directory Permissions<a class="headerlink" href="#setting-strong-directory-permissions" title="Permalink to this headline">¶</a></h2>
+<p>We recommend setting the directory permissions in your ownCloud installation as
+strictly as possible for stronger security. Please refer to the <tt class="docutils literal"><span class="pre">Setting</span>
+<span class="pre">Strong</span> <span class="pre">Directory</span> <span class="pre">Permissions</span></tt> section of <a class="reference internal" href="installation_wizard.html"><em>Installation Wizard</em></a>.</p>
 </div>
-<p>For hardened security we  highly recommend setting the permissions on your ownCloud directory as strictly
-as possible. These commands should be executed immediately after the initial installation:</p>
-<div class="highlight-python"><pre>chown -R root:root /path/to/owncloud/
-chmod -R 755 /path/to/owncloud/
-chown &lt;http-user&gt;:&lt;http-user&gt; /path/to/owncloud/config/config.php
-chmod 750 /path/to/owncloud/config/config.php
-chown -R &lt;http-user&gt;:&lt;http-user&gt; /path/to/owncloud/data/
-chmod -R 750 /path/to/owncoud/data
-chown root:root /path/to/owncloud/data/.htaccess
-chmod 755 /path/to/owncloud/data/.htaccess
-chown &lt;http-user&gt;:&lt;http-user&gt; /path/to/owncloud/apps/
-chmod 750 /path/to/owncloud/apps/</pre>
-</div>
-<p>These strict permissions will prevent the Updater app from working. If you use the Updater app, it needs your whole
-ownCloud directory to be owned by the http-user, like these examples:</p>
-<ul>
-<li><p class="first">This example is for Ubuntu 14.04 LTS server:</p>
-<div class="highlight-python"><pre>chown -R www-data:www-data /var/www/owncloud</pre>
-</div>
-</li>
-<li><p class="first">Arch Linux:</p>
-<div class="highlight-python"><pre>chown -R http:http /path/to/owncloud/</pre>
-</div>
-</li>
-<li><p class="first">Fedora:</p>
-<div class="highlight-python"><pre>chown -R apache:apache /path/to/owncloud/</pre>
-</div>
-</li>
-<li><p class="first">openSUSE:</p>
-<div class="highlight-python"><pre>chown -R wwwrun:www /path/to/owncloud/</pre>
-</div>
-</li>
-</ul>
-<p>After the Update app has run, you should re-apply the strict permissions.</p>
+<div class="section" id="selinux">
+<h2>SELinux<a class="headerlink" href="#selinux" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference internal" href="selinux_configuration.html"><em>SELinux Configuration</em></a> for a suggested configuration for SELinux-enabled distributions such as Fedora and CentOS.</p>
 <p>Apache is the recommended Web server.</p>
 </div>
 <div class="section" id="apache-web-server-configuration">
@@ -421,7 +381,7 @@ Server built:   Jul 22 2014 14:36:38</pre>
 </div>
 <p>Example config for Apache 2.2:</p>
 <div class="highlight-xml"><pre>&lt;Directory /path/to/owncloud&gt;
-    Options Indexes FollowSymLinks MultiViews
+    Options Indexes FollowSymLinks
     AllowOverride All
     Order allow,deny
     allow from all
@@ -429,7 +389,7 @@ Server built:   Jul 22 2014 14:36:38</pre>
 </div>
 <p>Example config for Apache 2.4:</p>
 <div class="highlight-xml"><pre>&lt;Directory /path/to/owncloud&gt;
-    Options Indexes FollowSymLinks MultiViews
+    Options Indexes FollowSymLinks
     AllowOverride All
     Require all granted
 &lt;/Directory&gt;</pre>
@@ -459,7 +419,7 @@ the <tt class="file docutils literal"><span class="pre">/etc/apache2/sites-avail
                 AllowOverride None
         &lt;/Directory&gt;
         &lt;Directory /var/www/&gt;
-                Options Indexes FollowSymLinks MultiViews
+                Options Indexes FollowSymLinks
                 AllowOverride None
                 Order allow,deny
                 allow from all
@@ -481,7 +441,7 @@ the <tt class="file docutils literal"><span class="pre">/etc/apache2/sites-avail
                 downgrade-1.0 force-response-1.0
         BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
         &lt;Directory /var/www/owncloud&gt;
-                Options Indexes FollowSymLinks MultiViews
+                Options Indexes FollowSymLinks
                 AllowOverride All
                 Allow from all
                 Require all granted
@@ -552,11 +512,6 @@ at the time the ssl-cert package was installed.</p>
 </ul>
 </li>
 </ul>
-</div>
-<div class="section" id="install-wizard">
-<h2>Install Wizard<a class="headerlink" href="#install-wizard" title="Permalink to this headline">¶</a></h2>
-<p>Finish setting up your ownCloud server by following
-the <a class="reference internal" href="installation_wizard.html"><em>Installation Wizard</em></a>.</p>
 </div>
 <div class="section" id="other-web-servers">
 <h2>Other Web Servers<a class="headerlink" href="#other-web-servers" title="Permalink to this headline">¶</a></h2>

@@ -21,21 +21,24 @@
  */
 
 require_once __DIR__ . '/../appinfo/app.php';
-require_once __DIR__ . '/../lib/versions.php';
 
 /**
  * Class Test_Files_versions
  * this class provide basic files versions test
  */
-class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
+class Test_Files_Versioning extends \Test\TestCase {
 
 	const TEST_VERSIONS_USER = 'test-versions-user';
 	const TEST_VERSIONS_USER2 = 'test-versions-user2';
 	const USERS_VERSIONS_ROOT = '/test-versions-user/files_versions';
 
+	/**
+	 * @var \OC\Files\View
+	 */
 	private $rootView;
 
 	public static function setUpBeforeClass() {
+		parent::setUpBeforeClass();
 
 		// clear share hooks
 		\OC_Hook::clear('OCP\\Share');
@@ -52,9 +55,13 @@ class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
 		// cleanup test user
 		\OC_User::deleteUser(self::TEST_VERSIONS_USER);
 		\OC_User::deleteUser(self::TEST_VERSIONS_USER2);
+
+		parent::tearDownAfterClass();
 	}
 
-	function setUp() {
+	protected function setUp() {
+		parent::setUp();
+
 		self::loginHelper(self::TEST_VERSIONS_USER);
 		$this->rootView = new \OC\Files\View();
 		if (!$this->rootView->file_exists(self::USERS_VERSIONS_ROOT)) {
@@ -62,8 +69,10 @@ class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
 		}
 	}
 
-	function tearDown() {
+	protected function tearDown() {
 		$this->rootView->deleteAll(self::USERS_VERSIONS_ROOT);
+
+		parent::tearDown();
 	}
 
 	/**
@@ -71,9 +80,9 @@ class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
 	 * test expire logic
 	 * @dataProvider versionsProvider
 	 */
-	function testGetExpireList($versions, $sizeOfAllDeletedFiles) {
+	public function testGetExpireList($versions, $sizeOfAllDeletedFiles) {
 
-		// last interval enda at 2592000
+		// last interval end at 2592000
 		$startTime = 5000000;
 
 		$testClass = new VersionStorageToTest();
@@ -213,7 +222,7 @@ class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
 		);
 	}
 
-	function testRename() {
+	public function testRename() {
 
 		\OC\Files\Filesystem::file_put_contents("test.txt", "test file");
 
@@ -244,7 +253,7 @@ class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
 		\OC\Files\Filesystem::unlink('test2.txt');
 	}
 
-	function testRenameInSharedFolder() {
+	public function testRenameInSharedFolder() {
 
 		\OC\Files\Filesystem::mkdir('folder1');
 		\OC\Files\Filesystem::mkdir('folder1/folder2');
@@ -267,7 +276,7 @@ class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
 		$this->rootView->file_put_contents($v1, 'version1');
 		$this->rootView->file_put_contents($v2, 'version2');
 
-		\OCP\Share::shareItem('folder', $fileInfo['fileid'], \OCP\Share::SHARE_TYPE_USER, self::TEST_VERSIONS_USER2, OCP\PERMISSION_ALL);
+		\OCP\Share::shareItem('folder', $fileInfo['fileid'], \OCP\Share::SHARE_TYPE_USER, self::TEST_VERSIONS_USER2, \OCP\Constants::PERMISSION_ALL);
 
 		self::loginHelper(self::TEST_VERSIONS_USER2);
 
@@ -288,7 +297,7 @@ class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
 		\OC\Files\Filesystem::unlink('/folder1/folder2/test.txt');
 	}
 
-	function testRenameSharedFile() {
+	public function testRenameSharedFile() {
 
 		\OC\Files\Filesystem::file_put_contents("test.txt", "test file");
 
@@ -310,7 +319,7 @@ class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
 		$this->rootView->file_put_contents($v1, 'version1');
 		$this->rootView->file_put_contents($v2, 'version2');
 
-		\OCP\Share::shareItem('file', $fileInfo['fileid'], \OCP\Share::SHARE_TYPE_USER, self::TEST_VERSIONS_USER2, OCP\PERMISSION_ALL);
+		\OCP\Share::shareItem('file', $fileInfo['fileid'], \OCP\Share::SHARE_TYPE_USER, self::TEST_VERSIONS_USER2, \OCP\Constants::PERMISSION_ALL);
 
 		self::loginHelper(self::TEST_VERSIONS_USER2);
 
@@ -331,7 +340,7 @@ class Test_Files_Versioning extends \PHPUnit_Framework_TestCase {
 		\OC\Files\Filesystem::unlink('/test.txt');
 	}
 
-	function testCopy() {
+	public function testCopy() {
 
 		\OC\Files\Filesystem::file_put_contents("test.txt", "test file");
 

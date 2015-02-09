@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuring External Storage (GUI) &mdash; ownCloud Administrators Manual 7.0 documentation</title>
+    <title>Configuring External Storage (GUI) &mdash; ownCloud Administrators Manual 8.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0',
+        VERSION:     '8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Administrators Manual 7.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Administrators Manual 8.0 documentation" href="../index.html" />
     <link rel="up" title="Configuration" href="index.html" />
     <link rel="next" title="Configuring External Storage (Configuration File)" href="external_storage_configuration.html" />
     <link rel="prev" title="Encryption Configuration" href="encryption_configuration.html" />
@@ -116,7 +116,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos.html">ownCloud Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-8-only">Enterprise 8 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#owncloud-7-release-notes">ownCloud 7 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-7-only">Enterprise 7 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Configuration</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="antivirus_configuration.html">Configuring the ClamAV Antivirus Scanner</a></li>
@@ -152,6 +157,9 @@
 <li class="toctree-l2"><a class="reference internal" href="knowledgebase_configuration.html">Knowledge Base Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="language_configuration.html">Language Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="logging_configuration.html">Logging Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html">Using the occ Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tips.html">Performance Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#nginx-caching-owncloud-gallery-thumbnails-with-fastcgi-cache-purge">Nginx: caching ownCloud gallery thumbnails with fastcgi_cache_purge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="previews_configuration.html">Previews Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reverse_proxy_configuration.html">Reverse Proxy Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="search_configuration.html">Enabling Full-Text Search</a></li>
@@ -160,11 +168,14 @@
 <li class="toctree-l2"><a class="reference internal" href="thirdparty_php_configuration.html">Using Third Party PHP Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ftp_smb_imap.html">User Authentication with IMAP, SMB, and FTP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ldap.html">User Authentication with LDAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_auth_ldap_cleanup.html">LDAP User Cleanup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_configuration.html">User Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html">User Provisioning API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reset_admin_password.html">Resetting a Lost Admin Password</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
 </ul>
 
 								</ul>
@@ -320,7 +331,7 @@ account. Click <tt class="docutils literal"><span class="pre">Allow</span></tt>,
 <li>Whatever name you want for your local mountpoint.</li>
 <li>The URL of your FTP server.</li>
 <li>FTP server username and password.</li>
-<li>The FTP directory to mount in ownCloud. ownCloud defaults to the root
+<li>Remote Subfolder, the FTP directory to mount in ownCloud. ownCloud defaults to the root
 directory. When you specify a different directory you must leave off the
 leading slash. For example, if you want to connect your
 <tt class="docutils literal"><span class="pre">public_html/images</span></tt> directory, then type it exactly like that.</li>
@@ -338,14 +349,14 @@ safely tucked inside an SSH tunnel. To connect an SFTP server you need:</p>
 <li>Whatever name you want for your local mountpoint.</li>
 <li>The URL of your SFTP server.</li>
 <li>SFTP server username and password.</li>
-<li>The SFTP directory to mount in ownCloud.</li>
+<li>Remote Subfolder, the SFTP directory to mount in ownCloud.</li>
 <li>The ownCloud users or groups who are allowed to access the share.</li>
 </ul>
 </div>
 <div class="section" id="google-drive">
 <h2>Google Drive<a class="headerlink" href="#google-drive" title="Permalink to this headline">¶</a></h2>
 <p>All applications that access a Google API must be registered through the
-<a class="reference external" href="https://cloud.google.com">Google Cloud Console</a>. Follow along carefully
+<a class="reference external" href="https://console.developers.google.com/">Google Cloud Console</a>. Follow along carefully
 because the Google is a bit of a maze and it&#8217;s easy to get lost.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -423,11 +434,11 @@ on Linux and other Unix-type operating systems, and NAS appliances.</p>
 <ul class="simple">
 <li>Folder name &#8211; Whatever name you want for your local mountpoint.</li>
 <li>Host &#8211; The URL of the Samba server.</li>
-<li>Username &#8211; The user name used to login to the Samba server.</li>
+<li>Username &#8211; The username or domain/username used to login to the Samba server.</li>
 <li>Password &#8211; The password to login to the Samba server.</li>
 <li>Share &#8211; The share on the Samba server to mount.</li>
-<li>Root &#8211; The folder inside the Samba share to mount (optional, defaults to
-<tt class="docutils literal"><span class="pre">/</span></tt>)</li>
+<li>Remote Subfolder &#8211; The remote subfolder inside the Samba share to mount (optional, defaults to
+<tt class="docutils literal"><span class="pre">/</span></tt>). To assign the ownCloud logon username automatically to the subfolder, use <tt class="docutils literal"><span class="pre">$user</span></tt> instead of a particular subfolder name.</li>
 </ul>
 <p>And finally, the ownCloud users and groups who get access to the share.</p>
 <div class="figure">
@@ -454,7 +465,7 @@ ownCloud server.</p>
 <li>Folder name &#8211; Whatever name you want for your local mountpoint.</li>
 <li>URL &#8211; The URL of the WebDAV or ownCloud server.</li>
 <li>Username and password for the remote server</li>
-<li>Root &#8211; The remote folder you want to mount (optional, defaults
+<li>Remote Subfolder &#8211; The remote subfolder you want to mount (optional, defaults
 to <tt class="docutils literal"><span class="pre">/</span></tt>)</li>
 <li>Secure <tt class="docutils literal"><span class="pre">https://</span></tt> - Whether to use <tt class="docutils literal"><span class="pre">https://</span></tt> to connect to the WebDav
 server instead of <tt class="docutils literal"><span class="pre">http://</span></tt> (We always recommend <tt class="docutils literal"><span class="pre">https://</span></tt> for

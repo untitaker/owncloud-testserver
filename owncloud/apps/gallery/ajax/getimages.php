@@ -7,6 +7,7 @@
  */
 
 OCP\JSON::checkAppEnabled('gallery');
+$path = null;
 
 if (isset($_GET['token'])) {
 	$token = $_GET['token'];
@@ -16,7 +17,7 @@ if (isset($_GET['token'])) {
 		$type = $linkItem['item_type'];
 		$fileSource = $linkItem['file_source'];
 		$shareOwner = $linkItem['uid_owner'];
-		$path = null;
+		
 		$rootLinkItem = \OCP\Share::resolveReShare($linkItem);
 		$fileOwner = $rootLinkItem['uid_owner'];
 
@@ -33,11 +34,11 @@ if (isset($_GET['token'])) {
 
 		$result = array();
 		foreach ($images as $image) {
-			$result[] = $token . $image['path'];
+			$result[] = trim($image['path'], '/');
 		}
 
 		OCP\JSON::setContentTypeHeader();
-		echo json_encode(array('images' => $result, 'users' => array(), 'displayNames' => array()));
+		echo json_encode($result);
 
 		exit;
 	}
@@ -51,24 +52,16 @@ $user = \OCP\User::getUser();
 $users = array();
 $result = array();
 
-foreach ($images as &$image) {
-	// we show shared images another way
-	if ($image->getStorage() instanceof \OC\Files\Storage\Shared) {
-		$owner = $image['uid_owner'];
-		$users[$owner] = $owner;
-	} else {
-		$owner = $user;
-	}
-	$path = $image['path'];
+if($path == null){
+	
+	$path='/';
+}
+
+foreach ($images as $image) {
 	if (strpos($path, DIRECTORY_SEPARATOR . ".")) {
 		continue;
 	}
-	$result[] = $owner . $path;
-}
-
-$displayNames = array();
-foreach ($users as $user) {
-	$displayNames[$user] = \OCP\User::getDisplayName($user);
+	$result[] = trim($image['path'], '/');
 }
 
 function startsWith($haystack, $needle) {
@@ -76,4 +69,4 @@ function startsWith($haystack, $needle) {
 }
 
 OCP\JSON::setContentTypeHeader();
-echo json_encode(array('images' => $result, 'users' => array_values($users), 'displayNames' => $displayNames));
+echo json_encode($result);

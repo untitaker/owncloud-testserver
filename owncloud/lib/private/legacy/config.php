@@ -14,19 +14,13 @@
 /**
  * This class is responsible for reading and writing config.php, the very basic
  * configuration file of ownCloud.
+ *
+ * @deprecated use \OC::$server->getConfig() to get an \OCP\Config instance
  */
 class OC_Config {
 
 	/** @var \OC\Config */
 	public static $object;
-
-	/**
-	 * Returns the config instance
-	 * @return \OC\Config
-	 */
-	public static function getObject() {
-		return self::$object;
-	}
 
 	/**
 	 * Lists all available config keys
@@ -62,6 +56,16 @@ class OC_Config {
 	 */
 	public static function setValue($key, $value) {
 		self::$object->setValue($key, $value);
+	}
+
+	/**
+	 * Sets and deletes values and writes the config.php
+	 *
+	 * @param array $configs Associative array with `key => value` pairs
+	 *                       If value is null, the config key will be deleted
+	 */
+	public static function setValues(array $configs) {
+		self::$object->setValues($configs);
 	}
 
 	/**

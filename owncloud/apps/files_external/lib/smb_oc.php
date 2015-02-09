@@ -18,12 +18,12 @@ class SMB_OC extends \OC\Files\Storage\SMB {
 	 * @throws \Exception
 	 */
 	public function __construct($params) {
-		if (isset($params['host']) && \OC::$session->exists('smb-credentials')) {
+		if (isset($params['host']) && \OC::$server->getSession()->exists('smb-credentials')) {
 			$host=$params['host'];
 			$this->username_as_share = ($params['username_as_share'] === 'true');
 
-			$params_auth = json_decode(\OC::$server->getCrypto()->decrypt(\OC::$session->get('smb-credentials')), true);
-			$user = \OC::$session->get('loginname');
+			$params_auth = json_decode(\OC::$server->getCrypto()->decrypt(\OC::$server->getSession()->get('smb-credentials')), true);
+			$user = \OC::$server->getSession()->get('loginname');
 			$password = $params_auth['password'];
 
 			$root=isset($params['root'])?$params['root']:'/';
@@ -48,6 +48,7 @@ class SMB_OC extends \OC\Files\Storage\SMB {
 		}
 	}
 
+
 	/**
 	 * Intercepts the user credentials on login and stores them
 	 * encrypted inside the session if SMB_OC storage is enabled.
@@ -60,7 +61,7 @@ class SMB_OC extends \OC\Files\Storage\SMB {
 			$mountpointClasses[$mountpoint['class']] = true;
 		}
 		if(isset($mountpointClasses['\OC\Files\Storage\SMB_OC'])) {
-			\OC::$session->set('smb-credentials', \OC::$server->getCrypto()->encrypt(json_encode($params)));
+			\OC::$server->getSession()->set('smb-credentials', \OC::$server->getCrypto()->encrypt(json_encode($params)));
 		}
 	}
 

@@ -87,6 +87,11 @@ class View {
 		if ($this->fakeRoot == '') {
 			return $path;
 		}
+
+		if (rtrim($path,'/') === rtrim($this->fakeRoot, '/')) {
+			return '/';
+		}
+
 		if (strpos($path, $this->fakeRoot) !== 0) {
 			return null;
 		} else {
@@ -110,6 +115,19 @@ class View {
 	 */
 	public function getMountPoint($path) {
 		return Filesystem::getMountPoint($this->getAbsolutePath($path));
+	}
+
+	/**
+	 * get the mountpoint of the storage object for a path
+	 * ( note: because a storage is not always mounted inside the fakeroot, the
+	 * returned mountpoint is relative to the absolute root of the filesystem
+	 * and doesn't take the chroot into account )
+	 *
+	 * @param string $path
+	 * @return \OCP\Files\Mount\IMountPoint
+	 */
+	public function getMount($path) {
+		return Filesystem::getMountManager()->find($this->getAbsolutePath($path));
 	}
 
 	/**
@@ -199,6 +217,10 @@ class View {
 		}
 	}
 
+	/**
+	 * @param string $path
+	 * @return bool|mixed
+	 */
 	public function rmdir($path) {
 		$absolutePath = $this->getAbsolutePath($path);
 		$mount = Filesystem::getMountManager()->find($absolutePath);
@@ -280,6 +302,11 @@ class View {
 	}
 
 	public function isDeletable($path) {
+		$absolutePath = $this->getAbsolutePath($path);
+		$mount = Filesystem::getMountManager()->find($absolutePath);
+		if ($mount->getInternalPath($absolutePath) === '') {
+			return $mount instanceof MoveableMount;
+		}
 		return $this->basicOperation('isDeletable', $path);
 	}
 
@@ -313,7 +340,7 @@ class View {
 		if (!$result) {
 			// If create file fails because of permissions on external storage like SMB folders,
 			// check file exists and return false if not.
-			if(!$this->file_exists($path)){
+			if (!$this->file_exists($path)) {
 				return false;
 			}
 			if (is_null($mtime)) {
@@ -417,11 +444,17 @@ class View {
 
 	/**
 	 * @param string $directory
+	 * @return bool|mixed
 	 */
-	public function deleteAll($directory, $empty = false) {
+	public function deleteAll($directory) {
 		return $this->rmdir($directory);
 	}
 
+	/**
+	 * @param string $path1
+	 * @param string $path2
+	 * @return bool|mixed
+	 */
 	public function rename($path1, $path2) {
 		$postFix1 = (substr($path1, -1, 1) === '/') ? '/' : '';
 		$postFix2 = (substr($path2, -1, 1) === '/') ? '/' : '';
@@ -465,7 +498,7 @@ class View {
 				if ($internalPath1 === '' and $mount instanceof MoveableMount) {
 					if ($this->isTargetAllowed($absolutePath2)) {
 						/**
-						 * @var \OC\Files\Mount\Mount | \OC\Files\Mount\MoveableMount $mount
+						 * @var \OC\Files\Mount\MountPoint | \OC\Files\Mount\MoveableMount $mount
 						 */
 						$sourceMountPoint = $mount->getMountPoint();
 						$result = $mount->moveMount($absolutePath2);
@@ -483,7 +516,7 @@ class View {
 					}
 				} else {
 					if ($this->is_dir($path1)) {
-						$result = $this->copy($path1, $path2);
+						$result = $this->copy($path1, $path2, true);
 						if ($result === true) {
 							$result = $storage1->rmdir($internalPath1);
 						}
@@ -491,6 +524,7 @@ class View {
 						$source = $this->fopen($path1 . $postFix1, 'r');
 						$target = $this->fopen($path2 . $postFix2, 'w');
 						list($count, $result) = \OC_Helper::streamCopy($source, $target);
+						$this->touch($path2, $this->filemtime($path1));
 
 						// close open handle - especially $source is necessary because unlink below will
 						// throw an exception on windows because the file is locked
@@ -498,7 +532,7 @@ class View {
 						fclose($target);
 
 						if ($result !== false) {
-							$storage1->unlink($internalPath1);
+							$result &= $storage1->unlink($internalPath1);
 						}
 					}
 				}
@@ -508,16 +542,18 @@ class View {
 					if ($this->shouldEmitHooks()) {
 						$this->emit_file_hooks_post($exists, $path2);
 					}
-				} elseif ($this->shouldEmitHooks() && $result !== false) {
+				} elseif ($result) {
 					$this->updater->rename($path1, $path2);
-					\OC_Hook::emit(
-						Filesystem::CLASSNAME,
-						Filesystem::signal_post_rename,
-						array(
-							Filesystem::signal_param_oldpath => $this->getHookPath($path1),
-							Filesystem::signal_param_newpath => $this->getHookPath($path2)
-						)
-					);
+					if ($this->shouldEmitHooks($path1) and $this->shouldEmitHooks($path2)) {
+						\OC_Hook::emit(
+							Filesystem::CLASSNAME,
+							Filesystem::signal_post_rename,
+							array(
+								Filesystem::signal_param_oldpath => $this->getHookPath($path1),
+								Filesystem::signal_param_newpath => $this->getHookPath($path2)
+							)
+						);
+					}
 				}
 				return $result;
 			} else {
@@ -528,7 +564,7 @@ class View {
 		}
 	}
 
-	public function copy($path1, $path2) {
+	public function copy($path1, $path2, $preserveMtime = false) {
 		$postFix1 = (substr($path1, -1, 1) === '/') ? '/' : '';
 		$postFix2 = (substr($path2, -1, 1) === '/') ? '/' : '';
 		$absolutePath1 = Filesystem::normalizePath($this->getAbsolutePath($path1));
@@ -573,10 +609,13 @@ class View {
 				} else {
 					if ($this->is_dir($path1) && ($dh = $this->opendir($path1))) {
 						$result = $this->mkdir($path2);
+						if ($preserveMtime) {
+							$this->touch($path2, $this->filemtime($path1));
+						}
 						if (is_resource($dh)) {
 							while (($file = readdir($dh)) !== false) {
 								if (!Filesystem::isIgnoredDir($file)) {
-									$result = $this->copy($path1 . '/' . $file, $path2 . '/' . $file);
+									$result = $this->copy($path1 . '/' . $file, $path2 . '/' . $file, $preserveMtime);
 								}
 							}
 						}
@@ -584,6 +623,9 @@ class View {
 						$source = $this->fopen($path1 . $postFix1, 'r');
 						$target = $this->fopen($path2 . $postFix2, 'w');
 						list($count, $result) = \OC_Helper::streamCopy($source, $target);
+						if($preserveMtime) {
+							$this->touch($path2, $this->filemtime($path1));
+						}
 						fclose($source);
 						fclose($target);
 					}
@@ -676,15 +718,17 @@ class View {
 				$this->mkdir($filePath);
 			}
 
-			if (!$tmpFile) {
-				debug_print_backtrace();
-			}
-
 			$source = fopen($tmpFile, 'r');
 			if ($source) {
-				$this->file_put_contents($path, $source);
+				$result = $this->file_put_contents($path, $source);
+				// $this->file_put_contents() might have already closed
+				// the resource, so we check it, before trying to close it
+				// to avoid messages in the error log.
+				if (is_resource($source)) {
+					fclose($source);
+				}
 				unlink($tmpFile);
-				return true;
+				return $result;
 			} else {
 				return false;
 			}
@@ -764,7 +808,7 @@ class View {
 
 				$result = \OC_FileProxy::runPostProxies($operation, $this->getAbsolutePath($path), $result);
 
-				if (in_array('delete', $hooks)) {
+				if (in_array('delete', $hooks) and $result) {
 					$this->updater->remove($path);
 				}
 				if (in_array('write', $hooks)) {
@@ -806,6 +850,9 @@ class View {
 			return false;
 		}
 		$defaultRoot = Filesystem::getRoot();
+		if ($defaultRoot === null) {
+			return false;
+		}
 		if ($this->fakeRoot === $defaultRoot) {
 			return true;
 		}
@@ -873,6 +920,9 @@ class View {
 		if (!Filesystem::isValidPath($path)) {
 			return $data;
 		}
+		if (Cache\Scanner::isPartialFile($path)) {
+			return $this->getPartFileInfo($path);
+		}
 		$path = Filesystem::normalizePath($this->fakeRoot . '/' . $path);
 
 		$mount = Filesystem::getMountManager()->find($path);
@@ -882,22 +932,24 @@ class View {
 		if ($storage) {
 			$cache = $storage->getCache($internalPath);
 
-			if (!$cache->inCache($internalPath)) {
+			$data = $cache->get($internalPath);
+			$watcher = $storage->getWatcher($internalPath);
+
+			// if the file is not in the cache or needs to be updated, trigger the scanner and reload the data
+			if (!$data) {
 				if (!$storage->file_exists($internalPath)) {
 					return false;
 				}
 				$scanner = $storage->getScanner($internalPath);
 				$scanner->scan($internalPath, Cache\Scanner::SCAN_SHALLOW);
-			} else {
-				$watcher = $storage->getWatcher($internalPath);
-				$data = $watcher->checkUpdate($internalPath);
-			}
-
-			if (!is_array($data)) {
+				$data = $cache->get($internalPath);
+			} else if (!Cache\Scanner::isPartialFile($internalPath) && $watcher->checkUpdate($internalPath, $data)) {
+				$this->updater->propagate($path);
 				$data = $cache->get($internalPath);
 			}
 
 			if ($data and isset($data['fileid'])) {
+				// upgrades from oc6 or lower might not have the permissions set in the file cache
 				if ($data['permissions'] === 0) {
 					$data['permissions'] = $storage->getPermissions($data['path']);
 					$cache->update($data['fileid'], array('permissions' => $data['permissions']));
@@ -926,12 +978,12 @@ class View {
 		}
 
 		if ($mount instanceof MoveableMount && $internalPath === '') {
-			$data['permissions'] |= \OCP\PERMISSION_DELETE | \OCP\PERMISSION_UPDATE;
+			$data['permissions'] |= \OCP\Constants::PERMISSION_DELETE | \OCP\Constants::PERMISSION_UPDATE;
 		}
 
 		$data = \OC_FileProxy::runPostProxies('getFileInfo', $path, $data);
 
-		return new FileInfo($path, $storage, $internalPath, $data);
+		return new FileInfo($path, $storage, $internalPath, $data, $mount);
 	}
 
 	/**
@@ -947,26 +999,35 @@ class View {
 		if (!Filesystem::isValidPath($directory)) {
 			return $result;
 		}
-		$path = Filesystem::normalizePath($this->fakeRoot . '/' . $directory);
-		list($storage, $internalPath) = Filesystem::resolvePath($path);
+		$path = $this->getAbsolutePath($directory);
+		$path = Filesystem::normalizePath($path);
+		$mount = $this->getMount($directory);
+		$storage = $mount->getStorage();
+		$internalPath = $mount->getInternalPath($path);
 		if ($storage) {
 			$cache = $storage->getCache($internalPath);
 			$user = \OC_User::getUser();
 
-			if ($cache->getStatus($internalPath) < Cache\Cache::COMPLETE) {
+			$data = $cache->get($internalPath);
+			$watcher = $storage->getWatcher($internalPath);
+			if (!$data or $data['size'] === -1) {
+				if (!$storage->file_exists($internalPath)) {
+					return array();
+				}
 				$scanner = $storage->getScanner($internalPath);
 				$scanner->scan($internalPath, Cache\Scanner::SCAN_SHALLOW);
-			} else {
-				$watcher = $storage->getWatcher($internalPath);
-				$watcher->checkUpdate($internalPath);
+				$data = $cache->get($internalPath);
+			} else if ($watcher->checkUpdate($internalPath, $data)) {
+				$this->updater->propagate($path);
+				$data = $cache->get($internalPath);
 			}
 
-			$folderId = $cache->getId($internalPath);
+			$folderId = $data['fileid'];
 			/**
 			 * @var \OC\Files\FileInfo[] $files
 			 */
 			$files = array();
-			$contents = $cache->getFolderContents($internalPath, $folderId); //TODO: mimetype_filter
+			$contents = $cache->getFolderContentsById($folderId); //TODO: mimetype_filter
 			foreach ($contents as $content) {
 				if ($content['permissions'] === 0) {
 					$content['permissions'] = $storage->getPermissions($content['path']);
@@ -974,9 +1035,9 @@ class View {
 				}
 				// if sharing was disabled for the user we remove the share permissions
 				if (\OCP\Util::isSharingDisabledForUser()) {
-					$content['permissions'] = $content['permissions'] & ~\OCP\PERMISSION_SHARE;
+					$content['permissions'] = $content['permissions'] & ~\OCP\Constants::PERMISSION_SHARE;
 				}
-				$files[] = new FileInfo($path . '/' . $content['name'], $storage, $content['path'], $content);
+				$files[] = new FileInfo($path . '/' . $content['name'], $storage, $content['path'], $content, $mount);
 			}
 
 			//add a folder for any mountpoint in this directory and add the sizes of other mountpoints to the folders
@@ -984,13 +1045,28 @@ class View {
 			$dirLength = strlen($path);
 			foreach ($mounts as $mount) {
 				$mountPoint = $mount->getMountPoint();
-				$subStorage = Filesystem::getStorage($mountPoint);
+				$subStorage = $mount->getStorage();
 				if ($subStorage) {
 					$subCache = $subStorage->getCache('');
 
 					if ($subCache->getStatus('') === Cache\Cache::NOT_FOUND) {
 						$subScanner = $subStorage->getScanner('');
-						$subScanner->scanFile('');
+						try {
+							$subScanner->scanFile('');
+						} catch (\OCP\Files\StorageNotAvailableException $e) {
+							continue;
+						} catch (\OCP\Files\StorageInvalidException $e) {
+							continue;
+						} catch (\Exception $e) {
+							// sometimes when the storage is not available it can be any exception
+							\OCP\Util::writeLog(
+								'core',
+								'Exception while scanning storage "' . $subStorage->getId() . '": ' .
+								get_class($e) . ': ' . $e->getMessage(),
+								\OCP\Util::ERROR
+							);
+							continue;
+						}
 					}
 
 					$rootEntry = $subCache->get('');
@@ -1011,9 +1087,9 @@ class View {
 							// do not allow renaming/deleting the mount point if they are not shared files/folders
 							// for shared files/folders we use the permissions given by the owner
 							if ($mount instanceof MoveableMount) {
-								$rootEntry['permissions'] = $permissions | \OCP\PERMISSION_UPDATE | \OCP\PERMISSION_DELETE;
+								$rootEntry['permissions'] = $permissions | \OCP\Constants::PERMISSION_UPDATE | \OCP\Constants::PERMISSION_DELETE;
 							} else {
-								$rootEntry['permissions'] = $permissions & (\OCP\PERMISSION_ALL - (\OCP\PERMISSION_UPDATE | \OCP\PERMISSION_DELETE));
+								$rootEntry['permissions'] = $permissions & (\OCP\Constants::PERMISSION_ALL - (\OCP\Constants::PERMISSION_UPDATE | \OCP\Constants::PERMISSION_DELETE));
 							}
 
 							//remove any existing entry with the same name
@@ -1023,14 +1099,14 @@ class View {
 									break;
 								}
 							}
-							$rootEntry['path'] = substr($path . '/' . $rootEntry['name'], strlen($user) + 2); // full path without /$user/
+							$rootEntry['path'] = substr(Filesystem::normalizePath($path . '/' . $rootEntry['name']), strlen($user) + 2); // full path without /$user/
 
 							// if sharing was disabled for the user we remove the share permissions
 							if (\OCP\Util::isSharingDisabledForUser()) {
-								$content['permissions'] = $content['permissions'] & ~\OCP\PERMISSION_SHARE;
+								$content['permissions'] = $content['permissions'] & ~\OCP\Constants::PERMISSION_SHARE;
 							}
 
-							$files[] = new FileInfo($path . '/' . $rootEntry['name'], $subStorage, '', $rootEntry);
+							$files[] = new FileInfo($path . '/' . $rootEntry['name'], $subStorage, '', $rootEntry, $mount);
 						}
 					}
 				}
@@ -1097,7 +1173,7 @@ class View {
 	 * @return FileInfo[]
 	 */
 	public function search($query) {
-		return $this->searchCommon('%' . $query . '%', 'search');
+		return $this->searchCommon('search', array('%' . $query . '%'));
 	}
 
 	/**
@@ -1107,7 +1183,7 @@ class View {
 	 * @return FileInfo[]
 	 */
 	public function searchRaw($query) {
-		return $this->searchCommon($query, 'search');
+		return $this->searchCommon('search', array($query));
 	}
 
 	/**
@@ -1117,47 +1193,60 @@ class View {
 	 * @return FileInfo[]
 	 */
 	public function searchByMime($mimetype) {
-		return $this->searchCommon($mimetype, 'searchByMime');
+		return $this->searchCommon('searchByMime', array($mimetype));
 	}
 
 	/**
-	 * @param string $query
-	 * @param string $method
+	 * search for files by tag
+	 *
+	 * @param string|int $tag name or tag id
+	 * @param string $userId owner of the tags
 	 * @return FileInfo[]
 	 */
-	private function searchCommon($query, $method) {
+	public function searchByTag($tag, $userId) {
+		return $this->searchCommon('searchByTag', array($tag, $userId));
+	}
+
+	/**
+	 * @param string $method cache method
+	 * @param array $args
+	 * @return FileInfo[]
+	 */
+	private function searchCommon($method, $args) {
 		$files = array();
 		$rootLength = strlen($this->fakeRoot);
 
-		$mountPoint = Filesystem::getMountPoint($this->fakeRoot);
-		$storage = Filesystem::getStorage($mountPoint);
+		$mount = $this->getMount('');
+		$mountPoint = $mount->getMountPoint();
+		$storage = $mount->getStorage();
 		if ($storage) {
 			$cache = $storage->getCache('');
 
-			$results = $cache->$method($query);
+			$results = call_user_func_array(array($cache, $method), $args);
 			foreach ($results as $result) {
 				if (substr($mountPoint . $result['path'], 0, $rootLength + 1) === $this->fakeRoot . '/') {
 					$internalPath = $result['path'];
 					$path = $mountPoint . $result['path'];
 					$result['path'] = substr($mountPoint . $result['path'], $rootLength);
-					$files[] = new FileInfo($path, $storage, $internalPath, $result);
+					$files[] = new FileInfo($path, $storage, $internalPath, $result, $mount);
 				}
 			}
 
-			$mountPoints = Filesystem::getMountPoints($this->fakeRoot);
-			foreach ($mountPoints as $mountPoint) {
-				$storage = Filesystem::getStorage($mountPoint);
+			$mounts = Filesystem::getMountManager()->findIn($this->fakeRoot);
+			foreach ($mounts as $mount) {
+				$mountPoint = $mount->getMountPoint();
+				$storage = $mount->getStorage();
 				if ($storage) {
 					$cache = $storage->getCache('');
 
 					$relativeMountPoint = substr($mountPoint, $rootLength);
-					$results = $cache->$method($query);
+					$results = call_user_func_array(array($cache, $method), $args);
 					if ($results) {
 						foreach ($results as $result) {
 							$internalPath = $result['path'];
 							$result['path'] = rtrim($relativeMountPoint . $result['path'], '/');
 							$path = rtrim($mountPoint . $internalPath, '/');
-							$files[] = new FileInfo($path, $storage, $internalPath, $result);
+							$files[] = new FileInfo($path, $storage, $internalPath, $result, $mount);
 						}
 					}
 				}
@@ -1204,7 +1293,7 @@ class View {
 	 * @return string|null
 	 */
 	public function getPath($id) {
-		$id = (int) $id;
+		$id = (int)$id;
 		$manager = Filesystem::getMountManager();
 		$mounts = $manager->findIn($this->fakeRoot);
 		$mounts[] = $manager->find($this->fakeRoot);
@@ -1213,7 +1302,7 @@ class View {
 		$mounts = array_reverse($mounts);
 		foreach ($mounts as $mount) {
 			/**
-			 * @var \OC\Files\Mount\Mount $mount
+			 * @var \OC\Files\Mount\MountPoint $mount
 			 */
 			if ($mount->getStorage()) {
 				$cache = $mount->getStorage()->getCache();
@@ -1231,8 +1320,10 @@ class View {
 
 	private function assertPathLength($path) {
 		$maxLen = min(PHP_MAXPATHLEN, 4000);
-		$pathLen = strlen($path);
-		if ($pathLen > $maxLen) {
+		// Check for the string length - performed using isset() instead of strlen()
+		// because isset() is about 5x-40x faster.
+		if (isset($path[$maxLen])) {
+			$pathLen = strlen($path);
 			throw new \OCP\Files\InvalidPathException("Path length($pathLen) exceeds max path length($maxLen): $path");
 		}
 	}
@@ -1258,5 +1349,33 @@ class View {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Get a fileinfo object for files that are ignored in the cache (part files)
+	 *
+	 * @param string $path
+	 * @return \OCP\Files\FileInfo
+	 */
+	private function getPartFileInfo($path) {
+		$mount = $this->getMount($path);
+		$storage = $mount->getStorage();
+		$internalPath = $mount->getInternalPath($this->getAbsolutePath($path));
+		return new FileInfo(
+			$this->getAbsolutePath($path),
+			$storage,
+			$internalPath,
+			[
+				'fileid' => null,
+				'mimetype' => $storage->getMimeType($internalPath),
+				'name' => basename($path),
+				'etag' => null,
+				'size' => $storage->filesize($internalPath),
+				'mtime' => $storage->filemtime($internalPath),
+				'encrypted' => false,
+				'permissions' => \OCP\Constants::PERMISSION_ALL
+			],
+			$mount
+		);
 	}
 }

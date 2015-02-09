@@ -14,20 +14,6 @@ use Doctrine\DBAL\Schema\Schema;
 class SQLiteMigrator extends Migrator {
 
 	/**
-	 * @var \OCP\IConfig
-	 */
-	private $config;
-
-	/**
-	 * @param \Doctrine\DBAL\Connection $connection
-	 * @param \OCP\IConfig $config
-	 */
-	public function __construct(\Doctrine\DBAL\Connection $connection, \OCP\IConfig $config) {
-		parent::__construct($connection);
-		$this->config = $config;
-	}
-
-	/**
 	 * @param \Doctrine\DBAL\Schema\Schema $targetSchema
 	 * @throws \OC\DB\MigrationException
 	 *

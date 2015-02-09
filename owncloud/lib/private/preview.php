@@ -14,14 +14,7 @@
 namespace OC;
 
 use OC\Preview\Provider;
-
-require_once 'preview/image.php';
-require_once 'preview/movies.php';
-require_once 'preview/mp3.php';
-require_once 'preview/pdf.php';
-require_once 'preview/svg.php';
-require_once 'preview/txt.php';
-require_once 'preview/office.php';
+use OCP\Files\NotFoundException;
 
 class Preview {
 	//the thumbnail folder
@@ -105,7 +98,7 @@ class Preview {
 			self::initProviders();
 		}
 
-		if (empty(self::$providers)) {
+		if (empty(self::$providers) && \OC::$server->getConfig()->getSystemValue('enable_previews', true)) {
 			\OC_Log::write('core', 'No preview providers exist', \OC_Log::ERROR);
 			throw new \Exception('No preview providers');
 		}
@@ -207,14 +200,15 @@ class Preview {
 	/**
 	 * set the path of the file you want a thumbnail from
 	 * @param string $file
-	 * @return \OC\Preview $this
+	 * @return $this
 	 */
 	public function setFile($file) {
 		$this->file = $file;
 		$this->info = null;
+
 		if ($file !== '') {
 			$this->getFileInfo();
-			if($this->info !== null && $this->info !== false) {
+			if($this->info instanceof \OCP\Files\FileInfo) {
 				$this->mimeType = $this->info->getMimetype();
 			}
 		}
@@ -501,12 +495,15 @@ class Preview {
 		$cached = $this->isCached($fileId);
 		if ($cached) {
 			$stream = $this->userView->fopen($cached, 'r');
-			$image = new \OC_Image();
-			$image->loadFromFileHandle($stream);
-			$this->preview = $image->valid() ? $image : null;
+			$this->preview = null;
+			if ($stream) {
+				$image = new \OC_Image();
+				$image->loadFromFileHandle($stream);
+				$this->preview = $image->valid() ? $image : null;
 
-			$this->resizeAndCrop();
-			fclose($stream);
+				$this->resizeAndCrop();
+				fclose($stream);
+			}
 		}
 
 		if (is_null($this->preview)) {
@@ -554,10 +551,15 @@ class Preview {
 	}
 
 	/**
-	 * show preview
-	 * @return void
+	 * @param null|string $mimeType
+	 * @throws NotFoundException
 	 */
 	public function showPreview($mimeType = null) {
+		// Check if file is valid
+		if($this->isFileValid() === false) {
+			throw new NotFoundException('File not found.');
+		}
+
 		\OCP\Response::enableCaching(3600 * 24); // 24 hours
 		if (is_null($this->preview)) {
 			$this->getPreview();
@@ -582,8 +584,6 @@ class Preview {
 			\OC_Log::write('core', '$this->preview is not an instance of OC_Image', \OC_Log::DEBUG);
 			return;
 		}
-
-		$image->fixOrientation();
 
 		$realX = (int)$image->width();
 		$realY = (int)$image->height();
@@ -688,36 +688,39 @@ class Preview {
 	 * register a new preview provider to be used
 	 * @param string $class
 	 * @param array $options
-	 * @return void
 	 */
 	public static function registerProvider($class, $options = array()) {
 		/**
-		* Only register providers that have been explicitly enabled
-		*
-		* The following providers are enabled by default:
-		*  - OC\Preview\Image
-		*  - OC\Preview\MP3
-		*  - OC\Preview\TXT
-		*  - OC\Preview\MarkDown
-		*
-		* The following providers are disabled by default due to performance or privacy concerns:
-		*  - OC\Preview\MSOfficeDoc
-		*  - OC\Preview\MSOffice2003
-		*  - OC\Preview\MSOffice2007
-		*  - OC\Preview\OpenDocument
-		*  - OC\Preview\StarOffice
-		*  - OC\Preview\SVG
-		*  - OC\Preview\Movies
-		*  - OC\Preview\PDF
-		*/
+		 * Only register providers that have been explicitly enabled
+		 *
+		 * The following providers are enabled by default:
+		 *  - OC\Preview\Image
+		 *  - OC\Preview\MP3
+		 *  - OC\Preview\TXT
+		 *  - OC\Preview\MarkDown
+		 *
+		 * The following providers are disabled by default due to performance or privacy concerns:
+		 *  - OC\Preview\MSOfficeDoc
+		 *  - OC\Preview\MSOffice2003
+		 *  - OC\Preview\MSOffice2007
+		 *  - OC\Preview\OpenDocument
+		 *  - OC\Preview\StarOffice
+ 		 *  - OC\Preview\SVG
+		 *  - OC\Preview\Movie
+		 *  - OC\Preview\PDF
+		 *  - OC\Preview\TIFF
+		 *  - OC\Preview\Illustrator
+		 *  - OC\Preview\Postscript
+		 *  - OC\Preview\Photoshop
+		 */
 		if(empty(self::$enabledProviders)) {
-				self::$enabledProviders = \OC_Config::getValue('enabledPreviewProviders', array(
-						'OC\Preview\Image',
-						'OC\Preview\MP3',
-						'OC\Preview\TXT',
-						'OC\Preview\MarkDown',
-					));
-			}
+			self::$enabledProviders = \OC::$server->getConfig()->getSystemValue('enabledPreviewProviders', array(
+				'OC\Preview\Image',
+				'OC\Preview\MP3',
+				'OC\Preview\TXT',
+				'OC\Preview\MarkDown',
+			));
+		}
 
 		if(in_array($class, self::$enabledProviders)) {
 			self::$registeredProviders[] = array('class' => $class, 'options' => $options);
@@ -729,27 +732,95 @@ class Preview {
 	 * @return void
 	 */
 	private static function initProviders() {
-		if (!\OC_Config::getValue('enable_previews', true)) {
+		if (!\OC::$server->getConfig()->getSystemValue('enable_previews', true)) {
 			self::$providers = array();
 			return;
 		}
 
-		if (count(self::$providers) > 0) {
+		if (!empty(self::$providers)) {
 			return;
 		}
 
+		self::registerCoreProviders();
 		foreach (self::$registeredProviders as $provider) {
 			$class = $provider['class'];
 			$options = $provider['options'];
 
 			/** @var $object Provider */
 			$object = new $class($options);
-
 			self::$providers[$object->getMimeType()] = $object;
 		}
 
 		$keys = array_map('strlen', array_keys(self::$providers));
 		array_multisort($keys, SORT_DESC, self::$providers);
+	}
+
+	protected static function registerCoreProviders() {
+		self::registerProvider('OC\Preview\TXT');
+		self::registerProvider('OC\Preview\MarkDown');
+		self::registerProvider('OC\Preview\Image');
+		self::registerProvider('OC\Preview\MP3');
+
+		// SVG, Office and Bitmap require imagick
+		if (extension_loaded('imagick')) {
+			$checkImagick = new \Imagick();
+
+			$imagickProviders = array(
+				'SVG'	=> 'OC\Preview\SVG',
+				'TIFF'	=> 'OC\Preview\TIFF',
+				'PDF'	=> 'OC\Preview\PDF',
+				'AI'	=> 'OC\Preview\Illustrator',
+				'PSD'	=> 'OC\Preview\Photoshop',
+				// Requires adding 'eps' => array('application/postscript', null), to lib/private/mimetypes.list.php
+				'EPS'	=> 'OC\Preview\Postscript',
+			);
+
+			foreach ($imagickProviders as $queryFormat => $provider) {
+				if (count($checkImagick->queryFormats($queryFormat)) === 1) {
+					self::registerProvider($provider);
+				}
+			}
+
+			if (count($checkImagick->queryFormats('PDF')) === 1) {
+				// Office previews are currently not supported on Windows
+				if (!\OC_Util::runningOnWindows() && \OC_Helper::is_function_enabled('shell_exec')) {
+					$officeFound = is_string(\OC::$server->getConfig()->getSystemValue('preview_libreoffice_path', null));
+
+					if (!$officeFound) {
+						//let's see if there is libreoffice or openoffice on this machine
+						$whichLibreOffice = shell_exec('command -v libreoffice');
+						$officeFound = !empty($whichLibreOffice);
+						if (!$officeFound) {
+							$whichOpenOffice = shell_exec('command -v openoffice');
+							$officeFound = !empty($whichOpenOffice);
+						}
+					}
+
+					if ($officeFound) {
+						self::registerProvider('OC\Preview\MSOfficeDoc');
+						self::registerProvider('OC\Preview\MSOffice2003');
+						self::registerProvider('OC\Preview\MSOffice2007');
+						self::registerProvider('OC\Preview\OpenDocument');
+						self::registerProvider('OC\Preview\StarOffice');
+					}
+				}
+			}
+		}
+
+		// Video requires avconv or ffmpeg and is therefor
+		// currently not supported on Windows.
+		if (!\OC_Util::runningOnWindows()) {
+			$avconvBinary = \OC_Helper::findBinaryPath('avconv');
+			$ffmpegBinary = ($avconvBinary) ? null : \OC_Helper::findBinaryPath('ffmpeg');
+
+			if ($avconvBinary || $ffmpegBinary) {
+				// FIXME // a bit hacky but didn't want to use subclasses
+				\OC\Preview\Movie::$avconvBinary = $avconvBinary;
+				\OC\Preview\Movie::$ffmpegBinary = $ffmpegBinary;
+
+				self::registerProvider('OC\Preview\Movie');
+			}
+		}
 	}
 
 	/**
@@ -842,6 +913,38 @@ class Preview {
 	}
 
 	/**
+	 * Check if a preview can be generated for a file
+	 *
+	 * @param \OC\Files\FileInfo $file
+	 * @return bool
+	 */
+	public static function isAvailable(\OC\Files\FileInfo $file) {
+		if (!\OC_Config::getValue('enable_previews', true)) {
+			return false;
+		}
+
+		$mount = $file->getMountPoint();
+		if ($mount and !$mount->getOption('previews', true)){
+			return false;
+		}
+
+		//check if there are preview backends
+		if (empty(self::$providers)) {
+			self::initProviders();
+		}
+
+		foreach (self::$providers as $supportedMimeType => $provider) {
+			/**
+			 * @var \OC\Preview\Provider $provider
+			 */
+			if (preg_match($supportedMimeType, $file->getMimetype())) {
+				return $provider->isAvailable($file);
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * @param string $mimeType
 	 * @return bool
 	 */
@@ -853,16 +956,6 @@ class Preview {
 		//check if there are preview backends
 		if (empty(self::$providers)) {
 			self::initProviders();
-		}
-
-		// FIXME: Ugly hack to prevent SVG of being returned if the SVG
-		// provider is not enabled.
-		// This is required because the preview system is designed in a
-		// bad way and relies on opt-in with asterisks (i.e. image/*)
-		// which will lead to the fact that a SVG will also match the image
-		// provider.
-		if($mimeType === 'image/svg+xml' && !array_key_exists('/image\/svg\+xml/', self::$providers)) {
-			return false;
 		}
 
 		foreach(self::$providers as $supportedMimetype => $provider) {
@@ -892,6 +985,10 @@ class Preview {
 	}
 
 
+	/**
+	 * @param int $fileId
+	 * @return string
+	 */
 	private function getPreviewPath($fileId) {
 		return $this->getThumbnailsFolder() . '/' . $fileId . '/';
 	}

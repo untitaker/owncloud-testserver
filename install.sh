@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-OWNCLOUD_VERSION="7.0.4"
+OWNCLOUD_VERSION="8.0.0"
 OC_DOWNLOAD_URL="http://download.owncloud.org/community/owncloud-${OWNCLOUD_VERSION}.tar.bz2"
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 

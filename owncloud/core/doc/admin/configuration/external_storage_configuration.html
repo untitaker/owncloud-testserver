@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuring External Storage (Configuration File) &mdash; ownCloud Administrators Manual 7.0 documentation</title>
+    <title>Configuring External Storage (Configuration File) &mdash; ownCloud Administrators Manual 8.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '7.0',
+        VERSION:     '8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Administrators Manual 7.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Administrators Manual 8.0 documentation" href="../index.html" />
     <link rel="up" title="Configuration" href="index.html" />
     <link rel="next" title="File Sharing" href="file_sharing_configuration.html" />
     <link rel="prev" title="Configuring External Storage (GUI)" href="external_storage_configuration_gui.html" />
@@ -116,7 +116,12 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 7</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos.html">ownCloud Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-8-only">Enterprise 8 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#owncloud-7-release-notes">ownCloud 7 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-7-only">Enterprise 7 Only</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Configuration</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="antivirus_configuration.html">Configuring the ClamAV Antivirus Scanner</a></li>
@@ -135,6 +140,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#priorities">Priorities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#backends">Backends</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#external-storage-password-management">External Storage Password Management</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="file_sharing_configuration.html">File Sharing</a></li>
@@ -143,6 +149,9 @@
 <li class="toctree-l2"><a class="reference internal" href="knowledgebase_configuration.html">Knowledge Base Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="language_configuration.html">Language Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="logging_configuration.html">Logging Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html">Using the occ Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tips.html">Performance Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#nginx-caching-owncloud-gallery-thumbnails-with-fastcgi-cache-purge">Nginx: caching ownCloud gallery thumbnails with fastcgi_cache_purge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="previews_configuration.html">Previews Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reverse_proxy_configuration.html">Reverse Proxy Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="search_configuration.html">Enabling Full-Text Search</a></li>
@@ -151,11 +160,14 @@
 <li class="toctree-l2"><a class="reference internal" href="thirdparty_php_configuration.html">Using Third Party PHP Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ftp_smb_imap.html">User Authentication with IMAP, SMB, and FTP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ldap.html">User Authentication with LDAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_auth_ldap_cleanup.html">LDAP User Cleanup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_configuration.html">User Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html">User Provisioning API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reset_admin_password.html">Resetting a Lost Admin Password</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
 </ul>
 
 								</ul>
@@ -289,7 +301,7 @@ options:</p>
 <li><strong>password</strong>: the password to login on the ftp server</li>
 <li><strong>secure</strong>: whether to use ftps:// (FTP over TLS) to connect to the ftp
 server instead of ftp:// (optional, defaults to false)</li>
-<li><strong>root</strong>: the folder inside the ftp server to mount (optional, defaults
+<li><strong>root</strong>: the remote subfolder inside the ftp server to mount (optional, defaults
 to ‘/’)</li>
 </ul>
 <div class="section" id="id2">
@@ -322,7 +334,7 @@ options:</p>
 <li><strong>host</strong>: the hostname of the SSH server</li>
 <li><strong>user</strong>: the username used to login to the SSH server</li>
 <li><strong>password</strong>: the password to login on the SSH server</li>
-<li><strong>root</strong>: the folder inside the SSH server to mount (optional, defaults
+<li><strong>root</strong>: the remote subfolder inside the SSH server to mount (optional, defaults
 to ‘/’)</li>
 </ul>
 <div class="section" id="id3">
@@ -352,11 +364,11 @@ storage support’ app, the class to be used is <strong>\OC\Files\Storage\SMB</s
 takes the following options:</p>
 <ul class="simple">
 <li><strong>host</strong>: the host name of the samba server</li>
-<li><strong>user</strong>: the user name used to login on the samba server</li>
+<li><strong>user</strong>: the username or domain/username to login on the samba server</li>
 <li><strong>password</strong>: the password to login on the samba server</li>
 <li><strong>share</strong>: the share on the samba server to mount</li>
-<li><strong>root</strong>: the folder inside the samba share to mount (optional, defaults
-to ‘/’)</li>
+<li><strong>root</strong>: the remote subfolder inside the samba share to mount (optional, defaults
+to ‘/’). To assign the ownCloud logon username automatically to the subfolder, use <tt class="docutils literal"><span class="pre">$user</span></tt> instead of a particular subfolder name.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -364,10 +376,24 @@ to ‘/’)</li>
 </div>
 <div class="section" id="id4">
 <h4>Example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>With username only:</p>
 <div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>   <span class="nt">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;\\OC\\Files\\Storage\\SMB&quot;</span><span class="p">,</span>
     <span class="nt">&quot;options&quot;</span><span class="p">:{</span>
         <span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="s2">&quot;myhost.com&quot;</span><span class="p">,</span>
         <span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="s2">&quot;johndoe&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="s2">&quot;secret&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;share&quot;</span><span class="p">:</span><span class="s2">&quot;\/test&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;root&quot;</span><span class="p">:</span><span class="s2">&quot;\/Pictures&quot;</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;priority&quot;</span><span class="p">:</span><span class="mi">100</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>With domainname and username:</p>
+<div class="highlight-json"><div class="highlight"><pre><span class="p">{</span>   <span class="nt">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;\\OC\\Files\\Storage\\SMB&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;options&quot;</span><span class="p">:{</span>
+        <span class="nt">&quot;host&quot;</span><span class="p">:</span><span class="s2">&quot;myhost.com&quot;</span><span class="p">,</span>
+        <span class="nt">&quot;user&quot;</span><span class="p">:</span><span class="s2">&quot;domain\/johndoe&quot;</span><span class="p">,</span>
         <span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="s2">&quot;secret&quot;</span><span class="p">,</span>
         <span class="nt">&quot;share&quot;</span><span class="p">:</span><span class="s2">&quot;\/test&quot;</span><span class="p">,</span>
         <span class="nt">&quot;root&quot;</span><span class="p">:</span><span class="s2">&quot;\/Pictures&quot;</span>
@@ -390,7 +416,7 @@ following options:</p>
 <li><strong>password</strong>: the password to login on the webdav server</li>
 <li><strong>secure</strong>: whether to use <a class="reference external" href="https://">https://</a> to connect to the webdav server
 instead of <a class="reference external" href="http://">http://</a> (optional, defaults to false)</li>
-<li><strong>root</strong>: the folder inside the webdav server to mount (optional,
+<li><strong>root</strong>: the remote subfolder inside the webdav server to mount (optional,
 defaults to ‘/’)</li>
 </ul>
 <div class="section" id="id5">
@@ -522,6 +548,55 @@ defaults to ‘/’)</li>
 </div>
 </div>
 </div>
+</div>
+<div class="section" id="external-storage-password-management">
+<h2>External Storage Password Management<a class="headerlink" href="#external-storage-password-management" title="Permalink to this headline">¶</a></h2>
+<p>ownCloud handles passwords for external mounts differently than regular
+ownCloud user passwords.</p>
+<p>The regular user and file share passwords (when you use the default ownCloud
+user backend) are stored using a strong cryptographically secure hashing
+mechanism in the database. On a new user account with a new password, the
+password is hashed and stored in the ownCloud database. The plain-text password
+is never stored. When the user logs in, the hash of the password they enter is
+compared with the hash in the database. When the hashes match the user is
+allowed access. These are not recoverable, so when a user loses a password the
+only option is to create a new password.</p>
+<p>Passwords which are used to connect against external storage (e.g.
+SMB or FTP), there we have to differentiate again between different
+implementations:</p>
+<ol class="arabic simple">
+<li><strong>Login with ownCloud credentials</strong></li>
+</ol>
+<p>When a mountpoint has this option, for example <tt class="docutils literal"><span class="pre">SMB</span> <span class="pre">/</span> <span class="pre">CIFS</span> <span class="pre">using</span> <span class="pre">OC</span> <span class="pre">login</span></tt>,
+the password will be intercepted when a user logs in and written to the PHP
+session (which is a file on the filesystem), and written encrypted into the
+session with a key from the configuration file. Every time that password is
+required ownCloud reads it from the PHP session file.</p>
+<p>When you use this option, features such as sharing will not work properly from
+that mountpoint when the user is not logged-in.</p>
+<p>Depending on the implementation of the application, this means that the password
+could get leaked in the <tt class="docutils literal"><span class="pre">ps</span></tt> output, as we use <tt class="docutils literal"><span class="pre">smbclient</span></tt> for SMB storage
+access in the community version. There is a <a class="reference external" href="https://github.com/owncloud/core/issues/6092">bug report on this</a>. Consequently, we&#8217;re currently
+evaluating an alternative approach accessing the library directly, and thus not
+leaking the password anymore. This is already implemented in the Enterprise
+Edition in our Windows Network Drive application, and it will get into the
+community version once we have streamlined the code of the <tt class="docutils literal"><span class="pre">files_external</span></tt>
+application a little bit more.</p>
+<ol class="arabic simple" start="2">
+<li><strong>Stored credentials</strong></li>
+</ol>
+<p>When you enter credentials into the <tt class="docutils literal"><span class="pre">files_external</span></tt> dialog those are stored
+on the filesystem and encrypted with a key stored in <tt class="docutils literal"><span class="pre">config.php</span></tt>. This is
+required since ownCloud needs access to those files and shares even when the
+user is not logged-in to have sharing and other key features properly working.</p>
+<p>To sum up:</p>
+<p>The &#8220;login with ownCloud credentials&#8221; SMB function in the community edition
+exposes the password in the server system&#8217;s process list. If you want to get
+around this limitation without waiting for it to be addressed in CE you can get
+the Enterprise Edition. However, even then the password is stored in the PHP
+session and a malicious admin could access it. You can protect your PHP session
+files using protections available in your filesystem. Stored credentials are
+always accessible to the ownCloud instance.</p>
 </div>
 </div>
 

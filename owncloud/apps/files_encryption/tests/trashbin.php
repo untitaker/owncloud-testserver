@@ -20,22 +20,13 @@
  *
  */
 
-require_once __DIR__ . '/../../../lib/base.php';
-require_once __DIR__ . '/../lib/crypt.php';
-require_once __DIR__ . '/../lib/keymanager.php';
-require_once __DIR__ . '/../lib/proxy.php';
-require_once __DIR__ . '/../lib/stream.php';
-require_once __DIR__ . '/../lib/util.php';
-require_once __DIR__ . '/../appinfo/app.php';
-require_once __DIR__ . '/../../files_trashbin/appinfo/app.php';
-
-use OCA\Encryption;
+namespace OCA\Files_Encryption\Tests;
 
 /**
- * Class Test_Encryption_Trashbin
+ * Class Trashbin
  * this class provide basic trashbin app tests
  */
-class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
+class Trashbin extends TestCase {
 
 	const TEST_ENCRYPTION_TRASHBIN_USER1 = "test-trashbin-user1";
 
@@ -54,22 +45,8 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
 
-		// reset backend
-		\OC_User::clearBackends();
-		\OC_User::useBackend('database');
-
-		\OC_Hook::clear('OC_Filesystem');
-		\OC_Hook::clear('OC_User');
-
 		// trashbin hooks
 		\OCA\Files_Trashbin\Trashbin::registerHooks();
-
-		// Filesystem related hooks
-		\OCA\Encryption\Helper::registerFilesystemHooks();
-
-		// clear and register hooks
-		\OC_FileProxy::clearProxies();
-		\OC_FileProxy::register(new OCA\Encryption\Proxy());
 
 		// create test user
 		self::loginHelper(self::TEST_ENCRYPTION_TRASHBIN_USER1, true);
@@ -94,7 +71,7 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 		$this->subsubfolder = '/subsubfolder1';
 
 		// remember files_trashbin state
-		$this->stateFilesTrashbin = OC_App::isEnabled('files_trashbin');
+		$this->stateFilesTrashbin = \OC_App::isEnabled('files_trashbin');
 
 		// we want to tests with app files_trashbin enabled
 		\OC_App::enable('files_trashbin');
@@ -103,10 +80,10 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 	protected function tearDown() {
 		// reset app files_trashbin
 		if ($this->stateFilesTrashbin) {
-			OC_App::enable('files_trashbin');
+			\OC_App::enable('files_trashbin');
 		}
 		else {
-			OC_App::disable('files_trashbin');
+			\OC_App::disable('files_trashbin');
 		}
 
 		parent::tearDown();
@@ -116,13 +93,7 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 		// cleanup test user
 		\OC_User::deleteUser(self::TEST_ENCRYPTION_TRASHBIN_USER1);
 
-		\OC_Hook::clear();
-		\OC_FileProxy::clearProxies();
-
-		// Delete keys in /data/
-		$view = new \OC\Files\View('/');
-		$view->rmdir('public-keys');
-		$view->rmdir('owncloud_private_key');
+		\OC\Files\Filesystem::getLoader()->removeStorageWrapper('oc_trashbin');
 
 		parent::tearDownAfterClass();
 	}
@@ -147,22 +118,20 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// check if key for admin exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keyfiles/' . $filename
-			. '.key'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/' . $filename . '/fileKey'));
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keyfiles/' . $filename2
-			. '.key'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/' . $filename2 . '/fileKey'));
 
 		// check if share key for admin exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/share-keys/'
-			. $filename . '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/'
+			. $filename . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/share-keys/'
-			. $filename2 . '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/'
+			. $filename2 . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 
 		// delete first file
-		\OC\FIles\Filesystem::unlink($filename);
+		\OC\Files\Filesystem::unlink($filename);
 
 		// check if file not exists
 		$this->assertFalse($this->view->file_exists(
@@ -170,13 +139,12 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// check if key for admin not exists
 		$this->assertFalse($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keyfiles/' . $filename
-			. '.key'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/' . $filename . '/fileKey'));
 
 		// check if share key for admin not exists
 		$this->assertFalse($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/share-keys/'
-			. $filename . '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/'
+			. $filename . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 
 		// check that second file still exists
 		$this->assertTrue($this->view->file_exists(
@@ -184,39 +152,38 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// check that key for second file still exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keyfiles/' . $filename2
-			. '.key'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/' . $filename2 . '/fileKey'));
 
 		// check that share key for second file still exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/share-keys/'
-			. $filename2 . '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/'
+			. $filename2 . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 
 		// get files
-		$trashFiles = $this->view->getDirectoryContent(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/files/');
+		$trashFiles = \OCA\Files_Trashbin\Helper::getTrashFiles('/', self::TEST_ENCRYPTION_TRASHBIN_USER1);
 
-		$trashFileSuffix = null;
 		// find created file with timestamp
+		$timestamp = null;
 		foreach ($trashFiles as $file) {
-			if (strpos($file['path'], $filename . '.d') !== false) {
-				$path_parts = pathinfo($file['name']);
-				$trashFileSuffix = $path_parts['extension'];
+			if ($file['name'] === $filename) {
+				$timestamp = $file['mtime'];
+				break;
 			}
 		}
 
 		// check if we found the file we created
-		$this->assertNotNull($trashFileSuffix);
+		$this->assertNotNull($timestamp);
+
+		$this->assertTrue($this->view->is_dir('/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keys/' . $filename . '.d' . $timestamp));
 
 		// check if key for admin not exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keyfiles/' . $filename
-			. '.key.' . $trashFileSuffix));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keys/' . $filename . '.d' . $timestamp . '/fileKey'));
 
 		// check if share key for admin not exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/share-keys/' . $filename
-			. '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey.' . $trashFileSuffix));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keys/' . $filename
+			. '.d' . $timestamp . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 	}
 
 	/**
@@ -229,30 +196,36 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 		$filename2 = $filename . '.backup'; // a second file with similar name
 
 		// save file with content
-		$cryptedFile = file_put_contents('crypt:///' . self::TEST_ENCRYPTION_TRASHBIN_USER1. '/files/'. $filename, $this->dataShort);
-		$cryptedFile2 = file_put_contents('crypt:///' . self::TEST_ENCRYPTION_TRASHBIN_USER1. '/files/'. $filename2, $this->dataShort);
+		file_put_contents('crypt:///' . self::TEST_ENCRYPTION_TRASHBIN_USER1. '/files/'. $filename, $this->dataShort);
+		file_put_contents('crypt:///' . self::TEST_ENCRYPTION_TRASHBIN_USER1. '/files/'. $filename2, $this->dataShort);
 
 		// delete both files
 		\OC\Files\Filesystem::unlink($filename);
 		\OC\Files\Filesystem::unlink($filename2);
 
-		$trashFiles = $this->view->getDirectoryContent('/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/files/');
+		$trashFiles = \OCA\Files_Trashbin\Helper::getTrashFiles('/', self::TEST_ENCRYPTION_TRASHBIN_USER1);
 
-		$trashFileSuffix = null;
-		$trashFileSuffix2 = null;
 		// find created file with timestamp
+		$timestamp = null;
 		foreach ($trashFiles as $file) {
-			if (strpos($file['path'], $filename . '.d') !== false) {
-				$path_parts = pathinfo($file['name']);
-				$trashFileSuffix = $path_parts['extension'];
+			if ($file['name'] === $filename) {
+				$timestamp = $file['mtime'];
+				break;
 			}
 		}
 
-		// prepare file information
-		$timestamp = str_replace('d', '', $trashFileSuffix);
+		// make sure that we have a timestamp
+		$this->assertNotNull($timestamp);
+
+		// before calling the restore operation the keys shouldn't be there
+		$this->assertFalse($this->view->file_exists(
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/' . $filename . '/fileKey'));
+		$this->assertFalse($this->view->file_exists(
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/'
+			. $filename . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 
 		// restore first file
-		$this->assertTrue(\OCA\Files_Trashbin\Trashbin::restore($filename . '.' . $trashFileSuffix, $filename, $timestamp));
+		$this->assertTrue(\OCA\Files_Trashbin\Trashbin::restore($filename . '.d' . $timestamp, $filename, $timestamp));
 
 		// check if file exists
 		$this->assertTrue($this->view->file_exists(
@@ -260,13 +233,12 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// check if key for admin exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keyfiles/'
-			. $filename . '.key'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/' . $filename . '/fileKey'));
 
 		// check if share key for admin exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/share-keys/'
-			. $filename . '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/'
+			. $filename . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 
 		// check that second file was NOT restored
 		$this->assertFalse($this->view->file_exists(
@@ -274,13 +246,12 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// check if key for admin exists
 		$this->assertFalse($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keyfiles/'
-			. $filename2 . '.key'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/' . $filename2 . '/fileKey'));
 
 		// check if share key for admin exists
 		$this->assertFalse($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/share-keys/'
-			. $filename2 . '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/'
+			. $filename2 . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 	}
 
 	/**
@@ -300,13 +271,12 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// check if key for admin exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keyfiles/' . $filename
-			. '.key'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/' . $filename . '/fileKey'));
 
 		// check if share key for admin exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/share-keys/'
-			. $filename . '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/'
+			. $filename . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 
 		// delete file
 		\OC\Files\Filesystem::unlink($filename);
@@ -317,13 +287,13 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// check if key for admin not exists
 		$this->assertFalse($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keyfiles/' . $filename
-			. '.key'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/' . $filename . '/'
+				. $filename . '.key'));
 
 		// check if share key for admin not exists
 		$this->assertFalse($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/share-keys/'
-			. $filename . '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_encryption/keys/'
+			. $filename . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 
 		// find created file with timestamp
 		$query = \OC_DB::prepare('SELECT `timestamp`,`type` FROM `*PREFIX*files_trash`'
@@ -337,13 +307,13 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// check if key for admin exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keyfiles/' . $filename
-			. '.key.' . $trashFileSuffix));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keys/' . $filename
+				. '.' . $trashFileSuffix . '/fileKey'));
 
 		// check if share key for admin exists
 		$this->assertTrue($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/share-keys/' . $filename
-			. '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey.' . $trashFileSuffix));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keys/'
+				. $filename . '.' . $trashFileSuffix . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 
 		// get timestamp from file
 		$timestamp = str_replace('d', '', $trashFileSuffix);
@@ -358,13 +328,13 @@ class Test_Encryption_Trashbin extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// check if key for admin not exists
 		$this->assertFalse($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keyfiles/' . $filename
-			. '.key.' . $trashFileSuffix));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keys/' . $filename
+				. '.' . $trashFileSuffix . '/fileKey'));
 
 		// check if share key for admin not exists
 		$this->assertFalse($this->view->file_exists(
-			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/share-keys/' . $filename
-			. '.' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey.' . $trashFileSuffix));
+			'/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '/files_trashbin/keys/' . $filename
+				. '.' . $trashFileSuffix . '/' . self::TEST_ENCRYPTION_TRASHBIN_USER1 . '.shareKey'));
 	}
 
 }

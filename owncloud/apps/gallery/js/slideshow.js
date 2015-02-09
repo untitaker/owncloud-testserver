@@ -1,119 +1,179 @@
-/* global Gallery, Thumbnail */
+/**
+ *
+ * @param {jQuery} container
+ * @param {{name:string, url: string, path: string, fallBack: string}[]} images
+ * @param {int} interval
+ * @param {int} maxScale
+ * @constructor
+ */
+var SlideShow = function (container, images, interval, maxScale) {
+	this.container = container;
+	this.images = images;
+	this.interval = interval | 5000;
+	this.maxScale = maxScale | 2;
+	this.playTimeout = 0;
+	this.current = 0;
+	this.imageCache = {};
+	this.playing = false;
+	this.progressBar = container.find('.progress');
+	this.currentImage = null;
+	this.onStop = null;
+	this.active = false;
+};
 
-jQuery.fn.slideShow = function (container, start, options) {
-	var i, images = [], settings;
-	start = start || 0;
-	settings = jQuery.extend({
-		'interval': 5000,
-		'play': false,
-		'maxScale': 2,
-		'fallBacks': []
-	}, options);
-	var slideShow = $('#slideshow');
-	if (settings.play) {
-		slideShow.children('.play').hide();
-		slideShow.children('.pause').show();
-	}
-	else {
-		slideShow.children('.play').show();
-		slideShow.children('.pause').hide();
-	}
-	jQuery.fn.slideShow.container = container;
-	jQuery.fn.slideShow.settings = settings;
-	jQuery.fn.slideShow.current = start;
-	if (settings.images) {
-		images = settings.images;
-	} else {
-		for (i = 0; i < this.length; i++) {
-			var imageLink = this[i];
-			images.push(imageLink.imageUrl || imageLink.href);
-		}
-	}
-	container.children('img').remove();
-	container.show();
-	jQuery.fn.slideShow.fallBacks = settings.fallBacks;
-	jQuery.fn.slideShow.images = images;
-	jQuery.fn.slideShow.cache = [];
-	jQuery.fn.slideShow.showImage(images[start], images[start + 1], settings.fallBacks[start], settings.fallBacks[start + 1]);
-	jQuery.fn.slideShow.progressBar = container.find('.progress');
+SlideShow.prototype.init = function (play) {
+	this.active = true;
+	this.container.children('img').remove();
 
 	// hide arrows and play/pause when only one pic
-	slideShow.find('.next, .previous').toggle(images.length > 1);
-	if (images.length === 1) {
-		// note: only handling hide case here as we don't want to
-		// re-show the buttons that might have been hidden by
-		// the settings.play condition above
-		$('#slideshow').find('.play, .pause').hide();
+	this.container.find('.next, .previous').toggle(this.images.length > 1);
+	if (this.images.length === 1) {
+		this.container.find('.play, .pause').hide();
+	}
+
+	var makeCallBack = function (handler) {
+		return function (evt) {
+			if (!this.active) {
+				return;
+			}
+			evt.stopPropagation();
+			handler.call(this);
+		}.bind(this);
+	}.bind(this);
+
+	this.container.children('.next').click(makeCallBack(this.next));
+	this.container.children('.previous').click(makeCallBack(this.previous));
+	this.container.children('.exit').click(makeCallBack(this.stop));
+	this.container.children('.pause').click(makeCallBack(this.pause));
+	this.container.children('.play').click(makeCallBack(this.play));
+	this.container.click(makeCallBack(this.next));
+
+
+	$(document).keyup(function (evt) {
+		if (evt.keyCode === 27) { // esc
+			makeCallBack(this.stop)(evt);
+		} else if (evt.keyCode === 37) { // left
+			makeCallBack(this.previous)(evt);
+		} else if (evt.keyCode === 39) { // right
+			makeCallBack(this.next)(evt);
+		} else if (evt.keyCode === 32) { // space
+			makeCallBack(this.play)(evt);
+		}
+	}.bind(this));
+
+	if ($.fn.mousewheel) {
+		this.container.bind('mousewheel.fb', function (e, delta) {
+			e.preventDefault();
+			if ($(e.target).get(0).clientHeight === 0 ||
+				$(e.target).get(0).scrollHeight === $(e.target).get(0).clientHeight) {
+				if (delta > 0) {
+					this.previous();
+				} else {
+					this.next();
+				}
+			}
+		}.bind(this));
 	}
 
 	jQuery(window).resize(function () {
-		jQuery.fn.slideShow.loadImage(
-			jQuery.fn.slideShow.images[jQuery.fn.slideShow.current],
-			jQuery.fn.slideShow.fallBacks[jQuery.fn.slideShow.current]
-		).then(function (image) {
-			jQuery.fn.slideShow.fitImage(container, image);
-		});
-	});
-	return jQuery.fn.slideShow;
+		this.fitImage(this.currentImage.bind(this));
+	}.bind(this));
+
+	if (play) {
+		this.play();
+	} else {
+		this.pause();
+	}
 };
 
-jQuery.fn.slideShow.progressBar = null;
+SlideShow.prototype.onKeyUp = function () {
 
-jQuery.fn.slideShow.loadImage = function (url, fallBack) {
-	console.log(fallBack);
-	if (!jQuery.fn.slideShow.cache[url]) {
-		jQuery.fn.slideShow.cache[url] = new jQuery.Deferred();
+};
+
+SlideShow.prototype.show = function (index) {
+	this.container.show();
+	this.current = index;
+	this.container.css('background-position', 'center');
+	return this.loadImage(this.images[index].url, this.images[index].fallBack).then(function (image) {
+		this.container.css('background-position', '-10000px 0');
+
+		// check if we moved along while we were loading
+		if (this.current === index) {
+			this.currentImage = image;
+			this.container.children('img').remove();
+			this.container.append(image);
+			image.setAttribute('alt', this.images[index].name);
+			this.fitImage(image);
+			this.setUrl(this.images[index].path);
+			if (this.playing) {
+				this.setTimeout();
+			}
+		}
+	}.bind(this));
+};
+
+SlideShow.prototype.setUrl = function (path) {
+	if (history && history.replaceState) {
+		history.replaceState('', '', '#' + encodeURI(path));
+	}
+};
+
+SlideShow.prototype.loadImage = function (url, fallBack) {
+	if (!this.imageCache[url]) {
+		this.imageCache[url] = new jQuery.Deferred();
 		var image = new Image();
-		jQuery.fn.slideShow.cache[url].fail(function () {
-			image = false;
-			jQuery.fn.slideShow.cache[url] = false;
-		});
+
 		image.onload = function () {
 			if (image) {
 				image.natWidth = image.width;
 				image.natHeight = image.height;
 			}
-			if (jQuery.fn.slideShow.cache[url]) {
-				jQuery.fn.slideShow.cache[url].resolve(image);
+			if (this.imageCache[url]) {
+				this.imageCache[url].resolve(image);
 			}
-		};
+		}.bind(this);
 		image.onerror = function () {
 			if (fallBack) {
-				jQuery.fn.slideShow.loadImage(fallBack).then(function (image) {
-					jQuery.fn.slideShow.cache[url].resolve(image);
-				});
-			} else if (jQuery.fn.slideShow.cache[url]) {
-				jQuery.fn.slideShow.cache[url].reject(url);
+				this.loadImage(fallBack).then(function (image) {
+					this.imageCache[url].resolve(image);
+				}.bind(this), function (url) {
+					this.imageCache[url].reject(url);
+				}.bind(this));
+			} else if (this.imageCache[url]) {
+				this.imageCache[url].reject(url);
 			}
-		};
+		}.bind(this);
 		image.src = url;
 	}
-	return jQuery.fn.slideShow.cache[url];
+	return this.imageCache[url];
 };
 
-jQuery.fn.slideShow.fitImage = function (container, image) {
+SlideShow.prototype.fitImage = function (image) {
+	if (!image) {
+		return;
+	}
 	var ratio = image.natWidth / image.natHeight,
-		screenRatio = container.width() / container.height(),
+		screenRatio = this.container.width() / this.container.height(),
 		width = null, height = null, top = null;
 	if (ratio > screenRatio) {
-		if (container.width() > image.natWidth * jQuery.fn.slideShow.settings.maxScale) {
-			top = ((container.height() - image.natHeight) / 2) + 'px';
+		if (this.container.width() > image.natWidth * this.maxScale) {
+			top = ((this.container.height() - image.natHeight) / 2) + 'px';
 			height = image.natHeight + 'px';
 			width = image.natWidth + 'px';
 		} else {
-			width = container.width() + 'px';
-			height = (container.width() / ratio) + 'px';
-			top = ((container.height() - (container.width() / ratio)) / 2) + 'px';
+			width = this.container.width() + 'px';
+			height = (this.container.width() / ratio) + 'px';
+			top = ((this.container.height() - (this.container.width() / ratio)) / 2) + 'px';
 		}
 	} else {
-		if (container.height() > image.natHeight * jQuery.fn.slideShow.settings.maxScale) {
-			top = ((container.height() - image.natHeight) / 2) + 'px';
+		if (this.container.height() > image.natHeight * this.maxScale) {
+			top = ((this.container.height() - image.natHeight) / 2) + 'px';
 			height = image.natHeight + 'px';
 			width = image.natWidth + 'px';
 		} else {
 			top = 0;
-			height = container.height() + 'px';
-			width = (container.height() * ratio) + "px";
+			height = this.container.height() + 'px';
+			width = (this.container.height() * ratio) + "px";
 		}
 	}
 	jQuery(image).css({
@@ -123,179 +183,88 @@ jQuery.fn.slideShow.fitImage = function (container, image) {
 	});
 };
 
-jQuery.fn.slideShow.showImage = function (url, preloadUrl, fallBack, preloadFallBack) {
-	var container = jQuery.fn.slideShow.container;
-
-	container.css('background-position', 'center');
-	jQuery.fn.slideShow.loadImage(
-		url,
-		fallBack
-	).then(function (image) {
-		container.css('background-position', '-10000px 0');
-		if (url === jQuery.fn.slideShow.images[jQuery.fn.slideShow.current]) {
-			container.children('img').remove();
-			container.append(image);
-			jQuery.fn.slideShow.fitImage(container, image);
-			if (jQuery.fn.slideShow.settings.play) {
-				jQuery.fn.slideShow.setTimeout();
-			}
-			if (preloadUrl) {
-				jQuery.fn.slideShow.loadImage(
-					preloadUrl,
-					preloadFallBack
-				);
-			}
-		}
-	});
+SlideShow.prototype.setTimeout = function () {
+	this.clearTimeout();
+	this.playTimeout = setTimeout(this.next.bind(this), this.interval);
+	this.progressBar.stop();
+	this.progressBar.css('height', '6px');
+	this.progressBar.animate({'height': '26px'}, this.interval, 'linear');
 };
 
-jQuery.fn.slideShow.play = function () {
-	if (jQuery.fn.slideShow.settings) {
-		jQuery.fn.slideShow.settings.play = true;
-		jQuery.fn.slideShow.setTimeout();
+SlideShow.prototype.clearTimeout = function () {
+	if (this.playTimeout) {
+		clearTimeout(this.playTimeout);
+	}
+	this.progressBar.stop();
+	this.progressBar.css('height', '6px');
+	this.playTimeout = 0;
+};
+
+SlideShow.prototype.play = function () {
+	this.playing = true;
+	this.container.find('.pause').show();
+	this.container.find('.play').hide();
+	this.setTimeout();
+};
+
+SlideShow.prototype.pause = function () {
+	this.playing = false;
+	this.container.find('.pause').hide();
+	this.container.find('.play').show();
+	this.clearTimeout();
+};
+
+SlideShow.prototype.next = function () {
+	this.current = (this.current + 1) % this.images.length;
+	var next = (this.current + 1) % this.images.length;
+	this.show(this.current).then(function () {
+		// preload the next image
+		this.loadImage(this.images[next].url, this.images[next].fallBack);
+	}.bind(this));
+};
+
+SlideShow.prototype.previous = function () {
+	this.current = (this.current - 1 + this.images.length) % this.images.length;
+	var previous = (this.current - 1 + this.images.length) % this.images.length;
+	this.show(this.current).then(function () {
+		// preload the next image
+		this.loadImage(this.images[previous].url, this.images[previous].fallBack);
+	}.bind(this));
+};
+
+SlideShow.prototype.stop = function () {
+	this.clearTimeout();
+	this.container.hide();
+	this.active = false;
+	if (this.onStop) {
+		this.onStop();
 	}
 };
 
-jQuery.fn.slideShow.pause = function () {
-	if (jQuery.fn.slideShow.settings) {
-		jQuery.fn.slideShow.settings.play = false;
-		jQuery.fn.slideShow.clearTimeout();
-	}
+SlideShow.prototype.hideImage = function () {
+	this.container.children('img').remove();
 };
 
-jQuery.fn.slideShow.setTimeout = function () {
-	jQuery.fn.slideShow.clearTimeout();
-	jQuery.fn.slideShow.timeout = setTimeout(jQuery.fn.slideShow.next, jQuery.fn.slideShow.settings.interval);
-	jQuery.fn.slideShow.progressBar.stop();
-	jQuery.fn.slideShow.progressBar.css('height', '6px');
-	jQuery.fn.slideShow.progressBar.animate({'height': '26px'}, jQuery.fn.slideShow.settings.interval, 'linear');
-};
-
-jQuery.fn.slideShow.clearTimeout = function () {
-	if (jQuery.fn.slideShow.timeout) {
-		clearTimeout(jQuery.fn.slideShow.timeout);
-	}
-	jQuery.fn.slideShow.progressBar.stop();
-	jQuery.fn.slideShow.progressBar.css('height', '6px');
-	jQuery.fn.slideShow.timeout = 0;
-};
-
-jQuery.fn.slideShow.next = function () {
-	if (jQuery.fn.slideShow.container) {
-		jQuery.fn.slideShow.current++;
-		if (jQuery.fn.slideShow.current >= jQuery.fn.slideShow.images.length) {
-			jQuery.fn.slideShow.current = 0;
-		}
-		var image = jQuery.fn.slideShow.images[jQuery.fn.slideShow.current],
-			nextImage = jQuery.fn.slideShow.images[(jQuery.fn.slideShow.current + 1) % jQuery.fn.slideShow.images.length],
-			fallBack= jQuery.fn.slideShow.fallBacks[jQuery.fn.slideShow.current],
-			nextFallBack = jQuery.fn.slideShow.fallBacks[(jQuery.fn.slideShow.current + 1) % jQuery.fn.slideShow.images.length];
-		jQuery.fn.slideShow.showImage(image, nextImage, fallBack, nextFallBack);
-	}
-};
-
-jQuery.fn.slideShow.previous = function () {
-	if (jQuery.fn.slideShow.container) {
-		jQuery.fn.slideShow.current--;
-		if (jQuery.fn.slideShow.current < 0) {
-			jQuery.fn.slideShow.current = jQuery.fn.slideShow.images.length - 1;
-		}
-		var image = jQuery.fn.slideShow.images[jQuery.fn.slideShow.current],
-			previousImage = jQuery.fn.slideShow.images[(jQuery.fn.slideShow.current - 1 + jQuery.fn.slideShow.images.length) % jQuery.fn.slideShow.images.length],
-			fallBack = jQuery.fn.slideShow.fallBacks[jQuery.fn.slideShow.current],
-			previousFallBack = jQuery.fn.slideShow.fallBacks[(jQuery.fn.slideShow.current - 1 + jQuery.fn.slideShow.images.length) % jQuery.fn.slideShow.images.length];
-		jQuery.fn.slideShow.showImage(image, previousImage, fallBack, previousFallBack);
-	}
-};
-
-jQuery.fn.slideShow.stop = function () {
-	if (jQuery.fn.slideShow.container) {
-		jQuery.fn.slideShow.clearTimeout();
-		jQuery.fn.slideShow.container.hide();
-		jQuery.fn.slideShow.container = null;
-		if (jQuery.fn.slideShow.onstop) {
-			jQuery.fn.slideShow.onstop();
-		}
-	}
-};
-
-jQuery.fn.slideShow.hideImage = function () {
-	var container = jQuery.fn.slideShow.container;
-	if (container) {
-		container.children('img').remove();
-	}
-};
-
-jQuery.fn.slideShow.onstop = null;
-
-
-Slideshow = {};
-Slideshow.start = function (images, start, options) {
-	options = options || {};
-	var content = $('#content');
-	start = start || 0;
-	Thumbnail.concurrent = 1; //make sure we can load the image and doesn't get blocked by loading thumbnail
-	if (images.slideShow) {
-		images.slideShow($('#slideshow'), start, options);
+SlideShow.prototype.togglePlay = function () {
+	if (this.playing) {
+		this.pause();
 	} else {
-		options.images = images;
-		jQuery.fn.slideShow($('#slideshow'), start, options);
+		this.play();
 	}
 };
 
-Slideshow.end = function () {
-	jQuery.fn.slideShow.stop();
-};
-
-Slideshow.next = function (event) {
-	if (event) {
-		event.stopPropagation();
-	}
-	jQuery.fn.slideShow.hideImage();
-	jQuery.fn.slideShow.next();
-};
-
-Slideshow.previous = function (event) {
-	if (event) {
-		event.stopPropagation();
-	}
-	jQuery.fn.slideShow.hideImage();
-	jQuery.fn.slideShow.previous();
-};
-
-Slideshow.pause = function (event) {
-	if (event) {
-		event.stopPropagation();
-	}
-	$('#slideshow').children('.play').show();
-	$('#slideshow').children('.pause').hide();
-	Slideshow.playPause.playing = false;
-	jQuery.fn.slideShow.pause();
-};
-
-Slideshow.play = function (event) {
-	if (event) {
-		event.stopPropagation();
-	}
-	$('#slideshow').children('.play').hide();
-	$('#slideshow').children('.pause').show();
-	Slideshow.playPause.playing = true;
-	jQuery.fn.slideShow.play();
-};
-Slideshow.playPause = function () {
-	if (Slideshow.playPause.playing) {
-		Slideshow.pause();
-	} else {
-		Slideshow.play();
-	}
-};
-Slideshow.playPause.playing = false;
-Slideshow._getSlideshowTemplate = function () {
+SlideShow._getSlideshowTemplate = function () {
 	var defer = $.Deferred();
 	if (!this.$slideshowTemplate) {
 		var self = this;
 		$.get(OC.filePath('gallery', 'templates', 'slideshow.html'), function (tmpl) {
-			self.$slideshowTemplate = $(tmpl);
+			var template = $(tmpl);
+			template.find('.next').val(t('gallery', 'Next'));
+			template.find('.play').val(t('gallery', 'Play'));
+			template.find('.pause').val(t('gallery', 'Pause'));
+			template.find('.previous').val(t('gallery', 'Previous'));
+			template.find('.exit').val(t('gallery', 'Close'));
+			self.$slideshowTemplate = template;
 			defer.resolve(self.$slideshowTemplate);
 		})
 			.fail(function () {
@@ -312,45 +281,23 @@ $(document).ready(function () {
 		return true; //deactivate slideshow on login page
 	}
 
-	//close slideshow on esc
-	$(document).keyup(function (e) {
-		if (e.keyCode === 27) { // esc
-			Slideshow.end();
-		} else if (e.keyCode === 37) { // left
-			Slideshow.previous();
-		} else if (e.keyCode === 39) { // right
-			Slideshow.next();
-		} else if (e.keyCode === 32) { // space
-			Slideshow.playPause();
-		}
-	});
-
-	$.when(Slideshow._getSlideshowTemplate()).then(function ($tmpl) {
+	$.when(SlideShow._getSlideshowTemplate()).then(function ($tmpl) {
 		$('body').append($tmpl); //move the slideshow outside the content so we can hide the content
 
-		if (!SVGSupport()) { //replace all svg images with png images for browser that dont support svg
-			replaceSVG();
-		}
+		var inactiveCallback = function () {
+			$('#slideshow').addClass('inactive');
+		};
+		var inactiveTimeout = setTimeout(inactiveCallback, 3000);
 
-		var slideshow = $('#slideshow');
-		slideshow.children('.next').click(Slideshow.next);
-		slideshow.children('.previous').click(Slideshow.previous);
-		slideshow.children('.exit').click(jQuery.fn.slideShow.stop);
-		slideshow.children('.pause').click(Slideshow.pause);
-		slideshow.children('.play').click(Slideshow.play);
-		slideshow.click(Slideshow.next);
+		$('#slideshow').mousemove(function () {
+			$('#slideshow').removeClass('inactive');
+			clearTimeout(inactiveTimeout);
+			inactiveTimeout = setTimeout(inactiveCallback, 3000);
+		});
 
-		if ($.fn.mousewheel) {
-			slideshow.bind('mousewheel.fb', function (e, delta) {
-				e.preventDefault();
-				if ($(e.target).get(0).clientHeight === 0 || $(e.target).get(0).scrollHeight === $(e.target).get(0).clientHeight) {
-					if (delta > 0) {
-						Slideshow.previous();
-					} else {
-						Slideshow.next();
-					}
-				}
-			});
+		//replace all svg images with png images for browser that dont support svg
+		if (!OC.Util.hasSVGSupport()) {
+			OC.Util.replaceSVG(this.$el);
 		}
 	})
 		.fail(function () {
@@ -358,26 +305,22 @@ $(document).ready(function () {
 		});
 
 
-	if (OCA.Files && typeof Slideshow !== 'undefined') {
+	if (OCA.Files && OCA.Files.fileActions) {
 		OCA.Files.fileActions.register('image', 'View', OC.PERMISSION_READ, '', function (filename, context) {
-			var files = context.fileList.files;
+			var imageUrl, files = context.fileList.files;
 			var start = 0;
 			var images = [];
 			var dir = context.dir + '/';
 			var user = OC.currentUser;
 			var width = $(document).width() * window.devicePixelRatio;
 			var height = $(document).height() * window.devicePixelRatio;
-			var fallBacks = [];
 			for (var i = 0; i < files.length; i++) {
 				var file = files[i];
 				if (file.mimetype && file.mimetype.indexOf('image') >= 0) {
-					if (file.mimetype === 'image/tiff') {
-						continue;
-					}
-					if (file.mimetype === 'image/svg+xml') {
+					if (file.mimetype === 'image/svg+xml' || file.mimetype === 'image/gif') {
 						imageUrl = OCA.Files.Files.getDownloadUrl(file.name, dir);
 					} else {
-						var imageUrl = OC.generateUrl('/core/preview.png?file={file}&x={x}&y={y}&a=true&scalingup=0&forceIcon=0', {
+						imageUrl = OC.generateUrl('/core/preview.png?file={file}&x={x}&y={y}&a=true&scalingup=0&forceIcon=0', {
 							x: width,
 							y: height,
 							file: encodeURIComponent(dir + file.name)
@@ -395,10 +338,10 @@ $(document).ready(function () {
 
 					images.push({
 						name: file.name,
-						// use gallery URL instead of download URL
-						imageUrl: imageUrl
+						path: dir + file.name,
+						url: imageUrl,
+						fallBack: OCA.Files.Files.getDownloadUrl(file.name, dir)
 					});
-					fallBacks.push(OCA.Files.Files.getDownloadUrl(file.name, dir));
 				}
 			}
 			for (i = 0; i < images.length; i++) {
@@ -406,9 +349,10 @@ $(document).ready(function () {
 					start = i;
 				}
 			}
-			jQuery.fn.slideShow.call(images, $('#slideshow'), start, {fallBacks: fallBacks});
+			var slideShow = new SlideShow($('#slideshow'), images);
+			slideShow.init();
+			slideShow.show(start);
 		});
 		OCA.Files.fileActions.setDefault('image', 'View');
-		OCA.Files.fileActions.setDefault('image/tiff', 'Download');
 	}
 });

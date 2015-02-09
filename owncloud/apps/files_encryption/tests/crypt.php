@@ -7,23 +7,12 @@
  * See the COPYING-README file.
  */
 
-require_once __DIR__ . '/../3rdparty/Crypt_Blowfish/Blowfish.php';
-require_once __DIR__ . '/../../../lib/base.php';
-require_once __DIR__ . '/../lib/crypt.php';
-require_once __DIR__ . '/../lib/keymanager.php';
-require_once __DIR__ . '/../lib/proxy.php';
-require_once __DIR__ . '/../lib/stream.php';
-require_once __DIR__ . '/../lib/util.php';
-require_once __DIR__ . '/../lib/helper.php';
-require_once __DIR__ . '/../appinfo/app.php';
-require_once __DIR__ . '/util.php';
-
-use OCA\Encryption;
+namespace OCA\Files_Encryption\Tests;
 
 /**
- * Class Test_Encryption_Crypt
+ * Class Crypt
  */
-class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
+class Crypt extends TestCase {
 
 	const TEST_ENCRYPTION_CRYPT_USER1 = "test-crypt-user1";
 
@@ -34,41 +23,30 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 	public $dataUrl;
 	public $dataShort;
 	/**
-	 * @var OC\Files\View
+	 * @var \OC\Files\View
 	 */
 	public $view;
 	public $legacyEncryptedData;
 	public $genPrivateKey;
 	public $genPublicKey;
 
+	/** @var  \OCP\IConfig */
+	private $config;
+
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
 
-		// reset backend
-		\OC_User::clearBackends();
-		\OC_User::useBackend('database');
-
-		// Filesystem related hooks
-		\OCA\Encryption\Helper::registerFilesystemHooks();
-
-		// Filesystem related hooks
-		\OCA\Encryption\Helper::registerUserHooks();
-
-		// clear and register hooks
-		\OC_FileProxy::clearProxies();
-		\OC_FileProxy::register(new OCA\Encryption\Proxy());
-
 		// create test user
-		self::loginHelper(\Test_Encryption_Crypt::TEST_ENCRYPTION_CRYPT_USER1, true);
+		self::loginHelper(self::TEST_ENCRYPTION_CRYPT_USER1, true);
 	}
 
 	protected function setUp() {
 		parent::setUp();
 
 		// set user id
-		\OC_User::setUserId(\Test_Encryption_Crypt::TEST_ENCRYPTION_CRYPT_USER1);
-		$this->userId = \Test_Encryption_Crypt::TEST_ENCRYPTION_CRYPT_USER1;
-		$this->pass = \Test_Encryption_Crypt::TEST_ENCRYPTION_CRYPT_USER1;
+		self::loginHelper(self::TEST_ENCRYPTION_CRYPT_USER1);
+		$this->userId = self::TEST_ENCRYPTION_CRYPT_USER1;
+		$this->pass = self::TEST_ENCRYPTION_CRYPT_USER1;
 
 		// set content for encrypting / decrypting in tests
 		$this->dataLong = file_get_contents(__DIR__ . '/../lib/crypt.php');
@@ -77,46 +55,40 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		$this->legacyData = __DIR__ . '/legacy-text.txt';
 		$this->legacyEncryptedData = __DIR__ . '/legacy-encrypted-text.txt';
 		$this->legacyEncryptedDataKey = __DIR__ . '/encryption.key';
-		$this->randomKey = Encryption\Crypt::generateKey();
+		$this->randomKey = \OCA\Files_Encryption\Crypt::generateKey();
 
-		$keypair = Encryption\Crypt::createKeypair();
+		$keypair = \OCA\Files_Encryption\Crypt::createKeypair();
 		$this->genPublicKey = $keypair['publicKey'];
 		$this->genPrivateKey = $keypair['privateKey'];
 
 		$this->view = new \OC\Files\View('/');
 
 		// remember files_trashbin state
-		$this->stateFilesTrashbin = OC_App::isEnabled('files_trashbin');
+		$this->stateFilesTrashbin = \OC_App::isEnabled('files_trashbin');
 
 		// we don't want to tests with app files_trashbin enabled
 		\OC_App::disable('files_trashbin');
+
+		$this->config = \OC::$server->getConfig();
 	}
 
 	protected function tearDown() {
 		// reset app files_trashbin
 		if ($this->stateFilesTrashbin) {
-			OC_App::enable('files_trashbin');
+			\OC_App::enable('files_trashbin');
 		} else {
-			OC_App::disable('files_trashbin');
+			\OC_App::disable('files_trashbin');
 		}
 
 		$this->assertTrue(\OC_FileProxy::$enabled);
-		\OCP\Config::deleteSystemValue('cipher');
+		$this->config->deleteSystemValue('cipher');
 
 		parent::tearDown();
 	}
 
 	public static function tearDownAfterClass() {
 		// cleanup test user
-		\OC_User::deleteUser(\Test_Encryption_Crypt::TEST_ENCRYPTION_CRYPT_USER1);
-
-		\OC_Hook::clear();
-		\OC_FileProxy::clearProxies();
-
-		// Delete keys in /data/
-		$view = new \OC\Files\View('/');
-		$view->rmdir('public-keys');
-		$view->rmdir('owncloud_private_key');
+		\OC_User::deleteUser(self::TEST_ENCRYPTION_CRYPT_USER1);
 
 		parent::tearDownAfterClass();
 	}
@@ -128,7 +100,7 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 
 		# TODO: use more accurate (larger) string length for test confirmation
 
-		$key = Encryption\Crypt::generateKey();
+		$key = \OCA\Files_Encryption\Crypt::generateKey();
 
 		$this->assertTrue(strlen($key) > 16);
 
@@ -137,16 +109,16 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 	public function testDecryptPrivateKey() {
 
 		// test successful decrypt
-		$crypted = Encryption\Crypt::symmetricEncryptFileContent($this->genPrivateKey, 'hat');
+		$crypted = \OCA\Files_Encryption\Crypt::symmetricEncryptFileContent($this->genPrivateKey, 'hat');
 
-		$header = Encryption\Crypt::generateHeader();
+		$header = \OCA\Files_Encryption\Crypt::generateHeader();
 
-		$decrypted = Encryption\Crypt::decryptPrivateKey($header . $crypted, 'hat');
+		$decrypted = \OCA\Files_Encryption\Crypt::decryptPrivateKey($header . $crypted, 'hat');
 
 		$this->assertEquals($this->genPrivateKey, $decrypted);
 
 		//test private key decrypt with wrong password
-		$wrongPasswd = Encryption\Crypt::decryptPrivateKey($crypted, 'hat2');
+		$wrongPasswd = \OCA\Files_Encryption\Crypt::decryptPrivateKey($crypted, 'hat2');
 
 		$this->assertEquals(false, $wrongPasswd);
 
@@ -160,12 +132,12 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 
 		# TODO: search in keyfile for actual content as IV will ensure this test always passes
 
-		$crypted = Encryption\Crypt::symmetricEncryptFileContent($this->dataShort, 'hat');
+		$crypted = \OCA\Files_Encryption\Crypt::symmetricEncryptFileContent($this->dataShort, 'hat');
 
 		$this->assertNotEquals($this->dataShort, $crypted);
 
 
-		$decrypt = Encryption\Crypt::symmetricDecryptFileContent($crypted, 'hat');
+		$decrypt = \OCA\Files_Encryption\Crypt::symmetricDecryptFileContent($crypted, 'hat');
 
 		$this->assertEquals($this->dataShort, $decrypt);
 
@@ -178,12 +150,12 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 
 		# TODO: search in keyfile for actual content as IV will ensure this test always passes
 
-		$crypted = Encryption\Crypt::symmetricEncryptFileContent($this->dataShort, 'hat', 'AES-128-CFB');
+		$crypted = \OCA\Files_Encryption\Crypt::symmetricEncryptFileContent($this->dataShort, 'hat', 'AES-128-CFB');
 
 		$this->assertNotEquals($this->dataShort, $crypted);
 
 
-		$decrypt = Encryption\Crypt::symmetricDecryptFileContent($crypted, 'hat', 'AES-128-CFB');
+		$decrypt = \OCA\Files_Encryption\Crypt::symmetricDecryptFileContent($crypted, 'hat', 'AES-128-CFB');
 
 		$this->assertEquals($this->dataShort, $decrypt);
 
@@ -222,8 +194,6 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// Teardown
 		$this->view->unlink($this->userId . '/files/' . $filename);
-
-		Encryption\Keymanager::deleteFileKey($this->view, $filename);
 	}
 
 	/**
@@ -233,14 +203,14 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 
 		$filename = 'tmp-' . $this->getUniqueID() . '.test';
 
-		\OCP\Config::setSystemValue('cipher', 'AES-128-CFB');
+		$this->config->setSystemValue('cipher', 'AES-128-CFB');
 
 		$cryptedFile = file_put_contents('crypt:///' . $this->userId . '/files/'. $filename, $this->dataShort);
 
 		// Test that data was successfully written
 		$this->assertTrue(is_int($cryptedFile));
 
-		\OCP\Config::deleteSystemValue('cipher');
+		$this->config->deleteSystemValue('cipher');
 
 		// Disable encryption proxy to prevent recursive calls
 		$proxyStatus = \OC_FileProxy::$enabled;
@@ -263,8 +233,6 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// Teardown
 		$this->view->unlink($this->userId . '/files/' . $filename);
-
-		Encryption\Keymanager::deleteFileKey($this->view, $filename);
 	}
 
 	/**
@@ -304,11 +272,7 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		$this->assertEquals($this->dataLong . $this->dataLong, $decrypted);
 
 		// Teardown
-
 		$this->view->unlink($this->userId . '/files/' . $filename);
-
-		Encryption\Keymanager::deleteFileKey($this->view, $filename);
-
 	}
 
 	/**
@@ -323,7 +287,7 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		// Generate a a random filename
 		$filename = 'tmp-' . $this->getUniqueID() . '.test';
 
-		\OCP\Config::setSystemValue('cipher', 'AES-128-CFB');
+		$this->config->setSystemValue('cipher', 'AES-128-CFB');
 
 		// Save long data as encrypted file using stream wrapper
 		$cryptedFile = file_put_contents('crypt:///' . $this->userId . '/files/' . $filename, $this->dataLong . $this->dataLong);
@@ -335,7 +299,7 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		$proxyStatus = \OC_FileProxy::$enabled;
 		\OC_FileProxy::$enabled = false;
 
-		\OCP\Config::deleteSystemValue('cipher');
+		$this->config->deleteSystemValue('cipher');
 
 		// Get file contents without using any wrapper to get it's actual contents on disk
 		$retreivedCryptedFile = $this->view->file_get_contents($this->userId . '/files/' . $filename);
@@ -352,11 +316,7 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		$this->assertEquals($this->dataLong . $this->dataLong, $decrypted);
 
 		// Teardown
-
 		$this->view->unlink($this->userId . '/files/' . $filename);
-
-		Encryption\Keymanager::deleteFileKey($this->view, $filename);
-
 	}
 
 	/**
@@ -371,12 +331,12 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		// Generate a a random filename
 		$filename = 'tmp-' . $this->getUniqueID() . '.test';
 
-		\OCP\Config::setSystemValue('cipher', 'AES-128-CFB');
+		$this->config->setSystemValue('cipher', 'AES-128-CFB');
 
 		// Save long data as encrypted file using stream wrapper
 		$cryptedFile = file_put_contents('crypt:///' . $this->userId . '/files/' . $filename, $this->dataLong . $this->dataLong);
 
-		\OCP\Config::deleteSystemValue('cipher');
+		$this->config->deleteSystemValue('cipher');
 
 		// Test that data was successfully written
 		$this->assertTrue(is_int($cryptedFile));
@@ -393,7 +353,7 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 
 		// remove the header to check if we can also decrypt old files without a header,
 		//  this files should fall back to AES-128
-		$cryptedWithoutHeader = substr($retreivedCryptedFile, Encryption\Crypt::BLOCKSIZE);
+		$cryptedWithoutHeader = substr($retreivedCryptedFile, \OCA\Files_Encryption\Crypt::BLOCKSIZE);
 		$this->view->file_put_contents($this->userId . '/files/' . $filename, $cryptedWithoutHeader);
 
 		// Re-enable proxy - our work is done
@@ -404,11 +364,7 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		$this->assertEquals($this->dataLong . $this->dataLong, $decrypted);
 
 		// Teardown
-
 		$this->view->unlink($this->userId . '/files/' . $filename);
-
-		Encryption\Keymanager::deleteFileKey($this->view, $filename);
-
 	}
 
 	/**
@@ -416,13 +372,13 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 	 */
 	public function testIsEncryptedContent() {
 
-		$this->assertFalse(Encryption\Crypt::isCatfileContent($this->dataUrl));
+		$this->assertFalse(\OCA\Files_Encryption\Crypt::isCatfileContent($this->dataUrl));
 
-		$this->assertFalse(Encryption\Crypt::isCatfileContent($this->legacyEncryptedData));
+		$this->assertFalse(\OCA\Files_Encryption\Crypt::isCatfileContent($this->legacyEncryptedData));
 
-		$keyfileContent = Encryption\Crypt::symmetricEncryptFileContent($this->dataUrl, 'hat', 'AES-128-CFB');
+		$keyfileContent = \OCA\Files_Encryption\Crypt::symmetricEncryptFileContent($this->dataUrl, 'hat', 'AES-128-CFB');
 
-		$this->assertTrue(Encryption\Crypt::isCatfileContent($keyfileContent));
+		$this->assertTrue(\OCA\Files_Encryption\Crypt::isCatfileContent($keyfileContent));
 
 	}
 
@@ -433,7 +389,7 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 
 		# TODO: search in keyfile for actual content as IV will ensure this test always passes
 
-		$pair1 = Encryption\Crypt::createKeypair();
+		$pair1 = \OCA\Files_Encryption\Crypt::createKeypair();
 
 		$this->assertEquals(2, count($pair1));
 
@@ -442,42 +398,15 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		$this->assertTrue(strlen($pair1['privateKey']) > 1);
 
 
-		$crypted = Encryption\Crypt::multiKeyEncrypt($this->dataShort, array($pair1['publicKey']));
+		$crypted = \OCA\Files_Encryption\Crypt::multiKeyEncrypt($this->dataShort, array($pair1['publicKey']));
 
 		$this->assertNotEquals($this->dataShort, $crypted['data']);
 
 
-		$decrypt = Encryption\Crypt::multiKeyDecrypt($crypted['data'], $crypted['keys'][0], $pair1['privateKey']);
+		$decrypt = \OCA\Files_Encryption\Crypt::multiKeyDecrypt($crypted['data'], $crypted['keys'][0], $pair1['privateKey']);
 
 		$this->assertEquals($this->dataShort, $decrypt);
 
-	}
-
-	/**
-	 * @medium
-	 * test decryption using legacy blowfish method
-	 */
-	function testLegacyDecryptShort() {
-
-		$crypted = $this->legacyEncrypt($this->dataShort, $this->pass);
-
-		$decrypted = Encryption\Crypt::legacyBlockDecrypt($crypted, $this->pass);
-
-		$this->assertEquals($this->dataShort, $decrypted);
-
-	}
-
-	/**
-	 * @medium
-	 * test decryption using legacy blowfish method
-	 */
-	function testLegacyDecryptLong() {
-
-		$crypted = $this->legacyEncrypt($this->dataLong, $this->pass);
-
-		$decrypted = Encryption\Crypt::legacyBlockDecrypt($crypted, $this->pass);
-
-		$this->assertEquals($this->dataLong, $decrypted);
 	}
 
 	/**
@@ -605,7 +534,7 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		// relogin
 		$params['uid'] = $this->userId;
 		$params['password'] = 'test';
-		OCA\Encryption\Hooks::login($params);
+		\OCA\Files_Encryption\Hooks::login($params);
 
 		// Get file decrypted contents
 		$newDecrypt = file_get_contents('crypt:///' . $this->userId . '/files/' . $filename);
@@ -724,21 +653,6 @@ class Test_Encryption_Crypt extends \OCA\Files_Encryption\Tests\TestCase {
 		// tear down
 		fclose($handle);
 		$view->unlink($filename);
-	}
-
-
-	/**
-	 * encryption using legacy blowfish method
-	 * @param string $data data to encrypt
-	 * @param string $passwd password
-	 * @return string
-	 */
-	function legacyEncrypt($data, $passwd) {
-
-		$bf = new Legacy_Crypt_Blowfish($passwd);
-		$crypted = $bf->encrypt($data);
-
-		return $crypted;
 	}
 
 }

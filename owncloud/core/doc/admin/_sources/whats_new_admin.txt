@@ -1,116 +1,134 @@
-What's New for Admins in ownCloud 7
+What's New for Admins in ownCloud 8
 ===================================
 
-New User Management
--------------------
+New Packaging
+-------------
 
-Admins can now view all ownCloud users in a single scrolling window, filter user 
-lists by group, and search by user display name using the new text filter. User 
-attributes have also been added, included the file storage location for each 
-user and the last time they logged in. New groups can be added with a click of 
-a button.
+We are introducing a new packaging system. Instead of two editions, Community 
+and Enterprise, we now offer Server to replace the old Community edition, and
+Enterprise Subscription replaces the old Enterprise Edition.
 
-External Storage
-----------------
+Server includes core file share and synchronization features plus community 
+apps, and is community-supported and free of cost. See `owncloud.org 
+<https://owncloud.org/>`_ for current information and links to downloads.
 
-Major improvements to the external storage app include support for FTP, Dropbox, 
-Google Drive, SFTP, Swift, S3, WebDAV, SMB/CIFS and more storage locations to 
-the ownCloud instance. You can control which storage types your users can set up 
-in their Personal tabs. Further performance improvements have made externally 
-mounted storage faster and more responsive.
+ownCloud now offers two levels of paid support:
 
+* ownCloud Standard 
+* ownCloud Enterprise
 
-Object Stores as Primary Storage
---------------------------------
+The ownCloud Standard Subscription is for customers who want paid support for 
+the core Server, and do not need Enterprise apps. This includes:
 
-Primary storage in ownCloud is where all files and folders are stored by 
-default. In contrast to secondary storage, primary storage is completely managed 
-by the ownCloud application. With ownCloud 7, ownCloud can now leverage SWIFT 
-and S3 (S3 is enterprise only) object stores as primary storage for ownCloud 
-files. Now admins can choose the best option for their specific need, including 
-local storage, network file system mounts, and object stores. 
+* ownCloud Server
+* ownCloud desktop and mobile apps (without the custom branding build service)
+* ownCloud open-source apps licensed as AGPL (Share Files, 
+  Federated Cloud, Versions, Deleted files, LDAP/AD, Antivirus, Encryption, 
+  External Storage. etc.), 8x5 support hours
 
-Server to Server Sharing
-------------------------
+Note: This does not include support for Contacts, Calendar, Tasks, Chat, 
+Documents, or any other community-only apps, and it does not include support 
+for Enterprise-only apps or services.
 
-ownCloud 7 servers can now connect shares with each other. With just a 
-few clicks you can easily and securely create public shares that are available 
-to other ownCloud 7 users on remote servers, and optionally allow your users to 
-also create their own public shares.
+The ownCloud Enterprise Subscription replaces the Enterprise Edition. This 
+includes the core Server plus Enterprise apps. The Enterprise Subscription 
+includes:
 
+* ownCloud Standard Subscription
+* ownCloud Enterprise apps (Logging modules, SAML, File Firewall, Sharepoint, 
+  Windows Network Drive, Home Directory Mounts, etc) 
+* ownBrander for mobile app branding
+* ownCloud Commercial License for closed-source customizations
+* Up to 24x7 support
+* Deployment assistance for the rollout
 
-SharePoint Integration (Enterprise Edition only)
-------------------------------------------------
+New customers, or customers upgrading from the old Enterprise Edition will 
+install ownCloud 8 from the existing ``owncloud-enterprise`` repository. The 
+``owncloud-server`` dependency will be pulled in automatically. Customers using 
+the community edition will upgrade via package manager by adding the 
+``owncloud-enterprise repository``, and installing ownCloud Enterprise Edition 
+apps on top of their ``owncloud-server``.
 
-Native SharePoint support has been added to ownCloud 7 Enterprise Edition as a 
-secondary storage location for SharePoint 2007, 2010 and 2013. When this is 
-enabled, users can access and sync all of their SharePoint content via ownCloud, 
-whether in the desktop sync, mobile or Web interfaces. Updated files are 
-bi-directionally synced automatically. SharePoint shares are created by the 
-ownCloud admin, and optionally by any users who have SharePoint credentials. 
-ownCloud preserves SharePoint ACLs to ensure content is restricted per
-SharePoint rules.
+No More PHP 5.3
+---------------
 
-Windows Network Drive Integration (Enterprise Edition only)
------------------------------------------------------------
+PHP 5.3 is not supported in ownCloud 8, and PHP 5.4 is required.
 
-ownCloud has always supported mounting Windows network drives, and in OC7 EE it 
-is easier than ever for the administrator to mount Windows Network Drives 
-for a user, a group or the entire ownCloud instance, and allow each user to 
-access the network drives and preserve their ACLs. The network drives appear as 
-normal folders and files, and changes are bi-directionally synced between user 
-devices and the Windows network drives.
+Improved Admin and Settings UI
+------------------------------
 
+The ownCloud Admin and Settings pages have been streamlined and re-organized, 
+and include a new sidebar for accessing configuration options more quickly.
 
-Sharing
--------
+Simplified App Management
+-------------------------
 
-Sharing has been dramatically enhanced and streamlined, making it more flexible, 
-faster and accessible. Improvements include:
+Installing, upgrading, and removing apps is easier, and includes a new 
+dependency feature to automatically resolve installation dependendencies.
 
-* Force Password: 
-   Admins can now force users to set a password when they create shared 
-   links. This ensures that files shared outside of ownCloud via a link 
-   are properly secured by users.
+New Updater Layout
+------------------
 
-* Share Link Default and Max Expiration: 
-   When sharing a file with a link, admins can now require users to set a 
-   specific expiration duration for the link.
+The Updater app (Server only) is more intelligent, and detects errors before 
+they happen and rolls the update back. Status and error messages are more 
+informative.
 
-* Antivirus Action Updates: 
-   The Antivirus app has been enhanced to allow – with some minor 
-   customization – the use of external virus scanners (rather than the 
-   default ClamAV) in scanning files as they arrive on the server.
-   
-* The Shared folder has been removed from new installations of ownCloud 7: 
-   Shared files now appear in the top level of your file tree on your Files 
-   page, and you can change the default shared folder to any folder with the 
-   ``'share_folder'`` directive in ``config.php``. If you are upgrading from 
-   older ownCloud versions you will still have your old Shared folder. 
+More Powerful User Management
+-----------------------------
 
-* Local shares do not expire with public shares:
-   In older versions of ownCloud, you could set an expiration date on both local 
-   and public shares. Now you can set an expiration date only on public shares, 
-   and local shares do not expire when public shares expire.
- 
-Email Configuration Wizard
+In addition to the existing filter and text string searchable user management, 
+an entirely new set of features has been added to ownCloud. Admins can now edit 
+email addresses for system users, sort users, select multiple users at once, and
+rename groups.
+
+LDAP Improvements, Including LDAP User Cleanup
+----------------------------------------------
+
+ownCloud has significantly improved LDAP and AD performance, provided additional 
+configuration options and expert modes, and added a new utility for verifying 
+and removing users from ownCloud that are no longer active in LDAP or AD.
+
+Improved and Open-Sourced Provisioning API
+------------------------------------------
+
+Remote management of ownCloud users is enabled with the Provisioning API. 
+Previously limited to the Enterprise edition, it is now open source and 
+available to the community.
+
+Favorites
+---------
+
+Users can now assign a favorite icon to files and folders. Look for 
+improvements in this feature in future ownCloud editions to make finding and 
+managing files even easier.
+
+Improved Server-to-Server Sharing
+---------------------------------
+
+Server-to-Server Sharing, introduced in ownCloud 7, allows you to mount file 
+shares from remote ownCloud servers, and create a "cloud of ownClouds". In 
+ownCloud 8 the process for creating a new Server-to-Server link is easier and more 
+streamlined.
+
+Improved Search
+---------------
+
+The search interface has been streamlined and simplified, with more features
+including enhanced result set reporting and additional search parameters.
+
+Web Interface Enhancements
 --------------------------
 
-The new graphical Email configuration wizard connects to your mail server in 
-just a few clicks, so that ownCloud can send automated messages to users. 
-ownCloud connects via PHP, Sendmail, or standard SMTP.
+The ownCloud Web interface has been improved to make it easier for all users to 
+access, edit, sync and share their files.
 
-Editable Email Templates
-------------------------
+Download Broker Improves Performance
+------------------------------------
 
-ownCloud admins can now edit the email templates that ownCloud uses for 
-automatic notifications on the Admin page.
-
-
-Active Directory and LDAP Enhancements
---------------------------------------
-
-Several improvements have been made to the LDAP and Active Directory plug-in 
-application, improving both the performance of the application as well as the 
-compatibility with OpenLDAP and Active Directory. 
-
+When ownCloud delivers universal file access to end users, files from many 
+different document sources are aggregated into a single interface and served to 
+end users. In some cases, passing all of the files aggregated in this interface 
+through a single server, ownCloud, slows down data access. ownCloud now 
+supports direct downloads of files from select storage back-ends, reducing the 
+load on the ownCloud server without sacrificing control over the files that are 
+stored in the various back end systems.

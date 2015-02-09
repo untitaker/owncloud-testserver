@@ -21,13 +21,16 @@
  */
 
 namespace OCA\Activity\Tests;
-use OCA\Activity\Data;
 
-class ApiTest extends \PHPUnit_Framework_TestCase {
+use OCA\Activity\Data;
+use OCP\Activity\IExtension;
+
+class ApiTest extends TestCase {
 	protected $originalWEBROOT;
 
-	public function setUp() {
+	protected function setUp() {
 		parent::setUp();
+
 		$this->originalWEBROOT =\OC::$WEBROOT;
 		\OC::$WEBROOT = '';
 		\OC_User::createUser('activity-api-user1', 'activity-api-user1');
@@ -62,14 +65,14 @@ class ApiTest extends \PHPUnit_Framework_TestCase {
 				'user',
 				$activity['affectedUser'],
 				time() + $loop,
-				Data::PRIORITY_MEDIUM,
+				IExtension::PRIORITY_MEDIUM,
 				$activity['type'],
 			));
 			$loop++;
 		}
 	}
 
-	public function tearDown() {
+	protected function tearDown() {
 		$data = new Data(
 			$this->getMock('\OCP\Activity\IManager')
 		);
@@ -86,6 +89,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase {
 			'type' => 'test',
 		));
 		\OC::$WEBROOT = $this->originalWEBROOT;
+
 		parent::tearDown();
 	}
 

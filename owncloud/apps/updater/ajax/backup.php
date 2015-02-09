@@ -25,7 +25,7 @@ try {
 
 	//Package version e.g. 4.0.4
 	$packageVersion = '';
-	$updateData = \OC_Updater::check();
+	$updateData = App::getFeed();
 
 	if (isset($updateData['version']) && $updateData['version'] !== Array()){
 		$packageVersion = $updateData['version'];
@@ -37,7 +37,10 @@ try {
 		App::log('Invalid response from update feed.');
 		throw new \Exception((string) App::$l10n->t('Version not found'));
 	}
-	
+
+	$packageVersionArray = explode('.', $packageVersion);
+	Helper::checkVersion($packageVersionArray, $packageVersion);
+
 	//Some cleanup first
 	Downloader::cleanUp($packageVersion);
 	if (!Downloader::isClean($packageVersion)){
@@ -55,7 +58,7 @@ try {
 		throw new \Exception($message);
 	}
 	
-	$backupPath = Backup::create();
+	$backupPath = Backup::create($packageVersion);
 	\OCP\JSON::success(array(
 		'backup' => $backupPath,
 		'version' => $packageVersion,

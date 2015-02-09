@@ -20,21 +20,13 @@
  *
  */
 
-require_once __DIR__ . '/../../../lib/base.php';
-require_once __DIR__ . '/../lib/crypt.php';
-require_once __DIR__ . '/../lib/keymanager.php';
-require_once __DIR__ . '/../lib/proxy.php';
-require_once __DIR__ . '/../lib/stream.php';
-require_once __DIR__ . '/../lib/util.php';
-require_once __DIR__ . '/../appinfo/app.php';
-
-use OCA\Encryption;
+namespace OCA\Files_Encryption\Tests;
 
 /**
- * Class Test_Encryption_Proxy
+ * Class Proxy
  * this class provide basic proxy app tests
  */
-class Test_Encryption_Proxy extends \OCA\Files_Encryption\Tests\TestCase {
+class Proxy extends TestCase {
 
 	const TEST_ENCRYPTION_PROXY_USER1 = "test-proxy-user1";
 
@@ -52,35 +44,21 @@ class Test_Encryption_Proxy extends \OCA\Files_Encryption\Tests\TestCase {
 	public static function setUpBeforeClass() {
 		parent::setUpBeforeClass();
 
-		// reset backend
-		\OC_User::clearBackends();
-		\OC_User::useBackend('database');
-
-		\OC_Hook::clear('OC_Filesystem');
-		\OC_Hook::clear('OC_User');
-
-		// Filesystem related hooks
-		\OCA\Encryption\Helper::registerFilesystemHooks();
-
-		// clear and register hooks
-		\OC_FileProxy::clearProxies();
-		\OC_FileProxy::register(new OCA\Encryption\Proxy());
-
 		// create test user
-		self::loginHelper(\Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1, true);
+		self::loginHelper(self::TEST_ENCRYPTION_PROXY_USER1, true);
 	}
 
 	protected function setUp() {
 		parent::setUp();
 
 		// set user id
-		\OC_User::setUserId(\Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1);
-		$this->userId = \Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1;
-		$this->pass = \Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1;
+		\OC_User::setUserId(self::TEST_ENCRYPTION_PROXY_USER1);
+		$this->userId = self::TEST_ENCRYPTION_PROXY_USER1;
+		$this->pass = self::TEST_ENCRYPTION_PROXY_USER1;
 
 		// init filesystem view
-		$this->view = new \OC\Files\View('/'. \Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1 . '/files');
-		$this->rootView = new \OC\Files\View('/'. \Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1 );
+		$this->view = new \OC\Files\View('/'. self::TEST_ENCRYPTION_PROXY_USER1 . '/files');
+		$this->rootView = new \OC\Files\View('/'. self::TEST_ENCRYPTION_PROXY_USER1 );
 
 		// init short data
 		$this->data = 'hats';
@@ -91,15 +69,7 @@ class Test_Encryption_Proxy extends \OCA\Files_Encryption\Tests\TestCase {
 
 	public static function tearDownAfterClass() {
 		// cleanup test user
-		\OC_User::deleteUser(\Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1);
-
-		\OC_Hook::clear();
-		\OC_FileProxy::clearProxies();
-
-		// Delete keys in /data/
-		$view = new \OC\Files\View('/');
-		$view->rmdir('public-keys');
-		$view->rmdir('owncloud_private_key');
+		\OC_User::deleteUser(self::TEST_ENCRYPTION_PROXY_USER1);
 
 		parent::tearDownAfterClass();
 	}
@@ -156,9 +126,7 @@ class Test_Encryption_Proxy extends \OCA\Files_Encryption\Tests\TestCase {
 		$this->view->mkdir(dirname($path));
 		$this->view->file_put_contents($path, "test");
 
-		$testClass = new DummyProxy();
-
-		$result = $testClass->isExcludedPathTesting($path, $this->userId);
+		$result = \Test_Helper::invokePrivate(new \OCA\Files_Encryption\Proxy(), 'isExcludedPath', array($path));
 		$this->assertSame($expected, $result);
 
 		$this->view->deleteAll(dirname($path));
@@ -167,24 +135,15 @@ class Test_Encryption_Proxy extends \OCA\Files_Encryption\Tests\TestCase {
 
 	public function isExcludedPathProvider() {
 		return array(
-			array ('/' . \Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1 . '/files/test.txt', false),
-			array (\Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1 . '/files/test.txt', false),
+			array ('/' . self::TEST_ENCRYPTION_PROXY_USER1 . '/files/test.txt', false),
+			array (self::TEST_ENCRYPTION_PROXY_USER1 . '/files/test.txt', false),
 			array ('/files/test.txt', true),
-			array ('/' . \Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1 . '/files/versions/test.txt', false),
-			array ('/' . \Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1 . '/files_versions/test.txt', false),
-			array ('/' . \Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1 . '/files_trashbin/test.txt', true),
-			array ('/' . \Test_Encryption_Proxy::TEST_ENCRYPTION_PROXY_USER1 . '/file/test.txt', true),
+			array ('/' . self::TEST_ENCRYPTION_PROXY_USER1 . '/files/versions/test.txt', false),
+			array ('/' . self::TEST_ENCRYPTION_PROXY_USER1 . '/files_versions/test.txt', false),
+			array ('/' . self::TEST_ENCRYPTION_PROXY_USER1 . '/files_trashbin/test.txt', true),
+			array ('/' . self::TEST_ENCRYPTION_PROXY_USER1 . '/file/test.txt', true),
 		);
 	}
 
 }
 
-
-/**
- * Dummy class to make protected methods available for testing
- */
-class DummyProxy extends \OCA\Encryption\Proxy {
-	public function isExcludedPathTesting($path, $uid) {
-		return $this->isExcludedPath($path, $uid);
-	}
-}

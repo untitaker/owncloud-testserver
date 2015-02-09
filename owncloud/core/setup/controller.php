@@ -9,19 +9,47 @@
 
 namespace OC\Core\Setup;
 
+use bantu\IniGetWrapper\IniGetWrapper;
 use OCP\IConfig;
+use OCP\IL10N;
 
 class Controller {
-	/** @var \OCP\IConfig */
+	/**
+	 * @var \OCP\IConfig
+	 */
 	protected $config;
+	/** @var IniGetWrapper */
+	protected $iniWrapper;
+	/** @var IL10N */
+	protected $l10n;
+	/** @var \OC_Defaults */
+	protected $defaults;
+
+	/**
+	 * @var string
+	 */
+	private $autoConfigFile;
 
 	/**
 	 * @param IConfig $config
+	 * @param IniGetWrapper $iniWrapper
+	 * @param IL10N $l10n
+	 * @param \OC_Defaults $defaults
 	 */
-	function __construct(IConfig $config) {
+	function __construct(IConfig $config,
+						 IniGetWrapper $iniWrapper,
+						 IL10N $l10n,
+						 \OC_Defaults $defaults) {
+		$this->autoConfigFile = \OC::$SERVERROOT.'/config/autoconfig.php';
 		$this->config = $config;
+		$this->iniWrapper = $iniWrapper;
+		$this->l10n = $l10n;
+		$this->defaults = $defaults;
 	}
 
+	/**
+	 * @param $post
+	 */
 	public function run($post) {
 		// Check for autosetup:
 		$post = $this->loadAutoConfig($post);
@@ -57,22 +85,24 @@ class Controller {
 		);
 		$parameters = array_merge($defaults, $post);
 
-		\OC_Util::addScript( '3rdparty', 'strengthify/jquery.strengthify' );
-		\OC_Util::addStyle( '3rdparty', 'strengthify/strengthify' );
+		\OC_Util::addVendorScript('strengthify/jquery.strengthify');
+		\OC_Util::addVendorStyle('strengthify/strengthify');
 		\OC_Util::addScript('setup');
 		\OC_Template::printGuestPage('', 'installation', $parameters);
 	}
 
 	public function finishSetup() {
+		if( file_exists( $this->autoConfigFile )) {
+			unlink($this->autoConfigFile);
+		}
 		\OC_Util::redirectToDefaultPage();
 	}
 
 	public function loadAutoConfig($post) {
-		$autosetup_file = \OC::$SERVERROOT.'/config/autoconfig.php';
-		if( file_exists( $autosetup_file )) {
+		if( file_exists($this->autoConfigFile)) {
 			\OC_Log::write('core', 'Autoconfig file found, setting up owncloud...', \OC_Log::INFO);
 			$AUTOCONFIG = array();
-			include $autosetup_file;
+			include $this->autoConfigFile;
 			$post = array_merge ($post, $AUTOCONFIG);
 		}
 
@@ -82,9 +112,6 @@ class Controller {
 
 		if ($dbIsSet AND $directoryIsSet AND $adminAccountIsSet) {
 			$post['install'] = 'true';
-			if( file_exists( $autosetup_file )) {
-				unlink($autosetup_file);
-			}
 		}
 		$post['dbIsSet'] = $dbIsSet;
 		$post['directoryIsSet'] = $directoryIsSet;
@@ -103,7 +130,7 @@ class Controller {
 		$setup = new \OC_Setup($this->config);
 		$databases = $setup->getSupportedDatabases();
 
-		$datadir = $this->config->getSystemValue('datadirectory', \OC::$SERVERROOT.'/data');
+		$dataDir = $this->config->getSystemValue('datadirectory', \OC::$SERVERROOT.'/data');
 		$vulnerableToNullByte = false;
 		if(@file_exists(__FILE__."\0Nullbyte")) { // Check if the used PHP version is vulnerable to the NULL Byte attack (CVE-2006-7243)
 			$vulnerableToNullByte = true;
@@ -114,33 +141,53 @@ class Controller {
 		// Create data directory to test whether the .htaccess works
 		// Notice that this is not necessarily the same data directory as the one
 		// that will effectively be used.
-		@mkdir($datadir);
-		if (is_dir($datadir) && is_writable($datadir)) {
+		@mkdir($dataDir);
+		$htAccessWorking = true;
+		if (is_dir($dataDir) && is_writable($dataDir)) {
 			// Protect data directory here, so we can test if the protection is working
 			\OC_Setup::protectDataDirectory();
 
 			try {
-				$htaccessWorking = \OC_Util::isHtaccessWorking();
+				$htAccessWorking = \OC_Util::isHtaccessWorking();
 			} catch (\OC\HintException $e) {
 				$errors[] = array(
 					'error' => $e->getMessage(),
 					'hint' => $e->getHint()
 				);
-				$htaccessWorking = false;
+				$htAccessWorking = false;
 			}
 		}
 
+
 		if (\OC_Util::runningOnMac()) {
-			$l10n = \OC_L10N::get('core');
-			$themeName = \OC_Util::getTheme();
-			$theme = new \OC_Defaults();
 			$errors[] = array(
-				'error' => $l10n->t(
+				'error' => $this->l10n->t(
 					'Mac OS X is not supported and %s will not work properly on this platform. ' .
 					'Use it at your own risk! ',
-					$theme->getName()
+					$this->defaults->getName()
 				),
-				'hint' => $l10n->t('For the best results, please consider using a GNU/Linux server instead.')
+				'hint' => $this->l10n->t('For the best results, please consider using a GNU/Linux server instead.')
+			);
+		}
+
+		if($this->iniWrapper->getString('open_basedir') !== '' && PHP_INT_SIZE === 4) {
+			$errors[] = array(
+				'error' => $this->l10n->t(
+					'It seems that this %s instance is running on a 32-bit PHP environment and the open_basedir has been configured in php.ini. ' .
+					'This will lead to problems with files over 4GB and is highly discouraged.',
+					$this->defaults->getName()
+				),
+				'hint' => $this->l10n->t('Please remove the open_basedir setting within your php.ini or switch to 64-bit PHP.')
+			);
+		}
+		if(!function_exists('curl_init') && PHP_INT_SIZE === 4) {
+			$errors[] = array(
+				'error' => $this->l10n->t(
+					'It seems that this %s instance is running on a 32-bit PHP environment and cURL is not installed. ' .
+					'This will lead to problems with files over 4GB and is highly discouraged.',
+					$this->defaults->getName()
+				),
+				'hint' => $this->l10n->t('Please install the cURL extension and restart your webserver.')
 			);
 		}
 
@@ -151,9 +198,8 @@ class Controller {
 			'hasOracle' => isset($databases['oci']),
 			'hasMSSQL' => isset($databases['mssql']),
 			'databases' => $databases,
-			'directory' => $datadir,
-			'secureRNG' => \OC_Util::secureRNGAvailable(),
-			'htaccessWorking' => $htaccessWorking,
+			'directory' => $dataDir,
+			'htaccessWorking' => $htAccessWorking,
 			'vulnerableToNullByte' => $vulnerableToNullByte,
 			'errors' => $errors,
 		);

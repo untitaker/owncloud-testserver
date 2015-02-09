@@ -22,7 +22,7 @@
 
 namespace OCA\Activity\Tests;
 
-class ParameterHelperTest extends \PHPUnit_Framework_TestCase {
+class ParameterHelperTest extends TestCase {
 	/** @var string */
 	protected $originalWEBROOT;
 	/** @var \OCA\Activity\ParameterHelper */
@@ -30,16 +30,25 @@ class ParameterHelperTest extends \PHPUnit_Framework_TestCase {
 	/** @var \OC\Files\View */
 	protected $view;
 
-	public function setUp() {
+	protected function setUp() {
 		parent::setUp();
+
 		$this->originalWEBROOT =\OC::$WEBROOT;
 		\OC::$WEBROOT = '';
 		$l = \OCP\Util::getL10N('activity');
 		$this->view = new \OC\Files\View('');
-		$this->parameterHelper = new \OCA\Activity\ParameterHelper($this->view, $l);
+		$manager = $this->getMock('\OCP\Activity\IManager');
+		$manager->expects($this->any())
+			->method('getSpecialParameterList')
+			->will($this->returnValue(false));
+		$this->parameterHelper = new \OCA\Activity\ParameterHelper(
+			$manager,
+			$this->view,
+			$l
+		);
 	}
 
-	public function tearDown() {
+	protected function tearDown() {
 		\OC::$WEBROOT = $this->originalWEBROOT;
 		parent::tearDown();
 	}
@@ -96,6 +105,14 @@ class ParameterHelperTest extends \PHPUnit_Framework_TestCase {
 			array(array('U<ser>A', '/foo/bar.file'), array(0 => 'username'), true, true, array(
 				'<div class="avatar" data-user="U&lt;ser&gt;A"></div><strong>U&lt;ser&gt;A</strong>',
 				'<strong>/foo/bar.file</strong>',
+			)),
+			array(array('', '/foo/bar.file'), array(0 => 'username'), true, true, array(
+				'<strong>"remote user"</strong>',
+				'<strong>/foo/bar.file</strong>',
+			)),
+			array(array('', '/foo/bar.file'), array(0 => 'username'), true, false, array(
+				'"remote user"',
+				'/foo/bar.file',
 			)),
 
 			array(array('UserA', '/foo/bar.file'), array(0 => 'username', 1 => 'file'), true, true, array(

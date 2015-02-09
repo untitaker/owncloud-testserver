@@ -12,8 +12,47 @@ class OC_Request {
 	// Android Chrome user agent: https://developers.google.com/chrome/mobile/docs/user-agent
 	const USER_AGENT_ANDROID_MOBILE_CHROME = '#Android.*Chrome/[.0-9]*#';
 	const USER_AGENT_FREEBOX = '#^Mozilla/5\.0$#';
-
 	const REGEX_LOCALHOST = '/^(127\.0\.0\.1|localhost)$/';
+	static protected $reqId;
+
+	/**
+	 * Returns the remote address, if the connection came from a trusted proxy and `forwarded_for_headers` has been configured
+	 * then the IP address specified in this header will be returned instead.
+	 * Do always use this instead of $_SERVER['REMOTE_ADDR']
+	 * @return string IP address
+	 */
+	public static function getRemoteAddress() {
+		$remoteAddress = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
+		$trustedProxies = \OC::$server->getConfig()->getSystemValue('trusted_proxies', array());
+
+		if(is_array($trustedProxies) && in_array($remoteAddress, $trustedProxies)) {
+			$forwardedForHeaders = \OC::$server->getConfig()->getSystemValue('forwarded_for_headers', array());
+
+			foreach($forwardedForHeaders as $header) {
+				if (array_key_exists($header, $_SERVER) === true) {
+					foreach (explode(',', $_SERVER[$header]) as $IP) {
+						$IP = trim($IP);
+						if (filter_var($IP, FILTER_VALIDATE_IP) !== false) {
+							return $IP;
+						}
+					}
+				}
+			}
+		}
+
+		return $remoteAddress;
+	}
+
+	/**
+	 * Returns an ID for the request, value is not guaranteed to be unique and is mostly meant for logging
+	 * @return string
+	 */
+	public static function getRequestID() {
+		if(self::$reqId === null) {
+			self::$reqId = hash('md5', microtime().\OC::$server->getSecureRandom()->getLowStrengthGenerator()->generate(20));
+		}
+		return self::$reqId;
+	}
 
 	/**
 	 * Check overwrite condition
@@ -238,6 +277,8 @@ class OC_Request {
 		if (strpos($requestUri, '/') === 0) {
 			$requestUri = '/' . ltrim($requestUri, '/');
 		}
+
+		$requestUri = preg_replace('%/{2,}%', '/', $requestUri);
 
 		// Remove the query string from REQUEST_URI
 		if ($pos = strpos($requestUri, '?')) {

@@ -1,10 +1,13 @@
-function Album(path, subAlbums, images, name) {
+/* global Thumbnail */
+function Album (path, subAlbums, images, name, token) {
+	this.token = token;
 	this.path = path;
 	this.subAlbums = subAlbums;
 	this.images = images;
 	this.viewedItems = 0;
 	this.name = name;
 	this.domDef = null;
+	this.preloadOffset = 0;
 }
 
 Album.prototype.getThumbnail = function () {
@@ -17,27 +20,24 @@ Album.prototype.getThumbnail = function () {
 
 Album.prototype.getThumbnailWidth = function () {
 	return this.getThumbnail().then(function (img) {
-		return img.width;
+		return img.originalWidth;
 	});
 };
 
 /**
- *@param {array} image
+ *@param {GalleryImage} image
  * @param {number} targetHeight
  * @param {number} calcWidth
  * @param {object} a
  * @returns {a}
  */
-Album.prototype.getOneImage = function(image, targetHeight, calcWidth, a) {
-	var gm = new GalleryImage(image.src, 1);
-	gm.getThumbnail(1).then(function(img) {
-		img= img;
+Album.prototype.getOneImage = function (image, targetHeight, calcWidth, a) {
+	image.getThumbnail(true).then(function (img) {
+		img.alt = '';
 		a.append(img);
 		img.height = targetHeight / 2;
 		img.width = calcWidth;
 	});
-
-	return;
 };
 
 /**
@@ -47,7 +47,7 @@ Album.prototype.getOneImage = function(image, targetHeight, calcWidth, a) {
  * @param {object} a
  * @returns {a}
  */
-Album.prototype.getFourImages = function(images, targetHeight, ratio, a) {
+Album.prototype.getFourImages = function (images, targetHeight, ratio, a) {
 
 	var calcWidth = (targetHeight * ratio) / 2;
 	var iImagesCount = images.length;
@@ -61,17 +61,15 @@ Album.prototype.getFourImages = function(images, targetHeight, ratio, a) {
 	for (var i = 0; i < iImagesCount; i++) {
 		this.getOneImage(images[i], targetHeight, calcWidth, a);
 	}
-
-	return;
 };
 
-Album.prototype.getDom = function(targetHeight) {
+Album.prototype.getDom = function (targetHeight) {
 	var album = this;
 
-	return this.getThumbnail().then(function(img) {
+	return this.getThumbnail().then(function (img) {
 		var a = $('<a/>').addClass('album').attr('href', '#' + encodeURI(album.path));
 
-		a.append($('<label/>').text(album.name));
+		a.append($('<span/>').addClass('album-label').text(album.name));
 		var ratio = Math.round(img.ratio * 100) / 100;
 		var calcWidth = (targetHeight * ratio) / 2;
 
@@ -111,12 +109,10 @@ Album.prototype.getNextRow = function (width) {
 	 * @returns {$.Deferred<Row>}
 	 */
 	var addImages = function (album, row, images) {
-		// pre-load thumbnails in parallel
-		for (var i = 0; i < 3 ;i++){
-			if (images[album.viewedItems + i]) {
-				images[album.viewedItems + i].getThumbnail();
-			}
+		if ((album.viewedItems + 5) > album.preloadOffset) {
+			album.preload(20);
 		}
+
 		var image = images[album.viewedItems];
 		return row.addImage(image).then(function (more) {
 			album.viewedItems++;
@@ -132,7 +128,39 @@ Album.prototype.getNextRow = function (width) {
 	return addImages(this, row, items);
 };
 
-function Row(targetWidth) {
+Album.prototype.getThumbnailPaths = function (count) {
+	var paths = [];
+	var items = this.images.concat(this.subAlbums);
+	for (var i = 0; i < items.length && i < count; i++) {
+		paths = paths.concat(items[i].getThumbnailPaths(count));
+	}
+
+	return paths;
+};
+
+/**
+ * preload the first $count thumbnails
+ * @param count
+ */
+Album.prototype.preload = function (count) {
+	var items = this.subAlbums.concat(this.images);
+
+	var paths = [];
+	var squarePaths = [];
+	for (var i = this.preloadOffset; i < this.preloadOffset + count && i < items.length; i++) {
+		if (items[i].subAlbums) {
+			squarePaths = squarePaths.concat(items[i].getThumbnailPaths(4));
+		} else {
+			paths = paths.concat(items[i].getThumbnailPaths());
+		}
+	}
+
+	this.preloadOffset = i;
+	Thumbnail.loadBatch(paths, false, this.token);
+	Thumbnail.loadBatch(squarePaths, true, this.token);
+};
+
+function Row (targetWidth) {
 	this.targetWidth = targetWidth;
 	this.items = [];
 	this.width = 8; // 4px margin to start with
@@ -159,7 +187,7 @@ Row.prototype.addImage = function (image) {
 Row.prototype.getDom = function () {
 	var scaleRation = (this.width > this.targetWidth) ? this.targetWidth / this.width : 1;
 	var targetHeight = 200 * scaleRation;
-	var row = $('<div/>').addClass('row');
+	var row = $('<div/>').addClass('row loading');
 	/**
 	 * @param row
 	 * @param {GalleryImage[]} items
@@ -187,7 +215,8 @@ Row.prototype.isFull = function () {
 	return this.width > this.targetWidth;
 };
 
-function GalleryImage(src, path) {
+function GalleryImage (src, path, token) {
+	this.token = token;
 	this.src = src;
 	this.path = path;
 	this.thumbnail = null;
@@ -195,13 +224,17 @@ function GalleryImage(src, path) {
 	this.domHeigth = null;
 }
 
+GalleryImage.prototype.getThumbnailPaths = function () {
+	return [this.path];
+};
+
 GalleryImage.prototype.getThumbnail = function (square) {
-	return Thumbnail.get(this.src, square).queue();
+	return Thumbnail.get(this.src, square, this.token).queue();
 };
 
 GalleryImage.prototype.getThumbnailWidth = function () {
 	return this.getThumbnail().then(function (img) {
-		return img.width;
+		return img.originalWidth;
 	});
 };
 
@@ -210,11 +243,11 @@ GalleryImage.prototype.getDom = function (targetHeight) {
 	if (this.domDef === null || this.domHeigth !== targetHeight) {
 		this.domHeigth = targetHeight;
 		this.domDef = this.getThumbnail().then(function (img) {
-			var a = $('<a/>').addClass('image').attr('href', '#' + encodeURI(image.src)).attr('data-path', image.path);
+			var a = $('<a/>').addClass('image').attr('href', '#' + encodeURI(image.path)).attr('data-path', image.path);
 			img.height = targetHeight;
 			img.width = targetHeight * img.ratio;
-			console.log(targetHeight * img.ratio);
 			img.setAttribute('width', 'auto');
+			img.alt = encodeURI(image.path);
 			a.append(img);
 			return a;
 		});

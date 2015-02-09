@@ -22,6 +22,13 @@ user interface or how to install clients on the server, refer to the following:
 .. _`User Manual`: http://doc.owncloud.com/
 .. _`Desktop Client Manual`: http://doc.owncloud.com/
 
+ownCloud Videos
+---------------
+
+See :doc:`videos`
+for howtos, demos, news, and Webinars for both the 
+Community and Enterprise versions of ownCloud.
+
 Document Structure
 ------------------
 
@@ -76,6 +83,8 @@ contains the following topics:
 * :doc:`configuration/knowledgebase_configuration`
 * :doc:`configuration/language_configuration`
 * :doc:`configuration/logging_configuration`
+* :doc:`configuration/occ_command`
+* :doc:`configuration/performance_tips`
 * :doc:`configuration/previews_configuration`
 * :doc:`configuration/reverse_proxy_configuration`
 * :doc:`configuration/search_configuration`
@@ -85,7 +94,10 @@ contains the following topics:
 * :doc:`configuration/thirdparty_php_configuration`
 * :doc:`configuration/user_auth_ftp_smb_imap`
 * :doc:`configuration/user_auth_ldap`
+* :doc:`configuration/user_auth_ldap_cleanup`
 * :doc:`configuration/user_configuration`
+* :doc:`configuration/user_provisioning_api`
+* :doc:`configuration/reset_admin_password`
 
 Maintenance
 ===========

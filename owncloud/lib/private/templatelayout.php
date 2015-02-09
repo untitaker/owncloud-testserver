@@ -2,8 +2,11 @@
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
 use Assetic\AssetWriter;
-use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\CssImportFilter;
+use Assetic\Filter\CssMinFilter;
+use Assetic\Filter\CssRewriteFilter;
+use Assetic\Filter\JSMinFilter;
+use OC\Assetic\SeparatorFilter; // waiting on upstream
 
 /**
  * Copyright (c) 2012 Bart Visscher <bartv@thisnet.nl>
@@ -17,13 +20,21 @@ class OC_TemplateLayout extends OC_Template {
 	private static $versionHash = '';
 
 	/**
-	 * @param string $renderas
-	 * @param string $appid application id
+	 * @var \OCP\IConfig
 	 */
-	public function __construct( $renderas, $appid = '' ) {
-		// Decide which page we show
+	private $config;
 
-		if( $renderas == 'user' ) {
+	/**
+	 * @param string $renderAs
+	 * @param string $appId application id
+	 */
+	public function __construct( $renderAs, $appId = '' ) {
+
+		// yes - should be injected ....
+		$this->config = \OC::$server->getConfig();
+
+		// Decide which page we show
+		if( $renderAs == 'user' ) {
 			parent::__construct( 'core', 'layout.user' );
 			if(in_array(OC_APP::getCurrentApp(), array('settings','admin', 'help'))!==false) {
 				$this->assign('bodyid', 'body-settings');
@@ -32,9 +43,12 @@ class OC_TemplateLayout extends OC_Template {
 			}
 
 			// Update notification
-			if(OC_Config::getValue('updatechecker', true) === true) {
-				$data=OC_Updater::check();
-				if(isset($data['version']) && $data['version'] != '' and $data['version'] !== Array() && OC_User::isAdminUser(OC_User::getUser())) {
+			if($this->config->getSystemValue('updatechecker', true) === true &&
+				OC_User::isAdminUser(OC_User::getUser())) {
+				$updater = new \OC\Updater(\OC::$server->getHTTPHelper(), \OC::$server->getAppConfig());
+				$data = $updater->check();
+
+				if(isset($data['version']) && $data['version'] != '' and $data['version'] !== Array()) {
 					$this->assign('updateAvailable', true);
 					$this->assign('updateVersion', $data['versionstring']);
 					$this->assign('updateLink', $data['web']);
@@ -47,7 +61,7 @@ class OC_TemplateLayout extends OC_Template {
 
 			// Add navigation entry
 			$this->assign( 'application', '', false );
-			$this->assign( 'appid', $appid );
+			$this->assign( 'appid', $appId );
 			$navigation = OC_App::getNavigation();
 			$this->assign( 'navigation', $navigation);
 			$this->assign( 'settingsnavigation', OC_App::getSettingsNavigation());
@@ -57,42 +71,53 @@ class OC_TemplateLayout extends OC_Template {
 					break;
 				}
 			}
-			$user_displayname = OC_User::getDisplayName();
-			$this->assign( 'user_displayname', $user_displayname );
+			$userDisplayName = OC_User::getDisplayName();
+			$this->assign( 'user_displayname', $userDisplayName );
 			$this->assign( 'user_uid', OC_User::getUser() );
 			$this->assign( 'appsmanagement_active', strpos(OC_Request::requestUri(), OC_Helper::linkToRoute('settings_apps')) === 0 );
-			$this->assign('enableAvatars', \OC_Config::getValue('enable_avatars', true));
-		} else if ($renderas == 'guest' || $renderas == 'error') {
+			$this->assign('enableAvatars', $this->config->getSystemValue('enable_avatars', true));
+			$this->assign('userAvatarSet', \OC_Helper::userAvatarSet(OC_User::getUser()));
+		} else if ($renderAs == 'error') {
+			parent::__construct('core', 'layout.guest', '', false);
+			$this->assign('bodyid', 'body-login');
+		} else if ($renderAs == 'guest') {
 			parent::__construct('core', 'layout.guest');
+			$this->assign('bodyid', 'body-login');
 		} else {
 			parent::__construct('core', 'layout.base');
+
 		}
+		// Send the language to our layouts
+		$this->assign('language', OC_L10N::findLanguage());
+
 
 		if(empty(self::$versionHash)) {
-			self::$versionHash = md5(implode(',', OC_App::getAppVersions()));
+			$v = OC_App::getAppVersions();
+			$v['core'] = implode('.', \OC_Util::getVersion());
+			self::$versionHash = md5(implode(',', $v));
 		}
-		
-		$useAssetPipeline = $this->isAssetPipelineEnabled();
+
+		$useAssetPipeline = self::isAssetPipelineEnabled();
 		if ($useAssetPipeline) {
 			$this->append( 'jsfiles', OC_Helper::linkToRoute('js_config', array('v' => self::$versionHash)));
 			$this->generateAssets();
 		} else {
 			// Add the js files
-			$jsfiles = self::findJavascriptFiles(OC_Util::$scripts);
+			$jsFiles = self::findJavascriptFiles(OC_Util::$scripts);
 			$this->assign('jsfiles', array(), false);
-			if (OC_Config::getValue('installed', false) && $renderas!='error') {
+			if ($this->config->getSystemValue('installed', false) && $renderAs != 'error') {
 				$this->append( 'jsfiles', OC_Helper::linkToRoute('js_config', array('v' => self::$versionHash)));
 			}
-			foreach($jsfiles as $info) {
+			foreach($jsFiles as $info) {
 				$web = $info[1];
 				$file = $info[2];
 				$this->append( 'jsfiles', $web.'/'.$file . '?v=' . self::$versionHash);
 			}
 
 			// Add the css files
-			$cssfiles = self::findStylesheetFiles(OC_Util::$styles);
+			$cssFiles = self::findStylesheetFiles(OC_Util::$styles);
 			$this->assign('cssfiles', array());
-			foreach($cssfiles as $info) {
+			foreach($cssFiles as $info) {
 				$web = $info[1];
 				$file = $info[2];
 
@@ -109,10 +134,7 @@ class OC_TemplateLayout extends OC_Template {
 		// Read the selected theme from the config file
 		$theme = OC_Util::getTheme();
 
-		// Read the detected formfactor and use the right file name.
-		$fext = self::getFormFactorExtension();
-
-		$locator = new \OC\Template\CSSResourceLocator( $theme, $fext,
+		$locator = new \OC\Template\CSSResourceLocator( $theme,
 			array( OC::$SERVERROOT => OC::$WEBROOT ),
 			array( OC::$THIRDPARTYROOT => OC::$THIRDPARTYWEBROOT ));
 		$locator->find($styles);
@@ -127,38 +149,44 @@ class OC_TemplateLayout extends OC_Template {
 		// Read the selected theme from the config file
 		$theme = OC_Util::getTheme();
 
-		// Read the detected formfactor and use the right file name.
-		$fext = self::getFormFactorExtension();
-
-		$locator = new \OC\Template\JSResourceLocator( $theme, $fext,
+		$locator = new \OC\Template\JSResourceLocator( $theme,
 			array( OC::$SERVERROOT => OC::$WEBROOT ),
 			array( OC::$THIRDPARTYROOT => OC::$THIRDPARTYWEBROOT ));
 		$locator->find($scripts);
 		return $locator->getResources();
 	}
 
-	public function generateAssets()
-	{
+	public function generateAssets() {
+		$assetDir = \OC::$server->getConfig()->getSystemValue('assetdirectory', \OC::$SERVERROOT);
 		$jsFiles = self::findJavascriptFiles(OC_Util::$scripts);
 		$jsHash = self::hashFileNames($jsFiles);
 
-		if (!file_exists("assets/$jsHash.js")) {
+		if (!file_exists("$assetDir/assets/$jsHash.js")) {
 			$jsFiles = array_map(function ($item) {
 				$root = $item[0];
 				$file = $item[2];
-				return new FileAsset($root . '/' . $file, array(), $root, $file);
+				// no need to minifiy minified files
+				if (substr($file, -strlen('.min.js')) === '.min.js') {
+					return new FileAsset($root . '/' . $file, array(
+						new SeparatorFilter(';')
+					), $root, $file);
+				}
+				return new FileAsset($root . '/' . $file, array(
+					new JSMinFilter(),
+					new SeparatorFilter(';')
+				), $root, $file);
 			}, $jsFiles);
 			$jsCollection = new AssetCollection($jsFiles);
 			$jsCollection->setTargetPath("assets/$jsHash.js");
 
-			$writer = new AssetWriter(\OC::$SERVERROOT);
+			$writer = new AssetWriter($assetDir);
 			$writer->writeAsset($jsCollection);
 		}
 
 		$cssFiles = self::findStylesheetFiles(OC_Util::$styles);
 		$cssHash = self::hashFileNames($cssFiles);
 
-		if (!file_exists("assets/$cssHash.css")) {
+		if (!file_exists("$assetDir/assets/$cssHash.css")) {
 			$cssFiles = array_map(function ($item) {
 				$root = $item[0];
 				$file = $item[2];
@@ -166,19 +194,20 @@ class OC_TemplateLayout extends OC_Template {
 				$sourceRoot =  \OC::$SERVERROOT;
 				$sourcePath = substr($assetPath, strlen(\OC::$SERVERROOT));
 				return new FileAsset(
-					$assetPath, 
+					$assetPath,
 					array(
-						new CssRewriteFilter(), 
+						new CssRewriteFilter(),
+						new CssMinFilter(),
 						new CssImportFilter()
 					),
-					$sourceRoot, 
+					$sourceRoot,
 					$sourcePath
 				);
 			}, $cssFiles);
 			$cssCollection = new AssetCollection($cssFiles);
 			$cssCollection->setTargetPath("assets/$cssHash.css");
 
-			$writer = new AssetWriter(\OC::$SERVERROOT);
+			$writer = new AssetWriter($assetDir);
 			$writer->writeAsset($cssCollection);
 		}
 
@@ -187,7 +216,7 @@ class OC_TemplateLayout extends OC_Template {
 	}
 
 	/**
-	 * Converts the absolute filepath to a relative path from \OC::$SERVERROOT
+	 * Converts the absolute file path to a relative path from \OC::$SERVERROOT
 	 * @param string $filePath Absolute path
 	 * @return string Relative path
 	 * @throws Exception If $filePath is not under \OC::$SERVERROOT
@@ -205,6 +234,7 @@ class OC_TemplateLayout extends OC_Template {
 	 * @param array $files
 	 * @return string
 	 */
+
 	private static function hashFileNames($files) {
 		foreach($files as $i => $file) {
 			$files[$i] = self::convertToRelativePath($file[0]).'/'.$file[2];
@@ -212,36 +242,7 @@ class OC_TemplateLayout extends OC_Template {
 
 		sort($files);
 		// include the apps' versions hash to invalidate the cached assets
-		$files[]= self::$versionHash;
+		$files[] = self::$versionHash;
 		return hash('md5', implode('', $files));
-	}
-
-	/**
-	 * @return bool
-	 */
-	private function isAssetPipelineEnabled() {
-		// asset management enabled?
-		$useAssetPipeline = OC_Config::getValue('asset-pipeline.enabled', false);
-		if (!$useAssetPipeline) {
-			return false;
-		}
-
-		// assets folder exists?
-		$assetDir = \OC::$SERVERROOT . '/assets';
-		if (!is_dir($assetDir)) {
-			if (!mkdir($assetDir)) {
-				\OCP\Util::writeLog('assets',
-					"Folder <$assetDir> does not exist and/or could not be generated.", \OCP\Util::ERROR);
-				return false;
-			}
-		}
-
-		// assets folder can be accessed?
-		if (!touch($assetDir."/.oc")) {
-			\OCP\Util::writeLog('assets',
-				"Folder <$assetDir> could not be accessed.", \OCP\Util::ERROR);
-			return false;
-		}
-		return $useAssetPipeline;
 	}
 }

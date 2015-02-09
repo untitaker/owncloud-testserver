@@ -30,9 +30,20 @@ class RepairConfig extends BasicEmitter implements RepairStep {
 	 * Updates the configuration after running an update
 	 */
 	public function run() {
-		$this->removePortsFromTrustedDomains();
 		$this->addSecret();
+		$this->removePortsFromTrustedDomains();
 	}
+
+	/**
+	 * Adds a secret to config.php
+	 */
+	private function addSecret() {
+		if(\OC::$server->getConfig()->getSystemValue('secret', null) === null) {
+			$secret = \OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate(48);
+			\OC::$server->getConfig()->setSystemValue('secret', $secret);
+		}
+	}
+
 
 	/**
 	 * Remove ports from existing trusted domains in config.php
@@ -51,15 +62,5 @@ class RepairConfig extends BasicEmitter implements RepairStep {
 			$newTrustedDomains[] = $domain;
 		}
 		\OC::$server->getConfig()->setSystemValue('trusted_domains', $newTrustedDomains);
-	}
-
-	/**
-	 * Adds a secret to config.php
-	 */
-	private function addSecret() {
-		if(\OC::$server->getConfig()->getSystemValue('secret', null) === null) {
-			$secret = \OC_Util::generateRandomBytes(96);
-			\OC::$server->getConfig()->setSystemValue('secret', $secret);
-		}
 	}
 }

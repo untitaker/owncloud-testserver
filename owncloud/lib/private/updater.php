@@ -25,6 +25,16 @@ class Updater extends BasicEmitter {
 	 * @var \OC\Log $log
 	 */
 	private $log;
+	
+	/**
+	 * @var \OC\HTTPHelper $helper;
+	 */
+	private $httpHelper;
+	
+	/**
+	 * @var \OCP\IAppConfig;
+	 */
+	private $config;
 
 	private $simulateStepEnabled;
 
@@ -33,8 +43,10 @@ class Updater extends BasicEmitter {
 	/**
 	 * @param \OC\Log $log
 	 */
-	public function __construct($log = null) {
+	public function __construct($httpHelper, $config,  $log = null) {
+		$this->httpHelper = $httpHelper;
 		$this->log = $log;
+		$this->config = $config;
 		$this->simulateStepEnabled = true;
 		$this->updateStepEnabled = true;
 	}
@@ -66,22 +78,26 @@ class Updater extends BasicEmitter {
 	 * @param string $updaterUrl the url to check, i.e. 'http://apps.owncloud.com/updater.php'
 	 * @return array|bool
 	 */
-	public function check($updaterUrl) {
+	public function check($updaterUrl = null) {
 
 		// Look up the cache - it is invalidated all 30 minutes
-		if ((\OC_Appconfig::getValue('core', 'lastupdatedat') + 1800) > time()) {
-			return json_decode(\OC_Appconfig::getValue('core', 'lastupdateResult'), true);
+		if (($this->config->getValue('core', 'lastupdatedat') + 1800) > time()) {
+			return json_decode($this->config->getValue('core', 'lastupdateResult'), true);
 		}
 
-		\OC_Appconfig::setValue('core', 'lastupdatedat', time());
+		if (is_null($updaterUrl)) {
+			$updaterUrl = 'https://apps.owncloud.com/updater.php';
+		}
 
-		if (\OC_Appconfig::getValue('core', 'installedat', '') == '') {
-			\OC_Appconfig::setValue('core', 'installedat', microtime(true));
+		$this->config->setValue('core', 'lastupdatedat', time());
+
+		if ($this->config->getValue('core', 'installedat', '') == '') {
+			$this->config->setValue('core', 'installedat', microtime(true));
 		}
 
 		$version = \OC_Util::getVersion();
-		$version['installed'] = \OC_Appconfig::getValue('core', 'installedat');
-		$version['updated'] = \OC_Appconfig::getValue('core', 'lastupdatedat');
+		$version['installed'] = $this->config->getValue('core', 'installedat');
+		$version['updated'] = $this->config->getValue('core', 'lastupdatedat');
 		$version['updatechannel'] = \OC_Util::getChannel();
 		$version['edition'] = \OC_Util::getEditionString();
 		$version['build'] = \OC_Util::getBuild();
@@ -91,30 +107,25 @@ class Updater extends BasicEmitter {
 		$url = $updaterUrl . '?version=' . $versionString;
 
 		// set a sensible timeout of 10 sec to stay responsive even if the update server is down.
-		$ctx = stream_context_create(
-			array(
-				'http' => array(
-					'timeout' => 10
-				)
-			)
-		);
-		$xml = @file_get_contents($url, 0, $ctx);
-		if ($xml == false) {
-			return array();
-		}
-		$loadEntities = libxml_disable_entity_loader(true);
-		$data = @simplexml_load_string($xml);
-		libxml_disable_entity_loader($loadEntities);
 
 		$tmp = array();
-		$tmp['version'] = $data->version;
-		$tmp['versionstring'] = $data->versionstring;
-		$tmp['url'] = $data->url;
-		$tmp['web'] = $data->web;
+		$xml = $this->httpHelper->getUrlContent($url);
+		if ($xml) {
+			$loadEntities = libxml_disable_entity_loader(true);
+			$data = @simplexml_load_string($xml);
+			libxml_disable_entity_loader($loadEntities);
+			if ($data !== false) {
+				$tmp['version'] = $data->version;
+				$tmp['versionstring'] = $data->versionstring;
+				$tmp['url'] = $data->url;
+				$tmp['web'] = $data->web;
+			}
+		} else {
+			$data = array();
+		}
 
 		// Cache the result
-		\OC_Appconfig::setValue('core', 'lastupdateResult', json_encode($data));
-
+		$this->config->setValue('core', 'lastupdateResult', json_encode($data));
 		return $tmp;
 	}
 
@@ -125,7 +136,6 @@ class Updater extends BasicEmitter {
 	 * @return bool true if the operation succeeded, false otherwise
 	 */
 	public function upgrade() {
-		\OC_DB::enableCaching(false);
 		\OC_Config::setValue('maintenance', true);
 
 		$installedVersion = \OC_Config::getValue('version', '0.0.0');
@@ -179,26 +189,17 @@ class Updater extends BasicEmitter {
 
 		// Update htaccess files for apache hosts
 		if (isset($_SERVER['SERVER_SOFTWARE']) && strstr($_SERVER['SERVER_SOFTWARE'], 'Apache')) {
-			\OC_Setup::updateHtaccess();
+			try {
+				\OC_Setup::updateHtaccess();
+			} catch (\Exception $e) {
+				throw new \Exception($e->getMessage());
+			}
 		}
 
 		// create empty file in data dir, so we can later find
 		// out that this is indeed an ownCloud data directory
 		// (in case it didn't exist before)
 		file_put_contents(\OC_Config::getValue('datadirectory', \OC::$SERVERROOT . '/data') . '/.ocdata', '');
-
-		/*
-		 * START CONFIG CHANGES FOR OLDER VERSIONS
-		 */
-		if (!\OC::$CLI && version_compare($installedVersion, '6.90.1', '<')) {
-			// Add the trusted_domains config if it is not existant
-			// This is added to prevent host header poisoning
-			\OC_Config::setValue('trusted_domains', \OC_Config::getValue('trusted_domains', array(\OC_Request::serverHost())));
-		}
-
-		/*
-		 * STOP CONFIG CHANGES FOR OLDER VERSIONS
-		 */
 
 		// pre-upgrade repairs
 		$repair = new \OC\Repair(\OC\Repair::getBeforeUpgradeRepairSteps());
@@ -211,13 +212,6 @@ class Updater extends BasicEmitter {
 			// simulate apps DB upgrade
 			$this->checkAppUpgrade($currentVersion);
 
-		}
-
-		// upgrade from OC6 to OC7
-		// TODO removed it again for OC8
-		$sharePolicy = \OC_Appconfig::getValue('core', 'shareapi_share_policy', 'global');
-		if ($sharePolicy === 'groups_only') {
-			\OC_Appconfig::setValue('core', 'shareapi_only_share_with_group_members', 'yes');
 		}
 
 		if ($this->updateStepEnabled) {
@@ -235,7 +229,7 @@ class Updater extends BasicEmitter {
 			$repair->run();
 
 			//Invalidate update feed
-			\OC_Appconfig::setValue('core', 'lastupdatedat', 0);
+			$this->config->setValue('core', 'lastupdatedat', 0);
 
 			// only set the final version if everything went well
 			\OC_Config::setValue('version', implode('.', \OC_Util::getVersion()));

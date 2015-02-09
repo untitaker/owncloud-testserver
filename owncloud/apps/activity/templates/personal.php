@@ -5,6 +5,9 @@
 
 /** @var $l OC_L10N */
 /** @var $_ array */
+
+script('activity', 'settings');
+style('activity', 'settings');
 ?>
 
 <form id="activity_notifications" class="section">
@@ -47,7 +50,11 @@
 	<br />
 	<input id="notify_setting_self" name="notify_setting_self" type="checkbox"
 		value="1" <?php if ($_['notify_self']): ?> checked="checked"<?php endif; ?> />
-	<label for="notify_setting_self"><?php p($l->t('Notify about my own actions')); ?></label>
+	<label for="notify_setting_self"><?php p($l->t('List your own actions in the stream')); ?></label>
+	<br />
+	<input id="notify_setting_selfemail" name="notify_setting_selfemail" type="checkbox"
+		value="1" <?php if ($_['notify_selfemail']): ?> checked="checked"<?php endif; ?> />
+	<label for="notify_setting_selfemail"><?php p($l->t('Notify about your own actions via email')); ?></label>
 	<br />
 
 	<?php if (empty($_['activity_email'])): ?>

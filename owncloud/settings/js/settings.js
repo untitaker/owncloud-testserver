@@ -41,29 +41,25 @@ OC.Settings = _.extend(OC.Settings, {
 						};
 					}
 					$.ajax({
-						url: OC.generateUrl('/settings/ajax/grouplist'),
+						url: OC.generateUrl('/settings/users/groups'),
 						data: queryData,
 						dataType: 'json',
 						success: function(data) {
-							if (data.status === "success") {
-								var results = [];
+							var results = [];
 
-								// add groups
-								$.each(data.data.adminGroups, function(i, group) {
-									results.push({id:group.id, displayname:group.name});
-								});
-								$.each(data.data.groups, function(i, group) {
-									results.push({id:group.id, displayname:group.name});
-								});
+							// add groups
+							$.each(data.data.adminGroups, function(i, group) {
+								results.push({id:group.id, displayname:group.name});
+							});
+							$.each(data.data.groups, function(i, group) {
+								results.push({id:group.id, displayname:group.name});
+							});
 
-								if (query.term === '') {
-									// cache full list
-									self._cachedGroups = results;
-								}
-								query.callback({results: results});
-							} else {
-								//FIXME add error handling
+							if (query.term === '') {
+								// cache full list
+								self._cachedGroups = results;
 							}
+							query.callback({results: results});
 						}
 					});
 				}, 100, true),

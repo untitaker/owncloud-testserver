@@ -23,10 +23,11 @@
 namespace OCA\Activity\Tests;
 
 use OCA\Activity\Data;
-use OCA\Activity\Hooks;
+use OCA\Activity\HooksStatic;
+use OCP\Activity\IExtension;
 
-class HooksDeleteUserTest extends \PHPUnit_Framework_TestCase {
-	public function setUp() {
+class HooksDeleteUserTest extends TestCase {
+	protected function setUp() {
 		parent::setUp();
 
 		$activities = array(
@@ -50,7 +51,7 @@ class HooksDeleteUserTest extends \PHPUnit_Framework_TestCase {
 				'user',
 				$activity['affectedUser'],
 				time(),
-				Data::PRIORITY_MEDIUM,
+				IExtension::PRIORITY_MEDIUM,
 				'test',
 			));
 			$queryMailQueue->execute(array(
@@ -65,9 +66,7 @@ class HooksDeleteUserTest extends \PHPUnit_Framework_TestCase {
 		}
 	}
 
-	public function tearDown() {
-		parent::tearDown();
-
+	protected function tearDown() {
 		$data = new Data(
 			$this->getMock('\OCP\Activity\IManager')
 		);
@@ -76,13 +75,15 @@ class HooksDeleteUserTest extends \PHPUnit_Framework_TestCase {
 		));
 		$query = \OCP\DB::prepare("DELETE FROM `*PREFIX*activity_mq` WHERE `amq_type` = 'test'");
 		$query->execute();
+
+		parent::tearDown();
 	}
 
 	public function testHooksDeleteUser() {
 
 		$this->assertUserActivities(array('delete', 'otherUser'));
 		$this->assertUserMailQueue(array('delete', 'otherUser'));
-		Hooks::deleteUser(array('uid' => 'delete'));
+		HooksStatic::deleteUser(array('uid' => 'delete'));
 		$this->assertUserActivities(array('otherUser'));
 		$this->assertUserMailQueue(array('otherUser'));
 	}

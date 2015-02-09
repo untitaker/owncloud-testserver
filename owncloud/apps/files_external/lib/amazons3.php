@@ -176,6 +176,7 @@ class AmazonS3 extends \OC\Files\Storage\Common {
 			$this->getConnection()->putObject(array(
 				'Bucket' => $this->bucket,
 				'Key' => $path . '/',
+				'Body' => '',
 				'ContentType' => 'httpd/unix-directory'
 			));
 			$this->testTimeout();
@@ -266,10 +267,7 @@ class AmazonS3 extends \OC\Files\Storage\Common {
 				$file = basename(
 					isset($object['Key']) ? $object['Key'] : $object['Prefix']
 				);
-
-				if ($file != basename($path)) {
-					$files[] = $file;
-				}
+				$files[] = $file;
 			}
 
 			\OC\Files\Stream\Dir::register('amazons3' . $path, $files);
@@ -454,6 +452,7 @@ class AmazonS3 extends \OC\Files\Storage\Common {
 					'Bucket' => $this->bucket,
 					'Key' => $this->cleanKey($path),
 					'Metadata' => $metadata,
+					'Body' => '',
 					'ContentType' => $mimeType
 				));
 				$this->testTimeout();
