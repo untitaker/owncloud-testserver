@@ -34,34 +34,6 @@ def wait():
     return False
 
 
-def get_request_token(session):
-    r = request('GET', base + '/', session=session)
-    tree = lxml.html.fromstring(r.content)
-    return tree.find('head').attrib['data-requesttoken']
-
-
-def create_address_book(name, token, session):
-    r = request(
-        'POST',
-        base + '/index.php/apps/contacts/addressbook/local/add',
-        data=dict(displayname=name, description=''),
-        headers=dict(requesttoken=token),
-        session=session
-    ).json()
-    assert r.get('uri', None) == name, r
-
-
-def create_calendar(name, token, session):
-    r = request(
-        'POST',
-        base + '/index.php/apps/calendar/ajax/calendar/new.php',
-        data=dict(active=0, color='#ff0000', id='new', name=name),
-        headers=dict(requesttoken=token),
-        session=session
-    ).json()
-    assert r.get('status', None) == 'success', r
-
-
 class ServerMixin(object):
     storage_class = None
     wsgi_teardown = None
@@ -74,18 +46,8 @@ class ServerMixin(object):
         xprocess.ensure('owncloud_server', preparefunc)
         subprocess.check_call([os.path.join(owncloud_repo, 'reset.sh')])
 
-    @pytest.fixture(scope='session')
-    def owncloud_session(self):
-        session = requests.session()
-        session.auth = (username, password)
-        return session
-
-    @pytest.fixture(scope='session')
-    def owncloud_csrf_token(self, owncloud_session):
-        return get_request_token(owncloud_session)
-
     @pytest.fixture
-    def get_storage_args(self, owncloud_session, owncloud_csrf_token):
+    def get_storage_args(self):
         def inner(collection='test'):
             fileext = self.storage_class.fileext
             if fileext == '.vcf':
@@ -97,16 +59,14 @@ class ServerMixin(object):
             else:
                 raise RuntimeError(fileext)
 
-            if collection is not None:
-                dav_path += collection + '/'
-                if fileext == '.ics':
-                    create_calendar(collection, owncloud_csrf_token,
-                                    owncloud_session)
-                else:
-                    create_address_book(collection, owncloud_csrf_token,
-                                        owncloud_session)
+            rv = {'url': base + dav_path, 'collection': collection,
+                  'username': username, 'password': password,
+                  'unsafe_href_chars': ''}
 
-            return {'url': base + dav_path, 'collection': collection,
-                    'username': username, 'password': password,
-                    'unsafe_href_chars': ''}
+            if collection is not None:
+                return self.storage_class.create_collection(**rv)
+            else:
+                return rv
+
+
         return inner
