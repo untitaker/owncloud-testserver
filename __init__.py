@@ -34,6 +34,23 @@ def wait():
     return False
 
 
+def get_request_token(session):
+    r = request('GET', base + '/', session=session)
+    tree = lxml.html.fromstring(r.content)
+    return tree.find('head').attrib['data-requesttoken']
+
+
+def create_address_book(name, token, session):
+    r = request(
+        'POST',
+        base + '/index.php/apps/contacts/addressbook/local/add',
+        data=dict(displayname=name, description=''),
+        headers=dict(requesttoken=token),
+        session=session
+    ).json()
+    assert r.get('uri', None) == name, r
+
+
 class ServerMixin(object):
     storage_class = None
     wsgi_teardown = None
@@ -46,8 +63,18 @@ class ServerMixin(object):
         xprocess.ensure('owncloud_server', preparefunc)
         subprocess.check_call([os.path.join(owncloud_repo, 'reset.sh')])
 
+    @pytest.fixture(scope='session')
+    def owncloud_session(self):
+        session = requests.session()
+        session.auth = (username, password)
+        return session
+
+    @pytest.fixture(scope='session')
+    def owncloud_csrf_token(self, owncloud_session):
+        return get_request_token(owncloud_session)
+
     @pytest.fixture
-    def get_storage_args(self):
+    def get_storage_args(self, owncloud_session, owncloud_csrf_token):
         def inner(collection='test'):
             fileext = self.storage_class.fileext
             if fileext == '.vcf':
@@ -64,9 +91,17 @@ class ServerMixin(object):
                   'unsafe_href_chars': ''}
 
             if collection is not None:
-                return self.storage_class.create_collection(**rv)
-            else:
-                return rv
+                if fileext == '.vcf':
+                    # Work around
+                    # https://github.com/owncloud/contacts/issues/802 This is
+                    # really the only reason this stupid CSRF-token-scraping
+                    # still exists.
+                    rv['url'] += collection + '/'
+                    create_address_book(collection, owncloud_csrf_token,
+                                        owncloud_session)
+                else:
+                    return self.storage_class.create_collection(**rv)
 
+            return rv
 
         return inner
