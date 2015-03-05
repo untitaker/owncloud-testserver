@@ -1,0 +1,444 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Server Tuning &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
+    <link rel="up" title="ownCloud Server Configuration" href="index.html" />
+    <link rel="next" title="Reverse Proxy Configuration" href="reverse_proxy_configuration.html" />
+    <link rel="prev" title="Performance Tips" href="performance_tips.html" />
+<script type="text/javascript">
+(function () {
+  /**
+   * Patch TOC list.
+   *
+   * Will mutate the underlying span to have a correct ul for nav.
+   *
+   * @param $span: Span containing nested UL's to mutate.
+   * @param minLevel: Starting level for nested lists. (1: global, 2: local).
+   */
+  var patchToc = function ($ul, minLevel) {
+    var findA;
+
+    // Find all a "internal" tags, traversing recursively.
+    findA = function ($elem, level) {
+      var level = level || 0,
+        $items = $elem.find("> li > a.internal, > ul, > li > ul");
+
+      // Iterate everything in order.
+      $items.each(function (index, item) {
+        var $item = $(item),
+          tag = item.tagName.toLowerCase(),
+          pad = 15 + ((level - minLevel) * 10);
+
+        if (tag === 'a' && level >= minLevel) {
+          // Add to existing padding.
+          $item.css('padding-left', pad + "px");
+          console.log(level, $item, 'padding-left', pad + "px");
+        } else if (tag === 'ul') {
+          // Recurse.
+          findA($item, level + 1);
+        }
+      });
+    };
+
+    console.log("HERE");
+    findA($ul);
+  };
+
+  $(document).ready(function () {
+    // Add styling, structure to TOC's.
+    $(".dropdown-menu").each(function () {
+      $(this).find("ul").each(function (index, item){
+        var $item = $(item);
+        $item.addClass('unstyled');
+      });
+      $(this).find("li").each(function () {
+        $(this).parent().append(this);
+      });
+    });
+
+    // Patch in level.
+    patchToc($("ul.globaltoc"), 2);
+    patchToc($("ul.localtoc"), 2);
+
+    // Enable dropdown.
+    $('.dropdown-toggle').dropdown();
+  });
+}());
+</script>
+
+  </head>
+  <body>
+  
+
+<div class="container">
+  <div class="content">
+    <div class="page-header">
+      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+
+    </div>
+    
+			<div class="row">
+				<div class="span3">
+					<div class="sidebar">
+						<div class="well">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										<li><a href="../contents.html">Overview</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">ownCloud Server Configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="antivirus_configuration.html">Configuring the ClamAV Antivirus Scanner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="automatic_configuration.html">Automatic Configuration Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="background_jobs_configuration.html">Defining Background Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_sample_php_parameters.html">Config.php Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email_configuration.html">Email Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="js_css_asset_management_configuration.html">JavaScript and CSS Asset Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="knowledgebase_configuration.html">Knowledge Base Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="language_configuration.html">Language Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging_configuration.html">Logging Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html">Using the occ Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tips.html">Performance Tips</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Server Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-linux-tuning">General Linux tuning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apache-tuning">Apache Tuning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-best-practice">Database Best Practice</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reverse_proxy_configuration.html">Reverse Proxy Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="search_configuration.html">Enabling Full-Text Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="thirdparty_php_configuration.html">Using Third Party PHP Components</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_database/index.html">Database Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Custom and Branded ownCloud Clients (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
+</ul>
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+        
+
+				<div class="span9">
+					<div class="page-content">
+						
+  <div class="section" id="server-tuning">
+<h1>Server Tuning<a class="headerlink" href="#server-tuning" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>There are a number of options to tune the ownCloud installation and enable a
+high level of performance. The database, for example, needs indexes in the most
+active tables. The number of live Apache connections needs to be turned up to
+1000 or more, and the number of allowed MySQL connections also has to be
+increased to the same. Turning on the Alternative PHP Cache (APC) will also
+increase performance on the app servers, and there are likely a number of
+environment and policy specific configurations needed as well in any given
+deployment.</p>
+<p>This chapter gives a few hands-on tips on how to achieve this.</p>
+<div class="section" id="general-linux-tuning">
+<h2>General Linux tuning<a class="headerlink" href="#general-linux-tuning" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="system-configuration-overview">
+<h3>System configuration overview<a class="headerlink" href="#system-configuration-overview" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> cat /etc/sysctl.conf
+<span class="go">...</span>
+<span class="go">net.core.somaxconn = 4096</span>
+<span class="go">net.ipv4.tcp_max_syn_backlog = 2048</span>
+<span class="go">...</span>
+<span class="gp">#</span> <span class="nb">ulimit</span> -nH 4096
+</pre></div>
+</div>
+<p>Make sure that your <tt class="docutils literal"><span class="pre">/tmp</span></tt> is in ramdisk which improves session handling
+performance. To do so, add the following to <tt class="docutils literal"><span class="pre">/etc/fstab</span></tt>:</p>
+<div class="highlight-python"><pre>none /tmp tmpfs,size=6g defaults</pre>
+</div>
+<p>Make surethe APC byte code cache is installed:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> yum install php-pecl-apc
+</pre></div>
+</div>
+<p>mysql temp in ramdisk</p>
+</div>
+<div class="section" id="tuning-system-parameters">
+<h3>Tuning System Parameters<a class="headerlink" href="#tuning-system-parameters" title="Permalink to this headline">¶</a></h3>
+<p>Configuration for more concurrent requests.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span class="nb">echo</span> <span class="s2">&quot;2048 64512&quot;</span> &gt; /proc/sys/net/ipv4/ip_local_port_range
+<span class="nb">echo</span> <span class="s2">&quot;1&quot;</span> &gt; /proc/sys/net/ipv4/tcp_tw_recycle
+<span class="nb">echo</span> <span class="s2">&quot;1&quot;</span> &gt; /proc/sys/net/ipv4/tcp_tw_reuse
+<span class="nb">echo</span> <span class="s2">&quot;10&quot;</span> &gt; /proc/sys/net/ipv4/tcp_fin_timeout
+
+<span class="nb">echo</span> <span class="s2">&quot;65536&quot;</span> &gt; /proc/sys/net/core/somaxconn
+<span class="nb">echo</span> <span class="s2">&quot;65536&quot;</span> &gt; /proc/sys/net/ipv4/tcp_max_syn_backlog
+<span class="nb">echo</span> <span class="s2">&quot;262144&quot;</span> &gt; /proc/sys/net/netfilter/nf_conntrack_max
+</pre></div>
+</div>
+<p>Check if the values have been set accordingly:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> cat /proc/sys/net/ipv4/ip_local_port_range
+<span class="go">2048 64512</span>
+<span class="gp">#</span> cat /proc/sys/net/ipv4/tcp_tw_recycle
+<span class="go">1</span>
+<span class="gp">#</span> cat /proc/sys/net/ipv4/tcp_tw_reuse
+<span class="go">1</span>
+<span class="gp">#</span> cat /proc/sys/net/ipv4/tcp_fin_timeout
+<span class="go">10</span>
+<span class="gp">#</span> cat /proc/sys/net/core/somaxconn
+<span class="go">65536</span>
+<span class="gp">#</span> cat /proc/sys/net/ipv4/tcp_max_syn_backlog
+<span class="go">65536</span>
+<span class="gp">#</span> cat /proc/sys/net/netfilter/nf_conntrack_max
+<span class="go">262144</span>
+</pre></div>
+</div>
+<p>Next, persist the settings across reboots by adding them into <tt class="docutils literal"><span class="pre">/etc/sysctl.conf</span></tt>:</p>
+<div class="highlight-python"><pre>net.ipv4.ip_local_port_range = 2048 64512
+net.ipv4.tcp_tw_recycle = 1
+net.ipv4.tcp_tw_reuse = 1
+net.ipv4.tcp_fin_timeout = 10
+
+net.core.somaxconn = 65536
+net.ipv4.tcp_max_syn_backlog = 65536
+net.netfilter.nf_conntrack_max = 262144</pre>
+</div>
+</div>
+<div class="section" id="tuning">
+<h3>Tuning<a class="headerlink" href="#tuning" title="Permalink to this headline">¶</a></h3>
+<p>Add RAM disk to fstab:</p>
+<div class="highlight-python"><pre>- none /var/www/html tmpfs defaults,size=6g</pre>
+</div>
+<p>Move PHP Code into RAM Disk:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> mv /var/www/html /var/www/html_fs
+</pre></div>
+</div>
+<p>Copy ownCloud installation to RAM Disk and symlink storage to ownCloud <tt class="docutils literal"><span class="pre">data</span></tt>
+directory.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">ram disks are not reboot-safe. You need to establish a way to persist them,
+for instance by using <tt class="docutils literal"><span class="pre">cp</span></tt> or <tt class="docutils literal"><span class="pre">rsync</span></tt> to transfer them from a location
+on the hard disk to the ram disk before apache starts.</p>
+</div>
+</div>
+</div>
+<div class="section" id="apache-tuning">
+<h2>Apache Tuning<a class="headerlink" href="#apache-tuning" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="maximum-number-apache-processes">
+<h3>Maximum number Apache processes<a class="headerlink" href="#maximum-number-apache-processes" title="Permalink to this headline">¶</a></h3>
+<p>An apache process is using around 12MB of RAM. Apache should be configured that the maximum number of httpd processes
+time 12MB is lower than the amount of RAM. Otherwise the system begins to swap and the performance goes down. In this
+case the maximum number is set to 6000</p>
+</div>
+<div class="section" id="keepalive-should-be-configured-with-sensible-defaults">
+<h3>KeepAlive should be configured with sensible defaults<a class="headerlink" href="#keepalive-should-be-configured-with-sensible-defaults" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-apache"><div class="highlight"><pre><span class="nb">KeepAlive</span> <span class="k">On</span>
+<span class="nb">KeepAliveTimeout</span> <span class="m">2</span>
+<span class="nb">MaxKeepAliveRequests</span> <span class="m">10</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mod-gzip">
+<h3>mod_gzip<a class="headerlink" href="#mod-gzip" title="Permalink to this headline">¶</a></h3>
+<p>mod_gzip should be used because it speeds up the transfer of data and helps to
+free server memory and http connections are closed faster.</p>
+</div>
+<div class="section" id="php-safe-mode">
+<h3>php safe mode<a class="headerlink" href="#php-safe-mode" title="Permalink to this headline">¶</a></h3>
+<p>php safe mode has to be turned off. It is deprecated and will be removed in
+newer PHP versions.</p>
+<div class="section" id="mpm">
+<h4>MPM<a class="headerlink" href="#mpm" title="Permalink to this headline">¶</a></h4>
+<p>Apache prefork has to be used. Don’t use threaded mpm with mod_php because php
+is currently not thread safe.</p>
+</div>
+</div>
+<div class="section" id="hostname-lookups">
+<h3>Hostname Lookups<a class="headerlink" href="#hostname-lookups" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre><span class="c"># cat /etc/httpd/conf/httpd.conf</span>
+...
+HostnameLookups off
+...
+</pre></div>
+</div>
+</div>
+<div class="section" id="log-files">
+<h3>Log files<a class="headerlink" href="#log-files" title="Permalink to this headline">¶</a></h3>
+<p>Log files should be switched off for maximum performance.</p>
+<p>Comment out the <cite>CustomLog`</cite> directive. Keep <tt class="docutils literal"><span class="pre">ErrorLog</span></tt> to be able to track down errors.</p>
+</div>
+<div class="section" id="maxkeepaliverequests-4096">
+<h3>MaxKeepAliveRequests 4096<a class="headerlink" href="#maxkeepaliverequests-4096" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-apache"><div class="highlight"><pre><span class="nt">&lt;IfModule</span> <span class="s">prefork.c</span><span class="nt">&gt;</span>
+        <span class="nb">StartServers</span> <span class="m">100</span>
+        <span class="nb">MinSpareServers</span> <span class="m">100</span>
+        <span class="nb">MaxSpareServers</span> <span class="m">2000</span>
+        <span class="nb">ServerLimit</span> <span class="m">6000</span>
+        <span class="nb">MaxClients</span> <span class="m">6000</span>
+        <span class="nb">MaxRequestsPerChild</span> <span class="m">4000</span>
+<span class="nt">&lt;/IfModule&gt;</span>
+
+<span class="nt">&lt;Directory</span> <span class="s">&quot;/var/www/html&quot;</span><span class="nt">&gt;</span>
+        <span class="nb">Options</span> Indexes SymLinksIfOwnerMatch AllowOverride <span class="k">All</span>
+<span class="nt">&lt;/Directory&gt;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="database-best-practice">
+<h2>Database Best Practice<a class="headerlink" href="#database-best-practice" title="Permalink to this headline">¶</a></h2>
+<p>Currently ownCloud supports the following relational database management systems:</p>
+<ul class="simple">
+<li>mysql</li>
+<li>mariadb</li>
+<li>postgresql</li>
+<li>oracle</li>
+<li>mssql</li>
+</ul>
+<p>We are using the <a class="reference external" href="http://www.doctrine-project.org/projects/dbal.html">doctrine database abstraction layer</a> and schema evolution with a <a class="reference external" href="https://raw2.github.com/pear/MDB2_Schema/master/docs/xml_schema_documentation.html">MDB2 Schema</a> based table description in XML.</p>
+<p>The default indexes are chosen to support every day usage. Additional indexes might further improve the performance.</p>
+<div class="section" id="mysql-mariadb">
+<h3>MySQL / MariaDB<a class="headerlink" href="#mysql-mariadb" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="usage-scenario">
+<h4>Usage scenario<a class="headerlink" href="#usage-scenario" title="Permalink to this headline">¶</a></h4>
+<p>Is the recommended setup. Well tested.</p>
+</div>
+<div class="section" id="additional-indexes">
+<h4>Additional Indexes<a class="headerlink" href="#additional-indexes" title="Permalink to this headline">¶</a></h4>
+<p>Index on uid in oc_group_user:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">create</span> <span class="k">index</span> <span class="n">oc_group_user_uid</span> <span class="k">on</span> <span class="n">oc_group_user</span><span class="p">(</span><span class="n">uid</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Index on oc_share:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">create</span> <span class="k">index</span> <span class="n">oc_share_file_target</span> <span class="k">on</span> <span class="n">oc_share</span><span class="p">(</span><span class="n">file_target</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Index on oc_filecache:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">create</span> <span class="k">index</span> <span class="n">oc_filepath</span> <span class="k">on</span> <span class="n">oc_filecache</span><span class="p">(</span><span class="k">storage</span><span class="p">,</span><span class="k">size</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Index on oc_files_versions:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">create</span> <span class="k">index</span> <span class="n">oc_files_versions_user</span>  <span class="k">on</span> <span class="n">oc_files_versions</span><span class="p">(</span><span class="k">user</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Index on oc_files_trashsize:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">create</span> <span class="k">index</span> <span class="n">oc_files_trashsize_user</span>  <span class="k">on</span> <span class="n">oc_files_trashsize</span><span class="p">(</span><span class="k">user</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Progress of adding them to the default code is tracked in <a class="reference external" href="https://github.com/owncloud/core/issues/7474">https://github.com/owncloud/core/issues/7474</a>.</p>
+</div>
+<div class="section" id="other-performance-improvements">
+<h4>Other performance improvements<a class="headerlink" href="#other-performance-improvements" title="Permalink to this headline">¶</a></h4>
+<p>Mysql: compare <a class="reference external" href="https://tools.percona.com/wizard">https://tools.percona.com/wizard</a> to your current settings
+MariaDB: <a class="reference external" href="https://mariadb.com/kb/en/optimization-and-tuning/">https://mariadb.com/kb/en/optimization-and-tuning/</a></p>
+</div>
+</div>
+<div class="section" id="postgresql">
+<h3>Postgresql<a class="headerlink" href="#postgresql" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h4>Usage scenario<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>Alternative to mysql. Used in production by a few core developers.</p>
+</div>
+<div class="section" id="migration">
+<h4>Migration<a class="headerlink" href="#migration" title="Permalink to this headline">¶</a></h4>
+<p>Requires at least Postgresql 9.0</p>
+</div>
+<div class="section" id="id2">
+<h4>Additional Indexes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>The ones from mysql should work just fine. Progress of adding them to the default code is tracked in <a class="reference external" href="https://github.com/owncloud/core/issues/7474">https://github.com/owncloud/core/issues/7474</a>.</p>
+</div>
+<div class="section" id="id3">
+<h4>Other performance improvements<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<p>See <a class="reference external" href="http://wiki.postgresql.org/wiki/Performance_Optimization">http://wiki.postgresql.org/wiki/Performance_Optimization</a></p>
+</div>
+<div class="section" id="id4">
+<h4>Additional Indexes<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<p>The ones from mysql should work just fine. Progress of adding them to the default code is
+tracked in <a class="reference external" href="https://github.com/owncloud/core/issues/7474">https://github.com/owncloud/core/issues/7474</a>.</p>
+</div>
+</div>
+<div class="section" id="oracle-database">
+<h3>Oracle Database<a class="headerlink" href="#oracle-database" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h4>Usage scenario<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<p>Existing enterprise installations. Only core apps are supported and tested. Not recommended because it involves compiling the oci8</p>
+</div>
+<div class="section" id="id6">
+<h4>Additional Indexes<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h4>
+<p>The ones from mysql should work just fine. Progress of adding them to the default code is tracked in <a class="reference external" href="https://github.com/owncloud/core/issues/7474">https://github.com/owncloud/core/issues/7474</a>.</p>
+</div>
+<div class="section" id="id7">
+<h4>Other performance improvements<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="http://de.slideshare.net/cjorcl/best-practices-php-and-the-oracle-database">http://de.slideshare.net/cjorcl/best-practices-php-and-the-oracle-database</a> and ask your DBA.</p>
+</div>
+<div class="section" id="problems">
+<h4>Problems<a class="headerlink" href="#problems" title="Permalink to this headline">¶</a></h4>
+<p>When ORA-56600 occurs (Oracle Bug 8467564) set this php.ini setting:
+<cite>oci8.statement_cache_size=1000</cite>, see <a class="reference external" href="https://community.oracle.com/message/3468020#3468020">oracle forum discussion</a></p>
+</div>
+</div>
+<div class="section" id="microsoft-sql-server">
+<h3>Microsoft SQL Server<a class="headerlink" href="#microsoft-sql-server" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id8">
+<h4>Usage scenario<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h4>
+<p>Only core apps are supported. <strong>Not</strong> even tested by jenkins.</p>
+</div>
+<div class="section" id="id9">
+<h4>Additional Indexes<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h4>
+<p>The ones from mysql should work just fine. Progress of adding them to the default code is tracked in <a class="reference external" href="https://github.com/owncloud/core/issues/7474">https://github.com/owncloud/core/issues/7474</a>.</p>
+</div>
+<div class="section" id="id10">
+<h4>Other performance improvements<a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h4>
+<p><a class="reference external" href="http://www.mssqltips.com/sql-server-tip-category/9/performance-tuning/">http://www.mssqltips.com/sql-server-tip-category/9/performance-tuning/</a></p>
+</div>
+</div>
+</div>
+</div>
+
+
+					</div>
+				</div>
+			</div>
+    
+  </div>
+</div>
+  </body>
+</html>

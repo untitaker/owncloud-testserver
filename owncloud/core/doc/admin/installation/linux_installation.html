@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Preferred Linux Installation Method &mdash; ownCloud Administrators Manual 8.0 documentation</title>
+    <title>Preferred Linux Installation Method &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,9 +27,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Administrators Manual 8.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
-    <link rel="next" title="ownCloud Appliances" href="appliance_installation.html" />
+    <link rel="next" title="Installation on Windows 7 and Windows Server 2008" href="windows_installation.html" />
     <link rel="prev" title="Installation" href="index.html" />
 <script type="text/javascript">
 (function () {
@@ -99,7 +99,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud Administrators Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
 
     </div>
     
@@ -112,40 +112,45 @@
 									<ul>
 										<li><a href="../contents.html">Overview</a></li>
 									</ul>
-                  <ul>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
-</ul>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../videos.html">ownCloud Videos</a></li>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-8-only">Enterprise 8 Only</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#owncloud-7-release-notes">ownCloud 7 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html#enterprise-7-only">Enterprise 7 Only</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Preferred Linux Installation Method</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#recommend-setup-and-supported-platforms">Recommend Setup and Supported Platforms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-owncloud-enterprise-subscription">Installing ownCloud Enterprise Subscription</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#supported-distribution-packages">Supported Distribution Packages</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additional-installation-guides-and-notes">Additional Installation Guides and Notes</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="windows_installation.html">Installation on Windows 7 and Windows Server 2008</a></li>
+<li class="toctree-l2"><a class="reference internal" href="macos_installation.html">Mac OS X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appliance_installation.html">ownCloud Appliances</a></li>
 <li class="toctree-l2"><a class="reference internal" href="apps_management_installation.html">Installing and Managing Apps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="hiawatha_configuration.html">Hiawatha Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lighttpd_configuration.html">Lighttpd Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="macos_installation.html">Mac OS X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nginx_configuration.html">Nginx Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="others_installation.html">Other Installation Methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="source_installation.html">Manual Installation on Linux</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ucs_installation.html">Univention Corporate Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="windows_installation.html">Windows 7 and Windows Server 2008</a></li>
 <li class="toctree-l2"><a class="reference internal" href="yaws_configuration.html">Yaws Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="selinux_configuration.html">SELinux Configuration</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_database/index.html">Database Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Custom and Branded ownCloud Clients (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -160,9 +165,19 @@
 						
   <div class="section" id="preferred-linux-installation-method">
 <h1>Preferred Linux Installation Method<a class="headerlink" href="#preferred-linux-installation-method" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="recommend-setup-and-supported-platforms">
+<h2>Recommend Setup and Supported Platforms<a class="headerlink" href="#recommend-setup-and-supported-platforms" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="../release_notes.html"><em>ownCloud 8.0 Release Notes</em></a> for the recommended ownCloud setup and supported platforms.</p>
+</div>
+<div class="section" id="installing-owncloud-enterprise-subscription">
+<h2>Installing ownCloud Enterprise Subscription<a class="headerlink" href="#installing-owncloud-enterprise-subscription" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference internal" href="../enterprise_installation/linux_installation.html"><em>Installing ownCloud Enterprise Edition on Linux</em></a> for instructions on installing
+ownCloud Enterprise Subscription.</p>
+</div>
 <div class="section" id="supported-distribution-packages">
 <h2>Supported Distribution Packages<a class="headerlink" href="#supported-distribution-packages" title="Permalink to this headline">¶</a></h2>
-<p>Installing ownCloud on Linux from the <a class="reference external" href="http://software.opensuse.org/download.html?project=isv:ownCloud:community&amp;package=owncloud">openSUSE Build Service</a> packages is the
+<p>Installing ownCloud Server (the free community edition) on Linux from the
+<a class="reference external" href="http://software.opensuse.org/download.html?project=isv:ownCloud:community&amp;package=owncloud">openSUSE Build Service</a> packages is the
 preferred method. These are maintained by ownCloud engineers, and you can use
 your package manager to keep your ownCloud server up-to-date. Ready-to-use
 packages are available at the ownCloud repository for a variety of Linux
@@ -176,9 +191,12 @@ ownCloud packages, or you may prefer to install from source code (see
 </div>
 <div class="section" id="additional-installation-guides-and-notes">
 <h2>Additional Installation Guides and Notes<a class="headerlink" href="#additional-installation-guides-and-notes" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference internal" href="selinux_configuration.html"><em>SELinux Configuration</em></a> for a suggested configuration for SELinux-enabled distributions such as Fedora and CentOS.</p>
-<p><strong>Archlinux:</strong> The are two packages for ownCloud: <a class="reference external" href="https://www.archlinux.org/packages/community/any/owncloud">stable version</a> in the official community repository and <a class="reference external" href="http://aur.archlinux.org/packages.php?ID=38767">development version</a> in AUR.</p>
-<p><strong>PCLinuxOS:</strong> Follow the Tutorial <a class="reference external" href="http://pclinuxoshelp.com/index.php/Owncloud,_installation_and_setup">ownCloud, installation and setup</a> on the PCLinuxOS web site.</p>
+<p>See <a class="reference internal" href="selinux_configuration.html"><em>SELinux Configuration</em></a> for a suggested configuration for
+SELinux-enabled distributions such as Fedora and CentOS.</p>
+<p><strong>Archlinux:</strong> The current <a class="reference external" href="https://www.archlinux.org/packages/community/any/owncloud">stable version</a> is in the
+official community repository, and more packages are in
+in <a class="reference external" href="https://aur.archlinux.org/packages/?O=0&amp;K=owncloud">the Arch User Repository</a>.</p>
+<p><strong>Mageia:</strong> The <a class="reference external" href="https://wiki.mageia.org/en/OwnCloud">Mageia Wiki</a> has a good page on installing ownCloud from the Mageia software repository.</p>
 </div>
 </div>
 

@@ -1,0 +1,276 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installing and Managing Apps &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
+    <link rel="up" title="Enterprise Subscription Installation (ES Only)" href="index.html" />
+    <link rel="next" title="Supported ownCloud Enterprise Subscription Apps" href="supported_apps_installation.html" />
+    <link rel="prev" title="Installing ownCloud Enterprise Subscription on Windows with SQL Server and IIS" href="windows2_installation.html" />
+<script type="text/javascript">
+(function () {
+  /**
+   * Patch TOC list.
+   *
+   * Will mutate the underlying span to have a correct ul for nav.
+   *
+   * @param $span: Span containing nested UL's to mutate.
+   * @param minLevel: Starting level for nested lists. (1: global, 2: local).
+   */
+  var patchToc = function ($ul, minLevel) {
+    var findA;
+
+    // Find all a "internal" tags, traversing recursively.
+    findA = function ($elem, level) {
+      var level = level || 0,
+        $items = $elem.find("> li > a.internal, > ul, > li > ul");
+
+      // Iterate everything in order.
+      $items.each(function (index, item) {
+        var $item = $(item),
+          tag = item.tagName.toLowerCase(),
+          pad = 15 + ((level - minLevel) * 10);
+
+        if (tag === 'a' && level >= minLevel) {
+          // Add to existing padding.
+          $item.css('padding-left', pad + "px");
+          console.log(level, $item, 'padding-left', pad + "px");
+        } else if (tag === 'ul') {
+          // Recurse.
+          findA($item, level + 1);
+        }
+      });
+    };
+
+    console.log("HERE");
+    findA($ul);
+  };
+
+  $(document).ready(function () {
+    // Add styling, structure to TOC's.
+    $(".dropdown-menu").each(function () {
+      $(this).find("ul").each(function (index, item){
+        var $item = $(item);
+        $item.addClass('unstyled');
+      });
+      $(this).find("li").each(function () {
+        $(this).parent().append(this);
+      });
+    });
+
+    // Patch in level.
+    patchToc($("ul.globaltoc"), 2);
+    patchToc($("ul.localtoc"), 2);
+
+    // Enable dropdown.
+    $('.dropdown-toggle').dropdown();
+  });
+}());
+</script>
+
+  </head>
+  <body>
+  
+
+<div class="container">
+  <div class="content">
+    <div class="page-header">
+      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+
+    </div>
+    
+			<div class="row">
+				<div class="span3">
+					<div class="sidebar">
+						<div class="well">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										<li><a href="../contents.html">Overview</a></li>
+									</ul>
+                  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_database/index.html">Database Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Enterprise Subscription Installation (ES Only)</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Installing ownCloud Enterprise Edition on Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows2_installation.html">Installing ownCloud Enterprise Subscription on Windows with SQL Server and IIS</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Installing and Managing Apps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#viewing-installed-apps">Viewing Installed Apps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#managing-apps">Managing Apps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#installing-apps">Installing Apps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#setting-app-parameters">Setting App Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-custom-app-directories">Using Custom App Directories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-your-own-appstore">Using Your Own Appstore</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="supported_apps_installation.html">Supported ownCloud Enterprise Subscription Apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license_keys_installation.html">License Keys</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Custom and Branded ownCloud Clients (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
+</ul>
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+        
+
+				<div class="span9">
+					<div class="page-content">
+						
+  <div class="section" id="installing-and-managing-apps">
+<h1>Installing and Managing Apps<a class="headerlink" href="#installing-and-managing-apps" title="Permalink to this headline">¶</a></h1>
+<p>After installing ownCloud, you may provide added functionality by installing applications.</p>
+<div class="section" id="viewing-installed-apps">
+<h2>Viewing Installed Apps<a class="headerlink" href="#viewing-installed-apps" title="Permalink to this headline">¶</a></h2>
+<p>Some apps are enabled by default. You can see these on your Apps page, where they are filtered by Enabled, Not Enabled, and
+Recommended, and then all installed apps are filtered by  categories such as Multimedia, PIM, and Productivity.</p>
+<blockquote>
+<div><div class="figure">
+<img alt="../_images/oc_admin_app_page.png" src="../_images/oc_admin_app_page.png" />
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="managing-apps">
+<h2>Managing Apps<a class="headerlink" href="#managing-apps" title="Permalink to this headline">¶</a></h2>
+<p>In the Apps page, you can enable or disable applications. If an app is already enabled, it
+appears highlighted in the list.  Some apps have some configurable options on the
+Apps page, but mainly they are enabled or disabled here, and then are configured on your
+ownCloud Admin page.</p>
+<p>Please see <a class="reference internal" href="supported_apps_installation.html"><em>Supported ownCloud Enterprise Subscription Apps</em></a> for a list of supported Enterprise apps.</p>
+</div>
+<div class="section" id="installing-apps">
+<h2>Installing Apps<a class="headerlink" href="#installing-apps" title="Permalink to this headline">¶</a></h2>
+<p>Some apps are developed and supported by ownCloud directly, while other apps are created
+by third parties and either included in or available for your ownCloud server
+installation.  Any apps that are not developed by ownCloud show a <em>3rd party</em>
+designation. Install unsupported apps at your own risk.</p>
+<p>To understand what an application does, click the app name to view a description of
+the app and any of its settings.</p>
+<p>ownCloud provides many apps in the server installation, and you can download a bundle of useful, though unsupported, apps from
+your account at <a class="reference external" href="https://customer.owncloud.com/owncloud/">Customer.owncloud.com</a>. You can find more unsupported apps in the
+<a class="reference external" href="http://apps.owncloud.com/">Owncloud App Store</a>.</p>
+<p>To install any additional app, download and unpack it into your <tt class="docutils literal"><span class="pre">owncloud/apps</span></tt> directory. You must retain the app&#8217;s root
+folder; for example, the <tt class="docutils literal"><span class="pre">owncloud_enterprise-8.x.x.tar.bz2</span></tt> archive on <a class="reference external" href="https://customer.owncloud.com/owncloud/">Customer.owncloud.com</a> contains these apps:</p>
+<ul class="simple">
+<li>Bookmarks</li>
+<li>Calendar</li>
+<li>Contacts</li>
+<li>ODF file viewer</li>
+<li>PDF file viewer</li>
+<li>Video viewer</li>
+<li>Picture Gallery</li>
+</ul>
+<p>To install the Bookmarks app, for one example, simply copy the entire <tt class="docutils literal"><span class="pre">bookmarks</span></tt>
+folder to <tt class="docutils literal"><span class="pre">owncloud/apps</span></tt>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please see the Apps Development section of the <a class="reference external" href="http://doc.owncloud.org/server/8.0/developer_manual/app/index.html">ownCloud Developer Manual</a>
+to find information about creating and adding your own apps.</p>
+</div>
+</div>
+<div class="section" id="setting-app-parameters">
+<h2>Setting App Parameters<a class="headerlink" href="#setting-app-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Most app parameters are configured on your Admin page, and some are set in
+<tt class="file docutils literal"><span class="pre">config/config.php</span></tt>. Always try your Admin page first.</p>
+</div>
+<div class="section" id="using-custom-app-directories">
+<h2>Using Custom App Directories<a class="headerlink" href="#using-custom-app-directories" title="Permalink to this headline">¶</a></h2>
+<p>Use the <strong>apps_paths</strong> array in <cite>config.php</cite> to set any custom apps directory locations.
+The key <strong>path</strong> defines the absolute file system path to the app folder. The key <strong>url</strong>
+defines the HTTP web path to that folder, starting at the ownCloud web root. The key
+<strong>writable</strong> indicates if a user can install apps in that folder.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To ensure that the default <strong>/apps/</strong> folder only contains apps
+shipped with ownCloud, follow this example to setup an <strong>/apps2/</strong> folder
+which will be used to store all other apps.</p>
+</div>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+
+  <span class="s2">&quot;apps_paths&quot;</span> <span class="o">=&gt;</span> <span class="k">array</span> <span class="p">(</span>
+      <span class="mi">0</span> <span class="o">=&gt;</span> <span class="k">array</span> <span class="p">(</span>
+              <span class="s2">&quot;path&quot;</span>     <span class="o">=&gt;</span> <span class="nx">OC</span><span class="o">::</span><span class="nv">$SERVERROOT</span><span class="o">.</span><span class="s2">&quot;/apps&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;url&quot;</span>      <span class="o">=&gt;</span> <span class="s2">&quot;/apps&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;writable&quot;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>
+      <span class="p">),</span>
+      <span class="mi">1</span> <span class="o">=&gt;</span> <span class="k">array</span> <span class="p">(</span>
+              <span class="s2">&quot;path&quot;</span>     <span class="o">=&gt;</span> <span class="nx">OC</span><span class="o">::</span><span class="nv">$SERVERROOT</span><span class="o">.</span><span class="s2">&quot;/apps2&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;url&quot;</span>      <span class="o">=&gt;</span> <span class="s2">&quot;/apps2&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;writable&quot;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+      <span class="p">),</span>
+  <span class="p">),</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-your-own-appstore">
+<h2>Using Your Own Appstore<a class="headerlink" href="#using-your-own-appstore" title="Permalink to this headline">¶</a></h2>
+<p>You can enable the installation of apps from your own apps store. This requires that you
+can write to at least one of the configured apps directories.</p>
+<p>To enable installation from your own apps store:</p>
+<ol class="arabic">
+<li><p class="first">Set the <strong>appstoreenabled</strong> parameter to &#8220;true&#8221;.</p>
+<p>This parameter is used to enable your apps store in ownCloud.</p>
+</li>
+<li><p class="first">Set the <strong>appstoreurl</strong> to the URL of your ownCloud apps store.</p>
+<p>This parameter is used to set the http path to the ownCloud apps store. The appstore server must use <abbr title="Open Collaboration Services">OCS</abbr>.</p>
+</li>
+</ol>
+<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
+
+  <span class="s2">&quot;appstoreenabled&quot;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+  <span class="s2">&quot;appstoreurl&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;http://api.apps.owncloud.com/v1&quot;</span><span class="p">,</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+					</div>
+				</div>
+			</div>
+    
+  </div>
+</div>
+  </body>
+</html>

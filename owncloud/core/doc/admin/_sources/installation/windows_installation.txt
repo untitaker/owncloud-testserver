@@ -1,5 +1,6 @@
-Windows 7 and Windows Server 2008
-=================================
+=================================================
+Installation on Windows 7 and Windows Server 2008
+=================================================
 
 .. note:: While ownCloud will run in any standard PHP environment,
           including IIS or Apache on Windows, there are known issues.
@@ -11,8 +12,6 @@ Windows 7 and Windows Server 2008
           
           ownCloud is not supported on the Internet Server Application 
           Programming Interface (ISAPI). 
-          
-          Microsoft SQL Server is not supported.
           
           For these reasons, while ownCloud server will run on Windows, it is 
           not recommended at this time.

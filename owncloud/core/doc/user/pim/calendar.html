@@ -112,10 +112,8 @@
 									<ul>
 										<li><a href="../contents.html">Overview</a></li>
 									</ul>
-                  <ul>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 User Documentation</a></li>
-</ul>
-<ul class="current">
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 User Manual Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New for Users in ownCloud 8</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The ownCloud Web Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../files/index.html">Files &amp; Synchronization</a></li>
@@ -129,20 +127,21 @@
 <li class="toctree-l3"><a class="reference internal" href="#sharing-events">Sharing Events</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#exporting-and-importing-events">Exporting and Importing Events</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#deleting-an-event">Deleting an Event</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#special-caldav-urls">Special CalDAV URLs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#calendar-app-faq">Calendar App FAQ</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="sync_ios.html">iOS - Synchronize iPhone/iPad</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sync_osx.html">Synchronizing with OS X</a></li>
-<li class="toctree-l2"><a class="reference internal" href="sync_thunderbird.html">Thunderbird - Synchronize Addressbook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="sync_kde.html">Synchronizing with KDE SC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sync_thunderbird.html">Thunderbird - Synchronize Addressbook</a></li>
 <li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../documents.html">Collaborative Document Editing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bookmarks.html">Using the Bookmarks App</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Setting Your Preferences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../external_storage/google_drive.html">Configuring External Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_storage/index.html">External Storage</a></li>
 </ul>
 
 								</ul>
@@ -448,6 +447,16 @@ calendar event:</p>
 <p>The Calendar app deletes the event.</p>
 </li>
 </ol>
+</div>
+<div class="section" id="special-caldav-urls">
+<h2>Special CalDAV URLs<a class="headerlink" href="#special-caldav-urls" title="Permalink to this headline">¶</a></h2>
+<p>Additionally the Calendar app is providing two URLs for special functions:</p>
+<p><strong>Export calendar as an .ics file</strong></p>
+<blockquote>
+<div><a class="reference external" href="https://ADDRESS/remote.php/caldav/calendars/USERNAME/CALENDARNAME?export">https://ADDRESS/remote.php/caldav/calendars/USERNAME/CALENDARNAME?export</a></div></blockquote>
+<p><strong>Your contacts&#8217; birthdays</strong></p>
+<blockquote>
+<div><a class="reference external" href="https://ADDRESS/remote.php/caldav/calendars/USERNAME/contact_birthdays">https://ADDRESS/remote.php/caldav/calendars/USERNAME/contact_birthdays</a></div></blockquote>
 </div>
 <div class="section" id="calendar-app-faq">
 <h2>Calendar App FAQ<a class="headerlink" href="#calendar-app-faq" title="Permalink to this headline">¶</a></h2>

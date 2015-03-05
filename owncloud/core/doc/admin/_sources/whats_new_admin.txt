@@ -1,3 +1,4 @@
+===================================
 What's New for Admins in ownCloud 8
 ===================================
 
@@ -49,6 +50,9 @@ the community edition will upgrade via package manager by adding the
 ``owncloud-enterprise repository``, and installing ownCloud Enterprise Edition 
 apps on top of their ``owncloud-server``.
 
+Visit `owncloud.com <https://owncloud.com/>`_ for more information on the 
+Enterprise Subscription.
+
 No More PHP 5.3
 ---------------
 
@@ -78,8 +82,8 @@ More Powerful User Management
 
 In addition to the existing filter and text string searchable user management, 
 an entirely new set of features has been added to ownCloud. Admins can now edit 
-email addresses for system users, sort users, select multiple users at once, and
-rename groups.
+email addresses for system users and send email notification to newly created
+system users.
 
 LDAP Improvements, Including LDAP User Cleanup
 ----------------------------------------------

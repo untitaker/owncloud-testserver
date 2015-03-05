@@ -1,0 +1,266 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Microsoft IIS and SQL Server Support &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '8.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap.js"></script>
+    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
+    <link rel="up" title="Database Configuration" href="index.html" />
+    <link rel="next" title="Maintenance" href="../maintenance/index.html" />
+    <link rel="prev" title="Oracle Database Support" href="oracle_db_configuration.html" />
+<script type="text/javascript">
+(function () {
+  /**
+   * Patch TOC list.
+   *
+   * Will mutate the underlying span to have a correct ul for nav.
+   *
+   * @param $span: Span containing nested UL's to mutate.
+   * @param minLevel: Starting level for nested lists. (1: global, 2: local).
+   */
+  var patchToc = function ($ul, minLevel) {
+    var findA;
+
+    // Find all a "internal" tags, traversing recursively.
+    findA = function ($elem, level) {
+      var level = level || 0,
+        $items = $elem.find("> li > a.internal, > ul, > li > ul");
+
+      // Iterate everything in order.
+      $items.each(function (index, item) {
+        var $item = $(item),
+          tag = item.tagName.toLowerCase(),
+          pad = 15 + ((level - minLevel) * 10);
+
+        if (tag === 'a' && level >= minLevel) {
+          // Add to existing padding.
+          $item.css('padding-left', pad + "px");
+          console.log(level, $item, 'padding-left', pad + "px");
+        } else if (tag === 'ul') {
+          // Recurse.
+          findA($item, level + 1);
+        }
+      });
+    };
+
+    console.log("HERE");
+    findA($ul);
+  };
+
+  $(document).ready(function () {
+    // Add styling, structure to TOC's.
+    $(".dropdown-menu").each(function () {
+      $(this).find("ul").each(function (index, item){
+        var $item = $(item);
+        $item.addClass('unstyled');
+      });
+      $(this).find("li").each(function () {
+        $(this).parent().append(this);
+      });
+    });
+
+    // Patch in level.
+    patchToc($("ul.globaltoc"), 2);
+    patchToc($("ul.localtoc"), 2);
+
+    // Enable dropdown.
+    $('.dropdown-toggle').dropdown();
+  });
+}());
+</script>
+
+  </head>
+  <body>
+  
+
+<div class="container">
+  <div class="content">
+    <div class="page-header">
+      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+
+    </div>
+    
+			<div class="row">
+				<div class="span3">
+					<div class="sidebar">
+						<div class="well">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										<li><a href="../contents.html">Overview</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Database Configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="db_conversion.html">Converting Database Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linux_database_configuration.html">Database Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oracle_db_configuration.html">Oracle Database Support</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Microsoft IIS and SQL Server Support</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configuration">Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-owncloud">Install ownCloud</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Custom and Branded ownCloud Clients (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
+</ul>
+
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+        
+
+				<div class="span9">
+					<div class="page-content">
+						
+  <div class="section" id="microsoft-iis-and-sql-server-support">
+<h1>Microsoft IIS and SQL Server Support<a class="headerlink" href="#microsoft-iis-and-sql-server-support" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>The preferred approach to installing the necessary prerequisites for ownCloud
+is to use the Microsoft Web Platform Installer (WPI).  This free utility can be
+downloaded from this link,
+<a class="reference external" href="http://www.microsoft.com/web/downloads/platform.aspx">http://www.microsoft.com/web/downloads/platform.aspx</a>.</p>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Once downloaded and installed, invoke the WPI.
+It will look like the following:</p>
+<img alt="../_images/mswpi-1.png" src="../_images/mswpi-1.png" style="width: 6.5in; height: 4.55in;" />
+<p>Navigate to the “Products” tab:</p>
+<img alt="../_images/mswpi-2.png" src="../_images/mswpi-2.png" style="width: 6.5in; height: 4.511in;" />
+<p>And install the following by selecting “Add” next to the instance.</p>
+<div class="section" id="server">
+<h3>Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h3>
+<p>IIS Recommended Configuration</p>
+<p>IIS Static Content</p>
+<p>IIS Default Document</p>
+<p>IIS Directory Browsing</p>
+<p>IIS HTTP Errors</p>
+<p>IIS HTTP Redirection</p>
+<p>IIS CGI</p>
+<p>IIS ISAPI Extensions</p>
+<p>IIS ISAPI Filters</p>
+<p>IIS Server Side Includes</p>
+<p>IIS HTTP Logging</p>
+<p>IIS Logging Tools</p>
+<p>IIS Request Monitor</p>
+<p>IIS Tracing</p>
+<p>IIS Custom Logging</p>
+<p>IIS Client Certificate Mapping Authentication</p>
+<p>IIS URL Authorization</p>
+<p>IIS Request Filtering</p>
+<p>IIS IP Domain Restrictions</p>
+<p>IIS Static Content Compression</p>
+<p>IIS Dynamic Content Compression</p>
+<p>IIS Management Console</p>
+<p>IIS Management Scripts and Tools</p>
+<p>IIS Management Service</p>
+</div>
+<div class="section" id="frameworks">
+<h3>Frameworks<a class="headerlink" href="#frameworks" title="Permalink to this headline">¶</a></h3>
+<p>PHP 5.4.14</p>
+<p>Windows Cache Extension 1.3 for PHP 5.4</p>
+</div>
+<div class="section" id="database">
+<h3>Database<a class="headerlink" href="#database" title="Permalink to this headline">¶</a></h3>
+<p>Microsoft Drivers for PHP v5.4 for SQL Server IIS</p>
+</div>
+<div class="section" id="tools">
+<h3>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h3>
+<p>PHP Manager for IIS</p>
+</div>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>Once these selections have been made, click the install button and allow the web platform installer to lay
+down the needed code to configure the web server.</p>
+</div>
+<div class="section" id="verbs">
+<h3>Verbs<a class="headerlink" href="#verbs" title="Permalink to this headline">¶</a></h3>
+<p>It is important to enable all verbs in the PHP FastCGI settings in order for the sync to work properly.</p>
+<p>In the IIS Management application, double click Handler Mappings.</p>
+<img alt="../_images/mswpi-3.png" src="../_images/mswpi-3.png" style="width: 4.4898in; height: 3.448in;" />
+<p>Then double-click on the PHP FastCGI Settings.</p>
+<img alt="../_images/mswpi-4.png" src="../_images/mswpi-4.png" style="width: 6.5in; height: 2.2299in;" />
+<p>Select “Request Restrictions”.</p>
+<img alt="../_images/mswpi-5.png" src="../_images/mswpi-5.png" style="width: 4.7701in; height: 4.1346in;" />
+<p>Navigate to the Verbs tab and verify that “All Verbs” is selected.</p>
+<img alt="../_images/mswpi-6.png" src="../_images/mswpi-6.png" style="width: 4.7811in; height: 3.8957in;" />
+<p>The following error may appear when this value is set and OK is selected.</p>
+<img alt="../_images/mswpi-7.png" src="../_images/mswpi-7.png" style="width: 5.0626in; height: 1.8543in;" />
+<p>The resolution is to put quotes around the exe name as follows.</p>
+<img alt="../_images/mswpi-8.png" src="../_images/mswpi-8.png" style="width: 5.0937in; height: 1.0417in;" />
+<p>When prompted to create a FastCGI application, select Yes.</p>
+<img alt="../_images/mswpi-9.png" src="../_images/mswpi-9.png" style="width: 4.9583in; height: 1.8126in;" />
+<p>Restart the IIS service to make sure all settings are applied.</p>
+</div>
+</div>
+<div class="section" id="install-owncloud">
+<h2>Install ownCloud<a class="headerlink" href="#install-owncloud" title="Permalink to this headline">¶</a></h2>
+<p>Once the prerequisites have been installed, the system is ready for the ownCloud installation</p>
+<p>To install ownCloud simply copy the ownCloud code to the IIS root directory, change the permissions on the
+folder to make sure that the user that IIS will use for access can indeed access the files.</p>
+<div class="section" id="data-directory">
+<h3>Data directory<a class="headerlink" href="#data-directory" title="Permalink to this headline">¶</a></h3>
+<p>Verify the desired storage directory has proper permissions for the user IIS is using to access.
+For example, if IIS users anonymous access, the user is “webusr”.
+Make certain “webusr” has access to the directory or share.</p>
+</div>
+<div class="section" id="run-owncloud">
+<h3>Run ownCloud<a class="headerlink" href="#run-owncloud" title="Permalink to this headline">¶</a></h3>
+<p>At this time, ownCloud is installed.
+Navigate to the ownCloud web interface in the browser and initialize the instance.
+Select MSSQL option for the database under the Advanced tab.
+Provide the location for the database server as well as the login and password for the database.</p>
+</div>
+</div>
+</div>
+
+
+					</div>
+				</div>
+			</div>
+    
+  </div>
+</div>
+  </body>
+</html>
