@@ -161,7 +161,6 @@ class AllConfig implements \OCP\IConfig {
 		\OC::$server->getAppConfig()->deleteApp($appName);
 	}
 
-
 	/**
 	 * Set a user defined value
 	 *
