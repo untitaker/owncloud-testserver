@@ -10,7 +10,7 @@ import pytest
 
 import requests
 
-from vdirsyncer.utils import request
+from vdirsyncer.utils.http import request
 
 
 owncloud_repo = os.path.dirname(__file__)
