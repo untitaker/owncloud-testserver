@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Maintenance &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
+    <title>Maintenance &mdash; ownCloud Server Administration Manual 8.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.0',
+        VERSION:     '8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,9 +27,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Server Administration Manual 8.1 documentation" href="../index.html" />
     <link rel="next" title="Maintenance Mode Configuration" href="enable_maintenance.html" />
-    <link rel="prev" title="Microsoft IIS and SQL Server Support" href="../configuration_database/windows_database_configuration.html" />
+    <link rel="prev" title="Oracle Database Setup" href="../configuration_database/oracle_db_configuration.html" />
 <script type="text/javascript">
 (function () {
   /**
@@ -109,11 +109,12 @@
 							<div class="menu-support-container">
 								<ul id="menu-support" class="menu">
 									<ul>
-										<li><a href="../contents.html">Overview</a></li>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -123,8 +124,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="">Maintenance</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="enable_maintenance.html">Maintenance Mode Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="backup.html">Backing up ownCloud</a></li>
-<li class="toctree-l2"><a class="reference internal" href="update.html">Updating ownCloud with the Updater App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="upgrade.html">Upgrading Your ownCloud Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update.html">Upgrading ownCloud with the Updater App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restore.html">Restoring ownCloud</a></li>
 <li class="toctree-l2"><a class="reference internal" href="migrating.html">Migrating to a Different Server</a></li>
 </ul>
@@ -154,22 +155,24 @@
 <h1>Maintenance<a class="headerlink" href="#maintenance" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="enable_maintenance.html">Maintenance Mode Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="enable_maintenance.html#parameters">Parameters</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="enable_maintenance.html">Maintenance Mode Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backup.html">Backing up ownCloud</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="backup.html#backup-folders">Backup Folders</a></li>
 <li class="toctree-l2"><a class="reference internal" href="backup.html#backup-database">Backup Database</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="update.html">Updating ownCloud with the Updater App</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="update.html#setting-strong-permissions">Setting Strong Permissions</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="upgrade.html">Upgrading Your ownCloud Server</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="upgrade.html#preferred-upgrade-method">Preferred Upgrade Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#upgrading-with-your-linux-package-manager">Upgrading With Your Linux Package Manager</a></li>
 <li class="toctree-l2"><a class="reference internal" href="upgrade.html#manual-upgrade-procedure">Manual Upgrade Procedure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#setting-strong-permissions">Setting Strong Permissions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#restore-from-backup">Restore From Backup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="update.html">Upgrading ownCloud with the Updater App</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="update.html#can-t-login-without-updating">Can&#8217;t Login Without Updating</a></li>
+<li class="toctree-l2"><a class="reference internal" href="update.html#setting-strong-permissions">Setting Strong Permissions</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="restore.html">Restoring ownCloud</a><ul>

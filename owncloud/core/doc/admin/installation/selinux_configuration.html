@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>SELinux Configuration &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
+    <title>SELinux Configuration &mdash; ownCloud Server Administration Manual 8.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.0',
+        VERSION:     '8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,9 +27,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Server Administration Manual 8.1 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
-    <link rel="next" title="User Management" href="../configuration_user/index.html" />
+    <link rel="next" title="Mac OS X" href="macos_installation.html" />
     <link rel="prev" title="Yaws Configuration" href="yaws_configuration.html" />
 <script type="text/javascript">
 (function () {
@@ -110,16 +110,15 @@
 							<div class="menu-support-container">
 								<ul id="menu-support" class="menu">
 									<ul>
-										<li><a href="../contents.html">Overview</a></li>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Linux Installation Method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="windows_installation.html">Installation on Windows 7 and Windows Server 2008</a></li>
-<li class="toctree-l2"><a class="reference internal" href="macos_installation.html">Mac OS X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appliance_installation.html">ownCloud Appliances</a></li>
 <li class="toctree-l2"><a class="reference internal" href="apps_management_installation.html">Installing and Managing Apps</a></li>
@@ -130,8 +129,11 @@
 <li class="toctree-l2"><a class="reference internal" href="yaws_configuration.html">Yaws Configuration</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">SELinux Configuration</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#allow-access-to-a-remote-database">Allow access to a remote database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#allow-access-to-ldap-server">Allow access to LDAP server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#allow-access-to-remote-network">Allow access to remote network</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="macos_installation.html">Mac OS X</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -194,6 +196,19 @@ HTTP server write access to these directories:</p>
 <h2>Allow access to a remote database<a class="headerlink" href="#allow-access-to-a-remote-database" title="Permalink to this headline">¶</a></h2>
 <p>An additional setting is needed if your installation is connecting to a remote database:</p>
 <div class="highlight-python"><pre>setsebool -P httpd_can_network_connect_db on</pre>
+</div>
+</div>
+<div class="section" id="allow-access-to-ldap-server">
+<h2>Allow access to LDAP server<a class="headerlink" href="#allow-access-to-ldap-server" title="Permalink to this headline">¶</a></h2>
+<p>Use this setting to allow LDAP connections:</p>
+<div class="highlight-python"><pre>setsebool -P httpd_can_connect_ldap on</pre>
+</div>
+</div>
+<div class="section" id="allow-access-to-remote-network">
+<h2>Allow access to remote network<a class="headerlink" href="#allow-access-to-remote-network" title="Permalink to this headline">¶</a></h2>
+<p>ownCloud requires access to remote networks for functionalities such as Server-to-Server sharing, external storages or
+the app store. To allow this access use the following setting:</p>
+<div class="highlight-python"><pre>setsebool -P httpd_can_network_connect on</pre>
 </div>
 </div>
 </div>

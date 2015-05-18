@@ -125,7 +125,7 @@ OC.Settings.Apps = OC.Settings.Apps || {
 			page.find("label[for='groups_enable-"+app.id+"']").hide();
 			page.find(".groups-enable").attr('checked', null);
 		} else {
-			page.find('#group_select').val((app.groups || []).join(','));
+			page.find('#group_select').val((app.groups || []).join('|'));
 			if (app.active) {
 				if (app.groups.length) {
 					OC.Settings.Apps.setupGroupsSelect(page.find('#group_select'));
@@ -235,7 +235,11 @@ OC.Settings.Apps = OC.Settings.Apps || {
 		OC.Settings.Apps.hideErrorMessage(appId);
 		$.post(OC.filePath('settings','ajax','updateapp.php'),{appid:appId},function(result) {
 			if(!result || result.status !== 'success') {
-				OC.Settings.Apps.showErrorMessage(appId, t('settings','Error while updating app'));
+				if (result.data && result.data.message) {
+					OC.Settings.Apps.showErrorMessage(appId, result.data.message);
+				} else {
+					OC.Settings.Apps.showErrorMessage(appId, t('settings','Error while updating app'));
+				}
 				element.val(oldButtonText);
 			}
 			else {
@@ -368,7 +372,7 @@ $(document).ready(function () {
 		var element = $(this).parent().find('input.enable');
 		var groups = $(this).val();
 		if (groups && groups !== '') {
-			groups = groups.split(',');
+			groups = groups.split('|');
 		} else {
 			groups = [];
 		}

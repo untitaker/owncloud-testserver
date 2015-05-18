@@ -1,12 +1,20 @@
+============================
 Manual Installation on Linux
 ============================
 
-Installing ownCloud on Linux from the openSUSE Build Service packages is the preferred method (see :doc:`linux_installation`). 
-These are maintained by ownCloud engineers, and you can use your package manager to keep your ownCloud server up-to-date.
+Installing ownCloud on Linux from the openSUSE Build Service packages is the 
+preferred method (see :doc:`linux_installation`). These are maintained by 
+ownCloud engineers, and you can use your package manager to keep your ownCloud 
+server up-to-date.
 
-If there are no packages for your Linux distribution, or you prefer installing from sources, you can setup ownCloud from scratch 
-using a classic LAMP stack (Linux, Apache, MySQL/MariaDB, PHP). This document provides a complete walk-through for installing 
-ownCloud on Ubuntu 14.04 LTS Server with Apache and MySQL.
+.. note:: Enterprise Subscription customers should refer to  
+   :doc:`../enterprise_installation/linux_installation`
+
+If there are no packages for your Linux distribution, or you prefer installing 
+from sources, you can setup ownCloud from scratch using a classic LAMP stack 
+(Linux, Apache, MySQL/MariaDB, PHP). This document provides a complete 
+walk-through for installing ownCloud on Ubuntu 14.04 LTS Server with Apache and 
+MySQL.
 
 Prerequisites
 -------------
@@ -147,20 +155,20 @@ Now download the archive of the latest ownCloud version:
 
   where ``/path/to/webserver/document-root`` is replaced by the 
   document root of your Web server. On Ubuntu systems this 
-  ``/var/www/owncloud``, so your copying command is::
+  ``/var/www/html/owncloud``, so your copying command is::
     
-    cp -r owncloud /var/www/
+    cp -r owncloud /var/www/html
     
 Apache Web Server Configuration
 -------------------------------
 
 On Debian, Ubuntu, and their derivatives, Apache installs with a useful configuration so all you have to do is create a 
-:file:`/etc/apache2/conf-available` file with these lines in it:
+:file:`/etc/apache2/conf-available/owncloud.conf` file with these lines in it:
 
 .. code-block:: xml
    
-   Alias /owncloud /var/www/owncloud
-   <Directory /var/www/owncloud/>
+   Alias /owncloud /var/www/html/owncloud
+   <Directory /var/www/html/owncloud/>
     AllowOverride All
    </Directory>
 
@@ -272,10 +280,6 @@ Keep in mind that changes to php.ini may have to be done on more than one ini fi
 
 Other Web Servers
 -----------------
-     
-**Microsoft Internet Information Server (IIS)**
-
-See :doc:`windows_installation` for further instructions.
 
 **Nginx Configuration**
 

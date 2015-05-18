@@ -317,7 +317,7 @@ class OC_Util {
 	private static function loadVersion() {
 		$timestamp = filemtime(OC::$SERVERROOT . '/version.php');
 		if (!\OC::$server->getSession()->exists('OC_Version') or OC::$server->getSession()->get('OC_Version_Timestamp') != $timestamp) {
-			require 'version.php';
+			require OC::$SERVERROOT . '/version.php';
 			$session = \OC::$server->getSession();
 			/** @var $timestamp int */
 			$session->set('OC_Version_Timestamp', $timestamp);
@@ -577,7 +577,7 @@ class OC_Util {
 				'DOMDocument' => 'dom',
 				'XMLWriter' => 'XMLWriter'
 			),
-			'functions' => array(
+			'functions' => [
 				'xml_parser_create' => 'libxml',
 				'mb_detect_encoding' => 'mb multibyte',
 				'ctype_digit' => 'ctype',
@@ -586,8 +586,8 @@ class OC_Util {
 				'gzencode' => 'zlib',
 				'iconv' => 'iconv',
 				'simplexml_load_string' => 'SimpleXML',
-				'hash' => 'HASH Message Digest Framework'
-			),
+				'hash' => 'HASH Message Digest Framework',
+			],
 			'defined' => array(
 				'PDO::ATTR_DRIVER_NAME' => 'PDO'
 			)

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Manual Installation on Linux &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
+    <title>Manual Installation on Linux &mdash; ownCloud Server Administration Manual 8.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.0',
+        VERSION:     '8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Server Administration Manual 8.1 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="Univention Corporate Server" href="ucs_installation.html" />
     <link rel="prev" title="Nginx Configuration" href="nginx_configuration.html" />
@@ -110,16 +110,15 @@
 							<div class="menu-support-container">
 								<ul id="menu-support" class="menu">
 									<ul>
-										<li><a href="../contents.html">Overview</a></li>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Linux Installation Method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="windows_installation.html">Installation on Windows 7 and Windows Server 2008</a></li>
-<li class="toctree-l2"><a class="reference internal" href="macos_installation.html">Mac OS X</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appliance_installation.html">ownCloud Appliances</a></li>
 <li class="toctree-l2"><a class="reference internal" href="apps_management_installation.html">Installing and Managing Apps</a></li>
@@ -141,6 +140,7 @@
 <li class="toctree-l2"><a class="reference internal" href="ucs_installation.html">Univention Corporate Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="yaws_configuration.html">Yaws Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="selinux_configuration.html">SELinux Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="macos_installation.html">Mac OS X</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -171,11 +171,20 @@
 						
   <div class="section" id="manual-installation-on-linux">
 <h1>Manual Installation on Linux<a class="headerlink" href="#manual-installation-on-linux" title="Permalink to this headline">¶</a></h1>
-<p>Installing ownCloud on Linux from the openSUSE Build Service packages is the preferred method (see <a class="reference internal" href="linux_installation.html"><em>Preferred Linux Installation Method</em></a>).
-These are maintained by ownCloud engineers, and you can use your package manager to keep your ownCloud server up-to-date.</p>
-<p>If there are no packages for your Linux distribution, or you prefer installing from sources, you can setup ownCloud from scratch
-using a classic LAMP stack (Linux, Apache, MySQL/MariaDB, PHP). This document provides a complete walk-through for installing
-ownCloud on Ubuntu 14.04 LTS Server with Apache and MySQL.</p>
+<p>Installing ownCloud on Linux from the openSUSE Build Service packages is the
+preferred method (see <a class="reference internal" href="linux_installation.html"><em>Preferred Linux Installation Method</em></a>). These are maintained by
+ownCloud engineers, and you can use your package manager to keep your ownCloud
+server up-to-date.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Enterprise Subscription customers should refer to
+<a class="reference internal" href="../enterprise_installation/linux_installation.html"><em>Installing ownCloud Enterprise Subscription on Linux</em></a></p>
+</div>
+<p>If there are no packages for your Linux distribution, or you prefer installing
+from sources, you can setup ownCloud from scratch using a classic LAMP stack
+(Linux, Apache, MySQL/MariaDB, PHP). This document provides a complete
+walk-through for installing ownCloud on Ubuntu 14.04 LTS Server with Apache and
+MySQL.</p>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
@@ -320,8 +329,8 @@ your web server:</p>
 </div>
 <p>where <tt class="docutils literal"><span class="pre">/path/to/webserver/document-root</span></tt> is replaced by the
 document root of your Web server. On Ubuntu systems this
-<tt class="docutils literal"><span class="pre">/var/www/owncloud</span></tt>, so your copying command is:</p>
-<div class="highlight-python"><pre>cp -r owncloud /var/www/</pre>
+<tt class="docutils literal"><span class="pre">/var/www/html/owncloud</span></tt>, so your copying command is:</p>
+<div class="highlight-python"><pre>cp -r owncloud /var/www/html</pre>
 </div>
 </li>
 </ul>
@@ -329,9 +338,9 @@ document root of your Web server. On Ubuntu systems this
 <div class="section" id="apache-web-server-configuration">
 <h2>Apache Web Server Configuration<a class="headerlink" href="#apache-web-server-configuration" title="Permalink to this headline">¶</a></h2>
 <p>On Debian, Ubuntu, and their derivatives, Apache installs with a useful configuration so all you have to do is create a
-<tt class="file docutils literal"><span class="pre">/etc/apache2/conf-available</span></tt> file with these lines in it:</p>
-<div class="highlight-xml"><pre>Alias /owncloud /var/www/owncloud
-&lt;Directory /var/www/owncloud/&gt;
+<tt class="file docutils literal"><span class="pre">/etc/apache2/conf-available/owncloud.conf</span></tt> file with these lines in it:</p>
+<div class="highlight-xml"><pre>Alias /owncloud /var/www/html/owncloud
+&lt;Directory /var/www/html/owncloud/&gt;
  AllowOverride All
 &lt;/Directory&gt;</pre>
 </div>
@@ -436,8 +445,6 @@ or ...</pre>
 </div>
 <div class="section" id="other-web-servers">
 <h2>Other Web Servers<a class="headerlink" href="#other-web-servers" title="Permalink to this headline">¶</a></h2>
-<p><strong>Microsoft Internet Information Server (IIS)</strong></p>
-<p>See <a class="reference internal" href="windows_installation.html"><em>Installation on Windows 7 and Windows Server 2008</em></a> for further instructions.</p>
 <p><strong>Nginx Configuration</strong></p>
 <p>See <a class="reference internal" href="nginx_configuration.html"><em>Nginx Configuration</em></a></p>
 <p><strong>Yaws Configuration</strong></p>

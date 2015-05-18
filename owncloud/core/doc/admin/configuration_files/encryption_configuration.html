@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Encryption Configuration &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
+    <title>Encryption Configuration &mdash; ownCloud Server Administration Manual 8.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.0',
+        VERSION:     '8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Server Administration Manual 8.1 documentation" href="../index.html" />
     <link rel="up" title="File Sharing and Management" href="index.html" />
     <link rel="next" title="Configuring External Storage (GUI)" href="external_storage_configuration_gui.html" />
     <link rel="prev" title="Providing Default Files" href="default_files_configuration.html" />
@@ -110,11 +110,12 @@
 							<div class="menu-support-container">
 								<ul id="menu-support" class="menu">
 									<ul>
-										<li><a href="../contents.html">Overview</a></li>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -130,7 +131,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#enabling-a-file-recovery-key">Enabling a File Recovery Key</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#files-not-encrypted">Files Not Encrypted</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ldap-and-other-external-user-back-ends">LDAP and Other External User Back-ends</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#missing-requirements-message-on-windows-servers">&#8220;Missing requirements&#8221; Message on Windows Servers</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="external_storage_configuration_gui.html">Configuring External Storage (GUI)</a></li>
@@ -331,23 +331,6 @@ to match on their next ownCloud login. The user will need both their old and new
 to do this. If you have enabled the Recovery Key then you can change a user&#8217;s password in
 the ownCloud Users panel to match their back-end password, and then, of course, notify the
 user and give them their new password.</p>
-</div>
-<div class="section" id="missing-requirements-message-on-windows-servers">
-<h2>&#8220;Missing requirements&#8221; Message on Windows Servers<a class="headerlink" href="#missing-requirements-message-on-windows-servers" title="Permalink to this headline">¶</a></h2>
-<p>If you get a &#8220;Missing requirements&#8221; error message when you enable encryption on
-a Windows server, enter the absolute location of your openSSL configuration file in
-<tt class="docutils literal"><span class="pre">config.php</span></tt>:</p>
-<div class="highlight-python"><pre>'openssl' =&gt; array(
-    'config' =&gt; 'C:\path\to\openssl.cnf',
-),</pre>
-</div>
-<p>For example, in a typical installation on a 64-bit Windows 7 system it looks like this:</p>
-<div class="highlight-python"><pre>'openssl' =&gt; array(
-    'config' =&gt; 'C:\OpenSSL-Win64\openssl.cnf',
-),</pre>
-</div>
-<p>There are many ways to configure OpenSSL, so be sure to verify your correct file
-location.</p>
 </div>
 </div>
 

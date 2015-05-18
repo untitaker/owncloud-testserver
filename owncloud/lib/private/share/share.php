@@ -724,7 +724,7 @@ class Share extends \OC\Share\Constants {
 			$token = \OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate(self::TOKEN_LENGTH, \OCP\Security\ISecureRandom::CHAR_LOWER . \OCP\Security\ISecureRandom::CHAR_UPPER .
 				\OCP\Security\ISecureRandom::CHAR_DIGITS);
 
-			$shareWith = rtrim($shareWith, '/');
+			$shareWith = Helper::fixRemoteURLInShareWith($shareWith);
 			$shareId = self::put($itemType, $itemSource, $shareType, $shareWith, $uidOwner, $permissions, null, $token, $itemSourceName);
 
 			$send = false;
@@ -1097,9 +1097,17 @@ class Share extends \OC\Share\Constants {
 	 */
 	public static function setExpirationDate($itemType, $itemSource, $date, $shareTime = null) {
 		$user = \OC_User::getUser();
+		$l = \OC::$server->getL10N('lib');
 
 		if ($date == '') {
-			$date = null;
+			if (\OCP\Util::isDefaultExpireDateEnforced()) {
+				$warning = 'Cannot clear expiration date. Shares are required to have an expiration date.';
+				$warning_t = $l->t('Cannot clear expiration date. Shares are required to have an expiration date.');
+				\OCP\Util::writeLog('OCP\Share', $warning, \OCP\Util::WARN);
+				throw new \Exception($warning_t);
+			} else {
+				$date = null;
+			}
 		} else {
 			$date = self::validateExpireDate($date, $shareTime, $itemType, $itemSource);
 		}
@@ -1795,9 +1803,10 @@ class Share extends \OC\Share\Constants {
 			if (in_array(\OCP\User::getUser(), $users)) {
 				unset($users[array_search(\OCP\User::getUser(), $users)]);
 			}
-			$groupItemTarget = Helper::generateTarget($itemType, $itemSource, $shareType, $shareWith['group'],
-				$uidOwner, $suggestedItemTarget);
-			$groupFileTarget = $filePath;
+			$groupItemTarget = Helper::generateTarget($itemType, $itemSource,
+				$shareType, $shareWith['group'], $uidOwner, $suggestedItemTarget);
+			$groupFileTarget = Helper::generateTarget($itemType, $itemSource,
+				$shareType, $shareWith['group'], $uidOwner, $filePath);
 
 			// add group share to table and remember the id as parent
 			$queriesToExecute['groupShare'] = array(
@@ -1810,7 +1819,7 @@ class Share extends \OC\Share\Constants {
 				'permissions'		=> $permissions,
 				'shareTime'			=> time(),
 				'fileSource'		=> $fileSource,
-				'fileTarget'		=> $filePath,
+				'fileTarget'		=> $groupFileTarget,
 				'token'				=> $token,
 				'parent'			=> $parent,
 				'expiration'		=> $expirationDate,

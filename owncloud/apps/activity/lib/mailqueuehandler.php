@@ -185,6 +185,7 @@ class MailQueueHandler {
 			new ParameterHelper(
 				\OC::$server->getActivityManager(),
 				new \OC\Files\View(''),
+				\OC::$server->getConfig(),
 				$l
 			),
 			$l
@@ -216,7 +217,7 @@ class MailQueueHandler {
 
 		try {
 			\OCP\Util::sendMail(
-				$email, $user,
+				$email, \OCP\User::getDisplayName($user),
 				$l->t('Activity notification'), $emailText,
 				$this->getSenderData('email'), $this->getSenderData('name')
 			);

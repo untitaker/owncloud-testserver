@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Uploading big files &gt; 512MB &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
+    <title>Uploading big files &gt; 512MB &mdash; ownCloud Server Administration Manual 8.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.0',
+        VERSION:     '8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud Server Administration Manual 8.1 documentation" href="../index.html" />
     <link rel="up" title="File Sharing and Management" href="index.html" />
     <link rel="next" title="Configuring the Collaborative Documents App" href="collaborative_documents_configuration.html" />
     <link rel="prev" title="File Sharing" href="file_sharing_configuration.html" />
@@ -110,11 +110,12 @@
 							<div class="menu-support-container">
 								<ul id="menu-support" class="menu">
 									<ul>
-										<li><a href="../contents.html">Overview</a></li>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -175,6 +176,11 @@ hard limits that cannot be exceeded:</p>
 </ul>
 <p>64-bit filesystems have much higher limits; consult the documentation for your
 filesystem.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ownCloud sync client is not affected by this described upload limits
+as it is uploading files in smaller chunks.</p>
+</div>
 <div class="section" id="system-configuration">
 <h2>System Configuration<a class="headerlink" href="#system-configuration" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -190,7 +196,9 @@ least 10x100 GB</li>
 <h2>Configuring Your Webserver<a class="headerlink" href="#configuring-your-webserver" title="Permalink to this headline">¶</a></h2>
 <div class="line-block">
 <div class="line">ownCloud comes with its own <tt class="docutils literal"><span class="pre">owncloud/.htaccess</span></tt> file.</div>
-<div class="line">If PHP-FPM is used, it can&#8217;t read <tt class="docutils literal"><span class="pre">.htaccess</span></tt> PHP settings unless a PECL extension is installed. If PHP-FPM is used without the PECL extension installed, settings and permissions must be set in the <tt class="docutils literal"><span class="pre">owncloud/.user.ini</span></tt> file.</div>
+<div class="line">If PHP-FPM is used, it can&#8217;t read <tt class="docutils literal"><span class="pre">.htaccess</span></tt> PHP settings unless the <tt class="docutils literal"><span class="pre">htscanner</span></tt></div>
+<div class="line">PECL extension is installed. If PHP-FPM is used without this PECL extension installed,</div>
+<div class="line">settings and permissions must be set in the <tt class="docutils literal"><span class="pre">owncloud/.user.ini</span></tt> file.</div>
 </div>
 <p>Set the following two parameters inside the corresponding .ini file:</p>
 <div class="highlight-python"><pre>php_value upload_max_filesize = 16G

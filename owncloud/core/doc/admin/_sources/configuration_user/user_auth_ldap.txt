@@ -21,6 +21,7 @@ The LDAP application supports:
 * Support for primary groups in Active Directory
 * Auto-detection of LDAP attributes such as base DN, email, and the LDAP server 
   port number
+* Read-only access to your LDAP (no edit or delete of users on your LDAP) 
 
 .. Note:: The LDAP app is not compatible with the ``WebDAV user backend`` app. 
    You cannot use both of them at the same time. 
@@ -362,7 +363,8 @@ Special Attributes
 Quota Field:
   ownCloud can read an LDAP attribute and set the user quota according to its
   value. Specify the attribute here, and it will return human-readable values, 
-  e.g. "2 GB".
+  e.g. "2 GB". Any quota set in LDAP overrides quotas set on the ownCloud user 
+  management page.
 
   * Example: *ownCloudQuota*
 

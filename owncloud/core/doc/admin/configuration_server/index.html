@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ownCloud Server Configuration &mdash; ownCloud Server Administration Manual 8.0 documentation</title>
+    <title>ownCloud Server Configuration &mdash; ownCloud Server Administration Manual 8.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +17,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.0',
+        VERSION:     '8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,8 +27,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.0 documentation" href="../index.html" />
-    <link rel="next" title="Configuring the ClamAV Antivirus Scanner" href="antivirus_configuration.html" />
+    <link rel="top" title="ownCloud Server Administration Manual 8.1 documentation" href="../index.html" />
+    <link rel="next" title="Using the occ Command" href="occ_command.html" />
     <link rel="prev" title="Serving Static Files for Better Performance" href="../configuration_files/serving_static_files_configuration.html" />
 <script type="text/javascript">
 (function () {
@@ -109,16 +109,19 @@
 							<div class="menu-support-container">
 								<ul id="menu-support" class="menu">
 									<ul>
-										<li><a href="../contents.html">Overview</a></li>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.0 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">ownCloud Server Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html">Using the occ Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="activity_configuration.html">Configuring the Activity App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="antivirus_configuration.html">Configuring the ClamAV Antivirus Scanner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="automatic_configuration.html">Automatic Configuration Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="background_jobs_configuration.html">Defining Background Jobs</a></li>
@@ -128,9 +131,8 @@
 <li class="toctree-l2"><a class="reference internal" href="knowledgebase_configuration.html">Knowledge Base Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="language_configuration.html">Language Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="logging_configuration.html">Logging Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="occ_command.html">Using the occ Command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html">Performance Tips</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tuning.html">Server Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harden_server.html">Hardening and Security Guidance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tuning.html">Server Tuning &amp; Performance Tips</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reverse_proxy_configuration.html">Reverse Proxy Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="search_configuration.html">Enabling Full-Text Search</a></li>
 <li class="toctree-l2"><a class="reference internal" href="thirdparty_php_configuration.html">Using Third Party PHP Components</a></li>
@@ -163,6 +165,21 @@
 <h1>ownCloud Server Configuration<a class="headerlink" href="#owncloud-server-configuration" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="occ_command.html">Using the occ Command</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html#maintenance-commands">Maintenance Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html#user-commands">User Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html#apps-commands">Apps Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html#upgrade-command">Upgrade Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html#database-conversion">Database Conversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html#ldap-commands">LDAP Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html#file-scanning">File Scanning</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="activity_configuration.html">Configuring the Activity App</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="activity_configuration.html#enabling-the-activity-app">Enabling the Activity App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="activity_configuration.html#configuring-your-owncloud-for-the-activity-app">Configuring your ownCloud for the Activity App</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="antivirus_configuration.html">Configuring the ClamAV Antivirus Scanner</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="antivirus_configuration.html#installing-clamav">Installing ClamAV</a></li>
 <li class="toctree-l2"><a class="reference internal" href="antivirus_configuration.html#enabling-the-antivirus-app-for-files">Enabling the Antivirus App for Files</a></li>
@@ -195,7 +212,9 @@
 <li class="toctree-l2"><a class="reference internal" href="config_sample_php_parameters.html#maintenance">Maintenance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="config_sample_php_parameters.html#ssl">SSL</a></li>
 <li class="toctree-l2"><a class="reference internal" href="config_sample_php_parameters.html#miscellaneous">Miscellaneous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_sample_php_parameters.html#memory-caching-backend-configuration">Memory caching backend configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="config_sample_php_parameters.html#all-other-config-options">All other config options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config_sample_php_parameters.html#app-config-options">App config options</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="email_configuration.html">Email Configuration</a><ul>
@@ -224,32 +243,23 @@
 <li class="toctree-l2"><a class="reference internal" href="logging_configuration.html#parameters">Parameters</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="occ_command.html">Using the occ Command</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="occ_command.html#maintenance-commands">Maintenance Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="occ_command.html#user-commands">User Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="occ_command.html#apps-commands">Apps Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="occ_command.html#upgrade-command">Upgrade Command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="occ_command.html#database-conversion">Database Conversion</a></li>
-<li class="toctree-l2"><a class="reference internal" href="occ_command.html#ldap-commands">LDAP Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="occ_command.html#file-scanning">File Scanning</a></li>
+<li class="toctree-l1"><a class="reference internal" href="harden_server.html">Hardening and Security Guidance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="harden_server.html#operating-system">Operating system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harden_server.html#deployment">Deployment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harden_server.html#use-https">Use HTTPS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harden_server.html#use-a-dedicated-domain-for-owncloud">Use a dedicated domain for ownCloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="harden_server.html#serve-security-related-headers-by-the-web-server">Serve security related Headers by the web server</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="performance_tips.html">Performance Tips</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#ssl-encryption-app">SSL / Encryption App</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#opcache-extension">OPcache Extension</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#memory-caching">Memory Caching</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#enable-the-spdy-protocol">Enable the SPDY protocol</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#serving-static-files-via-web-server">Serving static files via web server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#using-cron-to-perform-background-jobs">Using cron to perform background jobs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#using-mysql-instead-of-sqlite">Using MySQL instead of SQLite</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#improve-slow-performance-with-mysql-on-windows">Improve slow performance with MySQL on Windows</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tips.html#nginx-caching-owncloud-gallery-thumbnails-with-fastcgi-cache-purge">Nginx: caching ownCloud gallery thumbnails with fastcgi_cache_purge</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="performance_tuning.html">Server Tuning</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="performance_tuning.html">Server Tuning &amp; Performance Tips</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="performance_tuning.html#php-version-and-information">PHP Version and Information</a></li>
 <li class="toctree-l2"><a class="reference internal" href="performance_tuning.html#general-linux-tuning">General Linux tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tuning.html#owncloud-server-tuning">ownCloud Server Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tuning.html#ssl-encryption-app">SSL / Encryption App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tuning.html#webserver-tips">Webserver Tips</a></li>
 <li class="toctree-l2"><a class="reference internal" href="performance_tuning.html#apache-tuning">Apache Tuning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="performance_tuning.html#database-best-practice">Database Best Practice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="performance_tuning.html#nginx-caching-owncloud-gallery-thumbnails-with-fastcgi-cache-purge">Nginx: caching ownCloud gallery thumbnails with fastcgi_cache_purge</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reverse_proxy_configuration.html">Reverse Proxy Configuration</a><ul>
