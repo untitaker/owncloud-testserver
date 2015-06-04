@@ -40,7 +40,11 @@ def get_request_token(session):
     return tree.find('head').attrib['data-requesttoken']
 
 
-def create_address_book(name, token, session):
+def create_address_book(name):
+    session = requests.session()
+    session.auth = (username, password)
+    token = get_request_token(session)
+
     r = request(
         'POST',
         base + '/index.php/apps/contacts/addressbook/local/add',
@@ -63,18 +67,8 @@ class ServerMixin(object):
         xprocess.ensure('owncloud_server', preparefunc)
         subprocess.check_call([os.path.join(owncloud_repo, 'reset.sh')])
 
-    @pytest.fixture(scope='session')
-    def owncloud_session(self):
-        session = requests.session()
-        session.auth = (username, password)
-        return session
-
-    @pytest.fixture(scope='session')
-    def owncloud_csrf_token(self, owncloud_session):
-        return get_request_token(owncloud_session)
-
     @pytest.fixture
-    def get_storage_args(self, owncloud_session, owncloud_csrf_token):
+    def get_storage_args(self):
         def inner(collection='test'):
             fileext = self.storage_class.fileext
             if fileext == '.vcf':
@@ -97,8 +91,7 @@ class ServerMixin(object):
                     # really the only reason this stupid CSRF-token-scraping
                     # still exists.
                     rv['url'] += collection + '/'
-                    create_address_book(collection, owncloud_csrf_token,
-                                        owncloud_session)
+                    create_address_book(collection)
                 else:
                     return self.storage_class.create_collection(**rv)
 
