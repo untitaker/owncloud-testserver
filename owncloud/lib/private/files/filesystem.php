@@ -342,41 +342,41 @@ class Filesystem {
 
 		$userObject = \OC_User::getManager()->get($user);
 
-		if (!is_null($userObject)) {
-			$homeStorage = \OC_Config::getValue( 'objectstore' );
-			if (!empty($homeStorage)) {
-				// sanity checks
-				if (empty($homeStorage['class'])) {
-					\OCP\Util::writeLog('files', 'No class given for objectstore', \OCP\Util::ERROR);
-				}
-				if (!isset($homeStorage['arguments'])) {
-					$homeStorage['arguments'] = array();
-				}
-				// instantiate object store implementation
-				$homeStorage['arguments']['objectstore'] = new $homeStorage['class']($homeStorage['arguments']);
-				// mount with home object store implementation
-				$homeStorage['class'] = '\OC\Files\ObjectStore\HomeObjectStoreStorage';
-			} else {
-				$homeStorage = array(
-					//default home storage configuration:
-					'class' => '\OC\Files\Storage\Home',
-					'arguments' => array()
-				);
-			}
-			$homeStorage['arguments']['user'] = $userObject;
-
-			// check for legacy home id (<= 5.0.12)
-			if (\OC\Files\Cache\Storage::exists('local::' . $root . '/')) {
-				$homeStorage['arguments']['legacy'] = true;
-			}
-
-			self::mount($homeStorage['class'], $homeStorage['arguments'], $user);
-
-			$home = \OC\Files\Filesystem::getStorage($user);
+		if (is_null($userObject)) {
+			\OCP\Util::writeLog('files', ' Backends provided no user object for '.$user, \OCP\Util::ERROR);
+			throw new \OC\User\NoUserException();
 		}
-		else {
-			self::mount('\OC\Files\Storage\Local', array('datadir' => $root), $user);
+
+		$homeStorage = \OC_Config::getValue( 'objectstore' );
+		if (!empty($homeStorage)) {
+			// sanity checks
+			if (empty($homeStorage['class'])) {
+				\OCP\Util::writeLog('files', 'No class given for objectstore', \OCP\Util::ERROR);
+			}
+			if (!isset($homeStorage['arguments'])) {
+				$homeStorage['arguments'] = array();
+			}
+			// instantiate object store implementation
+			$homeStorage['arguments']['objectstore'] = new $homeStorage['class']($homeStorage['arguments']);
+			// mount with home object store implementation
+			$homeStorage['class'] = '\OC\Files\ObjectStore\HomeObjectStoreStorage';
+		} else {
+			$homeStorage = array(
+				//default home storage configuration:
+				'class' => '\OC\Files\Storage\Home',
+				'arguments' => array()
+			);
 		}
+		$homeStorage['arguments']['user'] = $userObject;
+
+		// check for legacy home id (<= 5.0.12)
+		if (\OC\Files\Cache\Storage::exists('local::' . $root . '/')) {
+			$homeStorage['arguments']['legacy'] = true;
+		}
+
+		self::mount($homeStorage['class'], $homeStorage['arguments'], $user);
+
+		$home = \OC\Files\Filesystem::getStorage($user);
 
 		self::mountCacheDir($user);
 
@@ -723,9 +723,18 @@ class Filesystem {
 	 * Fix common problems with a file path
 	 * @param string $path
 	 * @param bool $stripTrailingSlash
+	 * @param bool $isAbsolutePath
 	 * @return string
 	 */
 	public static function normalizePath($path, $stripTrailingSlash = true, $isAbsolutePath = false) {
+		/**
+		 * FIXME: This is a workaround for existing classes and files which call
+		 *        this function with another type than a valid string. This
+		 *        conversion should get removed as soon as all existing
+		 *        function calls have been fixed.
+		 */
+		$path = (string)$path;
+
 		$cacheKey = json_encode([$path, $stripTrailingSlash, $isAbsolutePath]);
 
 		if(isset(self::$normalizedPathCache[$cacheKey])) {

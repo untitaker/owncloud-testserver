@@ -152,9 +152,10 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Custom and Branded ownCloud Clients (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Branded ownCloud Clients (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
 </ul>
 
 								</ul>
@@ -169,9 +170,12 @@
 						
   <div class="section" id="user-authentication-with-ldap">
 <h1>User Authentication with LDAP<a class="headerlink" href="#user-authentication-with-ldap" title="Permalink to this headline">¶</a></h1>
-<p>ownCloud ships with an LDAP application so that your existing LDAP users may
-have access to your ownCloud server without creating separate ownCloud user
-accounts.</p>
+<p>ownCloud ships with an LDAP application to allow LDAP users (including Active
+Directory) to appear in your ownCloud user listings. These users will
+authenticate to ownCloud with their LDAP credentials, so you don&#8217;t have to
+create separate ownCloud user accounts for them. You will manage their ownCloud
+group memberships, quotas, and sharing permissions just like any other ownCloud
+user.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">For performance reasons, we recommend using PHP 5.4 or greater to use

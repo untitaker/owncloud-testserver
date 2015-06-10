@@ -263,27 +263,37 @@ class OC {
 			header('Retry-After: 120');
 
 			// render error page
-			$tmpl = new OC_Template('', 'update.user', 'guest');
+			$template = new OC_Template('', 'update.user', 'guest');
 			OC_Util::addscript('maintenance-check');
-			$tmpl->printPage();
+			$template->printPage();
 			die();
 		}
 	}
 
-	public static function checkSingleUserMode() {
-		$user = OC_User::getUserSession()->getUser();
-		$group = OC_Group::getManager()->get('admin');
-		if ($user && \OC::$server->getSystemConfig()->getValue('singleuser', false) && !$group->inGroup($user)) {
-			// send http status 503
-			header('HTTP/1.1 503 Service Temporarily Unavailable');
-			header('Status: 503 Service Temporarily Unavailable');
-			header('Retry-After: 120');
-
-			// render error page
-			$tmpl = new OC_Template('', 'singleuser.user', 'guest');
-			$tmpl->printPage();
-			die();
+	public static function checkSingleUserMode($lockIfNoUserLoggedIn = false) {
+		if (!\OC::$server->getSystemConfig()->getValue('singleuser', false)) {
+			return;
 		}
+		$user = OC_User::getUserSession()->getUser();
+		if ($user) {
+			$group = \OC::$server->getGroupManager()->get('admin');
+			if ($group->inGroup($user)) {
+				return;
+			}
+		} else {
+			if(!$lockIfNoUserLoggedIn) {
+				return;
+			}
+		}
+		// send http status 503
+		header('HTTP/1.1 503 Service Temporarily Unavailable');
+		header('Status: 503 Service Temporarily Unavailable');
+		header('Retry-After: 120');
+
+		// render error page
+		$template = new OC_Template('', 'singleuser.user', 'guest');
+		$template->printPage();
+		die();
 	}
 
 	/**
@@ -489,12 +499,11 @@ class OC {
 		\OC::$server->getEventLogger()->log('autoloader', 'Autoloader', $loaderStart, $loaderEnd);
 		\OC::$server->getEventLogger()->start('boot', 'Initialize');
 
-		// set some stuff
-		//ob_start();
+		// Don't display errors and log them
 		error_reporting(E_ALL | E_STRICT);
-		if (defined('DEBUG') && DEBUG) {
-			ini_set('display_errors', 1);
-		}
+		@ini_set('display_errors', 0);
+		@ini_set('log_errors', 1);
+
 		self::$CLI = (php_sapi_name() == 'cli');
 
 		date_default_timezone_set('UTC');
@@ -880,6 +889,10 @@ class OC {
 			}
 		} catch (\OC\User\LoginException $e) {
 			$messages[] = $e->getMessage();
+		} catch (\Exception $ex) {
+			\OCP\Util::logException('handleLogin', $ex);
+			// do not disclose information. show generic error
+			$error[] = 'internalexception';
 		}
 
 		OC_Util::displayLoginPage(array_unique($error), $messages);

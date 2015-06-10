@@ -1,5 +1,5 @@
 <?php 
-$OC_Version = array(8,0,3,4);
-$OC_VersionString = '8.0.3';
+$OC_Version = array(8,0,4,2);
+$OC_VersionString = '8.0.4';
 $OC_Channel = 'stable';
-$OC_Build = '2015-04-23T19:59:50+00:00 3f2069bd66669414d529cbdf2208635f27c85288';
+$OC_Build = '2015-06-04T13:45:27+00:00 5fcab24e592c5f0f35d3293449dbd2f15a40f5f8';

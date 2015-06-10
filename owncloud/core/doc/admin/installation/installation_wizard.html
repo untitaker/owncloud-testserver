@@ -150,9 +150,10 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Custom and Branded ownCloud Clients (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Branded ownCloud Clients (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
 </ul>
 
 								</ul>
@@ -278,6 +279,7 @@ chown -R root:${htuser} ${ocpath}/
 chown -R ${htuser}:${htuser} ${ocpath}/apps/
 chown -R ${htuser}:${htuser} ${ocpath}/config/
 chown -R ${htuser}:${htuser} ${ocpath}/data/
+chown -R ${htuser}:${htuser} ${ocpath}/themes/
 
 chown root:${htuser} ${ocpath}/.htaccess
 chown root:${htuser} ${ocpath}/data/.htaccess
@@ -299,6 +301,7 @@ the group owner</li>
 <li>The <tt class="file docutils literal"><span class="pre">apps/</span></tt> directory should be owned by <tt class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">user]</span></tt></li>
 <li>The <tt class="file docutils literal"><span class="pre">config/</span></tt> directory should be owned by <tt class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">user]</span></tt></li>
 <li>The <tt class="file docutils literal"><span class="pre">data/</span></tt> directory should be owned by <tt class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">user]</span></tt></li>
+<li>The <tt class="file docutils literal"><span class="pre">themes/</span></tt> directory should be owned by <tt class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">user]</span></tt></li>
 <li>The <tt class="file docutils literal"><span class="pre">[ocpath]/.htaccess</span></tt> file should be owned by <tt class="docutils literal"><span class="pre">root:[HTTP</span> <span class="pre">user]</span></tt></li>
 <li>The <tt class="file docutils literal"><span class="pre">data/.htaccess</span></tt> file should be owned by <tt class="docutils literal"><span class="pre">root:[HTTP</span> <span class="pre">user]</span></tt></li>
 <li>Both <tt class="file docutils literal"><span class="pre">.htaccess</span></tt> files are read-write file owner, read-only group and

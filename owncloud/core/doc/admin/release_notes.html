@@ -126,6 +126,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#owncloud-8-0">ownCloud 8.0</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#remote-federated-cloud-share-cannot-be-reshared-with-local-users">Remote Federated Cloud Share Cannot be Reshared With Local Users</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#windows-server-not-supported">Windows Server Not Supported</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#php-5-3-support-dropped">PHP 5.3 Support Dropped</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#disable-apache-multiviews">Disable Apache Multiviews</a></li>
@@ -181,9 +182,10 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="enterprise_clients/index.html">Creating Custom and Branded ownCloud Clients (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enterprise_clients/index.html">Creating Branded ownCloud Clients (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="enterprise_user_management/index.html">User Management (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
 </ul>
 
 								</ul>
@@ -222,7 +224,7 @@ Red Hat Enterprise Linux/Centos 6.5 and 7, Ubuntu 12.04 LTS, 14.04 LTS,
 only), Linux (CentOS 6.5, 7, Ubuntu 12.04 LTS, 14.04 LTS, 14.10, Fedora 20,
 21, openSUSE 12.3, 13)</li>
 <li>Mobile apps: iOS 7+, Android 4+</li>
-<li>Web browser: IE8+, Firefox 14+, Chrome 18+, Safari 5+</li>
+<li>Web browser: IE8+ (but not compatibility mode), Firefox 14+, Chrome 18+, Safari 5+</li>
 </ul>
 <div class="section" id="older-desktop-clients-not-allowed-to-connect-and-sync">
 <h3>Older Desktop Clients Not Allowed to Connect and Sync<a class="headerlink" href="#older-desktop-clients-not-allowed-to-connect-and-sync" title="Permalink to this headline">¶</a></h3>
@@ -245,6 +247,10 @@ same trusted environment.</p>
 </div>
 <div class="section" id="owncloud-8-0">
 <h2>ownCloud 8.0<a class="headerlink" href="#owncloud-8-0" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="remote-federated-cloud-share-cannot-be-reshared-with-local-users">
+<h3>Remote Federated Cloud Share Cannot be Reshared With Local Users<a class="headerlink" href="#remote-federated-cloud-share-cannot-be-reshared-with-local-users" title="Permalink to this headline">¶</a></h3>
+<p>When you mount a Federated Cloud share from a remote ownCloud server, you cannot re-share it with your local ownCloud users. (See <a class="reference internal" href="configuration_files/federated_cloud_sharing_configuration.html"><em>Configuring Federated Cloud Sharing</em></a> to learn more about federated cloud sharing)</p>
+</div>
 <div class="section" id="windows-server-not-supported">
 <h3>Windows Server Not Supported<a class="headerlink" href="#windows-server-not-supported" title="Permalink to this headline">¶</a></h3>
 <p>Windows Server is not supported in ownCloud 8.</p>

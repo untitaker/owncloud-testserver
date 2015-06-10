@@ -575,6 +575,28 @@ Warning, 3 = Error. The default value is Warning.
 
 ::
 
+	'log.condition' => [
+		'shared_secret' => '57b58edb6637fe3059b3595cf9c41b9',
+		'users' => ['sample-user'],
+		'apps' => ['files'],
+	],
+
+Log condition for log level increase based on conditions. Once one of these
+conditions is met, the required log level is set to debug. This allows to
+debug specific requests, users or apps
+
+Supported conditions:
+ - ``shared_secret``: if a request parameter with the name `log_secret` is set to
+               this value the condition is met
+ - ``users``:  if the current request is done by one of the specified users,
+               this condition is met
+ - ``apps``:   if the log message is invoked by one of the specified apps,
+               this condition is met
+
+Defaults to an empty array.
+
+::
+
 	'logdateformat' => 'F d, Y H:i:s',
 
 This uses PHP.date formatting; see http://php.net/manual/en/function.date.php
@@ -605,8 +627,8 @@ Log successful cron runs.
 
 Location of the lock file for cron executions can be specified here.
 
-Default is within the tmp directory. The file is named in the following way
-  owncloud-server-$INSTANCEID-cron.lock
+Default is within the tmp directory. The file is named in the following way:
+owncloud-server-$INSTANCEID-cron.lock
 where $INSTANCEID is the string specified in the instanceid field.
 Because the cron lock file is accessed in regular intervals, it may prevent
 enabled disk drives from spinning down. A different location for this file
@@ -928,6 +950,19 @@ The default location for themes is ``owncloud/themes/``.
 The default cipher for encrypting files. Currently AES-128-CFB and
 AES-256-CFB are supported.
 
+::
+
+	'minimum.supported.desktop.version' => '1.7.0',
+
+The minimum ownCloud desktop client version that will be allowed to sync with
+this server instance. All connections made from earlier clients will be denied
+by the server. Defaults to the minimum officially supported ownCloud version at
+the time of release of this server version.
+
+When changing this, note that older unsupported versions of the ownCloud desktop
+client may not function as expected, and could lead to permanent data loss for
+clients or other unexpected results.
+
 Memory caching backend configuration
 ------------------------------------
 
@@ -1139,6 +1174,27 @@ If the gif is bigger, it'll show a static preview
 Value represents the maximum filesize in megabytes
 Default is 10
 Set to -1 for no limit
+
+::
+
+	'filelocking.enabled' => false,
+
+Enables the EXPERIMENTAL file locking.
+
+This is disabled by default as it is experimental.
+
+Prevents concurrent processes to access the same files
+at the same time. Can help prevent side effects that would
+be caused by concurrent operations.
+
+WARNING: EXPERIMENTAL
+
+::
+
+	'memcache.locking' => '\\OC\\Memcache\\Redis',
+
+Memory caching backend for file locking
+Because most memcache backends can clean values without warning using redis is recommended
 
 ::
 

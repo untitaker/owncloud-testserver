@@ -70,7 +70,7 @@ class Storage extends DAV implements ISharedStorage {
 			'host' => $host,
 			'root' => $root,
 			'user' => $options['token'],
-			'password' => $options['password']
+			'password' => (string)$options['password']
 		));
 	}
 
@@ -237,7 +237,8 @@ class Storage extends DAV implements ISharedStorage {
 		$errorMessage = curl_error($ch);
 		curl_close($ch);
 		if (!empty($errorMessage)) {
-			throw new \Exception($errorMessage);
+			\OCP\Util::writeLog('files_sharing', 'Error getting remote share info: ' . $errorMessage, \OCP\Util::ERROR);
+			throw new StorageNotAvailableException($errorMessage);
 		}
 
 		switch ($status) {

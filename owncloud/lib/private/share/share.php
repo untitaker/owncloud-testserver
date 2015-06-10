@@ -312,18 +312,20 @@ class Share extends \OC\Share\Constants {
 	 */
 	public static function getItemSharedWithUser($itemType, $itemSource, $user, $owner = null, $shareType = null) {
 		$shares = array();
-		$fileDependend = false;
+		$fileDependent = false;
 
 		if ($itemType === 'file' || $itemType === 'folder') {
-			$fileDependend = true;
+			$fileDependent = true;
 			$column = 'file_source';
-			$where = 'INNER JOIN `*PREFIX*filecache` ON `file_source` = `*PREFIX*filecache`.`fileid` WHERE';
+			$where = 'INNER JOIN `*PREFIX*filecache` ON `file_source` = `*PREFIX*filecache`.`fileid` ';
+			$where .= 'INNER JOIN `*PREFIX*storages` ON `numeric_id` = `*PREFIX*filecache`.`storage` ';
+			$where .= ' WHERE';
 		} else {
 			$column = 'item_source';
 			$where = 'WHERE';
 		}
 
-		$select = self::createSelectStatement(self::FORMAT_NONE, $fileDependend);
+		$select = self::createSelectStatement(self::FORMAT_NONE, $fileDependent);
 
 		$where .= ' `' . $column . '` = ? AND `item_type` = ? ';
 		$arguments = array($itemSource, $itemType);
@@ -348,6 +350,9 @@ class Share extends \OC\Share\Constants {
 		$result = \OC_DB::executeAudited($query, $arguments);
 
 		while ($row = $result->fetchRow()) {
+			if ($fileDependent && !self::isFileReachable($row['path'], $row['storage_id'])) {
+				continue;
+			}
 			$shares[] = $row;
 		}
 
@@ -1360,10 +1365,11 @@ class Share extends \OC\Share\Constants {
 			} else {
 				$root = '';
 			}
-			$where = 'INNER JOIN `*PREFIX*filecache` ON `file_source` = `*PREFIX*filecache`.`fileid`';
+			$where = 'INNER JOIN `*PREFIX*filecache` ON `file_source` = `*PREFIX*filecache`.`fileid` ';
 			if (!isset($item)) {
-				$where .= ' WHERE `file_target` IS NOT NULL';
+				$where .= ' AND `file_target` IS NOT NULL ';
 			}
+			$where .= 'INNER JOIN `*PREFIX*storages` ON `numeric_id` = `*PREFIX*filecache`.`storage` ';
 			$fileDependent = true;
 			$queryArgs = array();
 		} else {
@@ -1504,6 +1510,9 @@ class Share extends \OC\Share\Constants {
 		while ($row = $result->fetchRow()) {
 			self::transformDBResults($row);
 			// Filter out duplicate group shares for users with unique targets
+			if ($fileDependent && !self::isFileReachable($row['path'], $row['storage_id'])) {
+				continue;
+			}
 			if ($row['share_type'] == self::$shareTypeGroupUserUnique && isset($items[$row['parent']])) {
 				$row['share_type'] = self::SHARE_TYPE_GROUP;
 				$row['unique_name'] = true; // remember that we use a unique name for this user
@@ -2160,7 +2169,9 @@ class Share extends \OC\Share\Constants {
 		$select = '*';
 		if ($format == self::FORMAT_STATUSES) {
 			if ($fileDependent) {
-				$select = '`*PREFIX*share`.`id`, `*PREFIX*share`.`parent`, `share_type`, `path`, `storage`, `share_with`, `uid_owner` , `file_source`, `stime`, `*PREFIX*share`.`permissions`';
+				$select = '`*PREFIX*share`.`id`, `*PREFIX*share`.`parent`, `share_type`, `path`, `storage`, '
+					. '`share_with`, `uid_owner` , `file_source`, `stime`, `*PREFIX*share`.`permissions`, '
+					. '`*PREFIX*storages`.`id` AS `storage_id`';
 			} else {
 				$select = '`id`, `parent`, `share_type`, `share_with`, `uid_owner`, `item_source`, `stime`, `*PREFIX*share`.`permissions`';
 			}
@@ -2169,7 +2180,8 @@ class Share extends \OC\Share\Constants {
 				if ($fileDependent) {
 					$select = '`*PREFIX*share`.`id`, `item_type`, `item_source`, `*PREFIX*share`.`parent`,'
 						. ' `share_type`, `share_with`, `file_source`, `file_target`, `path`, `*PREFIX*share`.`permissions`, `stime`,'
-						. ' `expiration`, `token`, `storage`, `mail_send`, `uid_owner`';
+						. ' `expiration`, `token`, `storage`, `mail_send`, `uid_owner`, '
+						. '`*PREFIX*storages`.`id` AS `storage_id`';
 				} else {
 					$select = '`id`, `item_type`, `item_source`, `parent`, `share_type`, `share_with`, `*PREFIX*share`.`permissions`,'
 						. ' `stime`, `file_source`, `expiration`, `token`, `mail_send`, `uid_owner`';
@@ -2182,9 +2194,11 @@ class Share extends \OC\Share\Constants {
 							. '`*PREFIX*share`.`permissions`, `expiration`, `storage`, `*PREFIX*filecache`.`parent` as `file_parent`, '
 							. '`name`, `mtime`, `mimetype`, `mimepart`, `size`, `unencrypted_size`, `encrypted`, `etag`, `mail_send`';
 					} else {
-						$select = '`*PREFIX*share`.`id`, `item_type`, `item_source`, `item_target`,
-							`*PREFIX*share`.`parent`, `share_type`, `share_with`, `uid_owner`,
-							`file_source`, `path`, `file_target`, `*PREFIX*share`.`permissions`, `stime`, `expiration`, `token`, `storage`, `mail_send`';
+						$select = '`*PREFIX*share`.`id`, `item_type`, `item_source`, `item_target`,'
+							. '`*PREFIX*share`.`parent`, `share_type`, `share_with`, `uid_owner`,'
+							. '`file_source`, `path`, `file_target`, `*PREFIX*share`.`permissions`,'
+						    . '`stime`, `expiration`, `token`, `storage`, `mail_send`,'
+							. '`*PREFIX*storages`.`id` AS `storage_id`';
 					}
 				}
 			}
@@ -2275,15 +2289,17 @@ class Share extends \OC\Share\Constants {
 	 *
 	 * @param string $url
 	 * @param array $fields post parameters
-	 * @return bool
+	 * @return array
 	 */
 	private static function tryHttpPost($url, $fields) {
 		$protocol = 'https://';
-		$success = false;
+		$result = [
+			'success' => false,
+			'result' => '',
+		];
 		$try = 0;
-		while ($success === false && $try < 2) {
+		while ($result['success'] === false && $try < 2) {
 			$result = \OC::$server->getHTTPHelper()->post($protocol . $url, $fields);
-			$success = $result['success'];
 			$try++;
 			$protocol = 'http://';
 		}
@@ -2306,7 +2322,7 @@ class Share extends \OC\Share\Constants {
 		list($user, $remote) = explode('@', $shareWith, 2);
 
 		if ($user && $remote) {
-			$url = $remote . self::BASE_PATH_TO_SHARE_API . '?format=' . self::RESPONSE_FORMAT;
+			$url = rtrim($remote, '/') . self::BASE_PATH_TO_SHARE_API . '?format=' . self::RESPONSE_FORMAT;
 
 			$local = \OC::$server->getURLGenerator()->getAbsoluteURL('/');
 
@@ -2339,8 +2355,9 @@ class Share extends \OC\Share\Constants {
 	 * @return bool
 	 */
 	private static function sendRemoteUnshare($remote, $id, $token) {
-		$url = $remote . self::BASE_PATH_TO_SHARE_API . '/' . $id . '/unshare?format=' . self::RESPONSE_FORMAT;
+		$url = rtrim($remote, '/') . self::BASE_PATH_TO_SHARE_API . '/' . $id . '/unshare?format=' . self::RESPONSE_FORMAT;
 		$fields = array('token' => $token, 'format' => 'json');
+		$url = self::removeProtocolFromUrl($url);
 		$result = self::tryHttpPost($url, $fields);
 		$status = json_decode($result['result'], true);
 
@@ -2368,6 +2385,29 @@ class Share extends \OC\Share\Constants {
 
 	public static function getExpireInterval() {
 		return (int)\OCP\Config::getAppValue('core', 'shareapi_expire_after_n_days', '7');
+	}
+
+	/**
+	 * Checks whether the given path is reachable for the given owner
+	 *
+	 * @param string $path path relative to files
+	 * @param string $ownerStorageId storage id of the owner
+	 *
+	 * @return boolean true if file is reachable, false otherwise
+	 */
+	private static function isFileReachable($path, $ownerStorageId) {
+		// if outside the home storage, file is always considered reachable
+		if (!(substr($ownerStorageId, 0, 6) === 'home::')) {
+			return true;
+		}
+
+		// if inside the home storage, the file has to be under "/files/"
+		$path = ltrim($path, '/');
+		if (substr($path, 0, 6) === 'files/') {
+			return true;
+		}
+
+		return false;
 	}
 
 }

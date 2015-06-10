@@ -142,9 +142,10 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Custom and Branded ownCloud Clients (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Branded ownCloud Clients (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
 </ul>
 
 								</ul>
@@ -269,18 +270,7 @@ user&#8217;s logins and data in transit.</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If you want to effectively increase maximum upload size you will also
-have to modify your <strong>php-fpm configuration</strong> (<strong>usually at
-/etc/php5/fpm/php.ini</strong>) and increase <strong>upload_max_filesize</strong> and
-<strong>post_max_size</strong> values. You’ll need to restart php5-fpm and nginx
-services in order these changes to be applied.</p>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">ownCloud comes with its own <tt class="docutils literal"><span class="pre">owncloud/.htaccess</span></tt> file. If PHP-FPM is used,
-it can&#8217;t read <tt class="docutils literal"><span class="pre">.htaccess</span></tt> PHP settings unless the <tt class="docutils literal"><span class="pre">htscanner</span></tt> PECL extension
-is installed. If PHP-FPM is used without this PECL extension installed, settings
-and permissions must be set in the <tt class="docutils literal"><span class="pre">owncloud/.user.ini</span></tt> file.</p>
+<p class="last">If you are using php-fpm please read <a class="reference internal" href="source_installation.html#using-php-fpm"><em>Configuration notes to php-fpm</em></a></p>
 </div>
 </div>
 
