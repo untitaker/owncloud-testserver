@@ -52,7 +52,6 @@ def create_address_book(name):
         headers=dict(requesttoken=token),
         session=session
     ).json()
-    assert r.get('uri', None) == name, r
 
 
 class ServerMixin(object):
