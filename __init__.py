@@ -89,7 +89,8 @@ class ServerMixin(object):
                     # https://github.com/owncloud/contacts/issues/802 This is
                     # really the only reason this stupid CSRF-token-scraping
                     # still exists.
-                    rv['url'] += collection + '/'
+                    from vdirsyncer.utils.compat import urlquote
+                    rv['url'] += urlquote(collection) + '/'
                     create_address_book(collection)
                 else:
                     return self.storage_class.create_collection(**rv)
