@@ -80,8 +80,7 @@ class ServerMixin(object):
                 raise RuntimeError(fileext)
 
             rv = {'url': base + dav_path, 'collection': collection,
-                  'username': username, 'password': password,
-                  'unsafe_href_chars': ''}
+                  'username': username, 'password': password}
 
             if collection is not None:
                 if fileext == '.vcf':
