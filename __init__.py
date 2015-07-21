@@ -48,10 +48,11 @@ def create_address_book(name):
     r = request(
         'POST',
         base + '/index.php/apps/contacts/addressbook/local/add',
-        data=dict(displayname=name, description=''),
+        data=dict(displayname=name, uri=name, description=''),
         headers=dict(requesttoken=token),
         session=session
     ).json()
+    return r['uri']
 
 
 class ServerMixin(object):
@@ -89,8 +90,7 @@ class ServerMixin(object):
                     # really the only reason this stupid CSRF-token-scraping
                     # still exists.
                     from vdirsyncer.utils.compat import urlquote
-                    rv['url'] += urlquote(collection) + '/'
-                    create_address_book(collection)
+                    rv['url'] += create_address_book(collection) + '/'
                 else:
                     return self.storage_class.create_collection(**rv)
 
