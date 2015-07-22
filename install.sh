@@ -8,7 +8,7 @@ echo "install.sh: Own directory is $DIR"
 
 if [ "$TRAVIS" = "true" ]; then
     # http://doc.owncloud.org/server/6.0/admin_manual/installation/installation_source.html#installation-of-packages-on-ubuntu-12-04-4-lts-server
-    sudo add-apt-repository -y ppa:ondrej/php5-oldstable
+    sudo add-apt-repository -y ppa:ondrej/php5-5.6
     # who cares if one or two repos are down. As long as i'm able to install
     # these packages...
     sudo apt-get update || true
