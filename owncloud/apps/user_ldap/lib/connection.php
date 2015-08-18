@@ -1,23 +1,29 @@
 <?php
-
 /**
- * ownCloud – LDAP Connection
+ * @author Arthur Schiwon <blizzz@owncloud.com>
+ * @author Bart Visscher <bartv@thisnet.nl>
+ * @author Jörn Friedrich Dreyer <jfd@butonic.de>
+ * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Lyonel Vincent <lyonel@ezix.org>
+ * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Robin Appelman <icewind@owncloud.com>
+ * @author Robin McCorkell <rmccorkell@karoshi.org.uk>
+ * @author Scrutinizer Auto-Fixer <auto-fixer@scrutinizer-ci.com>
  *
- * @author Arthur Schiwon
- * @copyright 2012, 2013 Arthur Schiwon blizzz@owncloud.com
+ * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @license AGPL-3.0
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or any later version.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
 
@@ -34,6 +40,7 @@ use OC\ServerNotAvailableException;
  * @property boolean hasPagedResultSupport
  * @property string[] ldapBaseUsers
  * @property int|string ldapPagingSize holds an integer
+ * @property bool|mixed|void ldapGroupMemberAssocAttr
  */
 class Connection extends LDAPUtility {
 	private $ldapConnectionRes = null;
@@ -44,6 +51,11 @@ class Connection extends LDAPUtility {
 	//whether connection should be kept on __destruct
 	private $dontDestruct = false;
 	private $hasPagedResultSupport = true;
+
+	/**
+	 * @var bool runtime flag that indicates whether supported primary groups are available
+	 */
+	public $hasPrimaryGroups = true;
 
 	//cache handler
 	protected $cache;
@@ -70,8 +82,6 @@ class Connection extends LDAPUtility {
 		$memcache = \OC::$server->getMemCacheFactory();
 		if($memcache->isAvailable()) {
 			$this->cache = $memcache->create();
-		} else {
-			$this->cache = \OC\Cache::getGlobalCache();
 		}
 		$this->hasPagedResultSupport =
 			$this->ldap->hasPagedResultSupport();
@@ -187,7 +197,7 @@ class Connection extends LDAPUtility {
 		if(!$this->configured) {
 			$this->readConfiguration();
 		}
-		if(!$this->configuration->ldapCacheTTL) {
+		if(is_null($this->cache) || !$this->configuration->ldapCacheTTL) {
 			return null;
 		}
 		if(!$this->isCached($key)) {
@@ -207,7 +217,7 @@ class Connection extends LDAPUtility {
 		if(!$this->configured) {
 			$this->readConfiguration();
 		}
-		if(!$this->configuration->ldapCacheTTL) {
+		if(is_null($this->cache) || !$this->configuration->ldapCacheTTL) {
 			return false;
 		}
 		$key = $this->getCacheKey($key);
@@ -217,12 +227,15 @@ class Connection extends LDAPUtility {
 	/**
 	 * @param string $key
 	 * @param mixed $value
+	 *
+	 * @return string
 	 */
 	public function writeToCache($key, $value) {
 		if(!$this->configured) {
 			$this->readConfiguration();
 		}
-		if(!$this->configuration->ldapCacheTTL
+		if(is_null($this->cache)
+			|| !$this->configuration->ldapCacheTTL
 			|| !$this->configuration->ldapConfigurationActive) {
 			return null;
 		}
@@ -232,7 +245,9 @@ class Connection extends LDAPUtility {
 	}
 
 	public function clearCache() {
-		$this->cache->clear($this->getCacheKey(null));
+		if(!is_null($this->cache)) {
+			$this->cache->clear($this->getCacheKey(null));
+		}
 	}
 
 	/**
@@ -595,7 +610,7 @@ class Connection extends LDAPUtility {
 		if(!$ldapLogin) {
 			\OCP\Util::writeLog('user_ldap',
 				'Bind failed: ' . $this->ldap->errno($cr) . ': ' . $this->ldap->error($cr),
-				\OCP\Util::ERROR);
+				\OCP\Util::WARN);
 			$this->ldapConnectionRes = null;
 			return false;
 		}

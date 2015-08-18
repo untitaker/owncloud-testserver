@@ -116,18 +116,20 @@
                   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">ownCloud Server Configuration</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="security_setup_warnings.html">Warnings on Admin Page</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Using the occ Command</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#run-occ-as-your-http-user">Run occ As Your HTTP User</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#apps-commands">Apps Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#background-jobs-selector">Background Jobs Selector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#database-conversion">Database Conversion</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#encryption">Encryption</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#file-operations">File Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#command-line-installation">Command Line Installation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#l10n-create-javascript-translation-files-for-apps">l10n, Create javascript Translation Files for Apps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ldap-commands">LDAP Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#maintenance-commands">Maintenance Commands</a></li>
@@ -157,7 +159,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
@@ -191,9 +192,10 @@ interface. You can perform many common server operations with <tt class="docutil
 <tt class="file docutils literal"><span class="pre">/var/www/owncloud</span></tt> on Ubuntu Linux. <tt class="docutils literal"><span class="pre">occ</span></tt> is a PHP script. You must run
 it as your HTTP user to ensure that the correct permissions are maintained on
 your ownCloud files and directories.</p>
-<p>The HTTP user is different on the various Linux distributions. See the
-<strong>Setting Strong Directory Permissions</strong> section of <a class="reference internal" href="../installation/installation_wizard.html"><em>Installation Wizard</em></a>
-to learn how to find your HTTP user</p>
+<div class="section" id="run-occ-as-your-http-user">
+<span id="http-user"></span><h2>Run occ As Your HTTP User<a class="headerlink" href="#run-occ-as-your-http-user" title="Permalink to this headline">¶</a></h2>
+<p>The HTTP user is different on the various Linux distributions. See
+<a class="reference internal" href="../installation/installation_wizard.html#strong-perms"><em>Setting Strong Directory Permissions</em></a> to learn how to find your HTTP user</p>
 <ul class="simple">
 <li>The HTTP user and group in Debian/Ubuntu is www-data.</li>
 <li>The HTTP user and group in Fedora/CentOS is apache.</li>
@@ -280,6 +282,7 @@ Default is plain text, but it can also be <tt class="docutils literal"><span cla
 <p>This <tt class="docutils literal"><span class="pre">output</span></tt> option is available on all list and list-like commands:
 <tt class="docutils literal"><span class="pre">status</span></tt>, <tt class="docutils literal"><span class="pre">check</span></tt>, <tt class="docutils literal"><span class="pre">app:list</span></tt>, <tt class="docutils literal"><span class="pre">encryption:status</span></tt>
 and <tt class="docutils literal"><span class="pre">encryption:list-modules</span></tt></p>
+</div>
 <div class="section" id="apps-commands">
 <h2>Apps Commands<a class="headerlink" href="#apps-commands" title="Permalink to this headline">¶</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">app</span></tt> commands list, enable, and disable apps. This lists all of your
@@ -349,10 +352,108 @@ keys after upgrading your ownCloud server:</p>
 </div>
 <div class="section" id="file-operations">
 <h2>File Operations<a class="headerlink" href="#file-operations" title="Permalink to this headline">¶</a></h2>
-<p>The <tt class="docutils literal"><span class="pre">files:scan</span></tt> command scans for new files for the file cache, and isn&#8217;t
-intended to be run manually.</p>
+<p>The <tt class="docutils literal"><span class="pre">files:scan</span></tt> command scans for new files and updates the file cache. You
+may rescan all files, per-user, a space-delimited list of users, and limit the
+search path:</p>
+<div class="highlight-python"><pre>$ sudo -u www-data php occ  files:scan --help
+  Usage:
+  files:scan [-p|--path="..."] [-q|--quiet] [--all] [user_id1] ... [user_idN]
+
+Arguments:
+  user_id               will rescan all files of the given user(s)
+
+Options:
+  --path (-p)           limit rescan to this path, eg.
+  --path="/alice/files/Music", the user_id is determined by the path and the
+  user_id parameter and --all are ignored
+  --all                 will rescan all files of all known users</pre>
+</div>
 <p><tt class="docutils literal"><span class="pre">files:cleanup</span></tt> tidies up the server&#8217;s file cache by deleting all file
 entries that have no matching entries in the storage table.</p>
+</div>
+<div class="section" id="command-line-installation">
+<span id="cli-installation"></span><h2>Command Line Installation<a class="headerlink" href="#command-line-installation" title="Permalink to this headline">¶</a></h2>
+<p>You can install ownCloud entirely from the command line. After downloading the
+tarball and copying ownCloud into the appropriate directories, or
+after installing ownCloud packages (See
+<a class="reference internal" href="../installation/linux_installation.html"><em>Preferred Linux Installation Method</em></a> and
+<a class="reference internal" href="../installation/source_installation.html"><em>Manual Installation on Linux</em></a>) you can use <tt class="docutils literal"><span class="pre">occ</span></tt> commands in
+place of running the graphical Installation Wizard.</p>
+<p>Apply correct permissions to your ownCloud directories; see
+<a class="reference internal" href="../installation/installation_wizard.html#strong-perms"><em>Setting Strong Directory Permissions</em></a>. Then choose your <tt class="docutils literal"><span class="pre">occ</span></tt> options. This lists your
+available options:</p>
+<div class="highlight-python"><pre>$ sudo -u www-data php /var/www/owncloud/occ
+ownCloud is not installed - only a limited number of commands are available
+ownCloud version 8.1.0
+
+Usage:
+ [options] command [arguments]
+
+Options:
+ --help (-h)           Display this help message
+ --quiet (-q)          Do not output any message
+ --verbose (-v|vv|vvv) Increase the verbosity of messages: 1 for normal
+ output,  2 for more verbose output and 3 for debug
+ --version (-V)        Display this application version
+ --ansi                Force ANSI output
+ --no-ansi             Disable ANSI output
+ --no-interaction (-n) Do not ask any interactive question
+
+Available commands:
+ check                 check dependencies of the server environment
+ help                  Displays help for a command
+ list                  Lists commands
+ status                show some status information
+ app
+ app:check-code        check code to be compliant
+ l10n
+ l10n:createjs         Create javascript translation files for a given app
+ maintenance
+ maintenance:install   install ownCloud</pre>
+</div>
+<p>Display your <tt class="docutils literal"><span class="pre">maintenance:install</span></tt> options:</p>
+<div class="highlight-python"><pre>$ sudo -u www-data php occ help maintenance:install
+ownCloud is not installed - only a limited number of commands are available
+Usage:
+ maintenance:install [--database="..."] [--database-name="..."]
+[--database-host="..."] [--database-user="..."] [--database-pass[="..."]]
+[--database-table-prefix[="..."]] [--admin-user="..."] [--admin-pass="..."]
+[--data-dir="..."]
+
+Options:
+ --database               Supported database type (default: "sqlite")
+ --database-name          Name of the database
+ --database-host          Hostname of the database (default: "localhost")
+ --database-user          User name to connect to the database
+ --database-pass          Password of the database user
+ --database-table-prefix  Prefix for all tables (default: oc_)
+ --admin-user             User name of the admin account (default: "admin")
+ --admin-pass             Password of the admin account
+ --data-dir               Path to data directory (default:
+                          "/var/www/owncloud/data")
+ --help (-h)              Display this help message
+ --quiet (-q)             Do not output any message
+ --verbose (-v|vv|vvv)    Increase the verbosity of messages: 1 for normal
+  output, 2 for more verbose output and 3 for debug
+ --version (-V)           Display this application version
+ --ansi                   Force ANSI output
+ --no-ansi                Disable ANSI output
+ --no-interaction (-n)    Do not ask any interactive question</pre>
+</div>
+<p>This example completes the installation:</p>
+<div class="highlight-python"><pre>$ cd /var/www/owncloud/
+$ sudo -u www-data php occ maintenance:install --database
+"mysql" --database-name "owncloud"  --database-user "root" --database-pass
+"password" --admin-user "admin" --admin-pass "password"
+ownCloud is not installed - only a limited number of commands are available
+ownCloud was successfully installed</pre>
+</div>
+<p>Supported databases are:</p>
+<div class="highlight-python"><pre>- sqlite (SQLite3 - Community Edition Only)
+- mysql (MySQL/MariaDB)
+- pgsql (PostgreSQL)
+- oci (Oracle)</pre>
+</div>
 </div>
 <div class="section" id="l10n-create-javascript-translation-files-for-apps">
 <h2>l10n, Create javascript Translation Files for Apps<a class="headerlink" href="#l10n-create-javascript-translation-files-for-apps" title="Permalink to this headline">¶</a></h2>
@@ -565,14 +666,60 @@ authentication servers such as LDAP:</p>
 </div>
 <div class="section" id="upgrade-command">
 <h2>Upgrade Command<a class="headerlink" href="#upgrade-command" title="Permalink to this headline">¶</a></h2>
+<p>List all options, like this example on CentOS Linux:</p>
+<div class="highlight-python"><pre>$ sudo -u apache php occ upgrade -h
+Usage:
+upgrade [--skip-migration-test] [--dry-run] [--no-app-disable]
+
+Options:
+--skip-migration-test  skips the database schema migration simulation and
+   update directly
+--dry-run              only runs the database schema migration simulation, do
+  not actually update
+--no-app-disable       skips the disable of third party apps
+--help (-h)            Display this help message.
+--quiet (-q)           Do not output any message.
+--verbose (-v|vv|vvv)  Increase the verbosity of messages: 1 for normal output,
+  2 for more verbose output and 3 for debug.
+--version (-V)         Display this application version.
+--ansi                 Force ANSI output.
+--no-ansi              Disable ANSI output.
+--no-interaction (-n)  Do not ask any interactive question</pre>
+</div>
 <p>When you are performing an update or upgrade on your ownCloud server (see the
 Maintenance section of this manual), it is better to use <tt class="docutils literal"><span class="pre">occ</span></tt> to perform the
 database upgrade step, rather than the Web GUI, in order to avoid timeouts. PHP
 scripts invoked from the Web interface are limited to 3600 seconds. In larger
 environments this may not be enough, leaving the system in an inconsistent
 state. After performing all the preliminary steps (see
-<a class="reference internal" href="../maintenance/upgrade.html"><em>Upgrading Your ownCloud Server</em></a>) use this command to upgrade your databases:</p>
-<div class="highlight-python"><pre>$ sudo -u www-data php occ upgrade</pre>
+<a class="reference internal" href="../maintenance/upgrade.html"><em>Upgrading Your ownCloud Server</em></a>) use this command to upgrade your databases,
+like this example on CentOS Linux. Note how it details the steps:</p>
+<div class="highlight-python"><pre>$ sudo -u www-data php occ upgrade
+ownCloud or one of the apps require upgrade - only a limited number of
+commands are available
+Turned on maintenance mode
+Checked database schema update
+Checked database schema update for apps
+Updated database
+Updating &lt;gallery&gt; ...
+Updated &lt;gallery&gt; to 0.6.1
+Updating &lt;activity&gt; ...
+Updated &lt;activity&gt; to 2.1.0
+Update successful
+Turned off maintenance mode</pre>
+</div>
+<p>If there is an error it throws an exception, and the error is detailed in your
+ownCloud logfile, so you can use the log output to figure out what went wrong,
+or to use in a bug report:</p>
+<div class="highlight-python"><pre>Turned on maintenance mode
+Checked database schema update
+Checked database schema update for apps
+Updated database
+Updating &lt;files_sharing&gt; ...
+Exception
+ServerNotAvailableException: LDAP server is not available
+Update failed
+Turned off maintenance mode</pre>
 </div>
 <p>Before completing the upgrade, ownCloud first runs a simulation by
 copying all database tables to a temporary directory and then performing the

@@ -116,7 +116,7 @@
                   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
@@ -125,7 +125,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
@@ -164,12 +163,12 @@
 						
   <div class="section" id="building-your-ios-app-with-ownbrander">
 <h1>Building Your iOS App With ownBrander<a class="headerlink" href="#building-your-ios-app-with-ownbrander" title="Permalink to this headline">¶</a></h1>
-<p>At last you have arrived to the point where you can actually build your
-branded iOS app. Log into your account on <a class="reference external" href="https://customer.owncloud.com/owncloud/">Customer.owncloud.com</a> and open the ownBrander app.</p>
+<p>At long last you have arrived at the point where you can actually build your
+branded iOS app. Log into your account on <a class="reference external" href="https://customer.owncloud.com/owncloud/">Customer.owncloud.com/owncloud</a> and open the ownBrander app.</p>
 <div class="figure">
 <img alt="../_images/ownbrander-13.png" src="../_images/ownbrander-13.png" />
 </div>
-<p>If you don&#8217;t see the ownBrander app, open a support request (Open Case
+<p>If you don&#8217;t see the ownBrander app, open a support request (<strong>Open Case</strong>
 button).</p>
 <p>Your first ownBrander task is to review the iOS page on ownBrander for your
 image requirements. You will need a lot of them, in specific sizes and formats,
@@ -226,12 +225,12 @@ on the app. The default is 30.</p>
 into the app. The ownBuilder app tells you exactly which images you need, and
 their required size. Click the example images on the right to enlarge them.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/ownbrander-14.png"><img alt="../_images/ownbrander-14.png" src="../_images/ownbrander-14.png" style="width: 495.6px; height: 489.3px;" /></a>
+<img alt="../_images/ownbrander-14.png" src="../_images/ownbrander-14.png" />
 </div>
 <p>You may enter a custom <strong>User agent</strong>, which is useful for traffic analysis and
 whitelisting your app.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/ownbrander-22.png"><img alt="../_images/ownbrander-22.png" src="../_images/ownbrander-22.png" style="width: 366.1px; height: 67.9px;" /></a>
+<img alt="../_images/ownbrander-22.png" src="../_images/ownbrander-22.png" />
 </div>
 <p>Check <strong>Recommend</strong> to open a Twitter, Facebook, and Email recommendation
 configurator.</p>
@@ -242,7 +241,9 @@ configurator.</p>
 <div class="figure">
 <img alt="../_images/ownbrander-24.png" src="../_images/ownbrander-24.png" />
 </div>
-<p>Enter a <strong>Feedback email</strong> address, if you have one.</p>
+<p><strong>Activate the option feedback</strong> creates an option for your users to either
+enable or not enable the feedback option on their devices. If you enable this,
+enter your <strong>Feedback email</strong> address.</p>
 <div class="figure">
 <img alt="../_images/ownbrander-25.png" src="../_images/ownbrander-25.png" />
 </div>
@@ -254,6 +255,25 @@ configurator.</p>
 account.</p>
 <div class="figure">
 <img alt="../_images/ownbrander-27.png" src="../_images/ownbrander-27.png" />
+</div>
+<p>Upload an icon that will be displayed by default when there is no file preview
+to display.</p>
+<div class="figure">
+<img alt="../_images/ownbrander-30.png" src="../_images/ownbrander-30.png" />
+</div>
+<p>By default, sharing by public URL is enabled. Public share links allow your
+users to share files with anyone. This option allows you to disable public link
+sharing.</p>
+<div class="figure">
+<img alt="../_images/ownbrander-31.png" src="../_images/ownbrander-31.png" />
+</div>
+<p>You may disable background transfers if you are using mobile device management
+(MDM), such as Mobile Iron, that does not support background jobs, or if you
+simply do not want to allow the app to work in the background. By default,
+the ownCloud iOS app supports background file transfers by taking
+advantage of <a class="reference external" href="https://developer.apple.com/library/ios/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html">Background Execution.</a></p>
+<div class="figure">
+<img alt="../_images/ownbrander-32.png" src="../_images/ownbrander-32.png" />
 </div>
 <p>That completes the required elements of your branded iOS app.</p>
 </div>
@@ -272,7 +292,7 @@ additional icons.</p>
 <h2>Generate iOS App<a class="headerlink" href="#generate-ios-app" title="Permalink to this headline">¶</a></h2>
 <p>When you have uploaded all of your images and completed your customizations,
 click the <strong>Generate iOS App</strong> button and take a well-deserved break. Remember
-to email your three provisioning profiles and P12 certificate to
+to email your four Ad Hoc provisioning profiles and P12 certificate to
 <a class="reference external" href="mailto:branding&#37;&#52;&#48;owncloud&#46;com">branding<span>&#64;</span>owncloud<span>&#46;</span>com</a>.</p>
 <div class="figure">
 <img alt="../_images/ownbrander-28.png" src="../_images/ownbrander-28.png" />

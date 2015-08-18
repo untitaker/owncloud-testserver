@@ -1,22 +1,21 @@
 <?php
 /**
- * ownCloud
+ * @author Joas Schilling <nickvergessen@owncloud.com>
  *
- * @author Joas Schilling
- * @copyright 2015 Joas Schilling <nickvergessen@owncloud.com>
+ * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @license AGPL-3.0
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or any later version.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
 
@@ -77,7 +76,7 @@ class ManagerTest extends TestCase {
 		$this->assertCount(1, $openShares);
 		$this->assertExternalShareEntry($shareData1, $openShares[0], 1, '{{TemporaryMountPointName#' . $shareData1['name'] . '}}');
 
-		\Test_Helper::invokePrivate($this->manager, 'setupMounts');
+		self::invokePrivate($this->manager, 'setupMounts');
 		$this->assertNotMount('SharedFolder');
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}');
 
@@ -89,7 +88,7 @@ class ManagerTest extends TestCase {
 		// New share falls back to "-1" appendix, because the name is already taken
 		$this->assertExternalShareEntry($shareData2, $openShares[1], 2, '{{TemporaryMountPointName#' . $shareData2['name'] . '}}-1');
 
-		\Test_Helper::invokePrivate($this->manager, 'setupMounts');
+		self::invokePrivate($this->manager, 'setupMounts');
 		$this->assertNotMount('SharedFolder');
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}');
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}-1');
@@ -102,7 +101,7 @@ class ManagerTest extends TestCase {
 		$this->manager->acceptShare($openShares[0]['id']);
 
 		// Check remaining shares - Accepted
-		$acceptedShares = \Test_Helper::invokePrivate($this->manager, 'getShares', [true]);
+		$acceptedShares = self::invokePrivate($this->manager, 'getShares', [true]);
 		$this->assertCount(1, $acceptedShares);
 		$shareData1['accepted'] = true;
 		$this->assertExternalShareEntry($shareData1, $acceptedShares[0], 1, $shareData1['name']);
@@ -111,7 +110,7 @@ class ManagerTest extends TestCase {
 		$this->assertCount(1, $openShares);
 		$this->assertExternalShareEntry($shareData2, $openShares[0], 2, '{{TemporaryMountPointName#' . $shareData2['name'] . '}}-1');
 
-		\Test_Helper::invokePrivate($this->manager, 'setupMounts');
+		self::invokePrivate($this->manager, 'setupMounts');
 		$this->assertMount($shareData1['name']);
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}');
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}-1');
@@ -124,7 +123,7 @@ class ManagerTest extends TestCase {
 		// New share falls back to the original name (no "-\d", because the name is not taken)
 		$this->assertExternalShareEntry($shareData3, $openShares[1], 3, '{{TemporaryMountPointName#' . $shareData3['name'] . '}}');
 
-		\Test_Helper::invokePrivate($this->manager, 'setupMounts');
+		self::invokePrivate($this->manager, 'setupMounts');
 		$this->assertMount($shareData1['name']);
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}');
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}-1');
@@ -136,13 +135,13 @@ class ManagerTest extends TestCase {
 		// Decline the third share
 		$this->manager->declineShare($openShares[1]['id']);
 
-		\Test_Helper::invokePrivate($this->manager, 'setupMounts');
+		self::invokePrivate($this->manager, 'setupMounts');
 		$this->assertMount($shareData1['name']);
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}');
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}-1');
 
 		// Check remaining shares - Accepted
-		$acceptedShares = \Test_Helper::invokePrivate($this->manager, 'getShares', [true]);
+		$acceptedShares = self::invokePrivate($this->manager, 'getShares', [true]);
 		$this->assertCount(1, $acceptedShares);
 		$shareData1['accepted'] = true;
 		$this->assertExternalShareEntry($shareData1, $acceptedShares[0], 1, $shareData1['name']);
@@ -151,7 +150,7 @@ class ManagerTest extends TestCase {
 		$this->assertCount(1, $openShares);
 		$this->assertExternalShareEntry($shareData2, $openShares[0], 2, '{{TemporaryMountPointName#' . $shareData2['name'] . '}}-1');
 
-		\Test_Helper::invokePrivate($this->manager, 'setupMounts');
+		self::invokePrivate($this->manager, 'setupMounts');
 		$this->assertMount($shareData1['name']);
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}');
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}-1');
@@ -164,10 +163,10 @@ class ManagerTest extends TestCase {
 			->with($this->stringStartsWith('http://localhost/ocs/v1.php/cloud/shares/' . $acceptedShares[0]['remote_id'] . '/decline'), $this->anything());
 
 		$this->manager->removeUserShares($this->uid);
-		$this->assertEmpty(\Test_Helper::invokePrivate($this->manager, 'getShares', [null]), 'Asserting all shares for the user have been deleted');
+		$this->assertEmpty(self::invokePrivate($this->manager, 'getShares', [null]), 'Asserting all shares for the user have been deleted');
 
 		$this->mountManager->clear();
-		\Test_Helper::invokePrivate($this->manager, 'setupMounts');
+		self::invokePrivate($this->manager, 'setupMounts');
 		$this->assertNotMount($shareData1['name']);
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}');
 		$this->assertNotMount('{{TemporaryMountPointName#' . $shareData1['name'] . '}}-1');

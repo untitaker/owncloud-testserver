@@ -116,7 +116,7 @@
                   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
@@ -125,7 +125,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
@@ -164,42 +163,44 @@
 						
   <div class="section" id="create-provisioning-profiles">
 <h1>Create Provisioning Profiles<a class="headerlink" href="#create-provisioning-profiles" title="Permalink to this headline">¶</a></h1>
-<p>The next phase is to create three provisioning profiles. These are the profiles
-that you will email to <a class="reference external" href="mailto:branding&#37;&#52;&#48;owncloud&#46;com">branding<span>&#64;</span>owncloud<span>&#46;</span>com</a> after building your branded app
-with the ownBrander app on
-<a class="reference external" href="https://customer.owncloud.com/owncloud">Customer.owncloud.com</a>.</p>
-<div class="section" id="first-provisioning-profile">
-<h2>First Provisioning Profile<a class="headerlink" href="#first-provisioning-profile" title="Permalink to this headline">¶</a></h2>
+<p>The next phase of this glorious journey is to create eight provisioning
+profiles: 4 Ad Hoc and 4 App Store. You will email the four Ad Hoc profiles,
+and your <a class="reference internal" href="publishing_ios_app_6.html"><em>P12 certificate</em></a> (which you will create
+after your provisioning profiles), to <a class="reference external" href="mailto:branding&#37;&#52;&#48;owncloud&#46;com">branding<span>&#64;</span>owncloud<span>&#46;</span>com</a> after building your
+branded app with the ownBrander app on <a class="reference external" href="https://customer.owncloud.com/owncloud">Customer.owncloud.com</a>. Do not send us the App Store
+profiles. All eight of these profiles must be stored on your Mac PC.</p>
+<div class="section" id="first-ad-hoc-provisioning-profile">
+<h2>First Ad Hoc Provisioning Profile<a class="headerlink" href="#first-ad-hoc-provisioning-profile" title="Permalink to this headline">¶</a></h2>
 <p>Go to <strong>Provisioning Profiles &gt; All</strong>, then click the plus button (top right)
-to open the <em>Add iOS Provisioning Profile</em> screen. Select <em>Ad Hoc</em> and click
+to open the <em>Add iOS Provisioning Profile</em> screen. Select <strong>Ad Hoc</strong> and click
 <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-35.png"><img alt="../_images/cert-35.png" src="../_images/cert-35.png" style="width: 581.6px; height: 563.2px;" /></a>
+<img alt="../_images/cert-35.png" src="../_images/cert-35.png" />
 </div>
 <p>On the <strong>Select App ID</strong> screen select the first of the three App IDs that you
 created and click <strong>Continue</strong>. (The first one has the shortest name, if you
 followed the naming conventions in this manual.)</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-36.png"><img alt="../_images/cert-36.png" src="../_images/cert-36.png" style="width: 751.2px; height: 378.4px;" /></a>
+<img alt="../_images/cert-36.png" src="../_images/cert-36.png" />
 </div>
 <p>Select the certificate that you created at the beginning of this process and
 click <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-38.png"><img alt="../_images/cert-38.png" src="../_images/cert-38.png" style="width: 571.2px; height: 396.8px;" /></a>
+<img alt="../_images/cert-38.png" src="../_images/cert-38.png" />
 </div>
 <p>Select the devices that you want to install and test your app on, then click
 <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-39.png"><img alt="../_images/cert-39.png" src="../_images/cert-39.png" style="width: 543.2px; height: 303.2px;" /></a>
+<img alt="../_images/cert-39.png" src="../_images/cert-39.png" />
 </div>
-<p>Name your provisioning profile with a descriptive <strong>Profile Name</strong>, which is
-your <strong>bundleID</strong>, and click <strong>Generate</strong>.</p>
+<p>Name your provisioning profile with a descriptive <strong>Profile Name</strong> and click
+<strong>Generate</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-40.png"><img alt="../_images/cert-40.png" src="../_images/cert-40.png" style="width: 492.0px; height: 360.8px;" /></a>
+<img alt="../_images/cert-40.png" src="../_images/cert-40.png" />
 </div>
 <p>When it has generated, download your new profile to your Mac computer.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-50.png"><img alt="../_images/cert-50.png" src="../_images/cert-50.png" style="width: 479.2px; height: 484.8px;" /></a>
+<img alt="../_images/cert-50.png" src="../_images/cert-50.png" />
 </div>
 <p>Find it on your Mac (usually the Download folder) and double-click to install
 it in Xcode.</p>
@@ -207,73 +208,122 @@ it in Xcode.</p>
 <img alt="../_images/cert-41.png" src="../_images/cert-41.png" />
 </div>
 </div>
-<div class="section" id="second-provisioning-profile">
-<h2>Second Provisioning Profile<a class="headerlink" href="#second-provisioning-profile" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="second-ad-hoc-provisioning-profile">
+<h2>Second Ad Hoc Provisioning Profile<a class="headerlink" href="#second-ad-hoc-provisioning-profile" title="Permalink to this headline">¶</a></h2>
 <p>Return to the &#8220;Your provision profile is ready&#8221; screen, scroll to the bottom
 and click <strong>Add Another</strong>. On the following screen select <strong>Ad Hoc</strong> and click
 <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-35.png"><img alt="../_images/cert-35.png" src="../_images/cert-35.png" style="width: 581.6px; height: 563.2px;" /></a>
+<img alt="../_images/cert-35.png" src="../_images/cert-35.png" />
 </div>
-<p>This time select the Select the <strong>.DocumentProvider</strong> app ID and click
-<strong>Continue</strong>.</p>
+<p>This time select the <strong>.DocumentProvider</strong> app ID and click <strong>Continue</strong>.</p>
 <div class="figure">
 <img alt="../_images/cert-42.png" src="../_images/cert-42.png" />
 </div>
 <p>Select the certificate that you created at the beginning of this process and
 click <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-43.png"><img alt="../_images/cert-43.png" src="../_images/cert-43.png" style="width: 504.8px; height: 443.2px;" /></a>
+<img alt="../_images/cert-43.png" src="../_images/cert-43.png" />
 </div>
 <p>Select the devices that you want to install and test your app on, then click
 <strong>Continue</strong>. These must be the same devices you selected for the first
-provisioning profile, and they will be selected by default.</p>
+provisioning profile.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-39.png"><img alt="../_images/cert-39.png" src="../_images/cert-39.png" style="width: 543.2px; height: 303.2px;" /></a>
+<img alt="../_images/cert-39.png" src="../_images/cert-39.png" />
 </div>
-<p>Give this provisioning profile the same <strong>bundleID</strong> as your first profile
+<p>Give this provisioning profile the same name as your first profile,
 plus <strong>.DocumentProvider</strong> and click <strong>Generate</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-44.png"><img alt="../_images/cert-44.png" src="../_images/cert-44.png" style="width: 484.0px; height: 379.2px;" /></a>
+<img alt="../_images/cert-44.png" src="../_images/cert-44.png" />
 </div>
 <p>Just like the first provisioning profile, download it to your Mac computer, and
 then double-click to install it in Xcode.</p>
 </div>
-<div class="section" id="third-provisioning-profile">
-<h2>Third Provisioning Profile<a class="headerlink" href="#third-provisioning-profile" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="third-ad-hoc-provisioning-profile">
+<h2>Third Ad Hoc Provisioning Profile<a class="headerlink" href="#third-ad-hoc-provisioning-profile" title="Permalink to this headline">¶</a></h2>
 <p>Return to the &#8220;Your provision profile is ready&#8221; screen, scroll to the bottom
 and click <strong>Add Another</strong>. On the following screen select <strong>Ad Hoc</strong> and click
 <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-35.png"><img alt="../_images/cert-35.png" src="../_images/cert-35.png" style="width: 581.6px; height: 563.2px;" /></a>
+<img alt="../_images/cert-35.png" src="../_images/cert-35.png" />
 </div>
-<p>This time select the Select the <strong>.DocumentProviderFileProvider</strong> app ID and
+<p>This time select the <strong>.DocumentProviderFileProvider</strong> app ID and click
+<strong>Continue</strong>.</p>
+<div class="figure">
+<img alt="../_images/cert-60.png" src="../_images/cert-60.png" />
+</div>
+<p>Select the certificate that you created at the beginning of this process and
 click <strong>Continue</strong>.</p>
+<div class="figure">
+<img alt="../_images/cert-43.png" src="../_images/cert-43.png" />
+</div>
+<p>Select the devices that you want to install and test your app on, then click
+<strong>Continue</strong>. These must be the same devices you selected for the first
+provisioning profile.</p>
+<div class="figure">
+<img alt="../_images/cert-39.png" src="../_images/cert-39.png" />
+</div>
+<p>Give this provisioning profile the same name as your first profile
+plus <strong>.DocumentProviderFileProvider</strong> and click <strong>Generate</strong>. There is a
+50-character limit, but don&#8217;t worry about counting characters because it will
+be automatically truncated if you go over.</p>
+<div class="figure">
+<img alt="../_images/cert-47.png" src="../_images/cert-47.png" />
+</div>
+<p>Download it to your Mac computer, and then double-click to install it in Xcode.</p>
+</div>
+<div class="section" id="fourth-ad-hoc-provisioning-profile">
+<h2>Fourth Ad Hoc Provisioning Profile<a class="headerlink" href="#fourth-ad-hoc-provisioning-profile" title="Permalink to this headline">¶</a></h2>
+<p>Return to the &#8220;Your provision profile is ready&#8221; screen, scroll to the bottom
+and click <strong>Add Another</strong>. On the following screen select <strong>Ad Hoc</strong> and click
+<strong>Continue</strong>.</p>
+<div class="figure">
+<img alt="../_images/cert-35.png" src="../_images/cert-35.png" />
+</div>
+<p>This time select the <strong>.ShareExtApp</strong> app ID and click <strong>Continue</strong>.</p>
 <div class="figure">
 <img alt="../_images/cert-46.png" src="../_images/cert-46.png" />
 </div>
 <p>Select the certificate that you created at the beginning of this process and
 click <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-43.png"><img alt="../_images/cert-43.png" src="../_images/cert-43.png" style="width: 504.8px; height: 443.2px;" /></a>
+<img alt="../_images/cert-43.png" src="../_images/cert-43.png" />
 </div>
-<p>Give this provisioning profile the same <strong>bundleID</strong> as your first profile
-plus <strong>.DocumentProviderFileProvider</strong> and click <strong>Generate</strong>. There is a
+<p>Select the devices that you want to install and test your app on, then click
+<strong>Continue</strong>. These must be the same devices you selected for the first
+provisioning profile.</p>
+<div class="figure">
+<img alt="../_images/cert-39.png" src="../_images/cert-39.png" />
+</div>
+<p>Give this provisioning profile the same name as your first profile
+plus <strong>.ShareExtApp</strong> and click <strong>Generate</strong>. There is a
 50-character limit, but don&#8217;t worry about counting characters because it will
 be automatically truncated if you go over.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-47.png"><img alt="../_images/cert-47.png" src="../_images/cert-47.png" style="width: 469.6px; height: 376.8px;" /></a>
+<img alt="../_images/cert-58.png" src="../_images/cert-58.png" />
 </div>
 <p>Download it to your Mac computer, and then double-click to install it in Xcode.
-You should now see all of your provisioning profiles in your Download folder:</p>
+You should now see all of your Ad Hoc provisioning profiles listed in your &#8220;iOS
+Provisioning Profiles&#8221;.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-51.png"><img alt="../_images/cert-51.png" src="../_images/cert-51.png" style="width: 522.4px; height: 150.4px;" /></a>
+<img alt="../_images/cert-59.png" src="../_images/cert-59.png" />
 </div>
-<p>And listed in your &#8220;iOS Provisioning Profiles&#8221;.</p>
+</div>
+<div class="section" id="create-four-app-store-profiles">
+<h2>Create Four App Store Profiles<a class="headerlink" href="#create-four-app-store-profiles" title="Permalink to this headline">¶</a></h2>
+<p>Creating your four App Store profiles is the same as creating your Ad Hoc
+profiles, except that when you start you check the App Store checkbox, and you
+won&#8217;t select testing devices.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-52.png"><img alt="../_images/cert-52.png" src="../_images/cert-52.png" style="width: 496.0px; height: 180.0px;" /></a>
+<img alt="../_images/cert-62.png" src="../_images/cert-62.png" />
 </div>
-<p>You have one more certificate to create, and that is your P12 certificate.</p>
+<p>When you&#8217;re finished, you&#8217;ll have eight new provisioning profiles. Remember,
+when you build your app on ownBuilder you only send in the four Ad Hoc
+profiles, plus your P12 certificate.</p>
+<div class="figure">
+<img alt="../_images/cert-61.png" src="../_images/cert-61.png" />
+</div>
+<p>Go to the next page to learn how to create your <a class="reference internal" href="publishing_ios_app_6.html"><em>P12 certificate</em></a>.</p>
 </div>
 </div>
 

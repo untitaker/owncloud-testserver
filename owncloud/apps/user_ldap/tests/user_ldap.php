@@ -1,24 +1,28 @@
 <?php
 /**
-* ownCloud
-*
-* @author Arthur Schiwon
-* @copyright 2013 Arthur Schiwon blizzz@owncloud.com
-*
-* This library is free software; you can redistribute it and/or
-* modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
-* License as published by the Free Software Foundation; either
-* version 3 of the License, or any later version.
-*
-* This library is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU AFFERO GENERAL PUBLIC LICENSE for more details.
-*
-* You should have received a copy of the GNU Affero General Public
-* License along with this library.  If not, see <http://www.gnu.org/licenses/>.
-*
-*/
+ * @author Arthur Schiwon <blizzz@owncloud.com>
+ * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Jörn Friedrich Dreyer <jfd@butonic.de>
+ * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Robin McCorkell <rmccorkell@karoshi.org.uk>
+ *
+ * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @license AGPL-3.0
+ *
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
+ */
 
 namespace OCA\user_ldap\tests;
 
@@ -105,12 +109,6 @@ class Test_User_Ldap_Direct extends \Test\TestCase {
 	 * @return void
 	 */
 	private function prepareAccessForCheckPassword(&$access, $noDisplayName = false) {
-		$access->expects($this->once())
-			   ->method('escapeFilterPart')
-			   ->will($this->returnCallback(function($uid) {
-				   return $uid;
-			   }));
-
 		$access->connection->expects($this->any())
 			   ->method('__get')
 			   ->will($this->returnCallback(function($name) {
@@ -128,6 +126,15 @@ class Test_User_Ldap_Direct extends \Test\TestCase {
 					}
 					return array();
 			   }));
+
+		$access->expects($this->any())
+			->method('fetchUsersByLoginName')
+			->will($this->returnCallback(function($uid) {
+				if($uid === 'roland') {
+					return array(array('dn' => 'dnOfRoland,dc=test'));
+				}
+				return array();
+			}));
 
 		$retVal = 'gunslinger';
 		if($noDisplayName === true) {
@@ -253,12 +260,15 @@ class Test_User_Ldap_Direct extends \Test\TestCase {
 		$config = $this->getMock('\OCP\IConfig');
 		$config->expects($this->exactly(2))
 			->method('getUserValue')
-			->will($this->returnValue(1));
+			->will($this->onConsecutiveCalls('1', '/var/vhome/jdings/'));
 
 		$backend = new UserLDAP($access, $config);
 
 		$result = $backend->deleteUser('jeremy');
 		$this->assertTrue($result);
+
+		$home = $backend->getHome('jeremy');
+		$this->assertSame($home, '/var/vhome/jdings/');
 	}
 
 	/**

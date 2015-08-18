@@ -116,7 +116,7 @@
                   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
@@ -125,7 +125,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
@@ -172,30 +171,39 @@ branded iOS app that you can distribute to your users.</p>
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>A Mac OS X computer with Xcode (free download) and Keychain Access
-(included in Utilities)</li>
+(included in Utilities). This computer is essential to the entire process
+and will be linked to to your iOS Developer account. You will use it
+create and store distribution certificates, and to upload your app to iTunes
+Connect.</li>
 <li>An iOS developer account on
 <a class="reference external" href="https://developer.apple.com/ios/">Developer.Apple.com/ios</a>,
-which costs $99 per year.</li>
+which costs $99 per year. Or an Enterprise account for $299/yr. The
+developer account limits you to testing on 100 devices of each type (Apple TV,
+Apple Watch, iPad, iPhone, iPod Touch) which must be
+registered in your account. The Enterprise account allows testing on
+unlimited, unregistered devices.</li>
 <li>An ownCloud Enterprise Subscription, with the ownBrander app enabled on
 <a class="reference external" href="https://customer.owncloud.com/owncloud">Customer.owncloud.com</a></li>
-<li>Some iPhones or iPads for testing your app, which must have their UDIDs
-registered in your account on <a class="reference external" href="https://developer.apple.com">Developer.Apple.com</a>. You may register up to 100 devices.</li>
+<li>Some iPhones or iPads for testing your app. Again, if you have the $99
+developer account each device must have its UDID
+registered in your account on <a class="reference external" href="https://developer.apple.com">Developer.Apple.com</a>.</li>
 </ul>
 </div>
 <div class="section" id="procedure">
 <h2>Procedure<a class="headerlink" href="#procedure" title="Permalink to this headline">¶</a></h2>
-<p>You need the Apple tools to build three provisioning profiles and a P12
-certificate, which you will email to <a class="reference external" href="mailto:branding&#37;&#52;&#48;owncloud&#46;com">branding<span>&#64;</span>owncloud<span>&#46;</span>com</a> after building your
-app with the ownBrander app on <a class="reference external" href="https://customer.owncloud.com/owncloud">Customer.owncloud.com</a>. It is best to create the
-provisioning profiles and P12 certificate first, before building your app,
-because you must supply a unique <strong>bundle ID</strong> and an <strong>app group</strong> to build
-your app. These are created in your account on <a class="reference external" href="https://developer.apple.com">Developer.Apple.com</a>, and with Keychain Access on your Mac computer.</p>
-<p>We use the provisioning profiles and P12 certificate to complete building your
-app, and then in 24-48 hours your new branded app is loaded into your account
-on <a class="reference external" href="https://customer.owncloud.com/owncloud">Customer.owncloud.com</a>.</p>
-<p>The next step is to test your app on your registered iOS devices. When it
-passes testing, the final step is to upload it to your iTunes account for
-distribution.</p>
+<p>You need the Apple tools to build eight provisioning profiles (4 Ad Hoc and 4
+App Store) and a P12 certificate. You will email the four Ad Hoc profiles and
+P12 certificate to <a class="reference external" href="mailto:branding&#37;&#52;&#48;owncloud&#46;com">branding<span>&#64;</span>owncloud<span>&#46;</span>com</a> after building your app with the
+ownBrander app on <a class="reference external" href="https://customer.owncloud.com/owncloud">Customer.owncloud.com</a>. You must create the provisioning
+profiles and P12 certificate first, before building your app, because you must
+supply a unique <strong>bundle ID</strong> and an <strong>app group</strong> to build your app. These are
+created in your account on <a class="reference external" href="https://developer.apple.com">Developer.Apple.com</a>,
+and with Keychain Access on your Mac computer.</p>
+<p>We use the 4 Ad Hoc provisioning profiles and P12 certificate to complete
+building your app, and then in 24-48 hours your new branded app is loaded into
+your account on <a class="reference external" href="https://customer.owncloud.com/owncloud">Customer.owncloud.com</a>.</p>
+<p>The next step is to test your app. When it passes testing, the final step is to
+upload it to your iTunes Connect account for distribution.</p>
 <p>You will need a lot of graphics for building your app, and for your iTunes
 store listing, in specific sizes and file formats. The ownBrander app and
 iTunes detail all the image specifications you will need.</p>

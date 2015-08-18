@@ -116,7 +116,7 @@
                   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
@@ -125,7 +125,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
@@ -164,7 +163,7 @@
 						
   <div class="section" id="create-bundle-ids">
 <h1>Create Bundle IDs<a class="headerlink" href="#create-bundle-ids" title="Permalink to this headline">¶</a></h1>
-<p>The next step is to create three <strong>Bundle IDs</strong>. These are unique identifiers
+<p>The next step is to create four <strong>Bundle IDs</strong>. These are unique identifiers
 for your branded iOS app. You must also create an <strong>App Group</strong> and place your
 three <strong>Bundle IDs</strong> in your <strong>App Group</strong>. You will need your base <strong>Bundle
 ID</strong> and <strong>App Group</strong> when you build your app with the ownBrander app on
@@ -177,33 +176,28 @@ plus button (top right) to open the &#8220;Register iOS App ID&#8221; screen. Fi
 descriptive. The <strong>App ID Prefix</strong> is your Apple Developer Team ID, and is
 automatically entered for you.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-8.png"><img alt="../_images/cert-8.png" src="../_images/cert-8.png" style="width: 817.6px; height: 504.0px;" /></a>
+<img alt="../_images/cert-8.png" src="../_images/cert-8.png" />
 </div>
-<p>Scroll down to the <strong>App ID Suffix</strong> section and create your <strong>Bundle ID</strong>.
-Your
+<p>Scroll down to the <strong>App ID Suffix</strong> section and create your <strong>Bundle ID</strong>. Your
 <strong>Bundle ID</strong> is the unique identifier for your app. Make a note of it because
-you
-will need it as you continue through this process. The format for your <strong>Bundle
-ID</strong>
-is reverse-domain, e.g. <em>com.MyCompany.MyProductName</em>.</p>
+you will need it as you continue through this process. The format for your
+<strong>Bundle ID</strong> is reverse-domain, e.g. <em>com.MyCompany.MyProductName</em>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-9.png"><img alt="../_images/cert-9.png" src="../_images/cert-9.png" style="width: 630.4px; height: 319.2px;" /></a>
+<img alt="../_images/cert-9.png" src="../_images/cert-9.png" />
 </div>
 <p>The next section, <strong>App Services</strong>, is where you select the services you want
-enabled in your app. You can edit this anytime after you
-finish creating your <strong>App ID</strong>. Make your selections and then click the
-<strong>Continue</strong> button at the bottom.</p>
+enabled in your app. You can edit this anytime after you finish creating your
+<strong>App ID</strong>. Check <strong>App Groups</strong>, make your other selections and then click the
+<strong>Continue</strong> button at the bottom. Now you can confirm all of your information.
+If everything is correct click <strong>Submit</strong>; if you need to make changes use the
+<strong>Back</strong> button.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-10.png"><img alt="../_images/cert-10.png" src="../_images/cert-10.png" style="width: 614.4px; height: 260.0px;" /></a>
+<img alt="../_images/cert-11.png" src="../_images/cert-11.png" />
 </div>
-<p>Now you can confirm all of your information. If everything is correct click
-<strong>Submit</strong>; if you need to make changes use the <strong>Back</strong> button.</p>
+<p>When you are finished you will see a confirmation. Click the <strong>Done</strong> button at
+the bottom.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-11.png"><img alt="../_images/cert-11.png" src="../_images/cert-11.png" style="width: 534.4px; height: 793.6px;" /></a>
-</div>
-<p>When you are finished you will see a confirmation.</p>
-<div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-12.png"><img alt="../_images/cert-12.png" src="../_images/cert-12.png" style="width: 520.8px; height: 362.4px;" /></a>
+<img alt="../_images/cert-12.png" src="../_images/cert-12.png" />
 </div>
 </div>
 <div class="section" id="create-app-group">
@@ -211,95 +205,77 @@ finish creating your <strong>App ID</strong>. Make your selections and then clic
 <p>The next step is to create an App Group and put your App ID in it. Go to
 <strong>Identifiers &gt; App Groups</strong> and click the plus button (top right).</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/Selection_015.png"><img alt="../_images/Selection_015.png" src="../_images/Selection_015.png" style="width: 787.2px; height: 401.6px;" /></a>
+<img alt="../_images/cert-13.png" src="../_images/cert-13.png" />
 </div>
 <p>Create a description for your app group, and a unique identifier in the format
-<em>groups.com.MyCompany.MyAppGroup</em>. Then click <strong>Continue</strong>.</p>
+<em>group.com.MyCompany.MyAppGroup</em>. Then click <strong>Continue</strong></p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-14.png"><img alt="../_images/cert-14.png" src="../_images/cert-14.png" style="width: 543.2px; height: 496.0px;" /></a>
+<img alt="../_images/cert-14.png" src="../_images/cert-14.png" />
 </div>
 <p>Review the confirmation screen, and if everything looks correct click the
 <strong>Register</strong> button.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-15.png"><img alt="../_images/cert-15.png" src="../_images/cert-15.png" style="width: 456.8px; height: 467.2px;" /></a>
+<img alt="../_images/cert-15.png" src="../_images/cert-15.png" />
 </div>
 <p>You&#8217;ll see a final confirmation screen; click <strong>Done</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-16.png"><img alt="../_images/cert-16.png" src="../_images/cert-16.png" style="width: 405.6px; height: 465.6px;" /></a>
+<img alt="../_images/cert-16.png" src="../_images/cert-16.png" />
 </div>
 <p>When you click on <strong>App Groups</strong> you will see your new app group.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/Selection_019.png"><img alt="../_images/Selection_019.png" src="../_images/Selection_019.png" style="width: 772.8px; height: 415.2px;" /></a>
+<img alt="../_images/cert-17.png" src="../_images/cert-17.png" />
 </div>
 <p>Now go back to <strong>Identifiers &gt; App IDs</strong> and click on your App ID. This opens a
 screen that displays all your app information. Click the <strong>Edit</strong> button at the
 bottom.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-18.png"><img alt="../_images/cert-18.png" src="../_images/cert-18.png" style="width: 688.8px; height: 664.0px;" /></a>
+<img alt="../_images/cert-18.png" src="../_images/cert-18.png" />
 </div>
-<p>This opens the edit screen; check <strong>App Groups</strong>.</p>
+<p>Click the <strong>Edit</strong> button next to <strong>App Groups</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-19.png"><img alt="../_images/cert-19.png" src="../_images/cert-19.png" style="width: 556.8px; height: 204.0px;" /></a>
+<img alt="../_images/cert-19.png" src="../_images/cert-19.png" />
 </div>
-<p>When you check  <strong>App Groups</strong> you&#8217;ll get a popup warning you &#8220;If you wish
-to enable App Groups for any existing provisioning profiles associated with
-this
-App ID, you must also regenerate them.&#8221; If you are following this guide for the
-first time, then you have not yet created provisioning profiles, so click
-<strong>OK</strong>.</p>
+<p>Check your app and click the <strong>Continue</strong> button.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-20.png"><img alt="../_images/cert-20.png" src="../_images/cert-20.png" style="width: 381.6px; height: 268.0px;" /></a>
+<img alt="../_images/cert-20.png" src="../_images/cert-20.png" />
 </div>
-<p>When you click <strong>OK</strong> the popup is dismissed, and you must click the <strong>Edit</strong>
-button.</p>
-<div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-21.png"><img alt="../_images/cert-21.png" src="../_images/cert-21.png" style="width: 564.8px; height: 200.0px;" /></a>
-</div>
-<p>Select your app and click <strong>Continue</strong></p>
-<div class="figure">
-<a class="reference internal image-reference" href="../_images/Selection_026.png"><img alt="../_images/Selection_026.png" src="../_images/Selection_026.png" style="width: 553.6px; height: 472.0px;" /></a>
-</div>
-<p>Review the confirmation screen, and then click <strong>Assign</strong>.</p>
-<div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-23.png"><img alt="../_images/cert-23.png" src="../_images/cert-23.png" style="width: 505.6px; height: 480.8px;" /></a>
-</div>
-<p>You will see the message &#8220;You have successfully updated the App Groups
-associations with your App ID.&#8221; Click <strong>done</strong>. If you go to <strong>Identifiers &gt;
-App IDs</strong> and click on your app, you&#8217;ll see an additional confirmation that you
-successfully assigned your app to your app group.</p>
-<div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-24.png"><img alt="../_images/cert-24.png" src="../_images/cert-24.png" style="width: 716.0px; height: 189.6px;" /></a>
-</div>
+<p>The next screen asks you to &#8220;Review and confirm the App Groups you have
+selected&#8221;. Click the <strong>Assign</strong> button to confirm. The next screen announces
+&#8220;You have successfully updated the App Groups associations with your App ID&#8221;,
+and you must click yet another button, the <strong>Done</strong> button at the bottom.</p>
 </div>
 <div class="section" id="create-a-documentprovider-bundle-id">
 <h2>Create a DocumentProvider Bundle ID<a class="headerlink" href="#create-a-documentprovider-bundle-id" title="Permalink to this headline">¶</a></h2>
 <p>Now you must return to <strong>Identifiers &gt; App IDs</strong> and click the plus button to
 create a DocumentProvider Bundle ID. Follow the same naming conventions as for
-your App ID.</p>
+your App ID, then click <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-25.png"><img alt="../_images/cert-25.png" src="../_images/cert-25.png" style="width: 549.6px; height: 677.6px;" /></a>
+<img alt="../_images/cert-25.png" src="../_images/cert-25.png" />
 </div>
 <p>Confirm your new App ID and click <strong>Submit</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-26.png"><img alt="../_images/cert-26.png" src="../_images/cert-26.png" style="width: 532.8px; height: 295.2px;" /></a>
+<img alt="../_images/cert-26.png" src="../_images/cert-26.png" />
 </div>
-<p>You will see one more confirmation; click <strong>Done</strong>. Now you need to add it
-to your App Group. Go to <strong>Identifiers &gt; App IDs</strong> and click on your new
-DocumentProvider Bundle ID to open its configuration window, and then click the
-<strong>Edit</strong> button.</p>
+<p>You will see one more confirmation: &#8220;Registration complete. This App ID is now
+registered to your account and can be used in your provisioning profiles.&#8221;
+Click <strong>Done</strong>.</p>
+<p>Now you need to add it to your App Group. Go to <strong>Identifiers &gt; App IDs</strong> and
+click on your new DocumentProvider Bundle ID to open its configuration window,
+and then click the <strong>Edit</strong> button at the bottom.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/Selection_035.png"><img alt="../_images/Selection_035.png" src="../_images/Selection_035.png" style="width: 772.8px; height: 262.4px;" /></a>
+<img alt="../_images/cert-27.png" src="../_images/cert-27.png" />
 </div>
 <p>Select <strong>App Groups</strong> and click the <strong>Edit</strong> button.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-28.png"><img alt="../_images/cert-28.png" src="../_images/cert-28.png" style="width: 573.6px; height: 206.4px;" /></a>
+<img alt="../_images/cert-28.png" src="../_images/cert-28.png" />
 </div>
 <p>Select your group and click <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/Selection_037.png"><img alt="../_images/Selection_037.png" src="../_images/Selection_037.png" style="width: 543.2px; height: 336.8px;" /></a>
+<img alt="../_images/cert-29.png" src="../_images/cert-29.png" />
 </div>
-<p>On the confirmation screen click <strong>Assign</strong>, and you&#8217;ll see the message &#8220;You
-have successfully updated the App Groups associations with your App ID.&#8221;</p>
+<p>Once again you will asked if you really mean it. On the confirmation screen
+click <strong>Assign</strong>, and you&#8217;ll see the message &#8220;You have successfully updated the
+App Groups associations with your App ID.&#8221;</p>
 </div>
 <div class="section" id="create-a-documentproviderfileprovider-bundle-id">
 <h2>Create a DocumentProviderFileProvider Bundle ID<a class="headerlink" href="#create-a-documentproviderfileprovider-bundle-id" title="Permalink to this headline">¶</a></h2>
@@ -307,32 +283,65 @@ have successfully updated the App Groups associations with your App ID.&#8221;</
 create a DocumentProviderFileProvider Bundle ID. Follow the same naming
 conventions as for your App ID, then click <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-30.png"><img alt="../_images/cert-30.png" src="../_images/cert-30.png" style="width: 544.0px; height: 632.8px;" /></a>
+<img alt="../_images/cert-30.png" src="../_images/cert-30.png" />
 </div>
 <p>Confirm your new App ID and click <strong>Submit</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-31.png"><img alt="../_images/cert-31.png" src="../_images/cert-31.png" style="width: 530.4px; height: 246.4px;" /></a>
+<img alt="../_images/cert-31.png" src="../_images/cert-31.png" />
 </div>
-<p>You will see one more confirmation; click <strong>Done</strong>. Now you need to add it to
-your App Group. Go to <strong>Identifiers &gt; App IDs</strong> and click on your new
-DocumentProviderFileProvider Bundle ID to open its configuration window, and
+<p>You will see one more confirmation; review it and click <strong>Done</strong>. Now you need
+to add it to your App Group. Go to <strong>Identifiers &gt; App IDs</strong> and click on your
+new DocumentProviderFileProvider Bundle ID to open its configuration window, and
 then click the <strong>Edit</strong> button.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-32.png"><img alt="../_images/cert-32.png" src="../_images/cert-32.png" style="width: 494.4px; height: 180.8px;" /></a>
+<img alt="../_images/cert-32.png" src="../_images/cert-32.png" />
 </div>
 <p>Select <strong>App Groups</strong> and click the <strong>Edit</strong> button.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-33.png"><img alt="../_images/cert-33.png" src="../_images/cert-33.png" style="width: 580.0px; height: 282.4px;" /></a>
+<img alt="../_images/cert-33.png" src="../_images/cert-33.png" />
 </div>
 <p>Select your group and click <strong>Continue</strong>.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/cert-34.png"><img alt="../_images/cert-34.png" src="../_images/cert-34.png" style="width: 562.4px; height: 479.2px;" /></a>
+<img alt="../_images/cert-34.png" src="../_images/cert-34.png" />
 </div>
 <p>On the confirmation screen click <strong>Assign</strong>, and you&#8217;ll see the message &#8220;You
 have successfully updated the App Groups associations with your App ID.&#8221;</p>
-<p>Now you should have three new App IDs, and all three of them should belong to
-your App Group. (You can verify group membership by going to the edit
-screen for each App ID and looking at the <strong>iOS App ID Settings</strong>.)</p>
+</div>
+<div class="section" id="create-a-shareextapp-bundle-id">
+<h2>Create a ShareExtApp Bundle ID<a class="headerlink" href="#create-a-shareextapp-bundle-id" title="Permalink to this headline">¶</a></h2>
+<p>This supports Apple&#8217;s ShareIN extension.</p>
+<p>Yet again, go to <strong>Identifiers &gt; App IDs</strong> and click the plus button to create a
+ShareExtApp Bundle ID. Follow the same naming conventions as for your App ID,
+then click <strong>Continue</strong>.</p>
+<div class="figure">
+<img alt="../_images/cert-53.png" src="../_images/cert-53.png" />
+</div>
+<p>Confirm your new App ID and click <strong>Submit</strong>.</p>
+<div class="figure">
+<img alt="../_images/cert-54.png" src="../_images/cert-54.png" />
+</div>
+<p>You will see one more confirmation; review it and click <strong>Done</strong>. Now you need
+to add it to your App Group. Go to <strong>Identifiers &gt; App IDs</strong> and click on your
+new ShareExtApp Bundle ID to open its configuration window, and
+then click the <strong>Edit</strong> button.</p>
+<div class="figure">
+<img alt="../_images/cert-55.png" src="../_images/cert-55.png" />
+</div>
+<p>Select <strong>App Groups</strong> and click the <strong>Edit</strong> button.</p>
+<div class="figure">
+<img alt="../_images/cert-56.png" src="../_images/cert-56.png" />
+</div>
+<p>Select your group and click <strong>Continue</strong>.</p>
+<div class="figure">
+<img alt="../_images/cert-57.png" src="../_images/cert-57.png" />
+</div>
+<p>On the confirmation screen click <strong>Assign</strong>, and you&#8217;ll see the message &#8220;You
+have successfully updated the App Groups associations with your App ID.&#8221;</p>
+</div>
+<div class="section" id="four-completed-app-ids">
+<h2>Four Completed App IDs<a class="headerlink" href="#four-completed-app-ids" title="Permalink to this headline">¶</a></h2>
+<p>Now you should have four new App IDs, and all of them should belong to
+your App Group.</p>
 <div class="figure">
 <img alt="../_images/cert-37.png" src="../_images/cert-37.png" />
 </div>

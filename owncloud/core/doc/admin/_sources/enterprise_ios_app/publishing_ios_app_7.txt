@@ -2,13 +2,13 @@
 Building Your iOS App With ownBrander
 =====================================
 
-At last you have arrived to the point where you can actually build your 
-branded iOS app. Log into your account on `Customer.owncloud.com 
+At long last you have arrived at the point where you can actually build your 
+branded iOS app. Log into your account on `Customer.owncloud.com/owncloud 
 <https://customer.owncloud.com/owncloud/>`_ and open the ownBrander app.
 
 .. figure:: ../images/ownbrander-1.png
 
-If you don't see the ownBrander app, open a support request (Open Case 
+If you don't see the ownBrander app, open a support request (**Open Case** 
 button).
 
 Your first ownBrander task is to review the iOS page on ownBrander for your 
@@ -71,13 +71,11 @@ into the app. The ownBuilder app tells you exactly which images you need, and
 their required size. Click the example images on the right to enlarge them.
 
 .. figure:: ../images/ownbrander-14.png
-   :scale: 70%
    
 You may enter a custom **User agent**, which is useful for traffic analysis and 
 whitelisting your app.
    
 .. figure:: ../images/ownbrander-22.png
-   :scale: 70%
 
 Check **Recommend** to open a Twitter, Facebook, and Email recommendation 
 configurator.
@@ -88,7 +86,9 @@ If you have online help, enter the URL here.
 
 .. figure:: ../images/ownbrander-24.png
 
-Enter a **Feedback email** address, if you have one.
+**Activate the option feedback** creates an option for your users to either 
+enable or not enable the feedback option on their devices. If you enable this, 
+enter your **Feedback email** address.
 
 .. figure:: ../images/ownbrander-25.png
 
@@ -100,6 +100,27 @@ Check **Show a "new account" link in app** to allow new users to request a new
 account.
 
 .. figure:: ../images/ownbrander-27.png
+
+Upload an icon that will be displayed by default when there is no file preview 
+to display.
+
+.. figure:: ../images/ownbrander-30.png
+
+By default, sharing by public URL is enabled. Public share links allow your 
+users to share files with anyone. This option allows you to disable public link 
+sharing.
+
+.. figure:: ../images/ownbrander-31.png
+
+You may disable background transfers if you are using mobile device management 
+(MDM), such as Mobile Iron, that does not support background jobs, or if you 
+simply do not want to allow the app to work in the background. By default, 
+the ownCloud iOS app supports background file transfers by taking
+advantage of `Background Execution. 
+<https://developer.apple.com/library/ios/documentation/iPhone/Conceptual/
+iPhoneOSProgrammingGuide/BackgroundExecution/BackgroundExecution.html>`_
+
+.. figure:: ../images/ownbrander-32.png
 
 That completes the required elements of your branded iOS app.
 
@@ -121,7 +142,7 @@ Generate iOS App
 
 When you have uploaded all of your images and completed your customizations, 
 click the **Generate iOS App** button and take a well-deserved break. Remember 
-to email your three provisioning profiles and P12 certificate to 
+to email your four Ad Hoc provisioning profiles and P12 certificate to 
 branding@owncloud.com.
 
 .. figure:: ../images/ownbrander-28.png

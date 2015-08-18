@@ -116,7 +116,7 @@
                   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
@@ -125,7 +125,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
@@ -165,22 +164,29 @@
   <div class="section" id="setting-up-testing-devices">
 <h1>Setting up Testing Devices<a class="headerlink" href="#setting-up-testing-devices" title="Permalink to this headline">¶</a></h1>
 <p>The $99 Apple Developer account allows you to test your iOS apps on a maximum of
-100 devices, and you must register the UDID of each device in your Apple
-developer account.</p>
-<p>First you must find the UDIDs of your test devices. The easiest way is to
-connect to your iTunes account. Then connect your iOS device to your Mac
-computer. Your device will appear on the left sidebar in iTunes. Click on this
-to display your device information. Then click on the serial number, and you
-will your UDID.</p>
+100 devices of each type:</p>
+<div class="highlight-python"><pre>Apple TV     100
+Apple Watch  100
+iPad         100
+iPhone       100
+iPod Touch   100</pre>
+</div>
+<p>And you must register the UDID of each device in your Apple developer account.
+If you have the $299 Enterprise account then you can install your app on any
+device without registering it.</p>
+<p>The easiest way to find UDIDs is to connect to your iTunes account. Then connect
+your iOS device to your Mac computer. Your device will appear on the left
+sidebar in iTunes. Click on this to display your device information. Then click
+on the serial number, and you will see your UDID.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/itunes-udid.png"><img alt="../_images/itunes-udid.png" src="../_images/itunes-udid.png" style="width: 759.2px; height: 426.4px;" /></a>
+<img alt="../_images/itunes-udid.png" src="../_images/itunes-udid.png" />
 </div>
 <p>Return to your account on <a class="reference external" href="https://developer.apple.com">Developer.apple.com</a>, go to <strong>IOS Apps &gt;
 Devices &gt; All</strong>, and click the plus button on the top right to register a new
 device. You can make the name anything you want, and the UDID must be the UDID
 copied from iTunes.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/itunes-udid-3.png"><img alt="../_images/itunes-udid-3.png" src="../_images/itunes-udid-3.png" style="width: 671.2px; height: 649.6px;" /></a>
+<img alt="../_images/itunes-udid-3.png" src="../_images/itunes-udid-3.png" />
 </div>
 <p>If you have a large number of devices to register, you may enter them in a text
 file in this format, and then upload the file:</p>
@@ -188,9 +194,10 @@ file in this format, and then upload the file:</p>
 A123456789012345678901234567890123456789       NAME1
 B123456789012345678901234567890123456789       NAME2</pre>
 </div>
-<p>Click <tt class="docutils literal"><span class="pre">Download</span> <span class="pre">sample</span> <span class="pre">files</span></tt> to see examples of plain text and markup files.</p>
+<p>Click <strong>Download sample files</strong> to see examples of plain text and markup
+files.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/itunes-udid-4.png"><img alt="../_images/itunes-udid-4.png" src="../_images/itunes-udid-4.png" style="width: 663.2px; height: 277.6px;" /></a>
+<img alt="../_images/itunes-udid-4.png" src="../_images/itunes-udid-4.png" />
 </div>
 <p>When you are finished entering your device IDs click the <strong>Continue</strong> button.
 Verify, and then click <strong>Done</strong>.</p>

@@ -116,7 +116,7 @@
                   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.1 Server Administration Manual Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.1 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
@@ -125,7 +125,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../videos/index.html">ownCloud Videos</a></li>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
@@ -164,7 +163,41 @@
 						
   <div class="section" id="testing-your-new-branded-ios-app">
 <h1>Testing Your New Branded iOS App<a class="headerlink" href="#testing-your-new-branded-ios-app" title="Permalink to this headline">¶</a></h1>
-<p>TODO</p>
+<p>You&#8217;ll distribute the file with the <tt class="file docutils literal"><span class="pre">.ipa</span></tt> extension, like our example
+<tt class="file docutils literal"><span class="pre">MyBiz</span> <span class="pre">iOS</span> <span class="pre">App-3.4.211.ipa</span></tt>, from your
+<a class="reference external" href="https://customer.owncloud.com/owncloud">https://customer.owncloud.com/owncloud</a>
+account to your beta testers. To do this you&#8217;ll need a Mac computer, an iPhone
+or iPad registered in your Apple developer account, and the iTunes account
+associated with your Apple developer account.</p>
+<ol class="arabic simple">
+<li>Connect your registered iPhone or iPad to a Mac running iTunes.</li>
+<li>Double-click your iOS <tt class="file docutils literal"><span class="pre">.ipa</span></tt> file.</li>
+<li>You should see your device in the upper left corner of your iTunes windows.
+Click on it.</li>
+<li>Click the Apps button. Now you should see your app in the iTune apps list,
+with an Install button. Click it.</li>
+<li>The Install button changes to Will Install.</li>
+<li>Click the sync button in the lower-right corner to sync your device. This
+installs your app on your device.</li>
+</ol>
+<p>Your other testers can now install and test your app on their registered iPhones
+and iPads just like any other app from iTunes.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you have the Enterprise Apple developer account, there is no limit
+on the number of testing devices, and they do not have to be registered.</p>
+</div>
+<div class="section" id="getting-crash-reports-from-testers">
+<h2>Getting Crash Reports From Testers<a class="headerlink" href="#getting-crash-reports-from-testers" title="Permalink to this headline">¶</a></h2>
+<p>iOS automatically records crash logs when apps crash. Your testers can retrieve
+and send these logs to you. They must follow these steps:</p>
+<ol class="arabic simple">
+<li>Connect the testing device to a Mac computer running iTunes.</li>
+<li>The crash logs are automatically downloaded to
+<tt class="file docutils literal"><span class="pre">~/Library/Logs/CrashReporter/MobileDevice</span></tt></li>
+<li>Attach the relevant log files to email and send them to you.</li>
+</ol>
+</div>
 </div>
 
 
