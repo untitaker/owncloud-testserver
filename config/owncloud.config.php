@@ -1,15 +1,16 @@
 <?php
 $CONFIG = array (
-  'instanceid' => 'oc26e8523e55',
-  'passwordsalt' => '35f730eb71515ece4b5e514a5c53e1',
+  'instanceid' => 'oc6vzxemf45u',
+  'passwordsalt' => 'kZI3R98nAp+EqGf0LneummAYi9LpIv',
+  'secret' => 'cGV0cMIPDHfCswmfR7ECtMN99tEg/7osnVeyGOvJHZb7hiAs',
   'trusted_domains' => 
   array (
-    0 => '127.0.0.1',
+    0 => '127.0.0.1:8080',
   ),
+  'datadirectory' => '/home/untitaker/projects/owncloud-testserver/owncloud/data',
+  'overwrite.cli.url' => 'http://127.0.0.1:8080',
   'dbtype' => 'sqlite3',
-  'version' => '8.0.4.2',
+  'version' => '8.1.1.3',
+  'logtimezone' => 'UTC',
   'installed' => true,
-  'theme' => '',
-  'maintenance' => false,
-  'secret' => '7595945098713d5ff520d3a8897936264c2f59ec286b13c54649cad8c135e936f8b2520a7fff33a99cc113300975cea5',
 );
