@@ -14,5 +14,4 @@ $CONFIG = array (
   'installed' => true,
   'theme' => '',
   'maintenance' => false,
-  'datadirectory' => '/home/untitaker/projects/owncloud-testserver/owncloud/data',
 );
