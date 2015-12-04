@@ -1166,7 +1166,7 @@ describe('OCA.Files.FileList tests', function() {
 		it('renders provided icon for file when provided', function() {
 			var fileData = {
 				type: 'file',
-				name: 'test dir',
+				name: 'test file',
 				icon: OC.webroot + '/core/img/filetypes/application-pdf.svg',
 				mimetype: 'application/pdf'
 			};
@@ -1178,7 +1178,7 @@ describe('OCA.Files.FileList tests', function() {
 		it('renders preview when no icon was provided and preview is available', function() {
 			var fileData = {
 				type: 'file',
-				name: 'test dir',
+				name: 'test file',
 				isPreviewAvailable: true
 			};
 			var $tr = fileList.add(fileData);
@@ -1192,7 +1192,7 @@ describe('OCA.Files.FileList tests', function() {
 		it('renders default file type icon when no icon was provided and no preview is available', function() {
 			var fileData = {
 				type: 'file',
-				name: 'test dir',
+				name: 'test file',
 				isPreviewAvailable: false
 			};
 			var $tr = fileList.add(fileData);
@@ -1200,6 +1200,47 @@ describe('OCA.Files.FileList tests', function() {
 			expect(OC.TestUtil.getImageUrl($imgDiv)).toEqual(OC.webroot + '/core/img/filetypes/file.svg');
 			expect(previewLoadStub.notCalled).toEqual(true);
 		});
+		it('does not render preview for directories', function() {
+			var fileData = {
+				type: 'dir',
+				mimetype: 'httpd/unix-directory',
+				name: 'test dir',
+				isPreviewAvailable: true
+			};
+			var $tr = fileList.add(fileData);
+			var $td = $tr.find('td.filename');
+			expect(OC.TestUtil.getImageUrl($td.find('.thumbnail'))).toEqual(OC.webroot + '/core/img/filetypes/folder.svg');
+			expect(previewLoadStub.notCalled).toEqual(true);
+		});
+		it('render external storage icon for external storage root', function() {
+			var fileData = {
+				type: 'dir',
+				mimetype: 'httpd/unix-directory',
+				name: 'test dir',
+				isPreviewAvailable: true,
+				mountType: 'external-root'
+			};
+			var $tr = fileList.add(fileData);
+			var $td = $tr.find('td.filename');
+			expect(OC.TestUtil.getImageUrl($td.find('.thumbnail'))).toEqual(OC.webroot + '/core/img/filetypes/folder-external.svg');
+			expect(previewLoadStub.notCalled).toEqual(true);
+		});
+		it('render external storage icon for external storage subdir', function() {
+			var fileData = {
+				type: 'dir',
+				mimetype: 'httpd/unix-directory',
+				name: 'test dir',
+				isPreviewAvailable: true,
+				mountType: 'external'
+			};
+			var $tr = fileList.add(fileData);
+			var $td = $tr.find('td.filename');
+			expect(OC.TestUtil.getImageUrl($td.find('.thumbnail'))).toEqual(OC.webroot + '/core/img/filetypes/folder-external.svg');
+			expect(previewLoadStub.notCalled).toEqual(true);
+			// default icon override
+			expect($tr.attr('data-icon')).toEqual(OC.webroot + '/core/img/filetypes/folder-external.svg');
+		});
+
 	});
 	describe('viewer mode', function() {
 		it('enabling viewer mode hides files table and action buttons', function() {
@@ -1879,15 +1920,54 @@ describe('OCA.Files.FileList tests', function() {
 				$tr2.find('td.filename .name').trigger(e);
 				expect(fileList.getSelectedFiles().length).toEqual(0);
 			});
-		})
+		});
 	});
 	describe('Details sidebar', function() {
 		beforeEach(function() {
 			fileList.setFiles(testFiles);
 			fileList.showDetailsView('Two.jpg');
 		});
+		describe('registering', function() {
+			var addTabStub;
+			var addDetailStub;
+
+			beforeEach(function() {
+				addTabStub = sinon.stub(OCA.Files.DetailsView.prototype, 'addTabView');
+				addDetailStub = sinon.stub(OCA.Files.DetailsView.prototype, 'addDetailView');
+			});
+			afterEach(function() {
+				addTabStub.restore();
+				addDetailStub.restore();
+			});
+			it('forward the registered views to the underlying DetailsView', function() {
+				fileList.destroy();
+				fileList = new OCA.Files.FileList($('#app-content-files'), {
+					detailsViewEnabled: true
+				});
+				fileList.registerTabView(new OCA.Files.DetailTabView());
+				fileList.registerDetailView(new OCA.Files.DetailFileInfoView());
+
+				expect(addTabStub.calledOnce).toEqual(true);
+				// twice because the filelist already registers one by default
+				expect(addDetailStub.calledTwice).toEqual(true);
+			});
+			it('does not error when registering panels when not details view configured', function() {
+				fileList.destroy();
+				fileList = new OCA.Files.FileList($('#app-content-files'), {
+					detailsViewEnabled: false
+				});
+				fileList.registerTabView(new OCA.Files.DetailTabView());
+				fileList.registerDetailView(new OCA.Files.DetailFileInfoView());
+
+				expect(addTabStub.notCalled).toEqual(true);
+				expect(addDetailStub.notCalled).toEqual(true);
+			});
+		});
 		it('triggers file action when clicking on row if no details view configured', function() {
-			fileList._detailsView = null;
+			fileList.destroy();
+			fileList = new OCA.Files.FileList($('#app-content-files'), {
+				detailsViewEnabled: false
+			});
 			var updateDetailsViewStub = sinon.stub(fileList, '_updateDetailsView');
 			var actionStub = sinon.stub();
 			fileList.setFiles(testFiles);

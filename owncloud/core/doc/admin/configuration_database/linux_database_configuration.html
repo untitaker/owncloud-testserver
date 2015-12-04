@@ -172,6 +172,32 @@
 <p class="first admonition-title">Note</p>
 <p class="last">The steps for configuring a third party database are beyond the scope of this document.  Please refer to the documentation for your specific database choice for instructions.</p>
 </div>
+<div class="section" id="mysql-mariadb-with-binary-logging-enabled">
+<span id="db-binlog-label"></span><h3>MySQL / MariaDB with Binary Logging Enabled<a class="headerlink" href="#mysql-mariadb-with-binary-logging-enabled" title="Permalink to this headline">¶</a></h3>
+<p>ownCloud is currently using a <tt class="docutils literal"><span class="pre">TRANSACTION_READ_COMMITTED</span></tt> transaction isolation
+to avoid data loss under high load scenarios (e.g. by using the sync client with
+many clients/users and many parallel operations). This requires a disabled or
+correctly configured binary logging when using MySQL or MariaDB. Your system is
+affected if you see the following in your log file during the installation or
+update of ownCloud:</p>
+<blockquote>
+<div>An unhandled exception has been thrown:
+exception &#8216;PDOException&#8217; with message &#8216;SQLSTATE[HY000]: General error: 1665
+Cannot execute statement: impossible to write to binary log since
+BINLOG_FORMAT = STATEMENT and at least one table uses a storage engine limited
+to row-based logging. InnoDB is limited to row-logging when transaction
+isolation level is READ COMMITTED or READ UNCOMMITTED.&#8217;</div></blockquote>
+<p>There are two solutions. One is to disable binary logging. Binary logging
+records all changes to your database, and how long each change took. The
+purpose of binary logging is to enable replication and to support backup
+operations.</p>
+<p>The other is to change the BINLOG_FORMAT = STATEMENT in your database
+configuration file, or possibly in your database startup script, to
+BINLOG_FORMAT = MIXED. See <a class="reference external" href="https://mariadb.com/kb/en/mariadb/overview-of-the-binary-log/">Overview of the Binary
+Log</a> and <a class="reference external" href="https://dev.mysql.com/doc/refman/5.6/en/binary-log.html">The
+Binary Log</a> for
+detailed information.</p>
+</div>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>

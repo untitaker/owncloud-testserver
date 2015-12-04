@@ -8,6 +8,7 @@
     "external",
     "files",
     "files_antivirus",
+    "files_drop",
     "files_external",
     "files_ldap_home",
     "files_locking",
@@ -30,6 +31,7 @@
     "user_external",
     "user_ldap",
     "user_shibboleth",
-    "windows_network_drive"
+    "windows_network_drive",
+    "password_policy"
   ]
 }

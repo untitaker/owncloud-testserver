@@ -127,6 +127,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="">Issues and Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#bugs">Bugs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#general-troubleshooting">General Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#disable-3rdparty-non-shipped-apps">Disable 3rdparty / non-shipped apps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#owncloud-logfiles">ownCloud Logfiles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#php-version-and-information">PHP Version and Information</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#debugging-sync-issues">Debugging Sync Issues</a></li>
@@ -141,7 +142,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#troubleshooting-webdav">Troubleshooting WebDAV</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#troubleshooting-contacts-calendar">Troubleshooting Contacts &amp; Calendar</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#service-discovery">Service discovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#apple-ios">Apple iOS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#unable-to-update-contacts-or-events">Unable to update Contacts or Events</a></li>
 </ul>
 </li>
@@ -204,6 +204,13 @@ support options.</p>
 </div>
 <div class="section" id="general-troubleshooting">
 <h2>General Troubleshooting<a class="headerlink" href="#general-troubleshooting" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="disable-3rdparty-non-shipped-apps">
+<h3>Disable 3rdparty / non-shipped apps<a class="headerlink" href="#disable-3rdparty-non-shipped-apps" title="Permalink to this headline">¶</a></h3>
+<p>It might be possible that 3rd party / non-shipped apps are causing various
+different issues. Always disable 3rd party apps before upgrades, and for
+troubleshooting. Please refer to the <a class="reference internal" href="../configuration_server/occ_command.html#apps-commands-label"><em>Apps Commands</em></a> on how
+to disable an app from command line.</p>
+</div>
 <div class="section" id="owncloud-logfiles">
 <h3>ownCloud Logfiles<a class="headerlink" href="#owncloud-logfiles" title="Permalink to this headline">¶</a></h3>
 <p>In a standard ownCloud installation the log level is set to <tt class="docutils literal"><span class="pre">Normal</span></tt>. To find
@@ -397,15 +404,11 @@ which contains various additional information about WebDAV problems.</p>
 <div class="section" id="troubleshooting-contacts-calendar">
 <h2>Troubleshooting Contacts &amp; Calendar<a class="headerlink" href="#troubleshooting-contacts-calendar" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="service-discovery">
-<h3>Service discovery<a class="headerlink" href="#service-discovery" title="Permalink to this headline">¶</a></h3>
+<span id="service-discovery-label"></span><h3>Service discovery<a class="headerlink" href="#service-discovery" title="Permalink to this headline">¶</a></h3>
 <p>Some clients - especially iOS - have problems finding the proper sync URL, even
 when explicitly configured to use it.</p>
 <p>There are several techniques to remedy this, which are described extensively at
 the <a class="reference external" href="http://sabre.io/dav/service-discovery/">Sabre DAV website</a>.</p>
-</div>
-<div class="section" id="apple-ios">
-<h3>Apple iOS<a class="headerlink" href="#apple-ios" title="Permalink to this headline">¶</a></h3>
-<p>Below is what has been proven to work with iOS including iOS 7.</p>
 <p>If your ownCloud instance is installed in a subfolder under the web server&#8217;s
 document root and the client has difficulties finding the Cal- or CardDAV
 end-points, configure your web server to redirect from a &#8220;well-known&#8221; URL to

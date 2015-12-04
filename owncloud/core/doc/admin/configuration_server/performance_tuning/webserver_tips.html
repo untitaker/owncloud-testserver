@@ -195,31 +195,15 @@ server usage it is recommended to raise this number to a higher value.</p>
 </div>
 <div class="section" id="enable-the-spdy-http-v2-protocol">
 <h2>Enable the SPDY / http_v2 protocol<a class="headerlink" href="#enable-the-spdy-http-v2-protocol" title="Permalink to this headline">¶</a></h2>
-<p>Your webserver can be configured to use the SPDY / http_v2 protocol which could improve
+<p>Your webserver can be configured to use the SPDY / http_v2 protocol which could
+improve
 the overall performance of ownCloud. Please have a look at the documentation of
 your webservers module for more information:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="20%" />
-<col width="80%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Webserver</th>
-<th class="head">Module Name / Link</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Apache</td>
-<td><a class="reference external" href="https://code.google.com/p/mod-spdy/">mod-spdy</a></td>
-</tr>
-<tr class="row-odd"><td>nginx (&lt;1.9.5)</td>
-<td><a class="reference external" href="http://nginx.org/en/docs/http/ngx_http_spdy_module.html">ngx_http_spdy_module</a></td>
-</tr>
-<tr class="row-even"><td>nginx (+1.9.5)</td>
-<td><a class="reference external" href="http://nginx.org/en/docs/http/ngx_http_v2_module.html">ngx_http_http2_module</a></td>
-</tr>
-</tbody>
-</table>
+<ul class="simple">
+<li><a class="reference external" href="https://code.google.com/p/mod-spdy/">Apache mod-spdy</a></li>
+<li><a class="reference external" href="http://nginx.org/en/docs/http/ngx_http_spdy_module.html">nginx (&lt;1.9.5) ngx_http_spdy_module</a></li>
+<li><a class="reference external" href="http://nginx.org/en/docs/http/ngx_http_v2_module.html">nginx (+1.9.5) ngx_http_http2_module</a></li>
+</ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">If you want to enable SPDY for Apache please note the <a class="reference external" href="https://code.google.com/p/mod-spdy/wiki/KnownIssues">Known Issues</a>
@@ -231,9 +215,11 @@ of this module to avoid problems after enabling it.</p>
 <p>1.) be aware that this module is not built in by default due to a dependency
 to the openssl version used on your system. It will be enabled with the
 <tt class="docutils literal"><span class="pre">--with-http_v2_module</span></tt> configuration parameter during compilation. The
-dependency should be checked automatically. You can check the presence of http_v2
+dependency should be checked automatically. You can check the presence of
+http_v2
 with <tt class="docutils literal"><span class="pre">nginx</span> <span class="pre">-V</span> <span class="pre">2&gt;&amp;1</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">http_v2</span> <span class="pre">-o</span></tt>. An example how to compile nginx can
-be found in section &#8220;Configure Nginx with the <tt class="docutils literal"><span class="pre">nginx-cache-purge</span></tt> module&#8221; below.</p>
+be found in section &#8220;Configure Nginx with the <tt class="docutils literal"><span class="pre">nginx-cache-purge</span></tt> module&#8221;
+below.</p>
 <p class="last">2.) When you have used SPDY before, the nginx config has to be changed from
 <tt class="docutils literal"><span class="pre">listen</span> <span class="pre">443</span> <span class="pre">ssl</span> <span class="pre">spdy;</span></tt> to <tt class="docutils literal"><span class="pre">listen</span> <span class="pre">443</span> <span class="pre">ssl</span> <span class="pre">http2;</span></tt></p>
 </div>
@@ -323,7 +309,8 @@ sudo apt-key add nginx_signing.key
 sudo vi /etc/apt/sources.list.d/nginx.list
 </pre></div>
 </div>
-<p>Add the following lines (if different, replace <tt class="docutils literal"><span class="pre">{trusty}</span></tt> by your distribution</p>
+<p>Add the following lines (if different, replace <tt class="docutils literal"><span class="pre">{trusty}</span></tt> by your
+distribution</p>
 <p>name):</p>
 <div class="highlight-python"><pre>deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx
 deb -src http://nginx.org/packages/mainline/ubuntu/ trusty nginx</pre>
@@ -416,7 +403,7 @@ in case of updates with items 2 to 5.</p>
 <li><strong>Preparation</strong>
 Create a directory where Nginx will save the cached thumbnails. Use any
 path that fits to your environment. Replace <tt class="docutils literal"><span class="pre">{path}</span></tt> in this example with
-your file path:</li>
+your path created:</li>
 </ol>
 <div class="highlight-bash"><div class="highlight"><pre>sudo mkdir -p /usr/local/tmp/cache
 </pre></div>
@@ -428,18 +415,33 @@ your file path:</li>
 </pre></div>
 </div>
 <p>Add at the <em>beginning</em>, but <em>outside</em> the <tt class="docutils literal"><span class="pre">server{}</span></tt> block:</p>
-<div class="highlight-python"><pre>fastcgi_cache_path {path} levels=1:2 keys_zone=OWNCLOUD:100m inactive=60m;</pre>
+<div class="highlight-python"><pre># cache_purge
+fastcgi_cache_path {path} levels=1:2 keys_zone=OWNCLOUD:100m inactive=60m;
+map $request_uri $skip_cache {
+     default 1;
+     ~*/thumbnail.php 0;
+     ~*/apps/galleryplus/ 0;
+     ~*/apps/gallery/ 0;
+}</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please adopt or delete any regex line in the <tt class="docutils literal"><span class="pre">map</span></tt> block according
+your needs and the ownCloud version used.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>As an alternative to mapping, you can use as many <tt class="docutils literal"><span class="pre">if</span></tt> statements
+in your server block as necessary:</p>
+<div class="last highlight-python"><pre>set $skip_cache 1;
+if ($request_uri ~* "thumbnail.php")      { set $skip_cache 0; }
+if ($request_uri ~* "/apps/galleryplus/") { set $skip_cache 0; }
+if ($request_uri ~* "/apps/gallery/")     { set $skip_cache 0; }</pre>
+</div>
 </div>
 <p>Add <em>inside</em> the <tt class="docutils literal"><span class="pre">server{}</span></tt> block, as an example of a configuration:</p>
-<div class="highlight-python"><pre>set $skip_cache 1;
-
-# POST requests and urls with a query string should always go to PHP
-
-if ($request_uri ~* "thumbnail.php")
-{ set $skip_cache 0;
-}
-
-fastcgi_cache_key "$scheme$request_method$host$request_uri";
+<div class="highlight-python"><pre># cache_purge (with $http_cookies we have unique keys for the user)
+fastcgi_cache_key $http_cookie$request_method$host$request_uri;
 fastcgi_cache_use_stale error timeout invalid_header http_500;
 fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
 
@@ -452,16 +454,31 @@ location ~ \.php(?:$/) {
       fastcgi_param HTTPS on;
       fastcgi_pass php-handler;
 
+      # cache_purge
       fastcgi_cache_bypass $skip_cache;
       fastcgi_no_cache $skip_cache;
       fastcgi_cache OWNCLOUD;
       fastcgi_cache_valid  60m;
+      fastcgi_cache_methods GET HEAD;
       }</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Note regarding the <tt class="docutils literal"><span class="pre">fastcgi_pass</span></tt> parameter:
+Use whatever fits your configuration. In the example above, an <tt class="docutils literal"><span class="pre">upstream</span></tt>
+was defined in an Nginx global configuration file.
+This may look like:</p>
+<div class="last highlight-python"><pre>upstream php-handler {
+    server unix:/var/run/php5-fpm.sock;
+    # or
+    # server 127.0.0.1:9000;
+  }</pre>
+</div>
 </div>
 <ol class="arabic simple" start="3">
 <li><strong>Test the configuration</strong></li>
 </ol>
-<div class="highlight-bash"><div class="highlight"><pre>sudo service nginx restart
+<div class="highlight-bash"><div class="highlight"><pre>sudo nginx -s reload
 </pre></div>
 </div>
 <ul class="simple">

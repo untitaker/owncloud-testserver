@@ -371,6 +371,12 @@ WebDAV Url, for example <tt class="docutils literal"><span class="pre">https://c
 to log in with their username and password. The password is generated on the
 Personal settings page.</p>
 <img alt="../_images/shibboleth-personal.png" src="../_images/shibboleth-personal.png" />
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In pure SSO mode the WebDAV password feature will not work, as we
+have no way to store the WebDAV password. It does work in auto-provision
+mode.</p>
+</div>
 <p>For provisioning purpose an OCS API has been added to revoke a generated
 password for a user:</p>
 <p>Syntax: <tt class="docutils literal"><span class="pre">/v1/cloud/users/{userid}/non_shib_password</span></tt></p>

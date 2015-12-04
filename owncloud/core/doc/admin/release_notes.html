@@ -200,6 +200,9 @@
 <h1>ownCloud 8.2 Release Notes<a class="headerlink" href="#owncloud-version-release-notes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="changes-in-8-2">
 <h2>Changes in 8.2<a class="headerlink" href="#changes-in-8-2" title="Permalink to this headline">¶</a></h2>
+<p>New location for Linux package repositories; ownCloud admins must manually
+change to the new repos. See <a class="reference internal" href="maintenance/upgrade.html"><em>Upgrading Your ownCloud Server</em></a></p>
+<p>PHP 5.6.11+ breaks the LDAP wizard with a &#8216;Could not connect to LDAP&#8217; error. See <a class="reference external" href="https://github.com/owncloud/core/issues/20020">https://github.com/owncloud/core/issues/20020</a>.</p>
 <p><tt class="docutils literal"><span class="pre">filesystem_check_changes</span></tt> in <tt class="docutils literal"><span class="pre">config.php</span></tt> is set to 0 by default. This
 prevents unnecessary update checks and improves performance. If you are using
 external storage mounts such as NFS on a remote storage server, set this to 1
@@ -217,6 +220,11 @@ the <tt class="docutils literal"><span class="pre">occ</span></tt> command, like
 <p>Run <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">www-data</span> <span class="pre">php</span> <span class="pre">occ</span> <span class="pre">ldap:show-config</span></tt> to find the correct <tt class="docutils literal"><span class="pre">sNN</span></tt>
 value; if there is not one then use empty quotes, <tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt>. (See
 <a class="reference internal" href="configuration_server/occ_command.html"><em>Using the occ Command</em></a>.)</p>
+<p>Users of the Linux Package need to update their repository setup as described
+in this <a class="reference external" href="https://owncloud.org/blog/upgrading-to-owncloud-server-8-2/">blogpost</a>.</p>
+<p>The log format for failed logins to the <tt class="docutils literal"><span class="pre">owncloud.log</span></tt> has a slight syntax change.
+If a tool relies on logging failed logins please revise its rule. For <tt class="docutils literal"><span class="pre">fail2ban</span></tt>
+you will find an updated rule at the <a class="reference external" href="https://forum.owncloud.org/viewtopic.php?f=8&amp;t=28678">forums</a>.</p>
 </div>
 <div class="section" id="changes-in-8-1">
 <h2>Changes in 8.1<a class="headerlink" href="#changes-in-8-1" title="Permalink to this headline">¶</a></h2>
@@ -266,8 +274,9 @@ via the <tt class="docutils literal"><span class="pre">preview_max_x</span></tt>
 <p>The ownCloud 8 server is not supported on any version of Windows.</p>
 <p>The 8.1.0 release has a minor bug which makes app updates fail at first try. Reload the
 apps page and try again, and the update will succeed.</p>
-<p>The <tt class="docutils literal"><span class="pre">forcessl</span></tt> option within the <tt class="docutils literal"><span class="pre">config.php</span></tt> and the <tt class="docutils literal"><span class="pre">Enforce</span> <span class="pre">SSL</span></tt> option within the
-Admin-Backend was removed. This now needs to be configured like described in <a class="reference internal" href="configuration_server/harden_server.html#use-https-label"><em>Use HTTPS</em></a>.</p>
+<p>The <tt class="docutils literal"><span class="pre">forcessl</span></tt> option within the <tt class="docutils literal"><span class="pre">config.php</span></tt> and the <tt class="docutils literal"><span class="pre">Enforce</span> <span class="pre">SSL</span></tt> option
+within the Admin-Backend was removed. This now needs to be configured like
+described in <a class="reference internal" href="configuration_server/harden_server.html#use-https-label"><em>Use HTTPS</em></a>.</p>
 <p>WebDAV file locking was removed in oC 8.1 which causes Finder on Mac OS X to mount WebDAV read-only.</p>
 </div>
 <div class="section" id="enterprise-8-1-only">

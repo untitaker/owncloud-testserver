@@ -1236,6 +1236,14 @@ function initCore() {
 	 */
 	moment.locale(OC.getLocale());
 
+	if ($.browser.msie || !!navigator.userAgent.match(/Trident\/7\./)) {
+		// for IE10+ that don't have conditional comments
+		// and IE11 doesn't identify as MSIE any more...
+		$('html').addClass('ie');
+	} else if (!!navigator.userAgent.match(/Edge\/12/)) {
+		// for edge
+		$('html').addClass('edge');
+	}
 
 	/**
 	 * Calls the server periodically to ensure that session doesn't
@@ -1275,23 +1283,7 @@ function initCore() {
 		SVGSupport.checkMimeType();
 	}
 
-	// user menu
-	$('#settings #expand').keydown(function(event) {
-		if (event.which === 13 || event.which === 32) {
-			$('#expand').click();
-		}
-	});
-	$('#settings #expand').click(function(event) {
-		$('#settings #expanddiv').slideToggle(OC.menuSpeed);
-		event.stopPropagation();
-	});
-	$('#settings #expanddiv').click(function(event){
-		event.stopPropagation();
-	});
-	//hide the user menu when clicking outside it
-	$(document).click(function(){
-		$('#settings #expanddiv').slideUp(OC.menuSpeed);
-	});
+	OC.registerMenu($('#expand'), $('#expanddiv'));
 
 	// toggle for menus
 	$(document).on('mouseup.closemenus', function(event) {
@@ -1304,7 +1296,6 @@ function initCore() {
 		OC.hideMenus();
 	});
 
-
 	/**
 	 * Set up the main menu toggle to react to media query changes.
 	 * If the screen is small enough, the main menu becomes a toggle.
@@ -1312,7 +1303,7 @@ function initCore() {
 	 */
 	function setupMainMenu() {
 		// toggle the navigation
-		var $toggle = $('#header .menutoggle');
+		var $toggle = $('#header .header-appname-container');
 		var $navigation = $('#navigation');
 
 		// init the menu
@@ -1630,6 +1621,15 @@ OC.Util = {
 			});
 		});
 		return $el;
+	},
+
+	/**
+	 * Returns whether this is IE
+	 *
+	 * @return {bool} true if this is IE, false otherwise
+	 */
+	isIE: function() {
+		return $('html').hasClass('ie');
 	},
 
 	/**
@@ -1989,7 +1989,8 @@ jQuery.fn.tipsy = function(argument) {
 			placement: 'bottom',
 			delay: { 'show': 0, 'hide': 0},
 			trigger: 'hover',
-			html: false
+			html: false,
+			container: 'body'
 		};
 		if(argument.gravity) {
 			switch(argument.gravity) {

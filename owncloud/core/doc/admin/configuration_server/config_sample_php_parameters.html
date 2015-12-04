@@ -653,6 +653,12 @@ for logging.</p>
 </div>
 <p>Loglevel to start logging at. Valid values are: 0 = Debug, 1 = Info, 2 =
 Warning, 3 = Error, and 4 = Fatal. The default value is Warning.</p>
+<div class="highlight-python"><pre>'syslog_tag' =&gt; 'ownCloud',</pre>
+</div>
+<p>If you maintain different instances and aggregate the logs, you may want
+to distinguish between them. <tt class="docutils literal"><span class="pre">syslog_tag</span></tt> can be set per instance
+with a unique id. Only available if <tt class="docutils literal"><span class="pre">log_type</span></tt> is set to <tt class="docutils literal"><span class="pre">syslog</span></tt>.</p>
+<p>The default value is <tt class="docutils literal"><span class="pre">ownCloud</span></tt>.</p>
 <div class="highlight-python"><pre>'log.condition' =&gt; [
         'shared_secret' =&gt; '57b58edb6637fe3059b3595cf9c41b9',
         'users' =&gt; ['sample-user'],
@@ -1170,12 +1176,6 @@ is highly recommended to <em>avoid data loss</em>.</p>
 <p>Set this ownCloud instance to debugging mode</p>
 <p>Only enable this for local development and not in production environments
 This will disable the minifier and outputs some additional debug information</p>
-<div class="highlight-python"><pre>'update.skip-migration-test' =&gt; false,</pre>
-</div>
-<p>Skips the migration test during upgrades</p>
-<p>If this is set to true the migration test are deactivated during upgrade.
-This is only recommended in installations where upgrade tests are run in
-advance with the same data on a test system.</p>
 <div class="highlight-python"><pre>'copied_sample_config' =&gt; true,</pre>
 </div>
 <p>This entry is just here to show a warning in case somebody copied the sample

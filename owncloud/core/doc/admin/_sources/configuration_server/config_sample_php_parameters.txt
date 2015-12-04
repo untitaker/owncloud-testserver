@@ -626,6 +626,16 @@ Warning, 3 = Error, and 4 = Fatal. The default value is Warning.
 
 ::
 
+	'syslog_tag' => 'ownCloud',
+
+If you maintain different instances and aggregate the logs, you may want
+to distinguish between them. ``syslog_tag`` can be set per instance
+with a unique id. Only available if ``log_type`` is set to ``syslog``.
+
+The default value is ``ownCloud``.
+
+::
+
 	'log.condition' => [
 		'shared_secret' => '57b58edb6637fe3059b3595cf9c41b9',
 		'users' => ['sample-user'],
@@ -1324,16 +1334,6 @@ Set this ownCloud instance to debugging mode
 
 Only enable this for local development and not in production environments
 This will disable the minifier and outputs some additional debug information
-
-::
-
-	'update.skip-migration-test' => false,
-
-Skips the migration test during upgrades
-
-If this is set to true the migration test are deactivated during upgrade.
-This is only recommended in installations where upgrade tests are run in
-advance with the same data on a test system.
 
 ::
 

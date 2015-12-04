@@ -199,13 +199,16 @@ Mint, and Ubuntu Linux you need to install two packages. The first one supplies
 <div class="highlight-python"><pre>$ sudo apt-get install openjdk-7-jre-headless
 $ sudo apt-get install openjdk-7-jdk</pre>
 </div>
+<p>Plus some additional 32-bit packages:</p>
+<div class="highlight-python"><pre>$ sudo apt-get install libc6-i386 lib32stdc++6 lib32gcc1 lib32ncurses5
+zlib1g:i386</pre>
+</div>
 <p>On SUSE systems, install this package:</p>
 <div class="highlight-python"><pre>$ sudo zypper install java-1_7_0-openjdk-devel</pre>
 </div>
 <p>It is simpler to get these on CentOS and Red Hat Enterprise Linux, as they have
-created some nice
-wrapper scripts around <tt class="docutils literal"><span class="pre">keytool</span></tt> and <tt class="docutils literal"><span class="pre">jarsigner</span></tt> that you can install
-standalone:</p>
+created some nice wrapper scripts around <tt class="docutils literal"><span class="pre">keytool</span></tt> and <tt class="docutils literal"><span class="pre">jarsigner</span></tt> that you
+can install standalone:</p>
 <div class="highlight-python"><pre>$ sudo yum install keytool-maven-plugin.noarch
 $ sudo yum install maven-jarsigner-plugin.noarch</pre>
 </div>
@@ -241,7 +244,7 @@ alias, which can be anything you want. The keystore name and alias
 must both have a password, which can be same for both. Then enter your company
 information as you are prompted:</p>
 <div class="highlight-python"><pre>$ keytool -genkey -v -keystore acme-release-key.keystore -alias acme_key
--keyalg RSA -keysize 2048
+-keyalg RSA -keysize 2048 -validity 10000
 Enter keystore password:
 Re-enter new password:
 What is your first and last name?

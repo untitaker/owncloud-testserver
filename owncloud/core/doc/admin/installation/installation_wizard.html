@@ -183,29 +183,27 @@ This is just three steps:</p>
 <li>Click <strong>Finish Setup</strong>.</li>
 </ol>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/install-wizard.png"><img alt="screenshot of the installation wizard" src="../_images/install-wizard.png" style="width: 276.0px; height: 511.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/install-wizard-a.png"><img alt="screenshot of the installation wizard" src="../_images/install-wizard-a.png" style="width: 250.5px; height: 350.25px;" /></a>
 </div>
 <p>You&#8217;re finished and can start using your new ownCloud server.</p>
-<p>Of course, there is much more that you can do to set up your ownCloud server
-for
-best performance and security. In the following sections we will cover
-important
+<p>Of course, there is much more that you can do to set up your ownCloud server for
+best performance and security. In the following sections we will cover important
 installation and post-installation steps. Note that you must follow the
-instructions in <a class="reference internal" href="#label-setting-strong-perms"><em>Setting Strong Permissions</em></a>
-in order to use the <a class="reference internal" href="../configuration_server/occ_command.html"><em>occ Command</em></a>.</p>
+instructions in <a class="reference internal" href="#strong-perms-label"><em>Setting Strong Permissions</em></a> in order
+to use the <a class="reference internal" href="../configuration_server/occ_command.html"><em>occ Command</em></a>.</p>
 <ul class="simple">
-<li><a class="reference internal" href="#label-data-directory-location"><em>Data Directory Location</em></a></li>
-<li><a class="reference internal" href="#label-database-choice"><em>Database Choice</em></a></li>
-<li><a class="reference internal" href="#label-trusted-domains"><em>Trusted Domains</em></a></li>
-<li><a class="reference internal" href="#label-setting-strong-perms"><em>Setting Strong Permissions</em></a></li>
+<li><a class="reference internal" href="#data-directory-location-label"><em>Data Directory Location</em></a></li>
+<li><a class="reference internal" href="#database-choice-label"><em>Database Choice</em></a></li>
+<li><a class="reference internal" href="#trusted-domains-label"><em>Trusted Domains</em></a></li>
+<li><a class="reference internal" href="#strong-perms-label"><em>Setting Strong Permissions</em></a></li>
 </ul>
 </div>
 <div class="section" id="data-directory-location">
-<span id="label-data-directory-location"></span><h2>Data Directory Location<a class="headerlink" href="#data-directory-location" title="Permalink to this headline">¶</a></h2>
+<span id="data-directory-location-label"></span><h2>Data Directory Location<a class="headerlink" href="#data-directory-location" title="Permalink to this headline">¶</a></h2>
 <p>Click <strong>Storage and Database</strong> to expose additional installation configuration
-options for your ownCloud data directory and database options.</p>
+options for your ownCloud data directory and database.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/install-wizard-2.png"><img alt="screenshot of the installation wizard with all options exposed" src="../_images/install-wizard-2.png" style="width: 231.75px; height: 520.5px;" /></a>
+<a class="reference internal image-reference" href="../_images/install-wizard-a1.png"><img alt="installation wizard with all options exposed" src="../_images/install-wizard-a1.png" style="width: 280.5px; height: 418.5px;" /></a>
 </div>
 <p>You should locate your ownCloud data directory outside of your Web root if you
 are using an HTTP server other than Apache, or you may wish to store your
@@ -213,30 +211,30 @@ ownCloud data in a different location for other reasons (e.g. on a storage
 server). It is best to configure your data directory location at installation,
 as it is difficult to move after installation. You may put it anywhere; in this
 example is it located in <tt class="docutils literal"><span class="pre">/var/oc_data</span></tt>. This directory must already exist,
-and must be owned by your HTTP user (see <a class="reference internal" href="#label-setting-strong-perms"><em>Setting Strong Directory Permissions</em></a>).</p>
+and must be owned by your HTTP user (see
+<a class="reference internal" href="#strong-perms-label"><em>Setting Strong Directory Permissions</em></a>).</p>
 </div>
 <div class="section" id="database-choice">
-<span id="label-database-choice"></span><h2>Database Choice<a class="headerlink" href="#database-choice" title="Permalink to this headline">¶</a></h2>
-<p>SQLite is the default database for ownCloud Server (it is not
-available and not supported in the Enterprise edition), and it is good only for
-testing and lightweight single-user setups without client synchronization.
-Supported databases are MySQL, MariaDB, Oracle 11g, and PostgreSQL, and we
-recommend <a class="reference internal" href="../release_notes.html"><em>MySQL/MariaDB</em></a>. Your database and PHP
-connectors must be installed before you run the Installation Wizard. When you
-install ownCloud from packages all the necessary dependencies will be satisfied
-(see <a class="reference internal" href="source_installation.html"><em>Manual Installation on Linux</em></a> for a detailed listing of required and optional
-PHP modules). You will need the root database login, or any administrator login
-that has permissions to create and modify databases, and then enter any name
-you
-want for your ownCloud database.</p>
+<span id="database-choice-label"></span><h2>Database Choice<a class="headerlink" href="#database-choice" title="Permalink to this headline">¶</a></h2>
+<p>SQLite is the default database for ownCloud Server (it is not available and not
+supported in the Enterprise edition), and it is good only for testing and
+lightweight single-user setups without client synchronization. Supported
+databases are MySQL, MariaDB, Oracle 11g, and PostgreSQL, and we recommend
+<a class="reference internal" href="system_requirements.html"><em>MySQL/MariaDB</em></a>. Your database and PHP connectors
+must be installed before you run the Installation Wizard. When you install
+ownCloud from packages all the necessary dependencies will be satisfied (see
+<a class="reference internal" href="source_installation.html"><em>Manual Installation on Linux</em></a> for a detailed listing of required and optional PHP
+modules). You will need the root database login, or any administrator login that
+has permissions to create and modify databases, and then enter any name you want
+for your ownCloud database.</p>
 <p>Click Finish Setup, and start using your new ownCloud server.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/install-wizard-3.png"><img alt="screenshot of the welcome screen after a successful installation" src="../_images/install-wizard-3.png" style="width: 375.0px; height: 240.75px;" /></a>
+<a class="reference internal image-reference" href="../_images/install-wizard-a2.png"><img alt="ownCloud welcome screen after a successful installation" src="../_images/install-wizard-a2.png" style="width: 433.5px; height: 356.25px;" /></a>
 </div>
 <p>Now we will look at some important post-installation steps.</p>
 </div>
 <div class="section" id="trusted-domains">
-<span id="label-trusted-domains"></span><h2>Trusted Domains<a class="headerlink" href="#trusted-domains" title="Permalink to this headline">¶</a></h2>
+<span id="trusted-domains-label"></span><h2>Trusted Domains<a class="headerlink" href="#trusted-domains" title="Permalink to this headline">¶</a></h2>
 <p>All URLs used to access your ownCloud server must be whitelisted in your
 <tt class="docutils literal"><span class="pre">config.php</span></tt> file, under the <tt class="docutils literal"><span class="pre">trusted_domains</span></tt> setting. Users
 are allowed to log into ownCloud only when they point their browsers to a
@@ -255,11 +253,11 @@ that a load balancer is in place there will be no issues as long as it sends
 the correct X-Forwarded-Host header. When a user tries a URL that
 is not whitelisted the following error appears:</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/untrusted-domain.png"><img alt="screenshot of error message when URL is not whitelisted in trusted_domains" src="../_images/untrusted-domain.png" style="width: 725.25px; height: 272.25px;" /></a>
+<a class="reference internal image-reference" href="../_images/install-wizard-a4.png"><img alt="Error message when URL is not whitelisted" src="../_images/install-wizard-a4.png" style="width: 544.5px; height: 273.0px;" /></a>
 </div>
 </div>
 <div class="section" id="setting-strong-directory-permissions">
-<span id="strong-perms"></span><span id="label-setting-strong-perms"></span><h2>Setting Strong Directory Permissions<a class="headerlink" href="#setting-strong-directory-permissions" title="Permalink to this headline">¶</a></h2>
+<span id="strong-perms-label"></span><h2>Setting Strong Directory Permissions<a class="headerlink" href="#setting-strong-directory-permissions" title="Permalink to this headline">¶</a></h2>
 <p>For hardened security we recommend setting the permissions on your ownCloud
 directories as strictly as possible, and for proper server operations. This
 should be done immediately after the initial installation. Your HTTP user must

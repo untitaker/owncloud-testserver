@@ -163,10 +163,15 @@
 <p>To restore an ownCloud installation there are three main things you need to
 restore:</p>
 <ol class="arabic simple">
-<li>The config folder</li>
-<li>The data folder</li>
+<li>The configuration directory</li>
+<li>The data directory</li>
 <li>The database</li>
 </ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must have both the database and data directory. You cannot
+complete restoration unless you have both of these.</p>
+</div>
 <p>When you have completed your restoration, see the <tt class="docutils literal"><span class="pre">Setting</span> <span class="pre">Strong</span> <span class="pre">Directory</span>
 <span class="pre">Permissions</span></tt> section of <a class="reference internal" href="../installation/installation_wizard.html"><em>Installation Wizard</em></a>.</p>
 <div class="section" id="restore-folders">
@@ -174,9 +179,10 @@ restore:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This guide assumes that your previous backup is called
-owncloud-dirbkp&#8221;</p>
+&#8220;owncloud-dirbkp&#8221;</p>
 </div>
-<p>Simply copy your config and data folder (or even your whole ownCloud install and
+<p>Simply copy your configuration and data folder (or even your whole ownCloud
+install and
 data folder) to your ownCloud environment. You could use this command:</p>
 <div class="highlight-python"><pre>rsync -Aax owncloud-dirbkp/ owncloud/</pre>
 </div>

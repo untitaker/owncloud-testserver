@@ -242,15 +242,14 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="installation/source_installation.html">Manual Installation on Linux</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#example-installation-on-ubuntu-14-04-lts-server">Example installation on Ubuntu 14.04 LTS Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#example-installation-on-ubuntu-14-04-lts-server">Example Installation on Ubuntu 14.04 LTS Server</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#apache-web-server-configuration">Apache Web Server Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#additional-apache-configurations">Additional Apache Configurations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#enabling-ssl">Enabling SSL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#installation-wizard">Installation Wizard</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#setting-strong-directory-permissions">Setting Strong Directory Permissions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#selinux">SELinux</a></li>
-<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#configuration-notes-to-php-ini-files">Configuration notes to php.ini files</a></li>
-<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#configuration-notes-to-php-fpm">Configuration notes to php-fpm</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#selinux-configuration-tips">SELinux Configuration Tips</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#php-ini-configuration-notes">php.ini Configuration Notes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#php-fpm-configuration-notes">php-fpm Configuration Notes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#other-web-servers">Other Web Servers</a></li>
 </ul>
 </li>
@@ -291,6 +290,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration_server/index.html">ownCloud Server Configuration</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="configuration_server/security_setup_warnings.html">Warnings on Admin Page</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#cache-warnings">Cache Warnings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#transactional-file-locking">Transactional file locking</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#you-are-accessing-this-site-via-http">You are accessing this site via HTTP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#the-test-with-getenv-path-only-returns-an-empty-response">The test with getenv(&#8220;PATH&#8221;) only returns an empty response</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#the-strict-transport-security-http-header-is-not-configured">The &#8220;Strict-Transport-Security&#8221; HTTP header is not configured</a></li>
@@ -598,11 +598,12 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="maintenance/upgrade.html">Upgrading Your ownCloud Server</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#preferred-upgrade-method">Preferred Upgrade Method</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#upgrade-quickstart">Upgrade Quickstart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#upgrading-with-your-linux-package-manager">Upgrading With Your Linux Package Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#upgrade-wizard">Upgrade Wizard</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#manual-upgrade-procedure">Manual Upgrade Procedure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#setting-strong-permissions">Setting Strong Permissions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#restore-from-backup">Restore From Backup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#reverse-upgrade">Reverse Upgrade</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
@@ -639,6 +640,7 @@
 <li class="toctree-l1"><a class="reference internal" href="issues/index.html">Issues and Troubleshooting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="issues/index.html#bugs">Bugs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="issues/index.html#general-troubleshooting">General Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="issues/index.html#disable-3rdparty-non-shipped-apps">Disable 3rdparty / non-shipped apps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="issues/index.html#owncloud-logfiles">ownCloud Logfiles</a></li>
 <li class="toctree-l3"><a class="reference internal" href="issues/index.html#php-version-and-information">PHP Version and Information</a></li>
 <li class="toctree-l3"><a class="reference internal" href="issues/index.html#debugging-sync-issues">Debugging Sync Issues</a></li>
@@ -653,7 +655,6 @@
 <li class="toctree-l2"><a class="reference internal" href="issues/index.html#troubleshooting-webdav">Troubleshooting WebDAV</a></li>
 <li class="toctree-l2"><a class="reference internal" href="issues/index.html#troubleshooting-contacts-calendar">Troubleshooting Contacts &amp; Calendar</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="issues/index.html#service-discovery">Service discovery</a></li>
-<li class="toctree-l3"><a class="reference internal" href="issues/index.html#apple-ios">Apple iOS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="issues/index.html#unable-to-update-contacts-or-events">Unable to update Contacts or Events</a></li>
 </ul>
 </li>
@@ -667,7 +668,7 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="enterprise_installation/linux_installation.html">Installing ownCloud Enterprise Subscription on Linux</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="enterprise_installation/linux_installation.html">Installing &amp; Upgrading ownCloud Enterprise Subscription</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_installation/linux_installation.html#selinux">SELinux</a></li>
 </ul>
 </li>

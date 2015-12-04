@@ -386,12 +386,15 @@
 		 * Update the details view to display the given file
 		 *
 		 * @param {string} fileName file name from the current list
+		 * @param {boolean} [show=true] whether to open the sidebar if it was closed
 		 */
-		_updateDetailsView: function(fileName) {
+		_updateDetailsView: function(fileName, show) {
 			if (!this._detailsView) {
 				return;
 			}
 
+			// show defaults to true
+			show = _.isUndefined(show) || !!show;
 			var oldFileInfo = this._detailsView.getFileInfo();
 			if (oldFileInfo) {
 				// TODO: use more efficient way, maybe track the highlight
@@ -409,7 +412,7 @@
 				return;
 			}
 
-			if (this._detailsView.$el.hasClass('disappear')) {
+			if (show && this._detailsView.$el.hasClass('disappear')) {
 				OC.Apps.showAppSidebar(this._detailsView.$el);
 			}
 
@@ -760,7 +763,7 @@
 		 */
 		elementToFile: function($el){
 			$el = $($el);
-			return {
+			var data = {
 				id: parseInt($el.attr('data-id'), 10),
 				name: $el.attr('data-file'),
 				mimetype: $el.attr('data-mime'),
@@ -770,6 +773,15 @@
 				etag: $el.attr('data-etag'),
 				permissions: parseInt($el.attr('data-permissions'), 10)
 			};
+			var icon = $el.attr('data-icon');
+			if (icon) {
+				data.icon = icon;
+			}
+			var mountType = $el.attr('data-mounttype');
+			if (mountType) {
+				data.mountType = mountType;
+			}
+			return data;
 		},
 
 		/**
@@ -892,11 +904,12 @@
 				mtime = parseInt(fileData.mtime, 10),
 				mime = fileData.mimetype,
 				path = fileData.path,
+				dataIcon = null,
 				linkUrl;
 			options = options || {};
 
 			if (isNaN(mtime)) {
-				mtime = new Date().getTime()
+				mtime = new Date().getTime();
 			}
 
 			if (type === 'dir') {
@@ -904,6 +917,7 @@
 
 				if (fileData.mountType && fileData.mountType.indexOf('external') === 0) {
 					icon = OC.MimeType.getIconUrl('dir-external');
+					dataIcon = icon;
 				}
 			}
 
@@ -918,6 +932,11 @@
 				"data-etag": fileData.etag,
 				"data-permissions": fileData.permissions || this.getDirectoryPermissions()
 			});
+
+			if (dataIcon) {
+				// icon override
+				tr.attr('data-icon', dataIcon);
+			}
 
 			if (fileData.mountType) {
 				tr.attr('data-mounttype', fileData.mountType);
@@ -1170,7 +1189,7 @@
 			// display actions
 			this.fileActions.display(filenameTd, !options.silent, this);
 
-			if (fileData.isPreviewAvailable) {
+			if (fileData.isPreviewAvailable && mime !== 'httpd/unix-directory') {
 				var iconDiv = filenameTd.find('.thumbnail');
 				// lazy load / newly inserted td ?
 				// the typeof check ensures that the default value of animate is true
@@ -1350,7 +1369,7 @@
 				) {
 					OC.redirect(OC.generateUrl('apps/files'));
 				}
-				OC.Notification.show(result.data.message);
+				OC.Notification.showTemporary(result.data.message);
 				return false;
 			}
 
@@ -1358,7 +1377,7 @@
 			if (result.status === 403) {
 				// Go home
 				this.changeDirectory('/');
-				OC.Notification.show(t('files', 'This operation is forbidden'));
+				OC.Notification.showTemporary(t('files', 'This operation is forbidden'));
 				return false;
 			}
 
@@ -1366,7 +1385,7 @@
 			if (result.status === 500) {
 				// Go home
 				this.changeDirectory('/');
-				OC.Notification.show(t('files', 'This directory is unavailable, please check the logs or contact the administrator'));
+				OC.Notification.showTemporary(t('files', 'This directory is unavailable, please check the logs or contact the administrator'));
 				return false;
 			}
 
@@ -1640,15 +1659,11 @@
 							} else {
 								OC.Notification.hide();
 								if (result.status === 'error' && result.data.message) {
-									OC.Notification.show(result.data.message);
+									OC.Notification.showTemporary(result.data.message);
 								}
 								else {
-									OC.Notification.show(t('files', 'Error moving file.'));
+									OC.Notification.showTemporary(t('files', 'Error moving file.'));
 								}
-								// hide notification after 10 sec
-								setTimeout(function() {
-									OC.Notification.hide();
-								}, 10000);
 							}
 						} else {
 							OC.dialogs.alert(t('files', 'Error moving file'), t('files', 'Error'));
@@ -1771,7 +1786,7 @@
 								tr.remove();
 								tr = self.add(fileInfo, {updateSummary: false, silent: true});
 								self.$fileList.trigger($.Event('fileActionsReady', {fileList: self, $files: $(tr)}));
-								self._updateDetailsView(fileInfo.name);
+								self._updateDetailsView(fileInfo.name, false);
 							}
 						});
 					} else {
@@ -2011,17 +2026,15 @@
 							self.fileSummary.update();
 							self.updateSelectionSummary();
 							self.updateStorageStatistics();
+							// in case there was a "storage full" permanent notification
+							OC.Notification.hide();
 						} else {
 							if (result.status === 'error' && result.data.message) {
-								OC.Notification.show(result.data.message);
+								OC.Notification.showTemporary(result.data.message);
 							}
 							else {
-								OC.Notification.show(t('files', 'Error deleting file.'));
+								OC.Notification.showTemporary(t('files', 'Error deleting file.'));
 							}
-							// hide notification after 10 sec
-							setTimeout(function() {
-								OC.Notification.hide();
-							}, 10000);
 							if (params.allfiles) {
 								// reload the page as we don't know what files were deleted
 								// and which ones remain
@@ -2116,15 +2129,16 @@
 				this.hideIrrelevantUIWhenNoFilesMatch();
 			}
 			var that = this;
+			filter = filter.toLowerCase();
 			this.$fileList.find('tr').each(function(i,e) {
 				var $e = $(e);
-				if ($e.data('file').toString().toLowerCase().indexOf(filter.toLowerCase()) === -1) {
+				if ($e.data('file').toString().toLowerCase().indexOf(filter) === -1) {
 					$e.addClass('hidden');
-					that.$container.trigger('scroll');
 				} else {
 					$e.removeClass('hidden');
 				}
 			});
+			that.$container.trigger('scroll');
 		},
 		hideIrrelevantUIWhenNoFilesMatch:function() {
 			if (this._filter && this.fileSummary.summary.totalDirs + this.fileSummary.summary.totalFiles === 0) {
@@ -2262,11 +2276,7 @@
 		 */
 		_showPermissionDeniedNotification: function() {
 			var message = t('core', 'You don’t have permission to upload or create files here');
-			OC.Notification.show(message);
-			//hide notification after 10 sec
-			setTimeout(function() {
-				OC.Notification.hide();
-			}, 5000);
+			OC.Notification.showTemporary(message);
 		},
 
 		/**
@@ -2620,14 +2630,18 @@
 		 * Register a tab view to be added to all views
 		 */
 		registerTabView: function(tabView) {
-			this._detailsView.addTabView(tabView);
+			if (this._detailsView) {
+				this._detailsView.addTabView(tabView);
+			}
 		},
 
 		/**
 		 * Register a detail view to be added to all views
 		 */
 		registerDetailView: function(detailView) {
-			this._detailsView.addDetailView(detailView);
+			if (this._detailsView) {
+				this._detailsView.addDetailView(detailView);
+			}
 		}
 	};
 

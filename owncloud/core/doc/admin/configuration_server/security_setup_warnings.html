@@ -121,6 +121,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">ownCloud Server Configuration</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Warnings on Admin Page</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#cache-warnings">Cache Warnings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transactional-file-locking">Transactional file locking</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#you-are-accessing-this-site-via-http">You are accessing this site via HTTP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-test-with-getenv-path-only-returns-an-empty-response">The test with getenv(&#8220;PATH&#8221;) only returns an empty response</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-strict-transport-security-http-header-is-not-configured">The &#8220;Strict-Transport-Security&#8221; HTTP header is not configured</a></li>
@@ -204,6 +205,15 @@ you need to upgrade, or, if you&#8217;re not using it, remove it.</p>
 <p>You are not required to use any caches, but caches improve server performance.
 See <a class="reference internal" href="caching_configuration.html"><em>Configuring Memory Caching</em></a>.</p>
 </div>
+<div class="section" id="transactional-file-locking">
+<h2>Transactional file locking<a class="headerlink" href="#transactional-file-locking" title="Permalink to this headline">¶</a></h2>
+<p>&#8220;Transactional file locking is disabled, this might lead to issues with race
+conditions.&#8221;</p>
+<p>&#8220;Transactional file locking is using the database as locking backend, for best
+performance it&#8217;s advised to configure a memcache for locking.&#8221;</p>
+<p>Please see <a class="reference internal" href="../configuration_files/files_locking_transactional.html"><em>Transactional File Locking</em></a> on how
+to correctly configure your environment for transactional file locking.</p>
+</div>
 <div class="section" id="you-are-accessing-this-site-via-http">
 <h2>You are accessing this site via HTTP<a class="headerlink" href="#you-are-accessing-this-site-via-http" title="Permalink to this headline">¶</a></h2>
 <p>&#8220;You are accessing this site via HTTP. We strongly suggest you configure your
@@ -219,7 +229,8 @@ describe how to enable HTTPS on the Apache and Nginx Web servers.</p>
 <div class="section" id="the-test-with-getenv-path-only-returns-an-empty-response">
 <h2>The test with getenv(&#8220;PATH&#8221;) only returns an empty response<a class="headerlink" href="#the-test-with-getenv-path-only-returns-an-empty-response" title="Permalink to this headline">¶</a></h2>
 <p>Some environments are not passing a valid PATH variable to ownCloud. The
-<a class="reference internal" href="../installation/source_installation.html#using-php-fpm"><em>Configuration notes to php-fpm</em></a> provides the information about how to configure your environment.</p>
+<a class="reference internal" href="../installation/source_installation.html#php-fpm-tips-label"><em>php-fpm Configuration Notes</em></a> provides the information about how to configure your
+environment.</p>
 </div>
 <div class="section" id="the-strict-transport-security-http-header-is-not-configured">
 <h2>The &#8220;Strict-Transport-Security&#8221; HTTP header is not configured<a class="headerlink" href="#the-strict-transport-security-http-header-is-not-configured" title="Permalink to this headline">¶</a></h2>

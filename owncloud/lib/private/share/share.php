@@ -597,11 +597,12 @@ class Share extends Constants {
 	 * @param int $permissions CRUDS
 	 * @param string $itemSourceName
 	 * @param \DateTime $expirationDate
+	 * @param bool $passwordChanged
 	 * @return boolean|string Returns true on success or false on failure, Returns token on success for links
 	 * @throws \OC\HintException when the share type is remote and the shareWith is invalid
 	 * @throws \Exception
 	 */
-	public static function shareItem($itemType, $itemSource, $shareType, $shareWith, $permissions, $itemSourceName = null, \DateTime $expirationDate = null) {
+	public static function shareItem($itemType, $itemSource, $shareType, $shareWith, $permissions, $itemSourceName = null, \DateTime $expirationDate = null, $passwordChanged = null) {
 
 		$backend = self::getBackend($itemType);
 		$l = \OC::$server->getL10N('lib');
@@ -619,10 +620,13 @@ class Share extends Constants {
 		if (is_null($itemSourceName)) {
 			$itemSourceName = $itemSource;
 		}
+		$itemName = $itemSourceName;
 
 		// check if file can be shared
 		if ($itemType === 'file' or $itemType === 'folder') {
 			$path = \OC\Files\Filesystem::getPath($itemSource);
+			$itemName = $path;
+
 			// verify that the file exists before we try to share it
 			if (!$path) {
 				$message = 'Sharing %s failed, because the file does not exist';
@@ -677,9 +681,9 @@ class Share extends Constants {
 		// Verify share type and sharing conditions are met
 		if ($shareType === self::SHARE_TYPE_USER) {
 			if ($shareWith == $uidOwner) {
-				$message = 'Sharing %s failed, because the user %s is the item owner';
-				$message_t = $l->t('Sharing %s failed, because the user %s is the item owner', array($itemSourceName, $shareWith));
-				\OCP\Util::writeLog('OCP\Share', sprintf($message, $itemSourceName, $shareWith), \OCP\Util::DEBUG);
+				$message = 'Sharing %s failed, because you can not share with yourself';
+				$message_t = $l->t('Sharing %s failed, because you can not share with yourself', [$itemName]);
+				\OCP\Util::writeLog('OCP\Share', sprintf($message, $itemSourceName), \OCP\Util::DEBUG);
 				throw new \Exception($message_t);
 			}
 			if (!\OC_User::userExists($shareWith)) {
@@ -693,8 +697,8 @@ class Share extends Constants {
 				if (empty($inGroup)) {
 					$message = 'Sharing %s failed, because the user '
 						.'%s is not a member of any groups that %s is a member of';
-					$message_t = $l->t('Sharing %s failed, because the user %s is not a member of any groups that %s is a member of', array($itemSourceName, $shareWith, $uidOwner));
-					\OCP\Util::writeLog('OCP\Share', sprintf($message, $itemSourceName, $shareWith, $uidOwner), \OCP\Util::DEBUG);
+					$message_t = $l->t('Sharing %s failed, because the user %s is not a member of any groups that %s is a member of', array($itemName, $shareWith, $uidOwner));
+					\OCP\Util::writeLog('OCP\Share', sprintf($message, $itemName, $shareWith, $uidOwner), \OCP\Util::DEBUG);
 					throw new \Exception($message_t);
 				}
 			}
@@ -772,14 +776,25 @@ class Share extends Constants {
 					$updateExistingShare = true;
 				}
 
-				// Generate hash of password - same method as user passwords
-				if (is_string($shareWith) && $shareWith !== '') {
-					self::verifyPassword($shareWith);
-					$shareWith = \OC::$server->getHasher()->hash($shareWith);
+				if ($passwordChanged === null) {
+					// Generate hash of password - same method as user passwords
+					if (is_string($shareWith) && $shareWith !== '') {
+						self::verifyPassword($shareWith);
+						$shareWith = \OC::$server->getHasher()->hash($shareWith);
+					} else {
+						// reuse the already set password, but only if we change permissions
+						// otherwise the user disabled the password protection
+						if ($checkExists && (int)$permissions !== (int)$oldPermissions) {
+							$shareWith = $checkExists['share_with'];
+						}
+					}
 				} else {
-					// reuse the already set password, but only if we change permissions
-					// otherwise the user disabled the password protection
-					if ($checkExists && (int)$permissions !== (int)$oldPermissions) {
+					if ($passwordChanged === true) {
+						if (is_string($shareWith) && $shareWith !== '') {
+							self::verifyPassword($shareWith);
+							$shareWith = \OC::$server->getHasher()->hash($shareWith);
+						}
+					} else if ($updateExistingShare) {
 						$shareWith = $checkExists['share_with'];
 					}
 				}
@@ -2208,7 +2223,7 @@ class Share extends Constants {
 			// Check if attempting to share back to owner
 			if ($checkReshare['uid_owner'] == $shareWith && $shareType == self::SHARE_TYPE_USER) {
 				$message = 'Sharing %s failed, because the user %s is the original sharer';
-				$message_t = $l->t('Sharing %s failed, because the user %s is the original sharer', array($itemSourceName, $shareWith));
+				$message_t = $l->t('Sharing failed, because the user %s is the original sharer', [$shareWith]);
 
 				\OCP\Util::writeLog('OCP\Share', sprintf($message, $itemSourceName, $shareWith), \OCP\Util::DEBUG);
 				throw new \Exception($message_t);
@@ -2632,7 +2647,9 @@ class Share extends Constants {
 	 */
 	private static function isFileReachable($path, $ownerStorageId) {
 		// if outside the home storage, file is always considered reachable
-		if (!(substr($ownerStorageId, 0, 6) === 'home::')) {
+		if (!(substr($ownerStorageId, 0, 6) === 'home::' ||
+			substr($ownerStorageId, 0, 13) === 'object::user:'
+		)) {
 			return true;
 		}
 

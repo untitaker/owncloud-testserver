@@ -29,7 +29,8 @@ var Files_Texteditor = {
 		dir: null,
 		name: null,
 		writeable: null,
-		mime: null
+		mime: null,
+		size: null
 	},
 
 	/**
@@ -46,6 +47,16 @@ var Files_Texteditor = {
 	 * Stores the autosave timer
 	 */
 	saveTimer: null,
+
+	/**
+	 * Stores the old page title
+	 */
+	oldTitle: null,
+
+	/**
+	 * Stores the timeout for the saving message
+	 */
+	saveMessageTimeout: null,
 
 	/**
 	 * preview plugins by mimetype
@@ -76,8 +87,11 @@ var Files_Texteditor = {
 			return;
 		} else {
 			OCA.Files_Texteditor.saving = true;
-			OCA.Files_Texteditor.edited = false;
+			OCA.Files_Texteditor.file.edited = false;
 		}
+
+		// Can any fade outs on the saving message
+		clearTimeout(OCA.Files_Texteditor.saveMessageTimeout);
 
 		// Set the saving status
 		$('#editor_controls small.saving-message')
@@ -88,26 +102,27 @@ var Files_Texteditor = {
 			window.aceEditor.getSession().getValue(),
 			OCA.Files_Texteditor.file,
 			function(data){
-				newmtime = data.mtime;
 				// Yay
-				// TODO only reset edited value if not editing during saving
-				document.title = document.title.slice(2);
-				$('small.unsaved-star').css('display', 'none');
-				OCA.Files_Texteditor.file.mtime = newmtime;
-				OCA.Files_Texteditor.file.edited = false;
+				if(OCA.Files_Texteditor.file.edited == false) {
+					document.title = OCA.Files_Texteditor.file.name + ' - ' + OCA.Files_Texteditor.oldTitle;
+					$('small.unsaved-star').css('display', 'none');
+				}
+				OCA.Files_Texteditor.file.mtime = data.mtime;
+				OCA.Files_Texteditor.file.size = data.size;
+
 				$('#editor_controls small.saving-message')
 					.text(t('files_texteditor', 'saved!'));
-				setTimeout(function() {
+				OCA.Files_Texteditor.saveMessageTimeout = setTimeout(function() {
 					$('small.saving-message').fadeOut(200);
 				}, 2000);
 			},
 			function(message){
 				// Boo
 				$('small.saving-message').text(t('files_texteditor', 'failed!'));
-				setTimeout(function() {
+				OCA.Files_Texteditor.saveMessageTimeout = setTimeout(function() {
 					$('small.saving-message').fadeOut(200);
 				}, 5000);
-				OCA.Files_Texteditor.edited = true;
+				OCA.Files_Texteditor.file.edited = true;
 			}
 		);
 		OCA.Files_Texteditor.saving = false;
@@ -135,7 +150,7 @@ var Files_Texteditor = {
 						'files_texteditor',
 						'Saved'
 						)
-					);
+					)
 					// Remove the editor
 					OCA.Files_Texteditor.closeEditor();
 				},
@@ -160,7 +175,7 @@ var Files_Texteditor = {
 	 */
 	_onReOpenTrigger: function() {
 		if($('#notification').data('reopeneditor') == true) {
-			document.title = OCA.Files_Texteditor.file.name + ' - ' + document.title;
+			document.title = OCA.Files_Texteditor.file.name + ' - ' + OCA.Files_Texteditor.oldTitle;
 			OCA.Files_Texteditor.$container.show();
 		}
 	},
@@ -202,7 +217,7 @@ var Files_Texteditor = {
 	 * Handler when unsaved work is detected
 	 */
 	_onUnsaved: function() {
-		document.title = '* '+document.title;
+		document.title = '* '+ OCA.Files_Texteditor.file.name + ' - ' + OCA.Files_Texteditor.oldTitle;
 		$('small.unsaved-star').css('display', 'inline-block');
 	},
 
@@ -273,7 +288,7 @@ var Files_Texteditor = {
 			function(file, data){
 				// Success!
 				// Sort the title
-				document.title = file.name + ' - ' + document.title;
+				document.title = file.name + ' - ' + OCA.Files_Texteditor.oldTitle;
 				// Load ace
 				$('#'+_self.editor).text(data);
 				// Configure ace
@@ -522,7 +537,7 @@ var Files_Texteditor = {
 				// temp dummy, until we can do a PROPFIND
 				etag: this.fileInfoModel.get('id') + this.file.mtime,
 				mtime: this.file.mtime * 1000,
-				// TODO: set size if there is a way to know
+				size: this.file.size
 			});
 		}
 		document.title = this.oldTitle;

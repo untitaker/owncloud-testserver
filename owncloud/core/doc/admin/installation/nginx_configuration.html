@@ -176,6 +176,10 @@ that it is accessed via http(s)://cloud.example.com.</li>
 <strong>ssl_certificate_key</strong> to suit your needs.</li>
 <li>Make sure your SSL certificates are readable by the server (see <a class="reference external" href="http://wiki.nginx.org/HttpSslModule">Nginx HTTP
 SSL Module documentation</a>).</li>
+<li><tt class="docutils literal"><span class="pre">add_header</span></tt> statements are only taken from the current level and are not cascaded
+from or to a different level. All necessary <tt class="docutils literal"><span class="pre">add_header</span></tt> statements must be defined
+in each level needed. For better readability is is possible to move <em>common</em> add
+header statements into a separate file and include that file wherever necessary.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -298,7 +302,7 @@ user&#8217;s logins and data in transit.</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If you are using php-fpm please read <a class="reference internal" href="source_installation.html#using-php-fpm"><em>Configuration notes to php-fpm</em></a></p>
+<p class="last">If you are using php-fpm please read <a class="reference internal" href="source_installation.html#php-fpm-tips-label"><em>php-fpm Configuration Notes</em></a></p>
 </div>
 <div class="section" id="suppressing-log-messages">
 <h2>Suppressing Log Messages<a class="headerlink" href="#suppressing-log-messages" title="Permalink to this headline">¶</a></h2>

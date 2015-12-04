@@ -116,7 +116,8 @@
 
 			// TODO: use backbone's default value mechanism once this is a separate model
 			var requiredAttributes = [
-				{ name: 'password',	   defaultValue: '' },
+				{ name: 'password', defaultValue: '' },
+				{ name: 'passwordChanged', defaultValue: false },
 				{ name: 'permissions', defaultValue: OC.PERMISSION_READ },
 				{ name: 'expiration', defaultValue: this.configModel.getDefaultExpirationDateString() }
 			];
@@ -136,11 +137,16 @@
 				}
 			});
 
+			var password = {
+				password: attributes.password,
+				passwordChanged: attributes.passwordChanged
+			};
+
 			OC.Share.share(
 				itemType,
 				itemSource,
 				OC.Share.SHARE_TYPE_LINK,
-				attributes.password,
+				password,
 				attributes.permissions,
 				this.fileInfoModel.get('name'),
 				attributes.expiration,
@@ -208,6 +214,7 @@
 		 */
 		setPassword: function(password) {
 			this.get('linkShare').password = password;
+			this.get('linkShare').passwordChanged = true;
 		},
 
 		addShare: function(attributes, options) {
@@ -522,11 +529,12 @@
 		 * @param {string} recipientEmail recipient email address
 		 */
 		sendEmailPrivateLink: function(recipientEmail) {
+			var deferred = $.Deferred();
 			var itemType = this.get('itemType');
 			var itemSource = this.get('itemSource');
 			var linkShare = this.get('linkShare');
 
-			return $.post(
+			$.post(
 				OC.generateUrl('core/ajax/share.php'), {
 					action: 'email',
 					toaddress: recipientEmail,
@@ -540,8 +548,13 @@
 					if (!result || result.status !== 'success') {
 						// FIXME: a model should not show dialogs
 						OC.dialogs.alert(result.data.message, t('core', 'Error while sending notification'));
+						deferred.reject();
+					} else {
+						deferred.resolve();
 					}
 			});
+
+			return deferred.promise();
 		},
 
 		/**

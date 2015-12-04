@@ -174,14 +174,13 @@
 <h2>Installation Quick Start<a class="headerlink" href="#installation-quick-start" title="Permalink to this headline">¶</a></h2>
 <p>See the <a class="reference internal" href="system_requirements.html"><em>System Requirements</em></a> for the recommended ownCloud setup and
 supported platforms.</p>
-<p>Installing ownCloud Server (the free community edition) on Linux from the
-<a class="reference external" href="http://software.opensuse.org/download.html?project=isv:ownCloud:community&amp;package=owncloud">openSUSE Build Service</a> packages is the preferred method. These are
-maintained
-by ownCloud engineers, and you can use your package manager to keep your
-ownCloud server up-to-date.  Follow the instructions for your distro to add the
-oBS repository, download and install the repository signing key, and install
-ownCloud. Then run the Installation Wizard to complete your installation. (see
-<a class="reference internal" href="installation_wizard.html"><em>Installation Wizard</em></a>).</p>
+<p>Installing ownCloud Server (the free community edition) on Linux from our <a class="reference external" href="https://download.owncloud.org/download/repositories/8.2/owncloud/">Open
+Build Service</a> packages is the preferred method. These are maintained by
+ownCloud engineers, and you can use your package manager to keep your ownCloud
+server up-to-date.  Follow the instructions for your distro to add the ownCloud
+Open Build Service repository, download and install the repository signing key,
+and install ownCloud. Then run the Installation Wizard to complete your
+installation. (see <a class="reference internal" href="installation_wizard.html"><em>Installation Wizard</em></a>).</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Do not move the folders provided by these packages after the
@@ -190,7 +189,7 @@ installation, as this will break updates.</p>
 </div>
 <div class="section" id="installing-owncloud-enterprise-subscription">
 <h2>Installing ownCloud Enterprise Subscription<a class="headerlink" href="#installing-owncloud-enterprise-subscription" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference internal" href="../enterprise_installation/linux_installation.html"><em>Installing ownCloud Enterprise Subscription on Linux</em></a> for instructions on
+<p>See <a class="reference internal" href="../enterprise_installation/linux_installation.html"><em>Installing &amp; Upgrading ownCloud Enterprise Subscription</em></a> for instructions on
 installing ownCloud Enterprise Subscription.</p>
 </div>
 <div class="section" id="downgrading-not-supported">
@@ -198,8 +197,7 @@ installing ownCloud Enterprise Subscription.</p>
 <p>Downgrading is not supported and risks corrupting your data! If you want to
 revert to an older ownCloud version, install it from scratch and then restore
 your data from backup. Before doing this, file a support ticket (if you have
-paid support) or ask for help in the ownCloud forums to see if your issue can
-be
+paid support) or ask for help in the ownCloud forums to see if your issue can be
 resolved without downgrading.</p>
 </div>
 <div class="section" id="additional-installation-guides-and-notes">
@@ -221,6 +219,11 @@ Mageia software repository.</p>
 <tt class="docutils literal"><span class="pre">/etc/apache2/conf.d/owncloud.conf</span></tt> which contains an <tt class="docutils literal"><span class="pre">Alias</span></tt> to the
 owncloud installation directory as well as some more needed configuration
 options.</p>
+<p><strong>Running ownCloud in a subdir</strong>: If you&#8217;re running ownCloud in a subdir and
+want to use CalDAV or CardDAV clients make sure you have configured the correct
+<a class="reference internal" href="../issues/index.html#service-discovery-label"><em>Service discovery</em></a> URLs.</p>
+<p><strong>Note for MySQL/MariaDB environments</strong>: Please refer to <a class="reference internal" href="../configuration_database/linux_database_configuration.html#db-binlog-label"><em>MySQL / MariaDB with Binary Logging Enabled</em></a>
+on how to correctly configure your environment if you have binary logging enabled.</p>
 </div>
 </div>
 

@@ -171,12 +171,13 @@ line:</p>
 <p>1. Download and install the ownCloud code via your package manager, or download
 and unpack the tarball in the appropriate directories. (See
 <a class="reference internal" href="linux_installation.html"><em>Preferred Linux Installation Method</em></a> and <a class="reference internal" href="source_installation.html"><em>Manual Installation on Linux</em></a>.)</p>
-<p>2. Apply the correction permissions to your ownCloud files and directories (see
-<a class="reference internal" href="installation_wizard.html#strong-perms"><em>Setting Strong Directory Permissions</em></a>.)</p>
+<p>2. Change the ownership of your <tt class="docutils literal"><span class="pre">owncloud</span></tt> directory to your HTTP user, like
+this example for Debian/Ubuntu. You must run <tt class="docutils literal"><span class="pre">occ</span></tt> as your HTTP user; see
+<a class="reference internal" href="../configuration_server/occ_command.html#http-user-label"><em>Run occ As Your HTTP User</em></a>:</p>
+<div class="highlight-python"><pre>$ sudo chown -R www-data:www-data /var/www/owncloud/</pre>
+</div>
 <p>3. Use the <tt class="docutils literal"><span class="pre">occ</span></tt> command to complete your installation. This takes the place
-of running the graphical Installation Wizard.</p>
-<p>You must run <tt class="docutils literal"><span class="pre">occ</span></tt> as your HTTP user; see <a class="reference internal" href="../configuration_server/occ_command.html#http-user-label"><em>Run occ As Your HTTP User</em></a>. This example
-shows how to complete your ownCloud installation with <tt class="docutils literal"><span class="pre">occ</span></tt> on Ubuntu Linux:</p>
+of running the graphical Installation Wizard:</p>
 <div class="highlight-python"><pre>$ cd /var/www/owncloud/
 $ sudo -u www-data php occ  maintenance:install --database
 "mysql" --database-name "owncloud"  --database-user "root" --database-pass
@@ -194,6 +195,10 @@ a PHP fatal error message.</p>
 - oci (Oracle)</pre>
 </div>
 <p>See <a class="reference internal" href="../configuration_server/occ_command.html#command-line-installation-label"><em>Command Line Installation</em></a> for more information.</p>
+<p>Finally, apply the correct strong permissions to your ownCloud files and
+directories (see <a class="reference internal" href="installation_wizard.html#strong-perms-label"><em>Setting Strong Directory Permissions</em></a>). This is an extremely important
+step. It helps protect your ownCloud installation, and ensures that it will run
+correctly.</p>
 </div>
 
 
