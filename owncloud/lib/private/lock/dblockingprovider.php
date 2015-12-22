@@ -49,8 +49,6 @@ class DBLockingProvider extends AbstractLockingProvider {
 
 	private $sharedLocks = [];
 
-	const TTL = 3600; // how long until we clear stray locks in seconds
-
 	/**
 	 * Check if we have an open shared lock for a path
 	 *
@@ -233,10 +231,10 @@ class DBLockingProvider extends AbstractLockingProvider {
 	/**
 	 * cleanup empty locks
 	 */
-	public function cleanEmptyLocks() {
+	public function cleanExpiredLocks() {
 		$expire = $this->timeFactory->getTime();
 		$this->connection->executeUpdate(
-			'DELETE FROM `*PREFIX*file_locks` WHERE `lock` = 0 AND `ttl` < ?',
+			'DELETE FROM `*PREFIX*file_locks` WHERE `ttl` < ?',
 			[$expire]
 		);
 	}
@@ -260,7 +258,7 @@ class DBLockingProvider extends AbstractLockingProvider {
 
 	public function __destruct() {
 		try {
-			$this->cleanEmptyLocks();
+			$this->cleanExpiredLocks();
 		} catch (\Exception $e) {
 			// If the table is missing, the clean up was successful
 			if ($this->connection->tableExists('file_locks')) {

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Table of Contents &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>Table of Contents &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="index.html" />
     <link rel="next" title="ownCloud 8.2 Server Administration Manual Introduction" href="index.html" />
 <script type="text/javascript">
 (function () {
@@ -97,7 +97,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="#">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="#">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -263,6 +263,11 @@
 <li class="toctree-l3"><a class="reference internal" href="installation/php_54_installation.html#centos-6">CentOS 6</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="installation/php_55_installation.html">Installing PHP 5.5 on RHEL 7 and CentOS 7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation/php_55_installation.html#rhel-7-upgrade-to-php-5-5">RHEL 7 Upgrade to PHP 5.5</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation/php_55_installation.html#centos-7-upgrade-to-php-5-5">CentOS 7 Upgrade to PHP 5.5</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="installation/selinux_configuration.html">SELinux Configuration</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="installation/selinux_configuration.html#allow-access-to-a-remote-database">Allow access to a remote database</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/selinux_configuration.html#allow-access-to-ldap-server">Allow access to LDAP server</a></li>
@@ -373,6 +378,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_server/external_sites.html">Linking External Sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_server/custom_client_repos.html">Custom Client Download Repositories</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_server/knowledgebase_configuration.html">Knowledge Base Configuration</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/knowledgebase_configuration.html#parameters">Parameters</a></li>
 </ul>
@@ -545,15 +551,12 @@
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#enabling-encryption">Enabling Encryption</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#sharing-encrypted-files">Sharing Encrypted Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#encrypting-external-mountpoints">Encrypting External Mountpoints</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#enabling-users-file-recovery-key">Enabling Users&#8217; File Recovery Key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#enabling-users-file-recovery-keys">Enabling Users File Recovery Keys</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#occ-encryption-commands">occ Encryption Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#files-not-encrypted">Files Not Encrypted</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#ldap-and-other-external-user-back-ends">LDAP and Other External User Back-ends</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#upgrading-from-owncloud-8-0">Upgrading From ownCloud 8.0</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_files/encryption_configuration.html#where-keys-are-stored">Where Keys are Stored</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_files/files_locking_enabling.html">Using the Files Locking App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_files/files_locking_transactional.html">Transactional File Locking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_files/previews_configuration.html">Previews Configuration</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/previews_configuration.html#parameters">Parameters</a></li>
@@ -597,14 +600,22 @@
 <li class="toctree-l3"><a class="reference internal" href="maintenance/backup.html#backup-database">Backup Database</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="maintenance/upgrade.html">Upgrading Your ownCloud Server</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#upgrade-quickstart">Upgrade Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance/upgrade.html">How to Upgrade Your ownCloud Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#update-notifier-and-updater-app-are-not-the-same">Update Notifier and Updater App Are Not the Same</a></li>
 <li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#upgrading-with-your-linux-package-manager">Upgrading With Your Linux Package Manager</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#upgrade-wizard">Upgrade Wizard</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#manual-upgrade-procedure">Manual Upgrade Procedure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#reverse-upgrade">Reverse Upgrade</a></li>
-<li class="toctree-l3"><a class="reference internal" href="maintenance/upgrade.html#troubleshooting">Troubleshooting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance/package_upgrade.html">Upgrade ownCloud From Packages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/package_upgrade.html#upgrade-quickstart">Upgrade Quickstart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/package_upgrade.html#upgrading-with-your-linux-package-manager">Upgrading With Your Linux Package Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/package_upgrade.html#upgrade-wizard">Upgrade Wizard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/package_upgrade.html#occ-upgrade">occ Upgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/package_upgrade.html#setting-strong-permissions">Setting Strong Permissions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="maintenance/manual_upgrade.html">Manual ownCloud Upgrade</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/manual_upgrade.html#reverse-upgrade">Reverse Upgrade</a></li>
+<li class="toctree-l3"><a class="reference internal" href="maintenance/manual_upgrade.html#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="maintenance/update.html">Upgrading ownCloud with the Updater App</a><ul>
@@ -757,8 +768,7 @@
 <li class="toctree-l2"><a class="reference internal" href="enterprise_user_management/user_auth_shibboleth.html">Shibboleth Integration (Enterprise Subscription only)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_user_management/user_auth_shibboleth.html#introduction">Introduction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_user_management/user_auth_shibboleth.html#apache-configuration">Apache Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="enterprise_user_management/user_auth_shibboleth.html#application-configuration">Application Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="enterprise_user_management/user_auth_shibboleth.html#enabling-the-shibboleth-app">Enabling the Shibboleth App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enterprise_user_management/user_auth_shibboleth.html#enabling-configurating-the-shibboleth-app">Enabling &amp; Configurating the Shibboleth App</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_user_management/user_auth_shibboleth.html#webdav-support">WebDAV Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_user_management/user_auth_shibboleth.html#known-limitations">Known Limitations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_user_management/user_auth_shibboleth.html#encryption">Encryption</a></li>

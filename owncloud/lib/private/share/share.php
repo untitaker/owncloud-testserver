@@ -635,7 +635,7 @@ class Share extends Constants {
 				throw new \Exception($message_t);
 			}
 			// verify that the user has share permission
-			if (!\OC\Files\Filesystem::isSharable($path)) {
+			if (!\OC\Files\Filesystem::isSharable($path) || \OCP\Util::isSharingDisabledForUser()) {
 				$message = 'You are not allowed to share %s';
 				$message_t = $l->t('You are not allowed to share %s', [$path]);
 				\OCP\Util::writeLog('OCP\Share', sprintf($message, $path), \OCP\Util::DEBUG);
@@ -745,10 +745,8 @@ class Share extends Constants {
 			// The check for each user in the group is done inside the put() function
 			if ($checkExists = self::getItems($itemType, $itemSource, self::SHARE_TYPE_GROUP, $shareWith,
 				null, self::FORMAT_NONE, null, 1, true, true)) {
-				// Only allow the same share to occur again if it is the same
-				// owner and is not a group share, this use case is for increasing
-				// permissions for a specific user
-				if ($checkExists['uid_owner'] != $uidOwner || $checkExists['share_type'] == $shareType) {
+
+				if ($checkExists['share_with'] === $shareWith && $checkExists['share_type'] === \OCP\Share::SHARE_TYPE_GROUP) {
 					$message = 'Sharing %s failed, because this item is already shared with %s';
 					$message_t = $l->t('Sharing %s failed, because this item is already shared with %s', array($itemSourceName, $shareWith));
 					\OCP\Util::writeLog('OCP\Share', sprintf($message, $itemSourceName, $shareWith), \OCP\Util::DEBUG);
@@ -763,6 +761,11 @@ class Share extends Constants {
 		} else if ($shareType === self::SHARE_TYPE_LINK) {
 			$updateExistingShare = false;
 			if (\OC::$server->getAppConfig()->getValue('core', 'shareapi_allow_links', 'yes') == 'yes') {
+
+				// IF the password is changed via the old ajax endpoint verify it before deleting the old share
+				if ($passwordChanged === true) {
+					self::verifyPassword($shareWith);
+				}
 
 				// when updating a link share
 				// FIXME Don't delete link if we update it
@@ -846,11 +849,20 @@ class Share extends Constants {
 					throw new \Exception($message_t);
 			}
 
+			// don't allow federated shares if source and target server are the same
+			list($user, $remote) = Helper::splitUserRemote($shareWith);
+			$currentServer = self::removeProtocolFromUrl(\OC::$server->getURLGenerator()->getAbsoluteURL('/'));
+			$currentUser = \OC::$server->getUserSession()->getUser()->getUID();
+			if (Helper::isSameUserOnSameServer($user, $remote, $currentUser, $currentServer)) {
+				$message = 'Not allowed to create a federated share with the same user.';
+				$message_t = $l->t('Not allowed to create a federated share with the same user');
+				\OCP\Util::writeLog('OCP\Share', $message, \OCP\Util::DEBUG);
+				throw new \Exception($message_t);
+			}
 
 			$token = \OC::$server->getSecureRandom()->getMediumStrengthGenerator()->generate(self::TOKEN_LENGTH, \OCP\Security\ISecureRandom::CHAR_LOWER . \OCP\Security\ISecureRandom::CHAR_UPPER .
 				\OCP\Security\ISecureRandom::CHAR_DIGITS);
 
-			list($user, $remote) = Helper::splitUserRemote($shareWith);
 			$shareWith = $user . '@' . $remote;
 			$shareId = self::put($itemType, $itemSource, $shareType, $shareWith, $uidOwner, $permissions, null, $token, $itemSourceName);
 
@@ -2242,7 +2254,13 @@ class Share extends Constants {
 				} else {
 					// TODO Don't check if inside folder
 					$result['parent'] = $checkReshare['id'];
-					$result['expirationDate'] = min($expirationDate, $checkReshare['expiration']);
+
+					$result['expirationDate'] = $expirationDate;
+					// $checkReshare['expiration'] could be null and then is always less than any value
+					if(isset($checkReshare['expiration']) && $checkReshare['expiration'] < $expirationDate) {
+						$result['expirationDate'] = $checkReshare['expiration'];
+					}
+
 					// only suggest the same name as new target if it is a reshare of the
 					// same file/folder and not the reshare of a child
 					if ($checkReshare[$column] === $itemSource) {
@@ -2515,7 +2533,7 @@ class Share extends Constants {
 	 * @param string $url
 	 * @return string
 	 */
-	private static function removeProtocolFromUrl($url) {
+	public static function removeProtocolFromUrl($url) {
 		if (strpos($url, 'https://') === 0) {
 			return substr($url, strlen('https://'));
 		} else if (strpos($url, 'http://') === 0) {

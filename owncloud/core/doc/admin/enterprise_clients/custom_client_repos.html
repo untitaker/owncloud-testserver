@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Custom Client Download Repositories &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>Custom Client Download Repositories &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
     <link rel="up" title="Creating Branded ownCloud Clients (ES only)" href="index.html" />
     <link rel="next" title="Distributing Your Branded Android App (Enterprise Only)" href="publishing_android_app.html" />
     <link rel="prev" title="Creating Branded Client Apps (Enterprise Only)" href="creating_branded_apps.html" />
@@ -99,7 +99,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -154,17 +154,8 @@
 						
   <div class="section" id="custom-client-download-repositories">
 <h1>Custom Client Download Repositories<a class="headerlink" href="#custom-client-download-repositories" title="Permalink to this headline">¶</a></h1>
-<p>You may set up your own download repositories for your ownCloud desktop
-clients and mobile apps in <tt class="file docutils literal"><span class="pre">config/config.php</span></tt>. This example shows
-the default download locations:</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
-
-  <span class="s2">&quot;customclient_desktop&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;https://owncloud.org/sync-clients/&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;customclient_android&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;https://play.google.com/store/apps/details?id=com.owncloud.android&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;customclient_ios&quot;</span>     <span class="o">=&gt;</span> <span class="s2">&quot;https://itunes.apple.com/us/app/owncloud/id543672169?mt=8&quot;</span><span class="p">,</span>
-</pre></div>
-</div>
-<p>Simply replace the URLs with the links to your own preferred download repos.</p>
+<p>See <a class="reference internal" href="../configuration_server/custom_client_repos.html"><em>Custom Client Download Repositories</em></a> to learn how test and
+configure custom download repository URLs for your branded clients.</p>
 </div>
 
 

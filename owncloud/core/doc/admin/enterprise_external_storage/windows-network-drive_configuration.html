@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installing and Configuring the Windows Network Drive App &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>Installing and Configuring the Windows Network Drive App &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
     <link rel="up" title="External Storage (ES only)" href="index.html" />
     <link rel="next" title="User Management (ES only)" href="../enterprise_user_management/index.html" />
     <link rel="prev" title="Configuring SharePoint Integration" href="sharepoint-integration_configuration.html" />
@@ -99,7 +99,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -162,10 +162,7 @@
   <div class="section" id="installing-and-configuring-the-windows-network-drive-app">
 <h1>Installing and Configuring the Windows Network Drive App<a class="headerlink" href="#installing-and-configuring-the-windows-network-drive-app" title="Permalink to this headline">¶</a></h1>
 <p>The Windows Network Drive app creates a control panel on your Admin page for
-seamless mounting of SMB/CIFS file shares on ownCloud servers that run on Linux.
-It does not work on Windows IIS or Windows Apache setups, but only Linux
-servers, because it requires the Samba client. (Samba is the free software
-implementation of the SMB/CIFS networking protocol.)</p>
+seamless mounting of SMB/CIFS file shares on ownCloud servers.</p>
 <p>Any Windows file share, and Samba servers on Linux and other Unix-type operating
 systems use the SMB/CIFS file-sharing protocol. The files and directories on the
 SMB/CIFS server will be visible on your Files page just like your other ownCloud
@@ -238,9 +235,13 @@ an existing folder.</li>
 default is all users.</li>
 <li>Next, enter the address of the server that contains the SMB share.</li>
 <li>Then the Windows share name.</li>
-<li>Then the root folder of the share.</li>
+<li>Then the root folder of the share. This is the folder name, or the <tt class="docutils literal"><span class="pre">$user</span></tt> variable for user&#8217;s home directories.</li>
 <li>Then your login credentials.</li>
 </ol>
+<div class="figure">
+<img alt="$user variable in the folder field." src="../_images/wnd-3.jpg" />
+<p class="caption"><em>Figure 2: $user variable to automatically set user&#8217;s home directories.</em></p>
+</div>
 <p>You have four options for login credentials:</p>
 <ul class="simple">
 <li><strong>User credentials</strong>.</li>
@@ -252,9 +253,14 @@ DOMAIN/logincredentials; enter the domain in the <strong>Domain</strong> field.<
 </ul>
 <div class="figure">
 <a class="reference internal image-reference" href="../_images/wnd-2.png"><img alt="Windows Network Drive configuration panel." src="../_images/wnd-2.png" style="width: 726.75px; height: 161.55px;" /></a>
-<p class="caption"><em>Figure 2: Windows Network Drive configuration panel. (Click to enlarge.)</em></p>
+<p class="caption"><em>Figure 3: Windows Network Drive configuration panel. (Click to enlarge.)</em></p>
 </div>
 <p>When you&#8217;re finished click the <strong>Save</strong> button.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When you create a new mountpoint using Login credentials you must log out of ownCloud,
+and then log back in so you can access the share. You only have to do this the first time.</p>
+</div>
 </div>
 <div class="section" id="personal-smb-mounts">
 <h2>Personal SMB Mounts<a class="headerlink" href="#personal-smb-mounts" title="Permalink to this headline">¶</a></h2>

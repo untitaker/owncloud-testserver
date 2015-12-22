@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Shibboleth Integration (Enterprise Subscription only) &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>Shibboleth Integration (Enterprise Subscription only) &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
     <link rel="up" title="User Management (ES only)" href="index.html" />
     <link rel="next" title="Enabling Anonymous Uploads with Files Drop (ES Only)" href="../enterprise_files_drop/index.html" />
     <link rel="prev" title="User Management (ES only)" href="index.html" />
@@ -99,7 +99,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -136,8 +136,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="">Shibboleth Integration (Enterprise Subscription only)</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#apache-configuration">Apache Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#application-configuration">Application Configuration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enabling-the-shibboleth-app">Enabling the Shibboleth App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enabling-configurating-the-shibboleth-app">Enabling &amp; Configurating the Shibboleth App</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#webdav-support">WebDAV Support</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#known-limitations">Known Limitations</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#encryption">Encryption</a></li>
@@ -169,32 +168,45 @@
 Shibboleth Service Provider (SP) and allows operations in federated and
 single-sign-on infrastructures. Setting up Shibboleth has three steps:</p>
 <ol class="arabic simple">
-<li>Create the appropriate Apache configuration</li>
-<li>Enable the Shibboleth app</li>
-<li>Enable Shibboleth on your ownCloud admin page</li>
+<li>Create the appropriate Apache configuration.</li>
+<li>Enable the Shibboleth app.</li>
+<li>Map Shibboleth environment variables to ownCloud attributes.</li>
 </ol>
 <p>Currently supported installations are based on the <a class="reference external" href="https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPApacheConfig">native Apache integration</a>
 . The individual configuration of the service provider is highly dependent on
 the operating system, as well as on the integration with the Identity
 Providers (IdP), and require case-by-case analysis and installation.</p>
-<p>The ownCloud Desktop Client and mobile clients can interact with an
+<p>The ownCloud Desktop Client can interact with an
 ownCloud instance running inside a Shibboleth Service Provider by using built-in
 browser components for authentication against the IdP.</p>
+<p>The regular ownCloud Android and iOS mobile apps do not work with Shibboleth.
+However, customers who create
+<a class="reference internal" href="../enterprise_clients/creating_branded_apps.html"><em>branded mobile apps with ownBrander</em></a>
+have the option to enable SAML authentication in ownBrander.</p>
+<p>Enterprise customers also have the option to request a regular ownCloud
+mobile client built to use Shibboleth from their ownCloud account
+representatives.</p>
 <p>The ownCloud desktop sync client and mobile apps store users&#8217; logins, so
 your users only need to enter their logins the first time they set up their
-accounts. These screenshots show what the user sees at account setup. Figure 1
+accounts.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The ownCloud clients may use only a single Shibboleth login per
+ownCloud server; multi-account is not supported with Shibboleth.</p>
+</div>
+<p>These screenshots show what the user sees at account setup. Figure 1
 shows a test Shibboleth login screen from
 <a class="reference external" href="https://www.testshib.org/index.html">Testshib.org</a> on the ownCloud desktop
 sync client.</p>
 <div class="figure">
-<img alt="../_images/shib-gui1.png" src="../_images/shib-gui1.png" />
+<img alt="First client login screen." src="../_images/shib-gui1.png" />
 <p class="caption"><em>figure 1: First login screen</em></p>
 </div>
 <p>Then after going through the setup wizard, the desktop sync client displays the
 server and login information just like it does for any other ownCloud server
 connections.</p>
 <div class="figure">
-<img alt="../_images/shib-gui4.png" src="../_images/shib-gui4.png" />
+<img alt="The ownCloud client shows which server you are connected to." src="../_images/shib-gui4.png" />
 <p class="caption"><em>figure 2: ownCloud client displays server information</em></p>
 </div>
 <p>To your users, it doesn&#8217;t look or behave differently on the desktop sync
@@ -311,57 +323,25 @@ following aliases are defined in an Apache virtual host directive:</p>
     &lt;/Location&gt;</pre>
 </div>
 </div>
-<div class="section" id="application-configuration">
-<h2>Application Configuration<a class="headerlink" href="#application-configuration" title="Permalink to this headline">¶</a></h2>
-<p>After installing and enabling the Shibboleth application there are three
-configuration variables to set up, depending on the data sent back by the
-IdP. The configuration is stored in <tt class="docutils literal"><span class="pre">apps/user_shibboleth</span></tt>.</p>
-<div class="highlight-php"><div class="highlight"><pre><span class="x">namespace OCA\user_shibboleth {</span>
-<span class="x">        const SHIB_SESSION_ID = &#39;Shib-Session-ID&#39;;</span>
-<span class="x">        const SHIB_EPPN = &#39;eppn&#39;;</span>
-<span class="x">        const SHIB_EMAIL = &#39;eppn&#39;;</span>
-<span class="x">        const SHIB_DISPLAY_NAME = &#39;eppn&#39;;</span>
-<span class="x">}</span>
-</pre></div>
-</div>
-<table border="1" class="docutils">
-<colgroup>
-<col width="27%" />
-<col width="73%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>Parameter</td>
-<td>Description</td>
-</tr>
-<tr class="row-even"><td>SHIB_SESSION_ID</td>
-<td>This constant defines the name of the environment
-variable holding the Shibboleth session id.</td>
-</tr>
-<tr class="row-odd"><td>SHIB_EPPN</td>
-<td>This constant defines the name of the environment
-variable which holds the EPPN (eduPersonPrincipalName).
-This is the unique user identifier.</td>
-</tr>
-<tr class="row-even"><td>SHIB_EMAIL</td>
-<td>The environment variable with this given name holds the
-email address of the logged-in user.</td>
-</tr>
-<tr class="row-odd"><td>SHIB_DISPLAY_NAME</td>
-<td>This constant defines the name of the environment
-variable holding the user&#8217;s display name.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="enabling-the-shibboleth-app">
-<h2>Enabling the Shibboleth App<a class="headerlink" href="#enabling-the-shibboleth-app" title="Permalink to this headline">¶</a></h2>
-<p>You must enable the Shibboleth app on your Apps page, and then check <strong>Activate
-Shibboleth</strong> and click the <strong>Save</strong> button on your ownCloud Admin page. The
-system information displayed on your Admin page may be useful for
-troubleshooting; for example you can copy and include it on a support ticket.</p>
+<div class="section" id="enabling-configurating-the-shibboleth-app">
+<h2>Enabling &amp; Configurating the Shibboleth App<a class="headerlink" href="#enabling-configurating-the-shibboleth-app" title="Permalink to this headline">¶</a></h2>
+<p>You must enable the Shibboleth app on your Apps page, and then select the mode
+you want Shibboleth to operate in from the dropdown on your Admin page, either
+<strong>Autoprovision Users</strong> or <strong>Single sign-on only</strong>.</p>
 <div class="figure">
-<img alt="../_images/shib-gui5.png" src="../_images/shib-gui5.png" />
+<img alt="Shibboleth configuration screen." src="../_images/shib-gui5.png" />
 <p class="caption"><em>figure 3: Enabling Shibboleth on the Admin page</em></p>
+</div>
+<p>In ownCloud 8.1 the Shibboleth variables were stored in
+<tt class="docutils literal"><span class="pre">apps/user_shibboleth/config.php</span></tt>. This file was overwritten on upgrades. In
+ownCloud 8.2 the variables are stored in the ownCloud database, so Shibboleth
+is now automatically upgradeable.</p>
+<p>After installing and enabling the Shibboleth application there are four
+Shibboleth environment configuration variables to map to ownCloud user
+attributes.</p>
+<div class="figure">
+<img alt="Dropdowns for mapping Shibboleth environment configuration variables to ownCloud user attributes." src="../_images/shib-gui6.png" />
+<p class="caption"><em>figure 4: Mapping Shibboleth environment configuration variables to ownCloud user attributes</em></p>
 </div>
 </div>
 <div class="section" id="webdav-support">

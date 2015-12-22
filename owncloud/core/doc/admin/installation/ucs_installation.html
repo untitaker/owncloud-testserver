@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Univention Corporate Server &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>Univention Corporate Server &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="Hiawatha Configuration" href="hiawatha_configuration.html" />
     <link rel="prev" title="Nginx Configuration" href="nginx_configuration.html" />
@@ -99,7 +99,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -126,6 +126,7 @@
 <li class="toctree-l2"><a class="reference internal" href="source_installation.html">Manual Installation on Linux</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appliance_installation.html">ownCloud Community Appliance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="php_54_installation.html">Installing PHP 5.4 on RHEL 6 and CentOS 6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="php_55_installation.html">Installing PHP 5.5 on RHEL 7 and CentOS 7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="selinux_configuration.html">SELinux Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nginx_configuration.html">Nginx Configuration</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Univention Corporate Server</a><ul>
@@ -175,10 +176,10 @@
 <div class="section" id="pre-configuration">
 <span id="preconfig"></span><h2>Pre configuration<a class="headerlink" href="#pre-configuration" title="Permalink to this headline">¶</a></h2>
 <p>ownCloud makes use of the UCR, the Univention Configuration Registry. The values
-are being read during installation, most of them can be changed later, too.
+are read during installation, most of them can be changed later, too.
 Changes done directly via ownCloud are not taken over to UCR. We think we found
 sane defaults, nevertheless you might have your own requirements. The
-installation script will listen to the UCR keys listed below. In case you want
+installation script will listen to the UCR keys listed below. If want
 to override any default setting, simply add the key in question to the UCR and
 assign your required value.</p>
 <table border="1" class="longtable docutils">
@@ -308,17 +309,17 @@ assign your required value.</p>
 </tr>
 <tr class="row-even"><td>owncloud/join/users/update</td>
 <td>yes</td>
-<td>Wether ownCloud LDAP schema should be applied to existing users</td>
+<td>Whether ownCloud LDAP schema should be applied to existing users</td>
 <td>2012.0.1</td>
 </tr>
 <tr class="row-odd"><td>owncloud/group/enableDomainUsers</td>
 <td>1</td>
-<td>Wether the group “Domain Users” shall be enabled for ownCloud on install</td>
+<td>Whether the group “Domain Users” shall be enabled for ownCloud on install</td>
 <td>2012.4.0.4</td>
 </tr>
 <tr class="row-even"><td>owncloud/join/users/filter</td>
 <td>(&amp;(|(&amp;(objectClass=posixAccount) (objectClass=shadowAccount)) (objectClass=univentionMail) (objectClass=sambaSamAccount) (objectClass=simpleSecurityObject) (&amp;(objectClass=person) (objectClass=organizationalPerson) (objectClass=inetOrgPerson))) (!(uidNumber=0)) (!(|(uid=*$) (uid=owncloudsystemuser) (uid=join-backup) (uid=join-slave))) (!(objectClass=ownCloudUser)))</td>
-<td>Filters, on which LDAP users the ownCloud schema should be applied to. The default excludes system users and already ownCloudUsers.</td>
+<td>Filters, on which LDAP users the ownCloud schema should be applied to. The default excludes system users and existing ownCloudUsers.</td>
 <td>2012.0.1</td>
 </tr>
 <tr class="row-odd"><td>owncloud/join/groups/filter</td>
@@ -337,55 +338,26 @@ question in the UCR and assign your required value, for example:</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>Now, we are ready to install ownCloud. This can be either done through the UCS
-App Center (recommended) or by downloading the packages.</p>
+<p>Now, we are ready to install ownCloud. The recommended method is by using the
+UCS App Center.</p>
 <div class="section" id="ucs-app-center">
 <h3>UCS App Center<a class="headerlink" href="#ucs-app-center" title="Permalink to this headline">¶</a></h3>
 <p>Open the Univention Management Console and choose the App Center module. You
-will see a variety of available applications, including ownCloud.</p>
-<img alt="../_images/ucs-app-center-module.png" src="../_images/ucs-app-center-module.png" />
-<p>Click on ownCloud 5 and follow the instructions.</p>
-<img alt="../_images/ucs-app-center-install.png" src="../_images/ucs-app-center-install.png" />
-<p>In the UCS App Center, you can also upgrade from ownCloud 4.5 by installing
-ownCloud 5.0. They are provided as separate apps. It is only possible to have
-one version of ownCloud installed.</p>
-</div>
-<div class="section" id="manually-by-download">
-<h3>Manually by download<a class="headerlink" href="#manually-by-download" title="Permalink to this headline">¶</a></h3>
-<p>Download the integration packages <a class="reference external" href="https://owncloud.com/download">from our website</a> and install them from
-within your download folder (note: the package owncloud-unsupported is
-optional) via command line:</p>
-<div class="highlight-python"><pre>dpkg -i owncloud*.deb</pre>
-</div>
-<p>ownCloud will be configured to fully work with LDAP.</p>
-</div>
-<div class="section" id="reinstallation">
-<h3>Reinstallation<a class="headerlink" href="#reinstallation" title="Permalink to this headline">¶</a></h3>
-<p>When ownCloud was installed before and uninstalled via AppCenter or via command
-line using apt-get remove, ownCloud can be simply installed again. The old
-configuration will be used again.</p>
-<p>When an older ownCloud was installed and has been purged (only possible via
-command line using apt-get purge) the old configuration is gone, but data is
-left. This blocks an installation. You can either install the old version and
-upgrade to ownCloud 5 or (re)move the old data. This is done by removing the
-MySQL database &#8220;ownCloud&#8221; using the command line:</p>
-<div class="highlight-python"><pre>mysql -u root -e "DROP DATABASE owncloud" -p`tail /etc/mysql.secret</pre>
-</div>
-<p>In this case you probably also want to remove the data directory
-<strong>/var/lib/owncloud</strong> although this is not mandatory.</p>
+will see a variety of available applications, including ownCloud. You can
+install and upgrade ownCloud from the App Center.</p>
 </div>
 </div>
 <div class="section" id="postconfiguration-optional">
 <h2>Postconfiguration (optional)<a class="headerlink" href="#postconfiguration-optional" title="Permalink to this headline">¶</a></h2>
-<p>There is only one local admin user “owncloudadmin”, you can find his password in
+<p>There is only one local admin user “owncloudadmin”, you can find the password in
 <cite>/etc/owncloudadmin.secret</cite>. Use this account, if you want to change basic
 ownCloud settings.</p>
 <p>In the installation process a virtual host is set up (Apache is required
 therefore). If you want to modify the settings, edit
 <tt class="file docutils literal"><span class="pre">/etc/apache2/sites-available/owncloud</span></tt> and restart the web server. You
 might want to do it to enable HTTPS connections. Besides that, you can edit the
-<strong>.htaccess-File in /var/www/owncloud/</strong>. In the latter file there are also the
-PHP limits for file transfer specified.</p>
+<strong>.htaccess-File in /var/www/owncloud/</strong>. In the latter file the
+PHP limits for file transfer are also specified.</p>
 </div>
 <div class="section" id="using-owncloud">
 <h2>Using ownCloud<a class="headerlink" href="#using-owncloud" title="Permalink to this headline">¶</a></h2>
@@ -401,18 +373,15 @@ your LDAP credentials.</p>
 variables as parameters: <strong>owncloud/user/enabled</strong> for enabling or disabling,
 <strong>owncloud/user/quota</strong> as the Quota value and <strong>owncloud/join/users/filter</strong> as
 LDAP filter to select the users to update.</p>
-<div class="section" id="groups-2012-4-0-4">
-<h3>Groups 2012.4.0.4<a class="headerlink" href="#groups-2012-4-0-4" title="Permalink to this headline">¶</a></h3>
-<p>Since ownCloud Enterprise 2012.4.0.4 group support is enabled. Groups,
-that are activated for ownCloud usage, can be used to share files to
-instead of single users, for example. It is also important to note, that
-users can only share within groups where they belong to. Groups can be
+<div class="section" id="groups">
+<h3>Groups<a class="headerlink" href="#groups" title="Permalink to this headline">¶</a></h3>
+<p>Groups can be
 enabled and disabled via UCM as shown in the screen shot below.</p>
 <img alt="../_images/ucsint.png" src="../_images/ucsint.png" />
 <p>Another way to enable or disable groups is to use the script
 <tt class="file docutils literal"><span class="pre">/usr/share/owncloud/update-groups.sh</span></tt>. Currently, it takes an argument
-which can be 1=enable groups or 0=disable groups. The filter applied is being
-taken from the UCR variable <strong>owncloud/join/groups/filter</strong>. In case it is
+which can be 1=enable groups or 0=disable groups. The filter applied is
+taken from the UCR variable <strong>owncloud/join/groups/filter</strong>. If it is
 empty, a message will be displayed.</p>
 </div>
 </div>

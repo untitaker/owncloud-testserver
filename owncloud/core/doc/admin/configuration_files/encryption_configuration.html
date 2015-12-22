@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Encryption Configuration &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>Encryption Configuration &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,9 +27,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
     <link rel="up" title="File Sharing and Management" href="index.html" />
-    <link rel="next" title="Using the Files Locking App" href="files_locking_enabling.html" />
+    <link rel="next" title="Transactional File Locking" href="files_locking_transactional.html" />
     <link rel="prev" title="External Storage Authentication mechanisms" href="external_storage/auth_mechanisms.html" />
 <script type="text/javascript">
 (function () {
@@ -99,7 +99,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -134,15 +134,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#enabling-encryption">Enabling Encryption</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#sharing-encrypted-files">Sharing Encrypted Files</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#encrypting-external-mountpoints">Encrypting External Mountpoints</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#enabling-users-file-recovery-key">Enabling Users&#8217; File Recovery Key</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#enabling-users-file-recovery-keys">Enabling Users File Recovery Keys</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#occ-encryption-commands">occ Encryption Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#files-not-encrypted">Files Not Encrypted</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#ldap-and-other-external-user-back-ends">LDAP and Other External User Back-ends</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#upgrading-from-owncloud-8-0">Upgrading From ownCloud 8.0</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#where-keys-are-stored">Where Keys are Stored</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="files_locking_enabling.html">Using the Files Locking App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="files_locking_transactional.html">Transactional File Locking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="previews_configuration.html">Previews Configuration</a></li>
 </ul>
@@ -174,27 +171,24 @@
 						
   <div class="section" id="encryption-configuration">
 <h1>Encryption Configuration<a class="headerlink" href="#encryption-configuration" title="Permalink to this headline">¶</a></h1>
-<p>If you are upgrading from ownCloud 8.0, and have encryption enabled, please see
-<a class="reference internal" href="#upgrading-encryption-label"><em>Upgrading From ownCloud 8.0</em></a> (below) for the correct steps to upgrade your encryption.</p>
-<p>In ownCloud 8.1 and up the server-side encryption has a number of changes and
+<p>The primary purpose of the ownCloud server-side encryption is to protect users&#8217;
+files on remote storage, such as Dropbox and Google Drive, and to do it easily
+and seamlessly from within ownCloud.</p>
+<p>In ownCloud 8.2 the server-side encryption has a number of changes and
 improvements, including:</p>
 <ul class="simple">
-<li>When encryption is enabled, all files are no longer encrypted at user&#8217;s first
-logins because this causes timeouts on large installations. Instead, only
-files that are created or updated after encryption has been enabled are
-encrypted.</li>
-<li>The &#8220;decrypt all&#8221; option in the Personal settings has been removed, also for
-performance reasons.</li>
-<li>A new option for users to enable/disable encryption on a per mount-point
-basis.</li>
-<li>The option to choose from multiple encryption modules.</li>
+<li>An option to create a master encryption key, which replaces all individual
+user keys. This is especially useful for single-sign on.</li>
+<li>Encrypt all data files at once when enabling encryption.</li>
+<li>Decrypt all data files, or per user.</li>
+<li>Users may decrypt their own files.</li>
+<li>Move your keys to a different folder.</li>
 </ul>
 <p>ownCloud server-side encryption encrypts files stored on the ownCloud server,
 and files on remote storage that is connected to your ownCloud server.
 Encryption and decryption are performed on the ownCloud server. All files sent
-to remote storage (for example Dropbox and Google Drive) will be encrypted by
-the ownCloud server, and upon retrieval, decrypted before serving them to you
-and anyone you have shared them with.</p>
+to remote storage will be encrypted by the ownCloud server, and upon retrieval,
+decrypted before serving them to you and anyone you have shared them with.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Encrypting files increases their size by roughly 35%, so you must
@@ -205,9 +199,6 @@ not the encrypted file size.</p>
 <p>When files on external storage are encrypted in ownCloud, you cannot share them
 directly from the external storage services, but only through ownCloud sharing
 because the key to decrypt the data never leaves the ownCloud server.</p>
-<p>The main purpose of the ownCloud server-side encryption is to protect users&#8217;
-files on remote storage, and to do it easily and seamlessly from within
-ownCloud.</p>
 <p>ownCloud&#8217;s server-side encryption generates a strong encryption key, which is
 unlocked by user&#8217;s passwords. Your users don&#8217;t need to track an extra
 password, but simply log in as they normally do. It encrypts only the contents
@@ -244,11 +235,15 @@ server. Read <a class="reference external" href="https://owncloud.org/blog/how-o
 </div>
 <div class="section" id="before-enabling-encryption">
 <h2>Before Enabling Encryption<a class="headerlink" href="#before-enabling-encryption" title="Permalink to this headline">¶</a></h2>
-<p>Plan very carefully before enabling encryption because if you lose your encryption keys your files are not recoverable. Always have backups of your encryption keys stored in a safe location, and consider enabling all recovery options.</p>
+<p>Plan very carefully before enabling encryption because it is not reversible via
+the ownCloud Web interface. If you lose your encryption keys your files are not
+recoverable. Always have backups of your encryption keys stored in a safe
+location, and consider enabling all recovery options.</p>
+<p>You have more options via the <tt class="docutils literal"><span class="pre">occ</span></tt> command (see <a class="reference internal" href="#occ-encryption-label"><em>occ Encryption Commands</em></a>)</p>
 </div>
 <div class="section" id="enabling-encryption">
 <span id="enable-encryption-label"></span><h2>Enabling Encryption<a class="headerlink" href="#enabling-encryption" title="Permalink to this headline">¶</a></h2>
-<p>ownCloud encryption now consists of two parts. The base encryption system is
+<p>ownCloud encryption consists of two parts. The base encryption system is
 enabled and disabled on your Admin page. First you must enable this, and then
 select an encryption module to load. Currently the only available encryption
 module is the ownCloud Default Encryption Module.</p>
@@ -294,8 +289,8 @@ external storage enabled on your Admin page, and enabled for your users.</p>
 storage mount, see <a class="reference internal" href="external_storage_configuration_gui.html#external-storage-mount-options-label"><em>Mount Options</em></a>
 (<a class="reference internal" href="external_storage_configuration_gui.html"><em>Configuring External Storage (GUI)</em></a>)</p>
 </div>
-<div class="section" id="enabling-users-file-recovery-key">
-<h2>Enabling Users&#8217; File Recovery Key<a class="headerlink" href="#enabling-users-file-recovery-key" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="enabling-users-file-recovery-keys">
+<h2>Enabling Users File Recovery Keys<a class="headerlink" href="#enabling-users-file-recovery-keys" title="Permalink to this headline">¶</a></h2>
 <p>If you lose your ownCloud password, then you lose access to your encrypted
 files. If one of your users loses their ownCloud password their files are
 unrecoverable. You cannot reset their password in the normal way; you&#8217;ll see a
@@ -323,8 +318,10 @@ Users page.</p>
 </div>
 </div>
 <div class="section" id="occ-encryption-commands">
-<h2>occ Encryption Commands<a class="headerlink" href="#occ-encryption-commands" title="Permalink to this headline">¶</a></h2>
-<p>You may also use the <tt class="docutils literal"><span class="pre">occ</span></tt> command to perform encryption operations.</p>
+<span id="occ-encryption-label"></span><h2>occ Encryption Commands<a class="headerlink" href="#occ-encryption-commands" title="Permalink to this headline">¶</a></h2>
+<p>If you have shell access you may use the <tt class="docutils literal"><span class="pre">occ</span></tt> command to perform encryption
+operations, and you have additional options such as decryption and creating a
+single master encryption key.</p>
 <p>Get the current status of encryption and the loaded encryption module:</p>
 <div class="highlight-python"><pre>occ encryption:status</pre>
 </div>
@@ -339,14 +336,38 @@ page:</p>
 <div class="highlight-python"><pre>occ encryption:set-default-module [Module ID].</pre>
 </div>
 <p>The [module ID] is taken from the <tt class="docutils literal"><span class="pre">encryption:list-modules</span></tt> command.</p>
+<p>Encrypt all data files for all users. For performance reasons, when you enable
+encryption on an ownCloud server only new and changed files are encrypted. This
+command gives you the option to encrypt all files. You must first put your
+ownCloud server into single-user mode to prevent any user activity until
+encryption is completed:</p>
+<div class="highlight-python"><pre>occ encryption:encrypt-all</pre>
+</div>
+<p>Decrypt all user data files, or optionally a single user:</p>
+<div class="highlight-python"><pre>occ encryption:decrypt-all [username]</pre>
+</div>
+<p>Move keys to a different folder, either locally or on a different server:</p>
+<div class="highlight-python"><pre>occ encryption:change-key-storage-root</pre>
+</div>
+<p>View current location of keys:</p>
+<div class="highlight-python"><pre>occ encryption:show-key-storage-root</pre>
+</div>
+<p>Create a new master key. Use this when you have a single-sign on
+infrastructure.  Use this only on fresh installations with no existing data, or
+on systems where encryption has not already been enabled. It is not possible to
+disable it:</p>
+<div class="highlight-python"><pre>occ encryption:enable-master-key</pre>
+</div>
 <p>See <a class="reference internal" href="../configuration_server/occ_command.html#encryption-label"><em>Encryption</em></a>  for detailed instructions on using <tt class="docutils literal"><span class="pre">occ</span></tt>.</p>
 </div>
 <div class="section" id="files-not-encrypted">
 <h2>Files Not Encrypted<a class="headerlink" href="#files-not-encrypted" title="Permalink to this headline">¶</a></h2>
-<p>Only the data in your files is encrypted, and not the filenames or folder
-structures. These files are never encrypted:</p>
+<p>Only the data in the files in <tt class="docutils literal"><span class="pre">data/user/files</span></tt> is encrypted, and not the
+filenames or folder structures. These files are never encrypted:</p>
 <ul class="simple">
-<li>Old files in the trash bin</li>
+<li>Existing files in the trash bin &amp; Versions. Only new and changed files after
+encryption is enabled are encrypted.</li>
+<li>Existing files in Versions</li>
 <li>Image thumbnails from the Gallery app</li>
 <li>Previews from the Files app</li>
 <li>The search index from the full text search app</li>
@@ -364,87 +385,7 @@ both their old and new passwords to do this. If you have enabled the Recovery
 Key then you can change a user&#8217;s password in the ownCloud Users panel to match
 their back-end password, and then, of course, notify the user and give them
 their new password.</p>
-</div>
-<div class="section" id="upgrading-from-owncloud-8-0">
-<span id="upgrading-encryption-label"></span><h2>Upgrading From ownCloud 8.0<a class="headerlink" href="#upgrading-from-owncloud-8-0" title="Permalink to this headline">¶</a></h2>
-<p>The encryption backend has changed in ownCloud 8.1, so you must take some
-additional steps to migrate encryption correctly. If you do not follow these
-steps you may not be able to access your files.</p>
-<p>Before you start your upgrade, put your ownCloud server into
-<tt class="docutils literal"><span class="pre">maintenance:singleuser</span></tt> mode (See <a class="reference internal" href="../maintenance/enable_maintenance.html"><em>Maintenance Mode Configuration</em></a>.)
-You must do this to prevent users and sync clients from accessing files before
-you have completed your encryption migration.</p>
-<p>After your upgrade is complete, follow the steps in <a class="reference internal" href="#enable-encryption-label"><em>Enabling Encryption</em></a> to
-enable the new encryption system. Then click the <strong>Start Migration</strong> button on
-your Admin page to migrate your encryption keys, or use the <tt class="docutils literal"><span class="pre">occ</span></tt> command. We
-strongly recommend using the <tt class="docutils literal"><span class="pre">occ</span></tt> command; the <strong>Start Migration</strong> button is
-for admins who do not have access to the console, for example installations on
-shared hosting. This example is for Debian/Ubuntu Linux:</p>
-<div class="highlight-python"><pre>$ sudo -u www-data php occ encryption:migrate</pre>
-</div>
-<p>This example is for Red Hat/CentOS/Fedora Linux:</p>
-<div class="highlight-python"><pre>$ sudo -u apache php occ encryption:migrate</pre>
-</div>
-<p>You must run <tt class="docutils literal"><span class="pre">occ</span></tt> as your HTTP user; see
-<a class="reference internal" href="../configuration_server/occ_command.html"><em>Using the occ Command</em></a>.</p>
-<p>When you are finished, take your ownCloud server out of
-<tt class="docutils literal"><span class="pre">maintenance:singleuser</span></tt> mode.</p>
-</div>
-<div class="section" id="where-keys-are-stored">
-<h2>Where Keys are Stored<a class="headerlink" href="#where-keys-are-stored" title="Permalink to this headline">¶</a></h2>
-<p>All of your encryption keys are stored in your ownCloud <tt class="file docutils literal"><span class="pre">data/</span></tt>
-directory. When you run the migration command your old keys are backed up in
-your data directory:</p>
-<dl class="docutils">
-<dt>Backup for system-wide keys:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/encryption_migration_backup_&lt;timestamp&gt;</span></tt></dd>
-<dt>Backup for user-specific keys:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/&lt;user&gt;/encryption_migration_backup_&lt;timestamp&gt;</span></tt></dd>
-</dl>
-<p>Both backup directories contain the keys in the old file structure. This is the
-old file structure for ownCloud 8.0:</p>
-<dl class="docutils">
-<dt>Private public share key:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/pubShare_&lt;public-share-key-id&gt;.privateKey</span></tt></dd>
-<dt>Private recovery key:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/recovery_&lt;recovery-key-id&gt;.privateKey</span></tt></dd>
-<dt>Public keys of all users:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/public_keys</span></tt></dd>
-<dt>File keys for system-wide mount points:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/keys/&lt;file_path&gt;/&lt;filename&gt;/fileKey</span></tt></dd>
-<dt>Share keys for files on a system-wide mount point (one key for the owner and one key for each user with access to the file):</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/keys/&lt;file_path&gt;/&lt;filename&gt;/&lt;user&gt;.shareKey</span></tt></dd>
-<dt>Users&#8217; private keys:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/&lt;user&gt;/files_encryption/&lt;user&gt;.privateKey</span></tt></dd>
-<dt>File keys for files owned by the user:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/&lt;user&gt;/files_encryption/keys/&lt;file_path&gt;/&lt;filename&gt;/fileKey</span></tt></dd>
-<dt>Share keys for files owned by the user (one key for the owner and one key for each user with access to the file):</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/&lt;user&gt;/files_encryption/keys/&lt;file_path&gt;/&lt;filename&gt;/&lt;user&gt;.shareKey</span></tt></dd>
-</dl>
-<p>This is the new file structure for ownCloud 8.1:</p>
-<dl class="docutils">
-<dt>Private public share key:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/OC_DEFAULT_MODULE/pubShare_&lt;public-share-key-id&gt;.privateKey</span></tt></dd>
-<dt>Private recovery key:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/OC_DEFAULT_MODULE/recovery_&lt;recovery-key-id&gt;.privateKey</span></tt></dd>
-<dt>Public public share key:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/OC_DEFAULT_MODULE/pubShare_&lt;public-share-key-id&gt;.publicKey</span></tt></dd>
-<dt>Public recovery key:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/OC_DEFAULT_MODULE/recovery_&lt;recovery-key-id&gt;.publicKey</span></tt></dd>
-<dt>File keys for system-wide mount points:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/keys/&lt;file_path&gt;/&lt;filename&gt;/OC_DEFAULT_MODULE/fileKey</span></tt></dd>
-<dt>Share keys for files on a system-wide mount point (one key for the owner and one key for each user with access to the file):</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/files_encryption/keys/&lt;file_path&gt;/&lt;filename&gt;/OC_DEFAULT_MODULE/&lt;user&gt;.shareKey</span></tt></dd>
-<dt>Users&#8217; private keys:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/&lt;user&gt;/files_encryption/OC_DEFAULT_MODULE/&lt;user&gt;.privateKey</span></tt></dd>
-<dt>Users&#8217; public keys:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/&lt;user&gt;/files_encryption/OC_DEFAULT_MODULE/&lt;user&gt;.publicKey</span></tt></dd>
-<dt>File keys for files owned by the user:</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/&lt;user&gt;/files_encryption/keys/&lt;file_path&gt;/&lt;filename&gt;/OC_DEFAULT_MODULE/fileKey</span></tt></dd>
-<dt>Share keys for files owned by the user (one key for the owner and one key for each user with access to the file):</dt>
-<dd><tt class="file docutils literal"><span class="pre">data/&lt;user&gt;/files_encryption/keys/&lt;file_path&gt;/&lt;filename&gt;/OC_DEFAULT_MODULE/&lt;user&gt;.shareKey</span></tt></dd>
-</dl>
-</div>
+<span class="target" id="upgrading-encryption-label"></span></div>
 </div>
 
 

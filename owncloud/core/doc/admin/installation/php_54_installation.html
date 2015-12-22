@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installing PHP 5.4 on RHEL 6 and CentOS 6 &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>Installing PHP 5.4 on RHEL 6 and CentOS 6 &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,9 +27,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
-    <link rel="next" title="SELinux Configuration" href="selinux_configuration.html" />
+    <link rel="next" title="Installing PHP 5.5 on RHEL 7 and CentOS 7" href="php_55_installation.html" />
     <link rel="prev" title="ownCloud Community Appliance" href="appliance_installation.html" />
 <script type="text/javascript">
 (function () {
@@ -99,7 +99,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -130,6 +130,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#centos-6">CentOS 6</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="php_55_installation.html">Installing PHP 5.5 on RHEL 7 and CentOS 7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="selinux_configuration.html">SELinux Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nginx_configuration.html">Nginx Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ucs_installation.html">Univention Corporate Server</a></li>
@@ -191,7 +192,7 @@ example installs the new PHP 5.4 module for MySQL/MariaDB:</p>
 </pre></div>
 </div>
 <p>Disable loading the old PHP 5.3 Apache module:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span><span class="o">/</span><span class="n">old</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">old</span>
 </pre></div>
 </div>
 <p>You should now have a /etc/httpd/conf.d/php54-php.conf file, which loads the
@@ -219,7 +220,7 @@ module for MySQL/MariaDB:</p>
 </pre></div>
 </div>
 <p>Disable loading the old PHP 5.3 Apache module:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span><span class="o">/</span><span class="n">old</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">old</span>
 </pre></div>
 </div>
 <p>You should now have a /etc/httpd/conf.d/php54-php.conf file, which loads the

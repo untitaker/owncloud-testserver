@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Database Configuration &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>Database Configuration &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
     <link rel="up" title="Database Configuration" href="index.html" />
     <link rel="next" title="Oracle Database Setup" href="oracle_db_configuration.html" />
     <link rel="prev" title="Converting Database Type" href="db_conversion.html" />
@@ -99,7 +99,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -206,7 +206,7 @@ detailed information.</p>
 <h3>Configuring a MySQL or MariaDB Database<a class="headerlink" href="#configuring-a-mysql-or-mariadb-database" title="Permalink to this headline">¶</a></h3>
 <p>If you decide to use a MySQL or MariaDB database, ensure the following:</p>
 <ul class="simple">
-<li>That you have installed and enabled the MySQL extension in PHP</li>
+<li>That you have installed and enabled the pdo_mysql extension in PHP</li>
 <li>That the <strong>mysql.default_socket</strong> points to the correct socket (if the database runs on the same server as ownCloud).</li>
 </ul>
 <div class="admonition note">
@@ -216,7 +216,6 @@ detailed information.</p>
 <p>The PHP configuration in <tt class="file docutils literal"><span class="pre">/etc/php5/conf.d/mysql.ini</span></tt> could look like this:</p>
 <div class="highlight-ini"><div class="highlight"><pre><span class="c"># configuration for PHP MySQL module</span>
 <span class="na">extension</span><span class="o">=</span><span class="s">pdo_mysql.so</span>
-<span class="na">extension</span><span class="o">=</span><span class="s">mysql.so</span>
 
 <span class="k">[mysql]</span>
 <span class="na">mysql.allow_local_infile</span><span class="o">=</span><span class="s">On</span>

@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Manual Installation on Linux &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>Manual Installation on Linux &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="ownCloud Community Appliance" href="appliance_installation.html" />
     <link rel="prev" title="Installing and Managing Apps" href="apps_management_installation.html" />
@@ -99,7 +99,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -138,6 +138,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="appliance_installation.html">ownCloud Community Appliance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="php_54_installation.html">Installing PHP 5.4 on RHEL 6 and CentOS 6</a></li>
+<li class="toctree-l2"><a class="reference internal" href="php_55_installation.html">Installing PHP 5.5 on RHEL 7 and CentOS 7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="selinux_configuration.html">SELinux Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nginx_configuration.html">Nginx Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ucs_installation.html">Univention Corporate Server</a></li>
@@ -186,10 +187,10 @@ server up-to-date.</p>
 <a class="reference internal" href="../enterprise_installation/linux_installation.html"><em>Installing &amp; Upgrading ownCloud Enterprise Subscription</em></a></p>
 </div>
 <p>If there are no packages for your Linux distribution, or you prefer installing
-from sources, you can setup ownCloud from scratch using a classic LAMP stack
-(Linux, Apache, MySQL/MariaDB, PHP). This document provides a complete
-walk-through for installing ownCloud on Ubuntu 14.04 LTS Server with Apache and
-MariaDB.</p>
+from the source tarball, you can setup ownCloud from scratch using a classic
+LAMP stack (Linux, Apache, MySQL/MariaDB, PHP). This document provides a
+complete walk-through for installing ownCloud on Ubuntu 14.04 LTS Server with
+Apache and MariaDB, using <a class="reference external" href="https://owncloud.org/install/">the ownCloud .tar archive</a>.</p>
 <ul class="simple">
 <li><a class="reference internal" href="#prerequisites-label"><em>Prerequisites</em></a></li>
 <li><a class="reference internal" href="#ubuntu-installation-label"><em>Example Installation on Ubuntu 14.04 LTS Server</em></a></li>
@@ -202,18 +203,18 @@ MariaDB.</p>
 <li><a class="reference internal" href="#php-fpm-tips-label"><em>php-fpm Configuration Notes</em></a></li>
 <li><a class="reference internal" href="#other-http-servers-label"><em>Other Web Servers</em></a></li>
 </ul>
-<div class="section" id="prerequisites">
-<span id="prerequisites-label"></span><h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This tutorial assumes you have terminal access to the machine you want
-to install ownCloud on. Although this is not an absolute requirement,
-installation without it is likely to require contacting your
-hoster (e.g. for installing required modules). Consult the
-<a class="reference external" href="http://php.net/manual/en/extensions.php">PHP manual</a> for information on modules.
-Your Linux distribution should have packages for all required modules.</p>
+<p class="last">Admins of SELinux-enabled distributions such as CentOS, Fedora, and
+Red Hat Enterprise Linux may need to set new rules to enable installing
+ownCloud. See <a class="reference internal" href="#selinux-tips-label"><em>SELinux Configuration Tips</em></a> for a suggested configuration.</p>
 </div>
-<p>To run ownCloud, your Web server must have the following PHP modules installed:</p>
+<div class="section" id="prerequisites">
+<span id="prerequisites-label"></span><h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>The ownCloud .tar archive contains all of the required PHP modules. This section
+lists all required and optional PHP modules.  Consult the <a class="reference external" href="http://php.net/manual/en/extensions.php">PHP manual</a> for more information on modules.
+Your Linux distribution should have packages for all required modules.</p>
+<p>Required:</p>
 <ul class="simple">
 <li>php5 (&gt;= 5.5)</li>
 <li>PHP module ctype</li>
@@ -232,7 +233,7 @@ Your Linux distribution should have packages for all required modules.</p>
 <p>Database connectors (pick the one for your database:)</p>
 <ul class="simple">
 <li>PHP module sqlite (&gt;= 3, usually not recommended for performance reasons)</li>
-<li>PHP module mysql (MySQL/MariaDB)</li>
+<li>PHP module pdo_mysql (MySQL/MariaDB)</li>
 <li>PHP module pgsql (requires PostgreSQL &gt;= 9.0)</li>
 </ul>
 <p><em>Recommended</em> packages:</p>
@@ -266,16 +267,18 @@ memcaches:</p>
 <li>PHP module memcached</li>
 <li>PHP module redis (required for Transactional File Locking)</li>
 </ul>
-<p>See <a class="reference internal" href="../configuration_server/caching_configuration.html"><em>Configuring Memory Caching</em></a>.</p>
+<p>See <a class="reference internal" href="../configuration_server/caching_configuration.html"><em>Configuring Memory Caching</em></a> to learn how to select
+and configure a memcache.</p>
 <p>For preview generation (<em>optional</em>):</p>
 <ul class="simple">
 <li>PHP module imagick</li>
 <li>avconv or ffmpeg</li>
 <li>OpenOffice or LibreOffice</li>
-<li>You don’t need the WebDAV module for your Web server (i.e. Apache’s
-<tt class="docutils literal"><span class="pre">mod_webdav</span></tt>) to access your ownCloud data via WebDAV. ownCloud has a built-in
-WebDAV server of its own, SabreDAV.</li>
 </ul>
+<p>You don’t need the WebDAV module for your Web server (i.e. Apache’s
+<tt class="docutils literal"><span class="pre">mod_webdav</span></tt>), as ownCloud has a built-in WebDAV server of its own, SabreDAV.
+If <tt class="docutils literal"><span class="pre">mod_webdav</span></tt> is enabled you must disable it for ownCloud. (See
+<a class="reference internal" href="#apache-configuration-label"><em>Apache Web Server Configuration</em></a> for an example configuration.)</p>
 </div>
 <div class="section" id="example-installation-on-ubuntu-14-04-lts-server">
 <span id="ubuntu-installation-label"></span><h2>Example Installation on Ubuntu 14.04 LTS Server<a class="headerlink" href="#example-installation-on-ubuntu-14-04-lts-server" title="Permalink to this headline">¶</a></h2>
@@ -289,30 +292,29 @@ apt-get install php5-intl php5-mcrypt php5-imagick</pre>
 <ul class="simple">
 <li>This installs the packages for the ownCloud core system. If you are planning
 on running additional apps, keep in mind that they might require additional
-packages.  See the Prerequisites section (above) for details.</li>
+packages.  See <a class="reference internal" href="#prerequisites-label"><em>Prerequisites</em></a> for details.</li>
 <li>At the installation of the MySQL/MariaDB server, you will be prompted to
-create a root password. Be sure to remember the password you enter there
-for later use as you will need it during ownCloud database setup.</li>
+create a root password. Be sure to remember your password as you will need it
+during ownCloud database setup.</li>
 </ul>
 <p>Now download the archive of the latest ownCloud version:</p>
 <ul>
 <li><p class="first">Go to the <a class="reference external" href="http://owncloud.org/install">ownCloud Download Page</a>.</p>
 </li>
 <li><p class="first">Go to <strong>Download ownCloud Server &gt; Download &gt; Archive file for
-server owners</strong> and download either the tar.bz2 or .zip archive in step 1.</p>
+server owners</strong> and download either the tar.bz2 or .zip archive.</p>
 </li>
-<li><p class="first">This downloads a file named owncloud-x.y.z.tar.bz2 (where
-x.y.z is the version number of the current latest version).</p>
+<li><p class="first">This downloads a file named owncloud-x.y.z.tar.bz2 or owncloud-x.y.z.zip
+(where x.y.z is the version number).</p>
 </li>
 <li><p class="first">Download its corresponding checksum file, e.g. owncloud-x.y.z.tar.bz2.md5,
 or owncloud-x.y.z.tar.bz2.sha256.</p>
 </li>
-<li><p class="first">Save these files in the same directory on the machine you want to install
-ownCloud on.</p>
-</li>
 <li><p class="first">Verify the MD5 or SHA256 sum:</p>
 <div class="highlight-python"><pre>md5sum -c owncloud-x.y.z.tar.bz2.md5 &lt; owncloud-x.y.z.tar.bz2
-sha256sum -c owncloud-x.y.z.tar.bz2.sha256 &lt; owncloud-x.y.z.tar.bz2</pre>
+sha256sum -c owncloud-x.y.z.tar.bz2.sha256 &lt; owncloud-x.y.z.tar.bz2
+md5sum  -c owncloud-x.y.z.zip.md5 &lt; owncloud-x.y.z.zip
+sha256sum  -c owncloud-x.y.z.zip.sha256 &lt; owncloud-x.y.z.zip</pre>
 </div>
 </li>
 <li><p class="first">You may also verify the PGP signature:</p>
@@ -322,22 +324,26 @@ gpg --import owncloud.asc
 gpg --verify owncloud-x.y.z.tar.bz2.asc owncloud-x.y.z.tar.bz2</pre>
 </div>
 </li>
-<li><p class="first">Now you can extract the archive contents. Open a terminal, navigate to your
-download directory, and run:</p>
-<div class="highlight-python"><pre>tar -xjf owncloud-x.y.z.tar.bz2</pre>
+<li><p class="first">Now you can extract the archive contents. Run the appropriate unpacking
+command for your archive type:</p>
+<div class="highlight-python"><pre>tar -xjf owncloud-x.y.z.tar.bz2
+unzip owncloud-x.y.z.zip</pre>
 </div>
 </li>
 <li><p class="first">This unpacks to a single <tt class="docutils literal"><span class="pre">owncloud</span></tt> directory. Copy the ownCloud directory
-to its final destination in the document root of your web server:</p>
+to its final destination. When you are running the Apache HTTP server you may
+safely install ownCloud in your Apache document root:</p>
 <div class="highlight-python"><pre>cp -r owncloud /path/to/webserver/document-root</pre>
 </div>
 <p>where <tt class="docutils literal"><span class="pre">/path/to/webserver/document-root</span></tt> is replaced by the
 document root of your Web server. On Ubuntu systems this
-<tt class="docutils literal"><span class="pre">/var/www/owncloud</span></tt>, so your copying command is:</p>
-<div class="highlight-python"><pre>cp -r owncloud /var/www/</pre>
+<tt class="docutils literal"><span class="pre">/var/www/html/owncloud</span></tt>, so your copying command is:</p>
+<div class="highlight-python"><pre>cp -r owncloud /var/www/html</pre>
 </div>
 </li>
 </ul>
+<p>On other HTTP servers it is recommended to install ownCloud outside of the
+document root.</p>
 <blockquote>
 <div></div></blockquote>
 </div>
@@ -346,20 +352,24 @@ document root of your Web server. On Ubuntu systems this
 <p>On Debian, Ubuntu, and their derivatives, Apache installs with a useful
 configuration so all you have to do is create a
 <tt class="file docutils literal"><span class="pre">/etc/apache2/sites-available/owncloud.conf</span></tt> file with these lines in
-it:</p>
-<div class="highlight-xml"><pre>Alias /owncloud /var/www/owncloud
- &lt;Directory /var/www/owncloud/&gt;
-   Options +FollowSymlinks
-   AllowOverride All
+it, replacing the <strong>Directory</strong> and other filepaths with your own filepaths:</p>
+<div class="highlight-xml"><pre>&lt;Directory /var/www/html/owncloud/&gt;
+  Options +FollowSymlinks
+  AllowOverride All
 
-  &lt;IfModule mod_dav.c&gt;
-   Dav off
-  &lt;/IfModule&gt;
+ &lt;IfModule mod_dav.c&gt;
+  Dav off
+ &lt;/IfModule&gt;
 
-  SetEnv HOME /var/www/owncloud
-  SetEnv HTTP_HOME /var/www/owncloud
+ SetEnv HOME /var/www/html/owncloud
+ SetEnv HTTP_HOME /var/www/html/owncloud
 
- &lt;/Directory&gt;</pre>
+&lt;/Directory&gt;</pre>
+</div>
+<p>If you install ownCloud outside of Apache&#8217;s DocumentRoot, then you must add an
+<strong>Alias</strong> directive at the top of the file. In this example ownCloud is installed in
+<tt class="docutils literal"><span class="pre">/var/www/owncloud</span></tt>:</p>
+<div class="highlight-python"><pre>Alias /owncloud "/var/www/owncloud/"</pre>
 </div>
 <p>Then create a symlink to <tt class="file docutils literal"><span class="pre">/etc/apache2/sites-enabled</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apache2</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">owncloud</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apache2</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span><span class="o">/</span><span class="n">owncloud</span><span class="o">.</span><span class="n">conf</span>
@@ -435,10 +445,16 @@ for good deals on commercial certificates.</p>
 <span id="installation-wizard-label"></span><h2>Installation Wizard<a class="headerlink" href="#installation-wizard" title="Permalink to this headline">¶</a></h2>
 <p>After restarting Apache you must complete your installation by
 running either the graphical Installation Wizard, or on the command line with
-the <tt class="docutils literal"><span class="pre">occ</span></tt> command. To enable this you must temporarily change the ownership
-of your <tt class="docutils literal"><span class="pre">owncloud</span></tt> directory to your HTTP user. On Debian/Ubuntu/etc. this is
-<tt class="docutils literal"><span class="pre">www-data</span></tt>:</p>
-<div class="highlight-python"><pre>chown -R www-data:www-data /var/www/owncloud/</pre>
+the <tt class="docutils literal"><span class="pre">occ</span></tt> command. To enable this, temporarily change the ownership on your
+ownCloud directories to your HTTP user (see <a class="reference internal" href="installation_wizard.html#strong-perms-label"><em>Setting Strong Directory Permissions</em></a> to learn
+how to find your HTTP user):</p>
+<div class="highlight-python"><pre>chown -R www-data:www-data /var/www/html/owncloud/</pre>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Admins of SELinux-enabled distributions may need to write new SELinux
+rules to complete their ownCloud installation; see
+<a class="reference internal" href="#selinux-tips-label"><em>SELinux Configuration Tips</em></a>.</p>
 </div>
 <p>To use <tt class="docutils literal"><span class="pre">occ</span></tt> see <a class="reference internal" href="command_line_installation.html"><em>Installing ownCloud From the Command Line</em></a>.</p>
 <p>To use the graphical Installation Wizard see <a class="reference internal" href="installation_wizard.html"><em>Installation Wizard</em></a>.</p>
@@ -447,7 +463,7 @@ apply strong permissions to your ownCloud directory.</p>
 </div>
 <div class="section" id="setting-strong-directory-permissions">
 <span id="strong-permissions-label"></span><h2>Setting Strong Directory Permissions<a class="headerlink" href="#setting-strong-directory-permissions" title="Permalink to this headline">¶</a></h2>
-<p>After completing installation, we recommend immediately setting the directory
+<p>After completing installation, you must immediately set the directory
 permissions in your ownCloud installation as strictly as possible for stronger
 security. Please refer to <a class="reference internal" href="installation_wizard.html#strong-perms-label"><em>Setting Strong Directory Permissions</em></a>.</p>
 </div>

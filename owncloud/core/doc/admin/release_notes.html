@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>ownCloud 8.2 Release Notes &mdash; ownCloud Server Administration Manual 8.2 documentation</title>
+    <title>ownCloud 8.2 Release Notes &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
     
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud Server Administration Manual 8.2 documentation" href="index.html" />
+    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="index.html" />
     <link rel="next" title="What’s New for Admins in ownCloud 8.2" href="whats_new_admin.html" />
     <link rel="prev" title="ownCloud 8.2 Server Administration Manual Introduction" href="index.html" />
 <script type="text/javascript">
@@ -98,7 +98,7 @@
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="contents.html">ownCloud Server Administration Manual</a></h1>
+      <h1><a href="contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
 
     </div>
     
@@ -200,8 +200,9 @@
 <h1>ownCloud 8.2 Release Notes<a class="headerlink" href="#owncloud-version-release-notes" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="changes-in-8-2">
 <h2>Changes in 8.2<a class="headerlink" href="#changes-in-8-2" title="Permalink to this headline">¶</a></h2>
+<p>Home folder rule is enforced in the user_ldap application in new ownCloud installations; see <a class="reference internal" href="configuration_user/user_auth_ldap.html"><em>User Authentication with LDAP</em></a>. This affects ownCloud 8.0.10, 8.1.5 and 8.2.0 and up.</p>
 <p>New location for Linux package repositories; ownCloud admins must manually
-change to the new repos. See <a class="reference internal" href="maintenance/upgrade.html"><em>Upgrading Your ownCloud Server</em></a></p>
+change to the new repos. See <a class="reference internal" href="maintenance/upgrade.html"><em>How to Upgrade Your ownCloud Server</em></a></p>
 <p>PHP 5.6.11+ breaks the LDAP wizard with a &#8216;Could not connect to LDAP&#8217; error. See <a class="reference external" href="https://github.com/owncloud/core/issues/20020">https://github.com/owncloud/core/issues/20020</a>.</p>
 <p><tt class="docutils literal"><span class="pre">filesystem_check_changes</span></tt> in <tt class="docutils literal"><span class="pre">config.php</span></tt> is set to 0 by default. This
 prevents unnecessary update checks and improves performance. If you are using
