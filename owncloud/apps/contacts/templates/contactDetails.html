@@ -1,0 +1,28 @@
+<div ng-if="ctrl.contact===undefined">
+	<div id="emptycontent" class="">
+		<div class="icon-contacts-dark"></div>
+		<h2>{{ctrl.t.noContacts}}</h2>
+	</div>
+</div>
+<div ng-if="ctrl.contact!==undefined">
+<header class="contactdetails__header" ng-style="{'background-color': (ctrl.contact.uid() | contactColor)}">
+	<img class="contactdetails__logo avatar" data-ng-src="data:image/png;base64,{{ctrl.photo}}" />
+	<h2>
+		<input type="text" id="details-fullName" class="contactdetails__name" placeholder="{{ctrl.t.placeholderName}}" name="email" ng-model="ctrl.contact.fullName" ng-model-options="{ getterSetter: true, debounce: 500 }" ng-change="ctrl.updateContact()" value="" />
+	</h2>
+	<button ng-click="ctrl.deleteContact()" class="icon-delete-white" title="Delete"></button>
+</header>
+<section>
+	<div ng-repeat="prop in ctrl.contact.props | toArray | orderDetailItems:'$key'">
+		<detailsItem ng-repeat="propData in prop" name="prop.$key" data="propData" model="ctrl" index="$index" ng-class="[ 'details-item-' + prop.$key ]"></detailsItem>
+	</div>
+	<div class="select-addressbook" ng-if="addressBooks.length > 1">
+		<select ng-model="addressBook" ng-change="ctrl.changeAddressBook(addressBook)" ng-options="book.id for book in addressBooks track by book.id">
+		</select>
+	</div>
+	<select class="add-field" ng-model="ctrl.field" ng-change="ctrl.addField(ctrl.field)">
+		<option value=''>{{ctrl.t.selectField}}</option>
+		<option ng-repeat="field in ctrl.fieldDefinitions | fieldFilter: ctrl.contact | orderBy : 'name'" value="{{field.id}}">{{field.name}}</option>
+	</select>
+</section>
+</div>
