@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Oracle Database Setup &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Oracle Database Setup &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="Database Configuration" href="index.html" />
     <link rel="next" title="Mimetypes Management" href="../configuration_mimetypes/index.html" />
     <link rel="prev" title="Database Configuration" href="linux_database_configuration.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,9 +113,9 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -144,6 +143,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -170,7 +171,7 @@ will host ownCloud, and as a host for the Oracle Database.</p>
 <ul class="simple">
 <li>Setup of the ownCloud user in Oracle: This involves setting up a user space
 in Oracle for setting up the ownCloud database.</li>
-<li>Installing the Oracle Instant Client on the web server (facilitating the
+<li>Installing the Oracle Instant Client on the Web server (facilitating the
 connection to the Oracle Database).</li>
 <li>Compiling and installing the Oracle PHP Plugin oci8 module</li>
 <li>Pointing ownCloud at the Oracle database in the initial setup process</li>
@@ -191,7 +192,7 @@ DBA and running the script below:</p>
 <span class="k">GRANT</span> <span class="k">create</span> <span class="k">session</span><span class="p">,</span> <span class="k">create</span> <span class="k">table</span><span class="p">,</span> <span class="k">create</span> <span class="k">procedure</span><span class="p">,</span> <span class="k">create</span> <span class="n">sequence</span><span class="p">,</span> <span class="k">create</span> <span class="k">trigger</span><span class="p">,</span> <span class="k">create</span> <span class="k">view</span><span class="p">,</span> <span class="k">create</span> <span class="n">synonym</span><span class="p">,</span> <span class="k">alter</span> <span class="k">session</span> <span class="k">TO</span> <span class="n">owncloud</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>Substitute an actual password for <tt class="docutils literal"><span class="pre">password</span></tt>.  Items like TableSpace, Quota etc. will be determined by your DBA.</p>
+<p>Substitute an actual password for <code class="docutils literal"><span class="pre">password</span></code>.  Items like TableSpace, Quota etc. will be determined by your DBA.</p>
 </div>
 <div class="section" id="downloading-and-installing-the-oracle-instant-client">
 <h3>Downloading and Installing the Oracle Instant Client<a class="headerlink" href="#downloading-and-installing-the-oracle-instant-client" title="Permalink to this headline">¶</a></h3>
@@ -204,8 +205,8 @@ your OS Distribution.</p>
 in a directory on the server, in this example they are RPM packages.</p>
 </div>
 <ul class="simple">
-<li>Install the basic client from the RPM.  Use the <tt class="docutils literal"><span class="pre">rpm</span> <span class="pre">–ivh</span></tt> command</li>
-<li>Install the SDK RPM package.  Use the <tt class="docutils literal"><span class="pre">rpm</span> <span class="pre">–ivh</span></tt> command</li>
+<li>Install the basic client from the RPM.  Use the <code class="docutils literal"><span class="pre">rpm</span> <span class="pre">–ivh</span></code> command</li>
+<li>Install the SDK RPM package.  Use the <code class="docutils literal"><span class="pre">rpm</span> <span class="pre">–ivh</span></code> command</li>
 </ul>
 <p>At this point, the Oracle Instant client is installed on the ownCloud Host (in
 the home directory).</p>
@@ -223,8 +224,8 @@ the home directory).</p>
 <li><dl class="first docutils">
 <dt>There should be two things in the folder:</dt>
 <dd><ul class="first last simple">
-<li><tt class="docutils literal"><span class="pre">package.xml</span></tt> file</li>
-<li><tt class="docutils literal"><span class="pre">oci8-*.*.*</span></tt> folder (folder will change based on version of the extension you downloaded).</li>
+<li><code class="docutils literal"><span class="pre">package.xml</span></code> file</li>
+<li><code class="docutils literal"><span class="pre">oci8-*.*.*</span></code> folder (folder will change based on version of the extension you downloaded).</li>
 </ul>
 </dd>
 </dl>
@@ -232,10 +233,11 @@ the home directory).</p>
 <li><dl class="first docutils">
 <dt>Build the OCI8 module.</dt>
 <dd><ul class="first last">
-<li><p class="first">Change (<tt class="docutils literal"><span class="pre">cd</span></tt>) to the folder where you have copied the downloaded and uncompressed OCI8 bits.</p>
+<li><p class="first">Change (<code class="docutils literal"><span class="pre">cd</span></code>) to the folder where you have copied the downloaded and uncompressed OCI8 bits.</p>
 </li>
 <li><p class="first">Run the following command (there will be a significant amount of output):</p>
-<div class="highlight-python"><pre>pecl build</pre>
+<div class="highlight-python"><div class="highlight"><pre>pecl build
+</pre></div>
 </div>
 </li>
 </ul>
@@ -246,35 +248,39 @@ the home directory).</p>
 </ul>
 </li>
 <li><p class="first">Change directory:</p>
-<div class="highlight-python"><pre>cd oci8-&lt;version number&gt;</pre>
+<div class="highlight-python"><div class="highlight"><pre>cd oci8-&lt;version number&gt;
+</pre></div>
 </div>
 </li>
 <li><p class="first">Type the following command:</p>
-<div class="highlight-python"><pre>./configure –with-oci8=instantcleint,/usr/lib/oracle/&lt;version number&gt;/client64/lib</pre>
+<div class="highlight-python"><div class="highlight"><pre>./configure –with-oci8=instantcleint,/usr/lib/oracle/&lt;version number&gt;/client64/lib
+</pre></div>
 </div>
 </li>
 <li><p class="first">Again, there will be significant output</p>
 </li>
-<li><p class="first">Enter the following command to compile: <tt class="docutils literal"><span class="pre">make</span></tt></p>
+<li><p class="first">Enter the following command to compile: <code class="docutils literal"><span class="pre">make</span></code></p>
 </li>
-<li><p class="first">At this time there should be a folder called modules in the <tt class="docutils literal"><span class="pre">oci8-&lt;version_&gt;</span></tt> folder.
-Within this folder exists the <tt class="docutils literal"><span class="pre">oci8.so</span></tt> file.</p>
+<li><p class="first">At this time there should be a folder called modules in the <code class="docutils literal"><span class="pre">oci8-&lt;version_&gt;</span></code> folder.
+Within this folder exists the <code class="docutils literal"><span class="pre">oci8.so</span></code> file.</p>
 </li>
 <li><p class="first">Copy this to the directory where the modules are stored in the PHP install. It depends on
 your distribution. This is the path for RHEL 6 and OEL 6:</p>
-<div class="highlight-python"><pre>cp oci8.so /usr/lib64/php/modules</pre>
+<div class="highlight-python"><div class="highlight"><pre>cp oci8.so /usr/lib64/php/modules
+</pre></div>
 </div>
 </li>
 <li><dl class="first docutils">
-<dt>Create an <tt class="docutils literal"><span class="pre">.ini</span></tt> file</dt>
+<dt>Create an <code class="docutils literal"><span class="pre">.ini</span></code> file</dt>
 <dd><ul class="first last">
-<li><p class="first">Navigate to the <tt class="docutils literal"><span class="pre">php.d</span></tt> directory: <tt class="docutils literal"><span class="pre">cd</span> <span class="pre">/etc/php.d</span></tt></p>
+<li><p class="first">Navigate to the <code class="docutils literal"><span class="pre">php.d</span></code> directory: <code class="docutils literal"><span class="pre">cd</span> <span class="pre">/etc/php.d</span></code></p>
 </li>
-<li><p class="first">Edit a file called oci8.ini: <tt class="docutils literal"><span class="pre">vi</span> <span class="pre">oci8.ini</span></tt></p>
+<li><p class="first">Edit a file called oci8.ini: <code class="docutils literal"><span class="pre">vi</span> <span class="pre">oci8.ini</span></code></p>
 </li>
 <li><p class="first">Make the file look as follows:</p>
-<div class="highlight-python"><pre>; Oracle Instant Client Shared Object
-extension=oci8.so</pre>
+<div class="highlight-python"><div class="highlight"><pre>; Oracle Instant Client Shared Object
+extension=oci8.so
+</pre></div>
 </div>
 </li>
 <li><p class="first">Save the document</p>
@@ -292,7 +298,7 @@ extension=oci8.so</pre>
 that ownCloud has previously been installed.</p>
 <div class="section" id="configuration-wizard">
 <h3>Configuration Wizard<a class="headerlink" href="#configuration-wizard" title="Permalink to this headline">¶</a></h3>
-<img alt="../_images/oracle-1.png" src="../_images/oracle-1.png" style="width: 5.778in; height: 7.4165in;" />
+<a class="reference internal image-reference" href="../_images/oracle-1.png"><img alt="../_images/oracle-1.png" src="../_images/oracle-1.png" style="width: 5.778in; height: 7.4165in;" /></a>
 <div class="section" id="database-user">
 <h4>Database user<a class="headerlink" href="#database-user" title="Permalink to this headline">¶</a></h4>
 <p>This is the user space created in step 2.1.

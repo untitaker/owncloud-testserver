@@ -2,10 +2,14 @@
 ownCloud |version| Release Notes
 ================================
 
-Changes in 8.2
+
+Changes in 9.0
 --------------
 
 Home folder rule is enforced in the user_ldap application in new ownCloud installations; see :doc:`configuration_user/user_auth_ldap`. This affects ownCloud 8.0.10, 8.1.5 and 8.2.0 and up.
+
+Changes in 8.2
+--------------
 
 New location for Linux package repositories; ownCloud admins must manually 
 change to the new repos. See :doc:`maintenance/upgrade`
@@ -37,11 +41,6 @@ value; if there is not one then use empty quotes, ``""``. (See
 
 Users of the Linux Package need to update their repository setup as described
 in this `blogpost <https://owncloud.org/blog/upgrading-to-owncloud-server-8-2/>`_.
-
-The log format for failed logins to the ``owncloud.log`` has a slight syntax change.
-If a tool relies on logging failed logins please revise its rule. For ``fail2ban``
-you will find an updated rule at the `forums <https://forum.owncloud.org/viewtopic.
-php?f=8&t=28678>`_.
 
 Changes in 8.1
 --------------

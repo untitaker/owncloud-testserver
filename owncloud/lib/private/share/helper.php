@@ -5,11 +5,11 @@
  * @author Miguel Prokop <miguel.prokop@vtu.com>
  * @author Morris Jobke <hey@morrisjobke.de>
  * @author Robin Appelman <icewind@owncloud.com>
- * @author Robin McCorkell <rmccorkell@karoshi.org.uk>
+ * @author Robin McCorkell <robin@mccorkell.me.uk>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -227,7 +227,7 @@ class Helper extends \OC\Share\Constants {
 	 *
 	 * all return: http://localhost
 	 *
-	 * @param string $shareWith
+	 * @param string $remote
 	 * @return string
 	 */
 	protected static function fixRemoteURL($remote) {
@@ -244,7 +244,7 @@ class Helper extends \OC\Share\Constants {
 	 * split user and remote from federated cloud id
 	 *
 	 * @param string $id
-	 * @return array
+	 * @return string[]
 	 * @throws HintException
 	 */
 	public static function splitUserRemote($id) {

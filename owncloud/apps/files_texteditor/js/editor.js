@@ -118,7 +118,11 @@ var Files_Texteditor = {
 			},
 			function(message){
 				// Boo
-				$('small.saving-message').text(t('files_texteditor', 'failed!'));
+				if (typeof message == 'undefined') {
+					$('small.saving-message').text(t('files_texteditor', 'failed!'));
+				} else {
+					$('small.saving-message').text(message);
+				}
 				OCA.Files_Texteditor.saveMessageTimeout = setTimeout(function() {
 					$('small.saving-message').fadeOut(200);
 				}, 5000);
@@ -296,12 +300,14 @@ var Files_Texteditor = {
 				// Show the controls
 				_self.loadControlBar(file, _self.currentContext);
 				window.aceEditor.getSession().on('change', _self.setupAutosave);
+				_self.bindVisibleActions();
 				window.aceEditor.focus();
 
 				if (_self.previewPlugins[file.mime]){
 					_self.preview = container.find('#preview');
 					_self.preview.addClass(file.mime.replace('/','-'));
 					container.find('#editor_container').addClass('hasPreview');
+					container.find('#editor_overlay').addClass('hasPreview');
 					_self.previewPluginOnChange = _.debounce(_self.previewPlugins[file.mime].preview, 200);
 					var text = window.aceEditor.getSession().getValue();
 					_self.previewPluginOnChange(text, _self.preview);
@@ -522,7 +528,14 @@ var Files_Texteditor = {
 		})
 		.done(success)
 		.fail(function(jqXHR) {
-			failure(JSON.parse(jqXHR.responseText).message);
+			var message;
+
+			try{
+				message = JSON.parse(jqXHR.responseText).message;
+			}catch(e){
+			}
+
+			failure(message);
 		});
 	},
 
@@ -532,6 +545,7 @@ var Files_Texteditor = {
 	closeEditor: function() {
 		this.$container.html('').show();
 		this.unloadControlBar();
+		this.unBindVisibleActions();
 		if (this.fileInfoModel) {
 			this.fileInfoModel.set({
 				// temp dummy, until we can do a PROPFIND
@@ -549,6 +563,7 @@ var Files_Texteditor = {
 	hideEditor: function() {
 		this.$container.hide();
 		document.title = this.oldTitle;
+		this.unBindVisibleActions();
 	},
 
 	/**
@@ -557,11 +572,74 @@ var Files_Texteditor = {
 	setupAutosave: function() {
 		clearTimeout(this.saveTimer);
 		this.saveTimer = setTimeout(OCA.Files_Texteditor._onSaveTrigger, 3000);
-	}
+	},
+
+	/**
+	 * Handles event when clicking outside editor
+	 */
+	_onClickDocument: function(event) {
+		// Check if click was inside the editor or not.
+		if(!$(event.target).closest('#editor_container').length) {
+		   // Edit the editor
+		   OCA.Files_Texteditor._onCloseTrigger();
+	   }
+	},
+
+	/*
+	 * Binds actions that need to happen whilst the editor is visible
+	 */
+	 bindVisibleActions: function() {
+		 $(document).bind('mouseup', this._onClickDocument);
+	 },
+
+	 /**
+	  * Unbinds actions that happen whilst the editor is visible
+	  */
+	 unBindVisibleActions: function() {
+		 $(document).unbind('mouseup', this._onClickDocument);
+	 }
 
 };
 
+Files_Texteditor.NewFileMenuPlugin = {
+
+	attach: function(menu) {
+		var fileList = menu.fileList;
+
+		// only attach to main file list, public view is not supported yet
+		if (fileList.id !== 'files') {
+			return;
+		}
+
+		// register the new menu entry
+		menu.addMenuEntry({
+			id: 'file',
+			displayName: t('files_texteditor', 'Text file'),
+			templateName: t('files_texteditor', 'New text file.txt'),
+			iconClass: 'icon-filetype-text',
+			fileType: 'file',
+			actionHandler: function(name) {
+				var dir = fileList.getCurrentDirectory();
+				// first create the file
+				fileList.createFile(name).then(function() {
+					// once the file got successfully created,
+					// open the editor
+					Files_Texteditor._onEditorTrigger(
+						name,
+						{
+							fileList: fileList,
+							dir: dir
+						}
+					);
+				});
+			}
+		});
+	}
+};
+
 OCA.Files_Texteditor = Files_Texteditor;
+
+OC.Plugins.register('OCA.Files.NewFileMenu', Files_Texteditor.NewFileMenuPlugin);
 
 $(document).ready(function () {
 	$('#editor').remove();

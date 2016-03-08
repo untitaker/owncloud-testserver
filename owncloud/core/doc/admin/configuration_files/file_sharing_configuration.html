@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>File Sharing &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>File Sharing &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,9 +26,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="File Sharing and Management" href="index.html" />
-    <link rel="next" title="Configuring Federated Cloud Sharing" href="federated_cloud_sharing_configuration.html" />
+    <link rel="next" title="Configuring Federation Sharing" href="federated_cloud_sharing_configuration.html" />
     <link rel="prev" title="File Sharing and Management" href="index.html" />
 <script type="text/javascript">
 (function () {
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,18 +113,20 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">File Sharing and Management</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">File Sharing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#transferring-files-to-another-user">Transferring Files to Another User</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#creating-persistent-file-shares">Creating Persistent File Shares</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#share-link-password-policy">Share Link Password Policy</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="federated_cloud_sharing_configuration.html">Configuring Federated Cloud Sharing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="federated_cloud_sharing_configuration.html">Configuring Federation Sharing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="big_file_upload_configuration.html">Uploading big files &gt; 512MB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="collaborative_documents_configuration.html">Configuring the Collaborative Documents App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="default_files_configuration.html">Providing Default Files</a></li>
@@ -150,6 +151,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -178,33 +181,38 @@ ownCloud users. You have control of a number of user permissions on file shares:
 <li>Allow email notifications of new public shares</li>
 <li>Exclude groups from creating shares</li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">ownCloud Enterprise includes a Share Link Password Policy app; see
+<a class="reference internal" href="#password-policy-label"><span>Share Link Password Policy</span></a>.</p>
+</div>
 <p>Configure your sharing policy on your Admin page in the Sharing section.</p>
 <div class="figure">
 <img alt="../_images/sharing-files-1.png" src="../_images/sharing-files-1.png" />
 </div>
 <ul>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Allow</span> <span class="pre">apps</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">the</span> <span class="pre">Share</span> <span class="pre">API</span></tt> to enable users to share files. If
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Allow</span> <span class="pre">apps</span> <span class="pre">to</span> <span class="pre">use</span> <span class="pre">the</span> <span class="pre">Share</span> <span class="pre">API</span></code> to enable users to share files. If
 this is not checked, no users can create file shares.</p>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Allow</span> <span class="pre">users</span> <span class="pre">to</span> <span class="pre">share</span> <span class="pre">via</span> <span class="pre">link</span></tt> to enable creating public shares for
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Allow</span> <span class="pre">users</span> <span class="pre">to</span> <span class="pre">share</span> <span class="pre">via</span> <span class="pre">link</span></code> to enable creating public shares for
 people who are not ownCloud users via hyperlink.</p>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Enforce</span> <span class="pre">password</span> <span class="pre">protection</span></tt> to force users to set a password on all
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Enforce</span> <span class="pre">password</span> <span class="pre">protection</span></code> to force users to set a password on all
 public share links. This does not apply to local user and group shares.</p>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Allow</span> <span class="pre">public</span> <span class="pre">uploads</span></tt> to allow anyone to upload files to
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Allow</span> <span class="pre">public</span> <span class="pre">uploads</span></code> to allow anyone to upload files to
 public shares.</p>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Allow</span> <span class="pre">users</span> <span class="pre">to</span> <span class="pre">send</span> <span class="pre">mail</span> <span class="pre">notification</span> <span class="pre">for</span> <span class="pre">shared</span> <span class="pre">files</span></tt> to enable
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Allow</span> <span class="pre">users</span> <span class="pre">to</span> <span class="pre">send</span> <span class="pre">mail</span> <span class="pre">notification</span> <span class="pre">for</span> <span class="pre">shared</span> <span class="pre">files</span></code> to enable
 sending notifications from ownCloud. (Your ownCloud server must be configured
 to send mail)</p>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Set</span> <span class="pre">default</span> <span class="pre">expiration</span> <span class="pre">date</span></tt> to set a default expiration date on
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Set</span> <span class="pre">default</span> <span class="pre">expiration</span> <span class="pre">date</span></code> to set a default expiration date on
 public shares.</p>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Allow</span> <span class="pre">resharing</span></tt> to enable users to re-share files shared with them.</p>
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Allow</span> <span class="pre">resharing</span></code> to enable users to re-share files shared with them.</p>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Restrict</span> <span class="pre">users</span> <span class="pre">to</span> <span class="pre">only</span> <span class="pre">share</span> <span class="pre">with</span> <span class="pre">users</span> <span class="pre">in</span> <span class="pre">their</span> <span class="pre">groups</span></tt> to confine
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Restrict</span> <span class="pre">users</span> <span class="pre">to</span> <span class="pre">only</span> <span class="pre">share</span> <span class="pre">with</span> <span class="pre">users</span> <span class="pre">in</span> <span class="pre">their</span> <span class="pre">groups</span></code> to confine
 sharing within group memberships.</p>
 <blockquote>
 <div><div class="admonition note">
@@ -216,19 +224,38 @@ enabled, users can still share items with any users on any instances
 </div>
 </div></blockquote>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Allow</span> <span class="pre">users</span> <span class="pre">to</span> <span class="pre">send</span> <span class="pre">mail</span> <span class="pre">notification</span> <span class="pre">for</span> <span class="pre">shared</span> <span class="pre">files</span></tt> enables
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Allow</span> <span class="pre">users</span> <span class="pre">to</span> <span class="pre">send</span> <span class="pre">mail</span> <span class="pre">notification</span> <span class="pre">for</span> <span class="pre">shared</span> <span class="pre">files</span></code> enables
 users to send an email notification to every ownCloud user that the file is
 shared with.</p>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Exclude</span> <span class="pre">groups</span> <span class="pre">from</span> <span class="pre">sharing</span></tt> to prevent members of specific groups
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Exclude</span> <span class="pre">groups</span> <span class="pre">from</span> <span class="pre">sharing</span></code> to prevent members of specific groups
 from creating any file shares in those groups. When you check this, you&#8217;ll
 get a dropdown list of all your groups to choose from. Members of excluded
 groups can still receive shares, but not create any</p>
 </li>
-<li><p class="first">Check <tt class="docutils literal"><span class="pre">Allow</span> <span class="pre">username</span> <span class="pre">autocompletion</span> <span class="pre">in</span> <span class="pre">share</span> <span class="pre">dialog</span></tt> to enable
+<li><p class="first">Check <code class="docutils literal"><span class="pre">Allow</span> <span class="pre">username</span> <span class="pre">autocompletion</span> <span class="pre">in</span> <span class="pre">share</span> <span class="pre">dialog</span></code> to enable
 auto-completion of ownCloud usernames.</p>
 </li>
 </ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">ownCloud does not preserve the mtime (modification time) of
+directories, though it does update the mtimes on files. See
+<a class="reference external" href="https://github.com/owncloud/core/issues/7009">Wrong folder date when syncing</a> for discussion of this.</p>
+</div>
+<div class="section" id="transferring-files-to-another-user">
+<span id="transfer-userfiles-label"></span><h2>Transferring Files to Another User<a class="headerlink" href="#transferring-files-to-another-user" title="Permalink to this headline">¶</a></h2>
+<p>You may transfer files from one user to another with <code class="docutils literal"><span class="pre">occ</span></code>. This is useful
+when you have to remove a user. Be sure to transfer the files before you delete
+the user!  This transfers all files from user1 to user2, and the shares and
+metadata info associated with those files (shares, tags, comments, etc).
+Trashbin contents are not transferred:</p>
+<div class="highlight-python"><div class="highlight"><pre>occ files:transfer-ownership user1 user2
+</pre></div>
+</div>
+<p>(See <a class="reference internal" href="../configuration_server/occ_command.html"><em>Using the occ Command</em></a> for a complete <code class="docutils literal"><span class="pre">occ</span></code>
+reference.)</p>
+</div>
 <div class="section" id="creating-persistent-file-shares">
 <h2>Creating Persistent File Shares<a class="headerlink" href="#creating-persistent-file-shares" title="Permalink to this headline">¶</a></h2>
 <p>When a user is deleted, their files are also deleted. As you can imagine, this
@@ -243,6 +270,15 @@ appropriate permissions on it, and then no matter which users come and go, the
 file shares will remain. Because all files added to the share, or edited in it,
 automatically become owned by the owner of the share regardless of who adds or
 edits them.</p>
+</div>
+<div class="section" id="share-link-password-policy">
+<span id="password-policy-label"></span><h2>Share Link Password Policy<a class="headerlink" href="#share-link-password-policy" title="Permalink to this headline">¶</a></h2>
+<p>ownCloud Enterprise users have the option of enabling the Share Link Password
+Policy app. This allows you to enforce password length, required characters,
+define special characters, and expiration dates on share links.</p>
+<div class="figure">
+<img alt="../_images/sharing-files-2.png" src="../_images/sharing-files-2.png" />
+</div>
 </div>
 </div>
 

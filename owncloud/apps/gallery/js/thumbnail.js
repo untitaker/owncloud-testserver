@@ -3,7 +3,7 @@
  * A thumbnail is the actual image attached to the GalleryImage object
  *
  * @param {number} fileId
- * @param {bool} square
+ * @param {boolean} square
  * @constructor
  */
 function Thumbnail (fileId, square) {
@@ -28,7 +28,7 @@ function Thumbnail (fileId, square) {
 		 * Retrieves the thumbnail linked to the given fileID
 		 *
 		 * @param {number} fileId
-		 * @param {bool} square
+		 * @param {boolean} square
 		 *
 		 * @returns {Thumbnail}
 		 */
@@ -70,9 +70,9 @@ function Thumbnail (fileId, square) {
 				};
 
 				if (type === -1) {
-					icon = 'folder.svg';
+					icon = 'filetypes/folder';
 				}
-				thumb.image.src = OC.imagePath(Gallery.appName, icon);
+				thumb.image.src = OC.imagePath('core', icon);
 
 				Thumbnails.squareMap[type] = thumb;
 			}
@@ -84,7 +84,7 @@ function Thumbnail (fileId, square) {
 		 * Loads thumbnails in batch, using EventSource
 		 *
 		 * @param {Array} ids
-		 * @param {bool} square
+		 * @param {boolean} square
 		 *
 		 * @returns {{}}
 		 */
@@ -133,14 +133,15 @@ function Thumbnail (fileId, square) {
 							thumb.image.onerror = function () {
 								thumb.valid = false;
 								var icon = Thumbnails._getMimeIcon(preview.mimetype);
-								setTimeout(function(){ thumb.image.src = icon; }, 0);
+								setTimeout(function () {
+									thumb.image.src = icon;
+								}, 0);
 							};
 
 							if (thumb.status === 200) {
 								var imageData = preview.preview;
 								if (preview.mimetype === 'image/svg+xml') {
-									var pureSvg = DOMPurify.sanitize(window.atob(imageData));
-									imageData = window.btoa(pureSvg);
+									imageData = Thumbnails._purifySvg(imageData);
 								}
 								thumb.image.src =
 									'data:' + preview.mimetype + ';base64,' + imageData;
@@ -171,6 +172,25 @@ function Thumbnail (fileId, square) {
 				icon = icon.substr(0, icon.lastIndexOf(".")) + ".png";
 			}
 			return icon;
+		},
+
+		/**
+		 * Sanitises SVGs
+		 *
+		 * We also fix a problem which arises when the XML contains comments
+		 *
+		 * @param imageData
+		 * @returns {string|*}
+		 * @private
+		 */
+		_purifySvg: function (imageData) {
+			var pureSvg = DOMPurify.sanitize(window.atob(imageData), {ADD_TAGS: ['filter']});
+			// Remove XML comment garbage left in the purified data
+			var badTag = pureSvg.indexOf(']&gt;');
+			var fixedPureSvg = pureSvg.substring(badTag < 0 ? 0 : 5, pureSvg.length);
+			imageData = window.btoa(fixedPureSvg);
+
+			return imageData;
 		}
 
 	};

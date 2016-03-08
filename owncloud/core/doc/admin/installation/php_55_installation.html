@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installing PHP 5.5 on RHEL 7 and CentOS 7 &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Installing PHP 5.5 on RHEL 7 and CentOS 7 &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="SELinux Configuration" href="selinux_configuration.html" />
     <link rel="prev" title="Installing PHP 5.4 on RHEL 6 and CentOS 6" href="php_54_installation.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,11 +113,12 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="system_requirements.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_recommendations.html">ownCloud Deployment Recommendations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Linux Installation Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="command_line_installation.html">Installing ownCloud From the Command Line</a></li>
@@ -155,6 +155,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -174,62 +176,68 @@
 <div class="section" id="rhel-7-upgrade-to-php-5-5">
 <h2>RHEL 7 Upgrade to PHP 5.5<a class="headerlink" href="#rhel-7-upgrade-to-php-5-5" title="Permalink to this headline">¶</a></h2>
 <p>To upgrade to PHP 5.5, you must use the Software Collections (SCL) repository to be in compliance with your RHEL support contract, and not any other third-party repository. Follow these steps to install PHP 5.5 from SCL. First you must use your Subscription Manager to enable SCL:</p>
-<div class="highlight-python"><pre>subscription-manager repos --enable rhel-server-rhscl-7-eus-rpms</pre>
+<div class="highlight-python"><div class="highlight"><pre>subscription-manager repos --enable rhel-server-rhscl-7-eus-rpms
+</pre></div>
 </div>
 <p>Then install PHP 5.5 and these modules:</p>
-<div class="highlight-python"><pre>yum install php55 php55-php php55-php-gd php55-php-mbstring</pre>
+<div class="highlight-python"><div class="highlight"><pre>yum install php55 php55-php php55-php-gd php55-php-mbstring
+</pre></div>
 </div>
 <p>You must also install the updated database module for your database. This installs the new PHP 5.5 module for MySQL/MariaDB:</p>
-<div class="highlight-python"><pre>yum install php55-php-mysqlnd</pre>
-</div>
-<p>Activate the new PHP version permanently:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">source</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">rh</span><span class="o">/</span><span class="n">php55</span><span class="o">/</span><span class="n">enable</span>
+<div class="highlight-python"><div class="highlight"><pre>yum install php55-php-mysqlnd
 </pre></div>
 </div>
-<p>Disable loading the old PHP Apache module by changing its name. Look in <tt class="docutils literal"><span class="pre">/etc/httpd/conf.d/</span></tt> to verify the module name:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">old</span>
+<p>Disable loading the old PHP Apache modules by changing their names:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php54</span><span class="o">.</span><span class="n">off</span>
+<span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="mi">10</span><span class="o">-</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="mi">10</span><span class="o">-</span><span class="n">php54</span><span class="o">.</span><span class="n">off</span>
 </pre></div>
 </div>
-<p>Copy the PHP 5.5 Apache modules from /opt/rh/php55/:</p>
-<div class="highlight-python"><pre>cp /opt/rh/httpd24/root/etc/httpd/conf.d/php55-php.conf /etc/httpd/conf.d/
-cp /opt/rh/httpd24/root/etc/httpd/conf.modules.d/10-php55-php.conf /etc/httpd/conf.modules.d/
-cp /opt/rh/httpd24/root/etc/httpd/modules/libphp-php55.so /etc/httpd/modules/</pre>
+<p>Copy the PHP 5.5 Apache modules into place:</p>
+<div class="highlight-python"><div class="highlight"><pre>cp /opt/rh/httpd24/root/etc/httpd/conf.d/php55-php.conf /etc/httpd/conf.d/
+cp /opt/rh/httpd24/root/etc/httpd/conf.modules.d/10-php55-php.conf /etc/httpdconf.modules.d/
+cp /opt/rh/httpd24/root/etc/httpd/modules/libphp55-php5.so /etc/httpd/modules/
+</pre></div>
 </div>
 <p>Then restart Apache:</p>
-<div class="highlight-python"><pre>service httpd restart</pre>
+<div class="highlight-python"><div class="highlight"><pre>service httpd restart
+</pre></div>
 </div>
-<p>Verify with <tt class="docutils literal"><span class="pre">phpinfo</span></tt> that your Apache server is using PHP 5.5 and loading the correct modules; see <a class="reference internal" href="../issues/index.html#label-phpinfo"><em>PHP Version and Information</em></a> to learn how to use phpinfo.</p>
+<p>Verify with <code class="docutils literal"><span class="pre">phpinfo</span></code> that your Apache server is using PHP 5.5 and loading the
+correct modules; see <a class="reference internal" href="../issues/general_troubleshooting.html#label-phpinfo"><span>PHP Version and Information</span></a> to learn how to use phpinfo.</p>
 </div>
 <div class="section" id="centos-7-upgrade-to-php-5-5">
 <h2>CentOS 7 Upgrade to PHP 5.5<a class="headerlink" href="#centos-7-upgrade-to-php-5-5" title="Permalink to this headline">¶</a></h2>
 <p>To upgrade to PHP 5.5, use the Red Hat Software Collections (SCL) repository.</p>
 <p><strong>Before upgrading, evaluate all of your PHP apps for compatibility with PHP 5.5.</strong></p>
 <p>Follow these steps to install PHP 5.5 from SCL. First install the SCL repository:</p>
-<div class="highlight-python"><pre>yum install centos-release-scl</pre>
+<div class="highlight-python"><div class="highlight"><pre>yum install centos-release-scl
+</pre></div>
 </div>
 <p>Then install PHP 5.5 and these modules:</p>
-<div class="highlight-python"><pre>yum install php55 php55-php php55-php-gd php55-php-mbstring</pre>
+<div class="highlight-python"><div class="highlight"><pre>yum install php55 php55-php php55-php-gd php55-php-mbstring
+</pre></div>
 </div>
 <p>You must also install the updated database module for your database. This installs the new PHP 5.5 module for MySQL/MariaDB:</p>
-<div class="highlight-python"><pre>yum install php55-php-mysqlnd</pre>
-</div>
-<p>Activate the new PHP version permanently:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">source</span> <span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">rh</span><span class="o">/</span><span class="n">php55</span><span class="o">/</span><span class="n">enable</span>
+<div class="highlight-python"><div class="highlight"><pre>yum install php55-php-mysqlnd
 </pre></div>
 </div>
-<p>Disable loading the old PHP Apache module by changing its name. Look in /etc/httpd/conf.d/ to verify the module name:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">old</span>
+<p>Disable loading the old PHP Apache modules by changing their names:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="n">php54</span><span class="o">.</span><span class="n">off</span>
+<span class="n">mv</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="mi">10</span><span class="o">-</span><span class="n">php</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">httpd</span><span class="o">/</span><span class="n">conf</span><span class="o">.</span><span class="n">modules</span><span class="o">.</span><span class="n">d</span><span class="o">/</span><span class="mi">10</span><span class="o">-</span><span class="n">php54</span><span class="o">.</span><span class="n">off</span>
 </pre></div>
 </div>
-<p>Copy the PHP 5.5 Apache modules from /opt/rh/php55/:</p>
-<div class="highlight-python"><pre>cp /opt/rh/httpd24/root/etc/httpd/conf.d/php55-php.conf /etc/httpd/conf.d/
-cp /opt/rh/httpd24/root/etc/httpd/conf.modules.d/10-php55-php.conf /etc/httpd/conf.modules.d/
-cp /opt/rh/httpd24/root/etc/httpd/modules/libphp-php55.so /etc/httpd/modules/</pre>
+<p>Copy the PHP 5.5 Apache modules into place:</p>
+<div class="highlight-python"><div class="highlight"><pre>cp /opt/rh/httpd24/root/etc/httpd/conf.d/php55-php.conf /etc/httpd/conf.d/
+cp /opt/rh/httpd24/root/etc/httpd/conf.modules.d/10-php55-php.conf /etc/httpdconf.modules.d/
+cp /opt/rh/httpd24/root/etc/httpd/modules/libphp55-php5.so /etc/httpd/modules/
+</pre></div>
 </div>
 <p>Then restart Apache:</p>
-<div class="highlight-python"><pre>service httpd restart</pre>
+<div class="highlight-python"><div class="highlight"><pre>service httpd restart
+</pre></div>
 </div>
-<p>Verify with <tt class="docutils literal"><span class="pre">phpinfo</span></tt> that your Apache server is using PHP 5.5 and loading the correct modules; see <a class="reference internal" href="../issues/index.html#label-phpinfo"><em>PHP Version and Information</em></a> to learn how to use phpinfo.</p>
+<p>Verify with <code class="docutils literal"><span class="pre">phpinfo</span></code> that your Apache server is using PHP 5.5 and loading the
+correct modules; see <a class="reference internal" href="../issues/general_troubleshooting.html#label-phpinfo"><span>PHP Version and Information</span></a> to learn how to use <code class="docutils literal"><span class="pre">phpinfo</span></code>.</p>
 </div>
 </div>
 

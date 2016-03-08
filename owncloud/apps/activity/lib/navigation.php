@@ -1,31 +1,32 @@
 <?php
-
 /**
- * ownCloud - Activity App
+ * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Roeland Jago Douma <rullzer@owncloud.com>
  *
- * @author Joas Schilling
- * @copyright 2014 Joas Schilling nickvergessen@owncloud.com
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @license AGPL-3.0
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or any later version.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
 
 namespace OCA\Activity;
 
-use \OCP\Activity\IManager;
-use \OCP\IURLGenerator;
-use \OCP\Template;
+
+use OCP\Activity\IManager;
+use OCP\IL10N;
+use OCP\IURLGenerator;
+use OCP\Template;
 
 /**
  * Class Navigation
@@ -33,13 +34,13 @@ use \OCP\Template;
  * @package OCA\Activity
  */
 class Navigation {
-	/** @var \OC_L10N */
+	/** @var IL10N */
 	protected $l;
 
-	/** @var \OCP\Activity\IManager */
+	/** @var IManager */
 	protected $activityManager;
 
-	/** @var \OCP\IURLGenerator */
+	/** @var IURLGenerator */
 	protected $URLGenerator;
 
 	/** @var UserSettings */
@@ -57,15 +58,15 @@ class Navigation {
 	/**
 	 * Construct
 	 *
-	 * @param \OC_L10N $l
-	 * @param \OCP\Activity\IManager $manager
-	 * @param \OCP\IURLGenerator $URLGenerator
+	 * @param IL10N $l
+	 * @param IManager $manager
+	 * @param IURLGenerator $URLGenerator
 	 * @param UserSettings $userSettings
 	 * @param string $user
 	 * @param string $rssToken
 	 * @param null|string $active Navigation entry that should be marked as active
 	 */
-	public function __construct(\OC_L10N $l,
+	public function __construct(IL10N $l,
 								IManager $manager,
 								IURLGenerator $URLGenerator,
 								UserSettings $userSettings,

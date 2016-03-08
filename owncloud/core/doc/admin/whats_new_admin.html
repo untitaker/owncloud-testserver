@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>What’s New for Admins in ownCloud 8.2 &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>What’s New for Admins in ownCloud 9.0 &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,8 +15,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '8.2',
+        URL_ROOT:    './',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,9 +26,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="contents.html" />
     <link rel="next" title="Installation" href="installation/index.html" />
-    <link rel="prev" title="ownCloud 8.2 Release Notes" href="release_notes.html" />
+    <link rel="prev" title="ownCloud 9.0 Release Notes" href="release_notes.html" />
 <script type="text/javascript">
 (function () {
   /**
@@ -92,13 +91,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -113,9 +112,9 @@
 <li><a href="contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration_server/index.html">ownCloud Server Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration_user/index.html">User Management</a></li>
@@ -133,6 +132,8 @@
 <li class="toctree-l1"><a class="reference internal" href="enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -146,37 +147,25 @@
 					<div class="page-content">
 						
   <div class="section" id="what-s-new-for-admins-in-owncloud-version">
-<h1>What&#8217;s New for Admins in ownCloud 8.2<a class="headerlink" href="#what-s-new-for-admins-in-owncloud-version" title="Permalink to this headline">¶</a></h1>
-<p>See the <a class="reference external" href="https://github.com/owncloud/core/wiki/ownCloud-8.2-Features">ownCloud 8.2
-Features page</a>
-on Github for a comprehensive list of new features and updates.</p>
-<p>Some of the improvements of interest to ownCloud admins are:</p>
+<h1>What&#8217;s New for Admins in ownCloud 9.0<a class="headerlink" href="#what-s-new-for-admins-in-owncloud-version" title="Permalink to this headline">¶</a></h1>
+<p>See the <a class="reference external" href="https://github.com/owncloud/core/wiki/ownCloud-9.0-Features">ownCloud 9.0 Features page</a> on Github for a
+comprehensive list of new features and updates.</p>
+<p>ownCloud has many improvements. Some of our new features are:</p>
 <ul class="simple">
-<li>New ownCloud package repositories (admins must manually change to these, see
-<a class="reference internal" href="maintenance/upgrade.html"><em>How to Upgrade Your ownCloud Server</em></a>)</li>
-<li>Configurable temporary directory</li>
-<li>Many new occ commands for logging, encryption, and apps</li>
-<li>Unavailable external storages are not rechecked every request; rather, their
-failed state is saved and they are tried again after 10 minutes</li>
-<li>External storages now support modular authentication mechanisms</li>
-<li>Transactional file locking prevents data corruption and race conditions on
-concurrent access</li>
-<li>Files app new sidebar shows details about files</li>
-<li>Admins can define custom mimetype mappings and aliases</li>
-<li>Mimetypes in the database can be updated when changed</li>
-<li>Downgrades are prevented because they are unsupported</li>
-<li>Admin page warning for EOL PHP version</li>
-<li>Show apps that will be updated on the DB update page</li>
-</ul>
-<p>There are many security enhancements, including:</p>
-<ul class="simple">
-<li>$.get and $.post cannot be used to execute remote JavaScript</li>
-<li>Referers are not sent anymore to prevent leaking of potential sensitive
-information within the URL such as the filename</li>
-<li>Autoloader will only allow loading files from enabled apps</li>
-<li>Encrypt session data to ensure that sensitive data such as remote storage
-passwords or encryption keys are not written on disk</li>
-<li>If the shareAPI is disabled link shares no longer work</li>
+<li>Separate encryption for home storage and remote storage; you may encrypt
+remote storage without encrypting local storage.
+(<a class="reference internal" href="configuration_files/encryption_configuration.html"><em>Encryption Configuration</em></a>)</li>
+<li>Password policy app for share links, for setting password requirements such
+as minimum length and required characters (Enterprise only).
+(<a class="reference internal" href="configuration_files/file_sharing_configuration.html#password-policy-label"><span>Share Link Password Policy</span></a>)</li>
+<li>New command to transfer files from one user to another.
+(<a class="reference internal" href="configuration_files/file_sharing_configuration.html#transfer-userfiles-label"><span>Transferring Files to Another User</span></a>)</li>
+<li>Streamlined Federation sharing with user and group name auto-fill. See
+(<a class="reference internal" href="configuration_files/federated_cloud_sharing_configuration.html#label-direct-share-link"><span>Creating a new Federation Share (9.0+ only)</span></a>)</li>
+<li>Configurable password reset URL. See
+(<a class="reference internal" href="configuration_user/reset_user_password.html"><em>Resetting a User Password</em></a>)</li>
+<li>Command-line options added to the Updater app. (<a class="reference internal" href="maintenance/update.html"><em>Upgrading ownCloud with the Updater App</em></a>)</li>
+<li>Many new <code class="docutils literal"><span class="pre">occ</span></code> commands. (<a class="reference internal" href="configuration_server/occ_command.html"><em>Using the occ Command</em></a>)</li>
 </ul>
 </div>
 

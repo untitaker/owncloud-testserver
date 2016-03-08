@@ -56,7 +56,7 @@ if ($_['mail_smtpmode'] == 'qmail') {
 			if (isset($form['anchor'])) {
 				$anchor = '#' . $form['anchor'];
 				$sectionName = $form['section-name'];
-				print_unescaped(sprintf("<li><a href='%s'>%s</a></li>", OC_Util::sanitizeHTML($anchor), OC_Util::sanitizeHTML($sectionName)));
+				print_unescaped(sprintf("<li><a href='%s'>%s</a></li>", \OCP\Util::sanitizeHTML($anchor), \OCP\Util::sanitizeHTML($sectionName)));
 			}
 		}?>
 	</ul>
@@ -110,7 +110,7 @@ if ($_['WindowsWarning']) {
 foreach ($_['OutdatedCacheWarning'] as $php_module => $data) {
 	?>
 	<li>
-		<?php p($l->t('%1$s below version %2$s is installed, for stability and performance reasons we recommend to update to a newer %1$s version.', $data)); ?>
+		<?php p($l->t('%1$s below version %2$s is installed, for stability and performance reasons we recommend updating to a newer %1$s version.', $data)); ?>
 	</li>
 <?php
 }
@@ -177,7 +177,7 @@ if ($_['cronErrors']) {
 ?>
 </ul>
 
-<div id="postsetupchecks">
+<div id="postsetupchecks" data-check-wellknown="<?php if($_['checkForWorkingWellKnownSetup']) { p('true'); } else { p('false'); } ?>">
 	<div class="loading"></div>
 	<ul class="errors hidden"></ul>
 	<ul class="warnings hidden"></ul>
@@ -284,18 +284,18 @@ if ($_['cronErrors']) {
 			$relative_time = relative_modified_date($_['lastcron']);
 			$absolute_time = OC_Util::formatDate($_['lastcron']);
 			if (time() - $_['lastcron'] <= 3600): ?>
-				<span class="cronstatus success"></span>
+				<span class="status success"></span>
 				<span class="crondate" original-title="<?php p($absolute_time);?>">
 					<?php p($l->t("Last cron job execution: %s.", [$relative_time]));?>
 				</span>
 			<?php else: ?>
-				<span class="cronstatus error"></span>
+				<span class="status error"></span>
 				<span class="crondate" original-title="<?php p($absolute_time);?>">
 					<?php p($l->t("Last cron job execution: %s. Something seems wrong.", [$relative_time]));?>
 				</span>
 			<?php endif;
 		else: ?>
-			<span class="cronstatus error"></span>
+			<span class="status error"></span>
 			<?php p($l->t("Cron was not executed yet!"));
 		endif; ?>
 	</p>
@@ -485,15 +485,6 @@ if ($_['cronErrors']) {
 
 <div class="section" id="log-section">
 	<h2><?php p($l->t('Log'));?></h2>
-	<?php p($l->t('Log level'));?> <select name='loglevel' id='loglevel'>
-<?php for ($i = 0; $i < 5; $i++):
-	$selected = '';
-	if ($i == $_['loglevel']):
-		$selected = 'selected="selected"';
-	endif; ?>
-		<option value='<?php p($i)?>' <?php p($selected) ?>><?php p($levelLabels[$i])?></option>
-<?php endfor;?>
-</select>
 <?php if ($_['showLog'] && $_['doesLogFileExist']): ?>
 	<table id="log" class="grid">
 		<?php foreach ($_['entries'] as $entry): ?>
@@ -531,6 +522,16 @@ if ($_['cronErrors']) {
 	</em>
 	<?php endif; ?>
 	<?php endif; ?>
+
+	<p><?php p($l->t('What to log'));?> <select name='loglevel' id='loglevel'>
+	<?php for ($i = 0; $i < 5; $i++):
+		$selected = '';
+		if ($i == $_['loglevel']):
+			$selected = 'selected="selected"';
+		endif; ?>
+			<option value='<?php p($i)?>' <?php p($selected) ?>><?php p($levelLabels[$i])?></option>
+	<?php endfor;?>
+	</select></p>
 </div>
 
 <div class="section" id="admin-tips">
@@ -561,11 +562,11 @@ if ($_['cronErrors']) {
 
 <div class="section">
 	<h2><?php p($l->t('Version'));?></h2>
-	<strong><?php p($theme->getTitle()); ?></strong> <?php p(OC_Util::getHumanVersion()) ?>
-	<?php include('settings.development.notice.php'); ?>
+	<p><a href="<?php print_unescaped($theme->getBaseUrl()); ?>" target="_blank"><?php p($theme->getTitle()); ?></a> <?php p(OC_Util::getHumanVersion()) ?></p>
+	<p><?php include('settings.development.notice.php'); ?></p>
 </div>
 
-<div class="section credits-footer">
-	<p><?php print_unescaped($theme->getShortFooter()); ?></p>
-</div>
+
+
+
 </div>

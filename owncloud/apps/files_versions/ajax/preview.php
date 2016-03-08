@@ -1,11 +1,12 @@
 <?php
 /**
  * @author Björn Schießle <schiessle@owncloud.com>
- * @author Roeland Jago Douma <roeland@famdouma.nl>
+ * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Roeland Jago Douma <rullzer@owncloud.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -47,18 +48,14 @@ if($maxX === 0 || $maxY === 0) {
 
 try {
 	list($user, $file) = \OCA\Files_Versions\Storage::getUidAndFilename($file);
-	if (is_null($file)) {
-		\OC_Response::setStatus(404);
-	} else {
-		$preview = new \OC\Preview($user, 'files_versions', $file . '.v' . $version);
-		$mimetype = \OC_Helper::getFileNameMimeType($file);
-		$preview->setMimetype($mimetype);
-		$preview->setMaxX($maxX);
-		$preview->setMaxY($maxY);
-		$preview->setScalingUp($scalingUp);
+	$preview = new \OC\Preview($user, 'files_versions', $file.'.v'.$version);
+	$mimetype = \OC::$server->getMimeTypeDetector()->detectPath($file);
+	$preview->setMimetype($mimetype);
+	$preview->setMaxX($maxX);
+	$preview->setMaxY($maxY);
+	$preview->setScalingUp($scalingUp);
 
-		$preview->showPreview();
-	}
+	$preview->showPreview();
 } catch (\OCP\Files\NotFoundException $e) {
 	\OC_Response::setStatus(404);
 	\OCP\Util::writeLog('core', $e->getmessage(), \OCP\Util::DEBUG);

@@ -1,10 +1,13 @@
 <?php
 /**
+ * @author Arthur Schiwon <blizzz@owncloud.com>
  * @author Björn Schießle <schiessle@owncloud.com>
  * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Lukas Reschke <lukas@owncloud.com>
  * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -96,11 +99,7 @@ if ($installedVersion === '1.1.9' && (
 	}
 }
 
-/**
- * migrate old constant DEBUG to new config value 'debug'
- *
- * TODO: remove this in ownCloud 8.3
- */
-if(defined('DEBUG') && DEBUG === true) {
-	\OC::$server->getConfig()->setSystemValue('debug', true);
-}
+// Add cron job for scanning user storages
+\OC::$server->getJobList()->add('OCA\Files\BackgroundJob\ScanFiles');
+\OC::$server->getJobList()->add('OCA\Files\BackgroundJob\DeleteOrphanedItems');
+\OC::$server->getJobList()->add('OCA\Files\BackgroundJob\CleanupFileLocks');

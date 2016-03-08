@@ -6,12 +6,13 @@
  * @author Jörn Friedrich Dreyer <jfd@butonic.de>
  * @author Lukas Reschke <lukas@owncloud.com>
  * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Renaud Fortier <Renaud.Fortier@fsaa.ulaval.ca>
  * @author Robin Appelman <icewind@owncloud.com>
- * @author Robin McCorkell <rmccorkell@karoshi.org.uk>
+ * @author Robin McCorkell <robin@mccorkell.me.uk>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  * @author Tom Needham <tom@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -118,6 +119,7 @@ class USER_LDAP extends BackendUtility implements \OCP\IUserBackend, \OCP\UserIn
 		try {
 			$ldapRecord = $this->getLDAPUserByLoginName($uid);
 		} catch(\Exception $e) {
+			\OC::$server->getLogger()->logException($e, ['app' => 'user_ldap']);
 			return false;
 		}
 		$dn = $ldapRecord['dn'][0];
@@ -150,8 +152,8 @@ class USER_LDAP extends BackendUtility implements \OCP\IUserBackend, \OCP\UserIn
 	 * Get a list of all users
 	 *
 	 * @param string $search
-	 * @param null|int $limit
-	 * @param null|int $offset
+	 * @param integer $limit
+	 * @param integer $offset
 	 * @return string[] an array of all uids
 	 */
 	public function getUsers($search = '', $limit = 10, $offset = 0) {
@@ -171,8 +173,14 @@ class USER_LDAP extends BackendUtility implements \OCP\IUserBackend, \OCP\UserIn
 		}
 		$filter = $this->access->combineFilterWithAnd(array(
 			$this->access->connection->ldapUserFilter,
+			$this->access->connection->ldapUserDisplayName . '=*',
 			$this->access->getFilterPartForUserSearch($search)
 		));
+		$attrs = array($this->access->connection->ldapUserDisplayName, 'dn');
+		$additionalAttribute = $this->access->connection->ldapUserDisplayName2;
+		if(!empty($additionalAttribute)) {
+			$attrs[] = $additionalAttribute;
+		}
 
 		\OCP\Util::writeLog('user_ldap',
 			'getUsers: Options: search '.$search.' limit '.$limit.' offset '.$offset.' Filter: '.$filter,
@@ -208,7 +216,7 @@ class USER_LDAP extends BackendUtility implements \OCP\IUserBackend, \OCP\UserIn
 
 		$dn = $user->getDN();
 		//check if user really still exists by reading its entry
-		if(!is_array($this->access->readAttribute($dn, ''))) {
+		if(!is_array($this->access->readAttribute($dn, '', $this->access->connection->ldapUserFilter))) {
 			$lcr = $this->access->connection->getConnectionResource();
 			if(is_null($lcr)) {
 				throw new \Exception('No LDAP Connection to server ' . $this->access->connection->ldapHost);
@@ -347,13 +355,30 @@ class USER_LDAP extends BackendUtility implements \OCP\IUserBackend, \OCP\UserIn
 			return $displayName;
 		}
 
+		//Check whether the display name is configured to have a 2nd feature
+		$additionalAttribute = $this->access->connection->ldapUserDisplayName2;
+		$displayName2 = '';
+		if(!empty($additionalAttribute)) {
+			$displayName2 = $this->access->readAttribute(
+				$this->access->username2dn($uid),
+				$additionalAttribute);
+		}
+
 		$displayName = $this->access->readAttribute(
 			$this->access->username2dn($uid),
 			$this->access->connection->ldapUserDisplayName);
 
 		if($displayName && (count($displayName) > 0)) {
-			$this->access->connection->writeToCache($cacheKey, $displayName[0]);
-			return $displayName[0];
+			$displayName = $displayName[0];
+
+			if(is_array($displayName2) && (count($displayName2) > 0)) {
+				$displayName2 = $displayName2[0];
+			}
+
+			$user = $this->access->userManager->get($uid);
+			$displayName = $user->composeAndStoreDisplayName($displayName, $displayName2);
+			$this->access->connection->writeToCache($cacheKey, $displayName);
+			return $displayName;
 		}
 
 		return null;

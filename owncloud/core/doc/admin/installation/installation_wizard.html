@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Installation Wizard &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Installation Wizard &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="Installing ownCloud From the Command Line" href="command_line_installation.html" />
     <link rel="prev" title="Preferred Linux Installation Method" href="linux_installation.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,11 +113,12 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="system_requirements.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_recommendations.html">ownCloud Deployment Recommendations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Linux Installation Method</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Installation Wizard</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#quick-start">Quick Start</a></li>
@@ -158,6 +158,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -179,7 +181,7 @@ the last step to completing the installation is running the Installation
 Wizard.
 This is just three steps:</p>
 <ol class="arabic simple">
-<li>Point your Web browser to <tt class="docutils literal"><span class="pre">http://localhost/owncloud</span></tt></li>
+<li>Point your Web browser to <code class="docutils literal"><span class="pre">http://localhost/owncloud</span></code></li>
 <li>Enter your desired administrator&#8217;s username and password.</li>
 <li>Click <strong>Finish Setup</strong>.</li>
 </ol>
@@ -190,13 +192,13 @@ This is just three steps:</p>
 <p>Of course, there is much more that you can do to set up your ownCloud server for
 best performance and security. In the following sections we will cover important
 installation and post-installation steps. Note that you must follow the
-instructions in <a class="reference internal" href="#strong-perms-label"><em>Setting Strong Permissions</em></a> in order
+instructions in <a class="reference internal" href="#strong-perms-label"><span>Setting Strong Permissions</span></a> in order
 to use the <a class="reference internal" href="../configuration_server/occ_command.html"><em>occ Command</em></a>.</p>
 <ul class="simple">
-<li><a class="reference internal" href="#data-directory-location-label"><em>Data Directory Location</em></a></li>
-<li><a class="reference internal" href="#database-choice-label"><em>Database Choice</em></a></li>
-<li><a class="reference internal" href="#trusted-domains-label"><em>Trusted Domains</em></a></li>
-<li><a class="reference internal" href="#strong-perms-label"><em>Setting Strong Permissions</em></a></li>
+<li><a class="reference internal" href="#data-directory-location-label"><span>Data Directory Location</span></a></li>
+<li><a class="reference internal" href="#database-choice-label"><span>Database Choice</span></a></li>
+<li><a class="reference internal" href="#trusted-domains-label"><span>Trusted Domains</span></a></li>
+<li><a class="reference internal" href="#strong-perms-label"><span>Setting Strong Permissions</span></a></li>
 </ul>
 </div>
 <div class="section" id="data-directory-location">
@@ -211,9 +213,9 @@ are using an HTTP server other than Apache, or you may wish to store your
 ownCloud data in a different location for other reasons (e.g. on a storage
 server). It is best to configure your data directory location at installation,
 as it is difficult to move after installation. You may put it anywhere; in this
-example is it located in <tt class="docutils literal"><span class="pre">/var/oc_data</span></tt>. This directory must already exist,
+example is it located in <code class="docutils literal"><span class="pre">/var/oc_data</span></code>. This directory must already exist,
 and must be owned by your HTTP user (see
-<a class="reference internal" href="#strong-perms-label"><em>Setting Strong Directory Permissions</em></a>).</p>
+<a class="reference internal" href="#strong-perms-label"><span>Setting Strong Directory Permissions</span></a>).</p>
 </div>
 <div class="section" id="database-choice">
 <span id="database-choice-label"></span><h2>Database Choice<a class="headerlink" href="#database-choice" title="Permalink to this headline">¶</a></h2>
@@ -228,27 +230,38 @@ ownCloud from packages all the necessary dependencies will be satisfied (see
 modules). You will need the root database login, or any administrator login that
 has permissions to create and modify databases, and then enter any name you want
 for your ownCloud database.</p>
+<p>After you enter your root or administrator login for your database, the
+installer creates a special database user with privileges limited to the
+ownCloud database. Then ownCloud needs only the special ownCloud database
+user, and drops the root dB login. This user is named for your ownCloud admin
+user, with an <code class="docutils literal"><span class="pre">oc_</span></code> prefix, and then given a random password. The ownCloud
+database user and password are written into <code class="docutils literal"><span class="pre">config.php</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>&#39;dbuser&#39; =&gt; &#39;oc_molly&#39;,
+&#39;dbpassword&#39; =&gt; &#39;pX65Ty5DrHQkYPE5HRsDvyFHlZZHcm&#39;,
+</pre></div>
+</div>
 <p>Click Finish Setup, and start using your new ownCloud server.</p>
 <div class="figure">
-<a class="reference internal image-reference" href="../_images/install-wizard-a2.png"><img alt="ownCloud welcome screen after a successful installation" src="../_images/install-wizard-a2.png" style="width: 433.5px; height: 356.25px;" /></a>
+<a class="reference internal image-reference" href="../_images/install-wizard-a2.png"><img alt="ownCloud welcome screen after a successful installation" src="../_images/install-wizard-a2.png" style="width: 481.5px; height: 356.25px;" /></a>
 </div>
 <p>Now we will look at some important post-installation steps.</p>
 </div>
 <div class="section" id="trusted-domains">
 <span id="trusted-domains-label"></span><h2>Trusted Domains<a class="headerlink" href="#trusted-domains" title="Permalink to this headline">¶</a></h2>
 <p>All URLs used to access your ownCloud server must be whitelisted in your
-<tt class="docutils literal"><span class="pre">config.php</span></tt> file, under the <tt class="docutils literal"><span class="pre">trusted_domains</span></tt> setting. Users
+<code class="docutils literal"><span class="pre">config.php</span></code> file, under the <code class="docutils literal"><span class="pre">trusted_domains</span></code> setting. Users
 are allowed to log into ownCloud only when they point their browsers to a
-URL that is listed in the <tt class="docutils literal"><span class="pre">trusted_domains</span></tt> setting. You may use IP addresses
+URL that is listed in the <code class="docutils literal"><span class="pre">trusted_domains</span></code> setting. You may use IP addresses
 and domain names. A typical configuration looks like this:</p>
-<div class="highlight-python"><pre>'trusted_domains' =&gt;
+<div class="highlight-python"><div class="highlight"><pre>&#39;trusted_domains&#39; =&gt;
   array (
-   0 =&gt; 'localhost',
-   1 =&gt; 'server1.example.com',
-   2 =&gt; '192.168.1.50',
-),</pre>
+   0 =&gt; &#39;localhost&#39;,
+   1 =&gt; &#39;server1.example.com&#39;,
+   2 =&gt; &#39;192.168.1.50&#39;,
+),
+</pre></div>
 </div>
-<p>The loopback address, <tt class="docutils literal"><span class="pre">127.0.0.1</span></tt>, is automatically whitelisted, so as long
+<p>The loopback address, <code class="docutils literal"><span class="pre">127.0.0.1</span></code>, is automatically whitelisted, so as long
 as you have access to the physical server you can always log in. In the event
 that a load balancer is in place there will be no issues as long as it sends
 the correct X-Forwarded-Host header. When a user tries a URL that
@@ -261,17 +274,17 @@ is not whitelisted the following error appears:</p>
 <span id="strong-perms-label"></span><h2>Setting Strong Directory Permissions<a class="headerlink" href="#setting-strong-directory-permissions" title="Permalink to this headline">¶</a></h2>
 <p>For hardened security we recommend setting the permissions on your ownCloud
 directories as strictly as possible, and for proper server operations. This
-should be done immediately after the initial installation. Your HTTP user must
-own the <tt class="docutils literal"><span class="pre">config/</span></tt>, <tt class="docutils literal"><span class="pre">data/</span></tt> and <tt class="docutils literal"><span class="pre">apps/</span></tt> directories so that you can
-configure ownCloud, create, modify and delete your data files, and install apps
-via the ownCloud Web interface.</p>
+should be done immediately after the initial installation and before running the
+setup. Your HTTP user must own the <code class="docutils literal"><span class="pre">config/</span></code>, <code class="docutils literal"><span class="pre">data/</span></code> and <code class="docutils literal"><span class="pre">apps/</span></code> directories
+so that you can configure ownCloud, create, modify and delete your data files,
+and install apps via the ownCloud Web interface.</p>
 <p>You can find your HTTP user in your HTTP server configuration files. Or you can
-use <a class="reference internal" href="../issues/index.html#label-phpinfo"><em>PHP Version and Information</em></a> (Look for the <strong>User/Group</strong> line).</p>
+use <a class="reference internal" href="../issues/general_troubleshooting.html#label-phpinfo"><span>PHP Version and Information</span></a> (Look for the <strong>User/Group</strong> line).</p>
 <ul class="simple">
-<li>The HTTP user and group in Debian/Ubuntu is <tt class="docutils literal"><span class="pre">www-data</span></tt>.</li>
-<li>The HTTP user and group in Fedora/CentOS is <tt class="docutils literal"><span class="pre">apache</span></tt>.</li>
-<li>The HTTP user and group in Arch Linux is <tt class="docutils literal"><span class="pre">http</span></tt>.</li>
-<li>The HTTP user in openSUSE is <tt class="docutils literal"><span class="pre">wwwrun</span></tt>, and the HTTP group is <tt class="docutils literal"><span class="pre">www</span></tt>.</li>
+<li>The HTTP user and group in Debian/Ubuntu is <code class="docutils literal"><span class="pre">www-data</span></code>.</li>
+<li>The HTTP user and group in Fedora/CentOS is <code class="docutils literal"><span class="pre">apache</span></code>.</li>
+<li>The HTTP user and group in Arch Linux is <code class="docutils literal"><span class="pre">http</span></code>.</li>
+<li>The HTTP user in openSUSE is <code class="docutils literal"><span class="pre">wwwrun</span></code>, and the HTTP group is <code class="docutils literal"><span class="pre">www</span></code>.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -282,28 +295,44 @@ ownership as above could result in some issues if the NFS mount is
 lost.</p>
 </div>
 <p>The easy way to set the correct permissions is to copy and run this script.
-Replace the <tt class="docutils literal"><span class="pre">ocpath</span></tt> variable with the path to your ownCloud directory, and
-replace the <tt class="docutils literal"><span class="pre">htuser</span></tt> and <tt class="docutils literal"><span class="pre">htgroup</span></tt> variables with your HTTP user and group:</p>
-<div class="highlight-python"><pre>#!/bin/bash
-ocpath='/var/www/owncloud'
-htuser='www-data'
-htgroup='www-data'
-rootuser='root' # On QNAP this is admin
+Replace the <code class="docutils literal"><span class="pre">ocpath</span></code> variable with the path to your ownCloud directory, and
+replace the <code class="docutils literal"><span class="pre">htuser</span></code> and <code class="docutils literal"><span class="pre">htgroup</span></code> variables with your HTTP user and group:</p>
+<div class="highlight-python"><div class="highlight"><pre>#!/bin/bash
+ocpath=&#39;/var/www/owncloud&#39;
+htuser=&#39;www-data&#39;
+htgroup=&#39;www-data&#39;
+rootuser=&#39;root&#39;
 
+printf &quot;Creating possible missing Directories\n&quot;
+mkdir -p $ocpath/data
+mkdir -p $ocpath/assets
+
+printf &quot;chmod Files and Directories\n&quot;
 find ${ocpath}/ -type f -print0 | xargs -0 chmod 0640
 find ${ocpath}/ -type d -print0 | xargs -0 chmod 0750
 
+printf &quot;chown Directories\n&quot;
 chown -R ${rootuser}:${htgroup} ${ocpath}/
 chown -R ${htuser}:${htgroup} ${ocpath}/apps/
 chown -R ${htuser}:${htgroup} ${ocpath}/config/
 chown -R ${htuser}:${htgroup} ${ocpath}/data/
 chown -R ${htuser}:${htgroup} ${ocpath}/themes/
+chown -R ${htuser}:${htgroup} ${ocpath}/assets/
 
-chown ${rootuser}:${htgroup} ${ocpath}/.htaccess
-chown ${rootuser}:${htgroup} ${ocpath}/data/.htaccess
+chmod +x ${ocpath}/occ
 
-chmod 0644 ${ocpath}/.htaccess
-chmod 0644 ${ocpath}/data/.htaccess</pre>
+printf &quot;chmod/chown .htaccess\n&quot;
+if [ -f ${ocpath}/.htaccess ]
+ then
+  chmod 0644 ${ocpath}/.htaccess
+  chown ${rootuser}:${htgroup} ${ocpath}/.htaccess
+fi
+if [ -f ${ocpath}/data/.htaccess ]
+ then
+  chmod 0644 ${ocpath}/data/.htaccess
+  chown ${rootuser}:${htgroup} ${ocpath}/data/.htaccess
+fi
+</pre></div>
 </div>
 <p>If you have customized your ownCloud installation and your filepaths are
 different than the standard installation, then modify this script accordingly.</p>
@@ -315,15 +344,19 @@ group owner, and zero for the world</li>
 <li>All directories should be executable (because directories always need the
 executable bit set), read-write for the directory owner, and read-only for
 the group owner</li>
-<li>The <tt class="file docutils literal"><span class="pre">apps/</span></tt> directory should be owned by <tt class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">group]</span></tt></li>
-<li>The <tt class="file docutils literal"><span class="pre">config/</span></tt> directory should be owned by <tt class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">group]</span></tt></li>
-<li>The <tt class="file docutils literal"><span class="pre">themes/</span></tt> directory should be owned by <tt class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">group]</span></tt></li>
-<li>The <tt class="file docutils literal"><span class="pre">data/</span></tt> directory should be owned by <tt class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">group]</span></tt></li>
-<li>The <tt class="file docutils literal"><span class="pre">[ocpath]/.htaccess</span></tt> file should be owned by <tt class="docutils literal"><span class="pre">root:[HTTP</span> <span class="pre">group]</span></tt></li>
-<li>The <tt class="file docutils literal"><span class="pre">data/.htaccess</span></tt> file should be owned by <tt class="docutils literal"><span class="pre">root:[HTTP</span> <span class="pre">group]</span></tt></li>
-<li>Both <tt class="file docutils literal"><span class="pre">.htaccess</span></tt> files are read-write file owner, read-only group and
+<li>The <code class="file docutils literal"><span class="pre">apps/</span></code> directory should be owned by <code class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">group]</span></code></li>
+<li>The <code class="file docutils literal"><span class="pre">config/</span></code> directory should be owned by <code class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">group]</span></code></li>
+<li>The <code class="file docutils literal"><span class="pre">themes/</span></code> directory should be owned by <code class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">group]</span></code></li>
+<li>The <code class="file docutils literal"><span class="pre">assets/</span></code> directory should be owned by <code class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">group]</span></code></li>
+<li>The <code class="file docutils literal"><span class="pre">data/</span></code> directory should be owned by <code class="docutils literal"><span class="pre">[HTTP</span> <span class="pre">user]:[HTTP</span> <span class="pre">group]</span></code></li>
+<li>The <code class="file docutils literal"><span class="pre">[ocpath]/.htaccess</span></code> file should be owned by <code class="docutils literal"><span class="pre">root:[HTTP</span> <span class="pre">group]</span></code></li>
+<li>The <code class="file docutils literal"><span class="pre">data/.htaccess</span></code> file should be owned by <code class="docutils literal"><span class="pre">root:[HTTP</span> <span class="pre">group]</span></code></li>
+<li>Both <code class="file docutils literal"><span class="pre">.htaccess</span></code> files are read-write file owner, read-only group and
 world</li>
 </ul>
+<p>These strong permissions prevent upgrading your ownCloud server;
+see <a class="reference internal" href="../maintenance/update.html#set-updating-permissions-label"><span>Setting Permissions for Updating</span></a> for a script to quickly change
+permissions to allow upgrading.</p>
 </div>
 </div>
 

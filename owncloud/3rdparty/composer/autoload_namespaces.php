@@ -6,17 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = $vendorDir;
 
 return array(
-    'Symfony\\Component\\Routing\\' => array($vendorDir . '/symfony/routing'),
-    'Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
-    'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
-    'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'SecurityLib' => array($vendorDir . '/ircmaxell/security-lib/lib'),
     'RandomLib' => array($vendorDir . '/ircmaxell/random-lib/lib'),
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
-    'Patchwork' => array($vendorDir . '/patchwork/utf8/class'),
     'PEAR' => array($vendorDir . '/pear/pear_exception'),
     'OpenCloud' => array($vendorDir . '/rackspace/php-opencloud/lib', $vendorDir . '/rackspace/php-opencloud/tests'),
-    'Normalizer' => array($vendorDir . '/patchwork/utf8/class'),
     'Guzzle\\Stream' => array($vendorDir . '/guzzle/stream'),
     'Guzzle\\Parser' => array($vendorDir . '/guzzle/parser'),
     'Guzzle\\Http' => array($vendorDir . '/guzzle/http'),
@@ -25,7 +19,6 @@ return array(
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib'),
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
-    'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib'),
     'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib'),
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/common/lib'),
     'Console' => array($vendorDir . '/pear/console_getopt'),

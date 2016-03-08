@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Enabling Anonymous Uploads with Files Drop (ES Only) &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Enabling Anonymous Uploads with Files Drop (ES Only) &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,8 +26,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="Enabling Anonymous Uploads with Files Drop (ES Only)" href="index.html" />
+    <link rel="next" title="Enterprise Logging Apps (ES only)" href="../enterprise_logging/index.html" />
     <link rel="prev" title="Enabling Anonymous Uploads with Files Drop (ES Only)" href="index.html" />
 <script type="text/javascript">
 (function () {
@@ -92,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -113,9 +113,9 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul>
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -140,6 +140,8 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -173,9 +175,9 @@ and enable it.</p>
 <p>Click the <strong>Choose</strong> button to open a dialog to select your upload directory.
 You may wish to first create a special upload directory (on your Files page),
 which in the following example is name <strong>upload</strong>.</p>
-<div class="figure">
+<div class="figure" id="id1">
 <a class="reference internal image-reference" href="../_images/files-drop-3.png"><img alt="../_images/files-drop-3.png" src="../_images/files-drop-3.png" style="width: 346.0px; height: 160.0px;" /></a>
-<p class="caption"><em>Click to enlarge</em></p>
+<p class="caption"><span class="caption-text"><em>Click to enlarge</em></span></p>
 </div>
 <p>On your Personal page you should now see a URL for your upload directory. Share
 this URL with anyone you want to allow uploads to your File Drop folder. Note
@@ -189,15 +191,15 @@ customize this.)</p>
 <h2>Using the Files Drop App<a class="headerlink" href="#using-the-files-drop-app" title="Permalink to this headline">¶</a></h2>
 <p>Uploading files via the Files Drop app is simple. Open your Web browser to the
 share URL created by ownCloud:</p>
-<div class="figure">
+<div class="figure" id="id2">
 <a class="reference internal image-reference" href="../_images/files-drop-5.png"><img alt="../_images/files-drop-5.png" src="../_images/files-drop-5.png" style="width: 392.0px; height: 295.5px;" /></a>
-<p class="caption"><em>Click to enlarge</em></p>
+<p class="caption"><span class="caption-text"><em>Click to enlarge</em></span></p>
 </div>
 <p>Click the <strong>Click to upload file</strong> button. This opens a file picker, and you
 select the file or directory you want to upload.</p>
-<div class="figure">
+<div class="figure" id="id3">
 <a class="reference internal image-reference" href="../_images/files-drop-6.png"><img alt="../_images/files-drop-6.png" src="../_images/files-drop-6.png" style="width: 361.5px; height: 321.0px;" /></a>
-<p class="caption"><em>Click to enlarge</em></p>
+<p class="caption"><span class="caption-text"><em>Click to enlarge</em></span></p>
 </div>
 <p>When your upload is completed, you&#8217;ll see a confirmation message with the
 filenames.</p>

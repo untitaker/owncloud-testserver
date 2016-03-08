@@ -13,14 +13,16 @@ Nginx Configuration
    SSL Module documentation <http://wiki.nginx.org/HttpSslModule>`_).
 -  ``add_header`` statements are only taken from the current level and are not cascaded 
    from or to a different level. All necessary ``add_header`` statements must be defined 
-   in each level needed. For better readability is is possible to move *common* add 
-   header statements into a separate file and include that file wherever necessary.
+   in each level needed. For better readability it is possible to move *common* add 
+   header statements into a separate file and include that file wherever necessary. 
+   However, each ``add_header`` statement must be written in a single line to prevent 
+   connection problems with sync clients.
 
 .. note:: The following example assumes that your ownCloud is installed in
    your webroot. If you're using a subfolder you need to adjust the configuration
    accordingly.
-
-.. code-block:: python
+   
+::   
 
   upstream php-handler {
     server 127.0.0.1:9000;
@@ -47,6 +49,8 @@ Nginx Configuration
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-XSS-Protection "1; mode=block";
     add_header X-Robots-Tag none;
+    add_header X-Download-Options noopen;
+    add_header X-Permitted-Cross-Domain-Policies none;
 
     # Path to the root of your installation
     root /var/www/owncloud/;
@@ -65,8 +69,8 @@ Nginx Configuration
     error_page 403 /core/templates/403.php;
     error_page 404 /core/templates/404.php;
 
-    rewrite ^/.well-known/carddav /remote.php/carddav/ permanent;
-    rewrite ^/.well-known/caldav /remote.php/caldav/ permanent;
+    rewrite ^/.well-known/carddav /remote.php/dav/ permanent;
+    rewrite ^/.well-known/caldav /remote.php/dav/ permanent;
 
     # The following 2 rules are only needed for the user_webfinger app.
     # Uncomment it if you're planning to use this app.
@@ -93,7 +97,7 @@ Nginx Configuration
 
       rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
 
-      try_files $uri $uri/ /index.php;
+      try_files $uri $uri/ =404;
     }
 
     location ~ \.php(?:$|/) {
@@ -117,6 +121,8 @@ Nginx Configuration
       add_header X-Frame-Options "SAMEORIGIN";
       add_header X-XSS-Protection "1; mode=block";
       add_header X-Robots-Tag none;
+      add_header X-Download-Options noopen;
+      add_header X-Permitted-Cross-Domain-Policies none;
       # Optional: Don't log access to assets
       access_log off;
     }

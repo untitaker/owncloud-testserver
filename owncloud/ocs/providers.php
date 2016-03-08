@@ -3,10 +3,9 @@
  * @author Frank Karlitschek <frank@owncloud.org>
  * @author Lukas Reschke <lukas@owncloud.com>
  * @author Morris Jobke <hey@morrisjobke.de>
- * @author Stefan Herbrechtsmeier <stefan@herbrechtsmeier.net>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -27,7 +26,9 @@ require_once '../lib/base.php';
 
 header('Content-type: application/xml');
 
-$url=OCP\Util::getServerProtocol().'://'.substr(OCP\Util::getServerHost().OCP\Util::getRequestUri(), 0, -17).'ocs/v1.php/';
+$request = \OC::$server->getRequest();
+
+$url = $request->getServerProtocol() . '://' . substr($request->getServerHost() . $request->getRequestUri(), 0, -17).'ocs/v1.php/';
 
 $writer = new XMLWriter();
 $writer->openURI('php://output');

@@ -1,4 +1,4 @@
-/* global oc_requesttoken, FileList, SlideShow */
+/* global oc_requesttoken, FileList, Gallery, SlideShow */
 (function ($, OC, OCA, oc_requesttoken) {
 	"use strict";
 	var galleryFileAction = {
@@ -88,8 +88,8 @@
 			var start = 0;
 			var images = [];
 			var dir = context.dir + '/';
-			var width = Math.floor(screen.width * window.devicePixelRatio);
-			var height = Math.floor(screen.height * window.devicePixelRatio);
+			var width = Math.ceil(screen.width * window.devicePixelRatio);
+			var height = Math.ceil(screen.height * window.devicePixelRatio);
 
 			/* Find value of longest edge. */
 			var longEdge = Math.max(width, height);
@@ -197,10 +197,17 @@ $(document).ready(function () {
 		return true;
 	}
 
+	if ($('html').is('.ie8')) {
+		return true; //deactivate in IE8
+	}
+
 	window.galleryFileAction.scrollContainer = $('#app-content');
 	if ($('#isPublic').val()) {
 		window.galleryFileAction.scrollContainer = $(window);
 	}
+
+	var utility = new Gallery.Utility();
+	utility.addDomPurifyHooks();
 
 	// Retrieve the config as well as the list of supported media types.
 	// The list of media files is retrieved when the user clicks on a row

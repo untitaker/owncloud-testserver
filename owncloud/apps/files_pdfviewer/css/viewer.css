@@ -5,9 +5,15 @@
   background-size: 16px 16px;
   height: 16px;
   width: 16px;
-
 }
 
+@media screen and (min-resolution: 2dppx) {
+  #secondaryToolbarClose::before {
+    background-size: 32px 32px !important;
+    height: 32px !important;
+    width: 32px !important;
+  }
+}
 
 html .doorHangerRight:after {
   right: 53px!important;

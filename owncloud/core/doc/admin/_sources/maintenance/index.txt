@@ -9,8 +9,7 @@ Maintenance
    backup
    upgrade
    package_upgrade
-   manual_upgrade
    update
+   manual_upgrade
    restore
    migrating
-

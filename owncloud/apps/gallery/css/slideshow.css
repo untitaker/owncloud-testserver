@@ -38,8 +38,6 @@
 	height: 52px;
 	position: absolute;
 	z-index: 1100;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-	filter: alpha(opacity=50);
 	opacity: .5;
 	background-position: center center;
 	background-repeat: no-repeat;
@@ -49,8 +47,6 @@
 #slideshow.inactive > .progress,
 #slideshow.inactive > .menu input,
 #slideshow.inactive > .name {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-	filter: alpha(opacity=0);
 	opacity: 0;
 	/* slow fadeout, fadein will be 300ms again*/
 	-webkit-transition: opacity 3s;
@@ -59,22 +55,8 @@
 	transition: opacity 3s;
 }
 
-#slideshow input.icon-view-download {
-	background-image: url("../img/download.svg");
-	background-size: 26px 26px;
-	-webkit-background-size: 26px 26px;
-	background-color: #fff;
-	height: 38px;
-	width: 38px;
-}
-
 #slideshow input.icon-view-toggle-background {
 	background-image: url("../img/toggle.svg");
-	background-size: 26px 26px;
-	-webkit-background-size: 26px 26px;
-	background-color: #fff;
-	height: 38px;
-	width: 38px;
 }
 
 #slideshow > * {
@@ -87,22 +69,22 @@
 #slideshow > input:hover,
 #slideshow > .menu input:hover,
 #slideshow.inactive > .name:hover {
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
-	filter: alpha(opacity=75);
 	opacity: .75;
 }
 
 #slideshow > .next, #slideshow > .previous {
-	top: 50%;
-	margin-top: -21px;
+	height:100%;
+	width: 25%;
 }
 
 #slideshow > .next {
 	right: 0;
+	background-position: right;
 }
 
 #slideshow > .previous {
 	left: 0;
+	background-position: left;
 }
 
 #slideshow > .exit {
@@ -123,18 +105,16 @@
 	right: 13px;
 	background-position: 0 100%;
 	width: 32px;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-	filter: alpha(opacity=50);
 	opacity: .5;
 	height: 0;
 	min-height: 0;
+	cursor: pointer;
 }
 
 #slideshow > .menu {
 	position: relative;
 	z-index: 1100;
-	display: table;
-	margin: 0 auto;
+	right: 50px;
 }
 
 #slideshow .menu .menuItem {
@@ -145,8 +125,6 @@
 	box-shadow: none;
 	width: 52px;
 	height: 52px;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-	filter: alpha(opacity=50);
 	opacity: .5;
 	background-position: center center;
 	background-repeat: no-repeat;
@@ -165,13 +143,12 @@
 	padding: 0 50px 3px;
 	text-align: center;
 	color: #fff;
-	text-shadow: 1px 1px 4px #333, 1px -1px 4px #333, -1px 1px 4px #333,-1px -1px 4px #333;
+	text-shadow: 1px 1px 4px #333, 1px -1px 4px #333, -1px 1px 4px #333, -1px -1px 4px #333;
 	font-size: 18px;
 	line-height: normal;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=75)";
 	opacity: .75;
 }
 
@@ -183,13 +160,15 @@
 	border: 0;
 	padding: 1px 8px;
 	display: none;
-	position: relative;
+	position: absolute;
 	top: 0;
 	border-bottom-left-radius: 3px;
 	border-bottom-right-radius: 3px;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=90)";
-	filter: alpha(opacity=90);
 	opacity: .9;
+	left: 50%;
+	-webkit-transform: translate(-50%, 0);
+	-moz-transform: translate(-50%, 0);
+	transform: translate(-50%, 0);
 }
 
 #slideshow > .bigshotContainer {

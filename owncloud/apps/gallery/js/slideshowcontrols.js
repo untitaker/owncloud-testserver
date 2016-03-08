@@ -54,13 +54,13 @@
 		 * Updates the controls
 		 *
 		 * @param {{name:string, url: string, path: string, fallBack: string}[]} images
-		 * @param {bool} autoPlay
+		 * @param {boolean} autoPlay
 		 */
 		update: function (images, autoPlay) {
 			this.images = images;
 			this.active = true;
 			this.showButton('.play');
-			this.hideButton('.pause');
+			this.hideButton('.pause, .progress');
 			this.playing = false;
 
 			// Hide prev/next and play buttons when we only have one pic
@@ -107,7 +107,7 @@
 		 * Updates the private variables in case of problems loading an image
 		 *
 		 * @param {Array} images
-		 * @param {bool} errorLoadingImage
+		 * @param {boolean} errorLoadingImage
 		 */
 		updateControls: function (images, errorLoadingImage) {
 			this.images = images;
@@ -168,6 +168,12 @@
 			this.container.children('.previous').click(makeCallBack(this._previous));
 			this.container.children('.exit').click(makeCallBack(this._exit));
 			this.container.children('.pause, .play').click(makeCallBack(this._playPauseToggle));
+			this.progressBar.click(makeCallBack(this._playPauseToggle));
+			this.container.children('.previous, .next, .menu, .name').on(
+				'mousewheel DOMMouseScroll mousemove', function (evn) {
+					this.container.children('.bigshotContainer')[0].dispatchEvent(
+						new WheelEvent(evn.originalEvent.type, evn.originalEvent));
+				}.bind(this));
 		},
 
 		/**
@@ -292,7 +298,7 @@
 				this._setTimeout();
 			}
 
-			this.container.find('.play, .pause').toggleClass('hidden');
+			this.container.find('.play, .pause, .progress').toggleClass('hidden');
 		},
 
 		/**
@@ -301,6 +307,7 @@
 		 * @private
 		 */
 		_next: function () {
+			this._setName('');
 			this.slideshow.hideErrorNotification();
 			this.zoomablePreview.reset();
 
@@ -318,6 +325,7 @@
 		 * @private
 		 */
 		_previous: function () {
+			this._setName('');
 			this.slideshow.hideErrorNotification();
 			this.zoomablePreview.reset();
 

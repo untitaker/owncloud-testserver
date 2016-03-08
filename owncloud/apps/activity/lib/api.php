@@ -1,23 +1,21 @@
 <?php
-
 /**
- * ownCloud - Activity App
+ * @author Joas Schilling <nickvergessen@owncloud.com>
  *
- * @author Joas Schilling
- * @copyright 2014 Joas Schilling nickvergessen@owncloud.com
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @license AGPL-3.0
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or any later version.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
 
@@ -34,29 +32,61 @@ class Api
 
 	static public function get() {
 		$app = new AppInfo\Application();
+		/** @var Data $data */
 		$data = $app->getContainer()->query('ActivityData');
 
-		$start = isset($_GET['start']) ? $_GET['start'] : 0;
-		$count = isset($_GET['count']) ? $_GET['count'] : self::DEFAULT_LIMIT;
+		$start = isset($_GET['start']) ? (int) $_GET['start'] : 0;
+		$count = isset($_GET['count']) ? (int) $_GET['count'] : self::DEFAULT_LIMIT;
+		$user = $app->getContainer()->getServer()->getUserSession()->getUser()->getUID();
 
-		$activities = $data->read(
+		if ($start !== 0) {
+			$start = self::getSinceFromOffset($user, $start);
+		}
+
+		$activities = $data->get(
 			$app->getContainer()->query('GroupHelper'),
 			$app->getContainer()->query('UserSettings'),
-			$start, $count, 'all'
+			$user, $start, $count, 'desc', 'all'
 		);
+		$parser = new PlainTextParser(\OC::$server->getL10NFactory()->get('activity'));
 
 		$entries = array();
-		foreach($activities as $entry) {
+		foreach($activities['data'] as $entry) {
 			$entries[] = array(
 				'id' => $entry['activity_id'],
-				'subject' => (string) $entry['subjectformatted']['full'],
-				'message' => (string) $entry['messageformatted']['full'],
-				'file' => $entry['file'],
+				'subject' => $parser->parseMessage($entry['subject_prepared']),
+				'message' => $parser->parseMessage($entry['message_prepared']),
+				'file' => $entry['object_name'],
 				'link' => $entry['link'],
 				'date' => date('c', $entry['timestamp']),
 			);
 		}
 
 		return new \OC_OCS_Result($entries);
+	}
+
+	/**
+	 * @param string $user
+	 * @param int $offset
+	 * @return int
+	 */
+	protected static function getSinceFromOffset($user, $offset) {
+		$query = \OC::$server->getDatabaseConnection()->getQueryBuilder();
+		$query->select('activity_id')
+			->from('activity')
+			->where($query->expr()->eq('affecteduser', $query->createNamedParameter($user)))
+			->orderBy('activity_id', 'desc')
+			->setFirstResult($offset - 1)
+			->setMaxResults(1);
+
+		$result = $query->execute();
+		$row = $result->fetch();
+		$result->closeCursor();
+
+		if ($row) {
+			return (int) $row['activity_id'];
+		}
+
+		return 0;
 	}
 }

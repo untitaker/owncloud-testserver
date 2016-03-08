@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Previews Configuration &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Previews Configuration &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="File Sharing and Management" href="index.html" />
     <link rel="next" title="Database Configuration" href="../configuration_database/index.html" />
     <link rel="prev" title="Transactional File Locking" href="files_locking_transactional.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,15 +113,15 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">File Sharing and Management</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="file_sharing_configuration.html">File Sharing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="federated_cloud_sharing_configuration.html">Configuring Federated Cloud Sharing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="federated_cloud_sharing_configuration.html">Configuring Federation Sharing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="big_file_upload_configuration.html">Uploading big files &gt; 512MB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="collaborative_documents_configuration.html">Configuring the Collaborative Documents App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="default_files_configuration.html">Providing Default Files</a></li>
@@ -150,6 +149,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -164,14 +165,11 @@
 						
   <div class="section" id="previews-configuration">
 <h1>Previews Configuration<a class="headerlink" href="#previews-configuration" title="Permalink to this headline">¶</a></h1>
-<p>The ownCloud thumbnail system is used to generate thumbnails from various
-file types, which are then shown as thumbnails in the Files application of
-the web interface, or as a larger preview for public shared links.</p>
-<p>The following image shows a file (A) where the ownCloud server generates a
-preview image, and another file (B) that it could not generate a preview for. In this
-case a generic icon (depending on the filetype) is displayed.</p>
+<p>The ownCloud thumbnail system generates previews of files for all
+ownCloud apps that display files, such as Files and Gallery.</p>
+<p>The following image shows some examples of previews of various file types.</p>
 <div class="figure">
-<img alt="../_images/preview_images.png" src="../_images/preview_images.png" />
+<img alt="Thumbnails of various image and audio/video files." src="../_images/preview_images.png" />
 </div>
 <p>By default, ownCloud can generate previews for the following filetypes:</p>
 <ul class="simple">
@@ -185,19 +183,22 @@ case a generic icon (depending on the filetype) is displayed.</p>
 of other file types such as PDF, SVG or various office documents.
 Due to security concerns those providers have been disabled by
 default and are considered unsupported.
-While those providers are still available, we discourage enabling them,
-and they are not documented.</p>
+While those providers are still available, we discourage enabling
+them, and they are not documented.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
 <p>Please notice that the ownCloud preview system comes already with sensible
-defaults, and therefore it is usually unecessary to adjust those configuration
+defaults, and therefore it is usually unnecessary to adjust those configuration
 values.</p>
 <div class="section" id="disabling-previews">
 <h3>Disabling previews:<a class="headerlink" href="#disabling-previews" title="Permalink to this headline">¶</a></h3>
-<p>Under certain circumstances, for example if the server has only very limited
+<p>Under certain circumstances, for example if the server has limited
 resources, you might want to consider disabling the generation of previews.
-Set the configuration option <tt class="docutils literal"><span class="pre">enable_previews</span></tt> in config.php to <tt class="docutils literal"><span class="pre">false</span></tt>:</p>
+Note that if you do this all previews in all apps are disabled, including
+the Gallery app, and will display generic icons instead of
+thumbnails.</p>
+<p>Set the configuration option <code class="docutils literal"><span class="pre">enable_previews</span></code> in config.php to <code class="docutils literal"><span class="pre">false</span></code>:</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
   <span class="s1">&#39;enable_previews&#39;</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>
 </pre></div>
@@ -235,7 +236,8 @@ scale factor. By default, pictures are upscaled to 10 times the original size:</
   <span class="s1">&#39;preview_max_scale_factor&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
 </pre></div>
 </div>
-<p>If you want to disable the maximum scaling factor, you can set the config value to &#8216;null&#8217;:</p>
+<p>If you want to disable the maximum scaling factor, you can set the config value
+to &#8216;null&#8217;:</p>
 <div class="highlight-php"><div class="highlight"><pre><span class="cp">&lt;?php</span>
   <span class="s1">&#39;preview_max_scale_factor&#39;</span> <span class="o">=&gt;</span> <span class="k">null</span><span class="p">,</span>
 </pre></div>

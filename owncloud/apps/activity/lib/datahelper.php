@@ -1,45 +1,57 @@
 <?php
-
 /**
- * ownCloud - Activity App
+ * @author Joas Schilling <nickvergessen@owncloud.com>
  *
- * @author Joas Schilling
- * @copyright 2014 Joas Schilling nickvergessen@owncloud.com
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @license AGPL-3.0
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or any later version.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
 
 namespace OCA\Activity;
 
+use OCA\Activity\Parameter\Factory;
+use OCA\Activity\Parameter\IParameter;
+use OCA\Activity\Parameter\Collection;
+use OCP\Activity\IEvent;
 use OCP\Activity\IManager;
 use OCP\IL10N;
-use OCP\Util;
+use OCP\L10N\IFactory;
 
 class DataHelper {
 	/** @var \OCP\Activity\IManager */
 	protected $activityManager;
 
-	/** @var \OCA\Activity\ParameterHelper */
-	protected $parameterHelper;
+	/** @var \OCA\Activity\Parameter\Factory */
+	protected $parameterFactory;
+
+	/** @var IFactory */
+	protected $l10Nfactory;
 
 	/** @var IL10N */
 	protected $l;
 
-	public function __construct(IManager $activityManager, ParameterHelper $parameterHelper, IL10N $l) {
+	/**
+	 * @param IManager $activityManager
+	 * @param Factory $parameterFactory
+	 * @param IFactory $l10Nfactory
+	 * @param IL10N $l
+	 */
+	public function __construct(IManager $activityManager, Factory $parameterFactory, IFactory $l10Nfactory, IL10N $l) {
 		$this->activityManager = $activityManager;
-		$this->parameterHelper = $parameterHelper;
+		$this->parameterFactory = $parameterFactory;
+		$this->l10Nfactory = $l10Nfactory;
 		$this->l = $l;
 	}
 
@@ -47,14 +59,14 @@ class DataHelper {
 	 * @param string $user
 	 */
 	public function setUser($user) {
-		$this->parameterHelper->setUser($user);
+		$this->parameterFactory->setUser($user);
 	}
 
 	/**
 	 * @param IL10N $l
 	 */
 	public function setL10n(IL10N $l) {
-		$this->parameterHelper->setL10n($l);
+		$this->parameterFactory->setL10n($l);
 		$this->l = $l;
 	}
 
@@ -62,33 +74,46 @@ class DataHelper {
 	 * @brief Translate an event string with the translations from the app where it was send from
 	 * @param string $app The app where this event comes from
 	 * @param string $text The text including placeholders
-	 * @param array $params The parameter for the placeholder
-	 * @param bool $stripPath Shall we strip the path from file names?
-	 * @param bool $highlightParams Shall we highlight the parameters in the string?
-	 *             They will be highlighted with `<strong>`, all data will be passed through
-	 *             \OCP\Util::sanitizeHTML() before, so no XSS is possible.
+	 * @param IParameter[] $params The parameter for the placeholder
 	 * @return string translated
 	 */
-	public function translation($app, $text, $params, $stripPath = false, $highlightParams = false) {
+	public function translation($app, $text, array $params) {
 		if (!$text) {
 			return '';
 		}
 
-		$preparedParams = $this->parameterHelper->prepareParameters(
-			$params, $this->parameterHelper->getSpecialParameterList($app, $text),
-			$stripPath, $highlightParams
-		);
+		$preparedParams = [];
+		foreach ($params as $parameter) {
+			$preparedParams[] = $parameter->format();
+		}
 
 		// Allow apps to correctly translate their activities
 		$translation = $this->activityManager->translate(
-			$app, $text, $preparedParams, $stripPath, $highlightParams, $this->l->getLanguageCode());
+			$app, $text, $preparedParams, false, false, $this->l->getLanguageCode());
 
 		if ($translation !== false) {
 			return $translation;
 		}
 
-		$l = Util::getL10N($app, $this->l->getLanguageCode());
+		$l = $this->l10Nfactory->get($app, $this->l->getLanguageCode());
 		return $l->t($text, $preparedParams);
+	}
+
+	/**
+	 * List with special parameters for the message
+	 *
+	 * @param string $app
+	 * @param string $text
+	 * @return array
+	 */
+	protected function getSpecialParameterList($app, $text) {
+		$specialParameters = $this->activityManager->getSpecialParameterList($app, $text);
+
+		if ($specialParameters !== false) {
+			return $specialParameters;
+		}
+
+		return array();
 	}
 
 	/**
@@ -101,17 +126,42 @@ class DataHelper {
 	public function formatStrings($activity, $message) {
 		$activity[$message . 'params'] = $activity[$message . 'params_array'];
 		unset($activity[$message . 'params_array']);
-
-		$activity[$message . 'formatted'] = array(
-			'trimmed'	=> $this->translation($activity['app'], $activity[$message], $activity[$message . 'params'], true),
-			'full'		=> $this->translation($activity['app'], $activity[$message], $activity[$message . 'params']),
-			'markup'	=> array(
-				'trimmed'	=> $this->translation($activity['app'], $activity[$message], $activity[$message . 'params'], true, true),
-				'full'		=> $this->translation($activity['app'], $activity[$message], $activity[$message . 'params'], false, true),
-			),
-		);
+		$activity[$message . '_prepared'] = $this->translation($activity['app'], $activity[$message], $activity[$message . 'params']);
 
 		return $activity;
+	}
+
+	/**
+	 * Get the parameter array from the parameter string of the database table
+	 *
+	 * @param IEvent $event
+	 * @param string $parsing What are we parsing `message` or `subject`
+	 * @param string $parameterString can be a JSON string, serialize() or a simple string.
+	 * @return array List of Parameters
+	 */
+	public function getParameters(IEvent $event, $parsing, $parameterString) {
+		$parameters = $this->parseParameters($parameterString);
+		$parameterTypes = $this->getSpecialParameterList(
+			$event->getApp(),
+			($parsing === 'subject') ? $event->getSubject() : $event->getMessage()
+		);
+
+		foreach ($parameters as $i => $parameter) {
+			$parameters[$i] = $this->parameterFactory->get(
+				$parameter,
+				$event,
+				isset($parameterTypes[$i]) ? $parameterTypes[$i] : 'base'
+			);
+		}
+
+		return $parameters;
+	}
+
+	/**
+	 * @return Collection
+	 */
+	public function createCollection() {
+		return $this->parameterFactory->createCollection();
 	}
 
 	/**
@@ -120,7 +170,7 @@ class DataHelper {
 	 * @param string $parameterString can be a JSON string, serialize() or a simple string.
 	 * @return array List of Parameters
 	 */
-	public function getParameters($parameterString) {
+	public function parseParameters($parameterString) {
 		if (!is_string($parameterString)) {
 			return [];
 		}

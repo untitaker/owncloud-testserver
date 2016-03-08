@@ -26,7 +26,7 @@ $thumbSize = 1024;
 ?>
 
 <?php if ($_['previewSupported']): /* This enables preview images for links (e.g. on Facebook, Google+, ...)*/?>
-	<link rel="image_src" href="<?php p(OCP\Util::linkToRoute( 'core_ajax_public_preview', array('x' => $thumbSize, 'y' => $thumbSize, 'file' => $_['directory_path'], 't' => $_['dirToken']))); ?>" />
+	<link rel="image_src" href="<?php p(\OC::$server->getURLGenerator()->linkToRoute( 'core_ajax_public_preview', array('x' => $thumbSize, 'y' => $thumbSize, 'file' => $_['directory_path'], 't' => $_['dirToken']))); ?>" />
 <?php endif; ?>
 
 <div id="notification-container">
@@ -41,7 +41,7 @@ $thumbSize = 1024;
 <input type="hidden" name="filename" value="<?php p($_['filename']) ?>" id="filename">
 <input type="hidden" name="mimetype" value="<?php p($_['mimetype']) ?>" id="mimetype">
 <input type="hidden" name="previewSupported" value="<?php p($_['previewSupported'] ? 'true' : 'false'); ?>" id="previewSupported">
-<input type="hidden" name="mimetypeIcon" value="<?php p(OC_Helper::mimetypeIcon($_['mimetype'])); ?>" id="mimetypeIcon">
+<input type="hidden" name="mimetypeIcon" value="<?php p(\OC::$server->getMimeTypeDetector()->mimeTypeIcon($_['mimetype'])); ?>" id="mimetypeIcon">
 <input type="hidden" name="filesize" value="<?php p($_['nonHumanFileSize']); ?>" id="filesize">
 <input type="hidden" name="maxSizeAnimateGif" value="<?php p($_['maxSizeAnimateGif']); ?>" id="maxSizeAnimateGif">
 
@@ -81,7 +81,7 @@ $thumbSize = 1024;
 				</span>
 				<?php } ?>
 				<a href="<?php p($_['downloadURL']); ?>" id="download" class="button">
-					<img class="svg" alt="" src="<?php print_unescaped(OCP\image_path("core", "actions/download.svg")); ?>"/>
+					<img class="svg" alt="" src="<?php print_unescaped(image_path("core", "actions/download.svg")); ?>"/>
 					<span id="download-text"><?php p($l->t('Download'))?></span>
 				</a>
 			</span>
@@ -105,7 +105,7 @@ $thumbSize = 1024;
 				<?php endif; ?>
 				<div class="directDownload">
 					<a href="<?php p($_['downloadURL']); ?>" id="downloadFile" class="button">
-						<img class="svg" alt="" src="<?php print_unescaped(OCP\image_path("core", "actions/download.svg")); ?>"/>
+						<img class="svg" alt="" src="<?php print_unescaped(image_path("core", "actions/download.svg")); ?>"/>
 						<?php p($l->t('Download %s', array($_['filename'])))?> (<?php p($_['fileSize']) ?>)
 					</a>
 				</div>

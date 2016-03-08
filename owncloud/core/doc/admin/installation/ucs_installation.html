@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Univention Corporate Server &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Univention Corporate Server &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="Hiawatha Configuration" href="hiawatha_configuration.html" />
     <link rel="prev" title="Nginx Configuration" href="nginx_configuration.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,11 +113,12 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="system_requirements.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_recommendations.html">ownCloud Deployment Recommendations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Linux Installation Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="command_line_installation.html">Installing ownCloud From the Command Line</a></li>
@@ -157,6 +157,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -331,7 +333,8 @@ assign your required value.</p>
 </table>
 <p>If you want to override the default settings, simply create the key in
 question in the UCR and assign your required value, for example:</p>
-<div class="highlight-python"><pre>ucr set owncloud/user/enabled=1</pre>
+<div class="highlight-python"><div class="highlight"><pre>ucr set owncloud/user/enabled=1
+</pre></div>
 </div>
 <p>or via UMC:</p>
 <img alt="../_images/ucsint2.png" src="../_images/ucsint2.png" />
@@ -354,7 +357,7 @@ install and upgrade ownCloud from the App Center.</p>
 ownCloud settings.</p>
 <p>In the installation process a virtual host is set up (Apache is required
 therefore). If you want to modify the settings, edit
-<tt class="file docutils literal"><span class="pre">/etc/apache2/sites-available/owncloud</span></tt> and restart the web server. You
+<code class="file docutils literal"><span class="pre">/etc/apache2/sites-available/owncloud</span></code> and restart the Web server. You
 might want to do it to enable HTTPS connections. Besides that, you can edit the
 <strong>.htaccess-File in /var/www/owncloud/</strong>. In the latter file the
 PHP limits for file transfer are also specified.</p>
@@ -369,7 +372,7 @@ credentials and enjoy.</p>
 your LDAP credentials.</p>
 <img alt="../_images/ucsint1.png" src="../_images/ucsint1.png" />
 <p>Updating users can also be done by the script
-<tt class="file docutils literal"><span class="pre">/usr/share/owncloud/update-users.sh</span></tt> . It takes the following UCR
+<code class="file docutils literal"><span class="pre">/usr/share/owncloud/update-users.sh</span></code> . It takes the following UCR
 variables as parameters: <strong>owncloud/user/enabled</strong> for enabling or disabling,
 <strong>owncloud/user/quota</strong> as the Quota value and <strong>owncloud/join/users/filter</strong> as
 LDAP filter to select the users to update.</p>
@@ -379,10 +382,11 @@ LDAP filter to select the users to update.</p>
 enabled and disabled via UCM as shown in the screen shot below.</p>
 <img alt="../_images/ucsint.png" src="../_images/ucsint.png" />
 <p>Another way to enable or disable groups is to use the script
-<tt class="file docutils literal"><span class="pre">/usr/share/owncloud/update-groups.sh</span></tt>. Currently, it takes an argument
+<code class="file docutils literal"><span class="pre">/usr/share/owncloud/update-groups.sh</span></code>. Currently, it takes an argument
 which can be 1=enable groups or 0=disable groups. The filter applied is
 taken from the UCR variable <strong>owncloud/join/groups/filter</strong>. If it is
 empty, a message will be displayed.</p>
+<p>w.. _from the UCS App Center: <a class="reference external" href="https://www.univention.com/products/univention-app-center/app-catalog/">https://www.univention.com/products/univention-app-center/app-catalog/</a></p>
 </div>
 </div>
 </div>

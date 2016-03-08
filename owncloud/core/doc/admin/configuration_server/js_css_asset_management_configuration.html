@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>JavaScript and CSS Asset Management &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>JavaScript and CSS Asset Management &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="ownCloud Server Configuration" href="index.html" />
     <link rel="next" title="Automatic Configuration Setup" href="automatic_configuration.html" />
     <link rel="prev" title="SSL / Encryption App" href="performance_tuning/ssl_encryption_app.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,9 +113,9 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">ownCloud Server Configuration</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="security_setup_warnings.html">Warnings on Admin Page</a></li>
@@ -159,6 +158,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -175,8 +176,8 @@
 <h1>JavaScript and CSS Asset Management<a class="headerlink" href="#javascript-and-css-asset-management" title="Permalink to this headline">¶</a></h1>
 <p>In production environments, JavaScript and CSS files should be delivered in a concatenated and compressed format.</p>
 <p>ownCloud can automatically collect all JavaScript and CSS files, aggregate and compress them to then save the result in a folder called &#8216;assets&#8217; which can be found in the folder where ownCloud has been installed.</p>
-<p>If your web server has write access to your ownCloud installation, then the &#8216;assets&#8217; folder will be automatically created for you, otherwise, you need to create it yourself before enabling that option and you must give write access to your web server user.</p>
-<p>Assets found in that folder will from now on be served as static files by your web server and will be automatically refreshed whenever ownCloud or one of its apps is updated.
+<p>If your Web server has write access to your ownCloud installation, then the &#8216;assets&#8217; folder will be automatically created for you, otherwise, you need to create it yourself before enabling that option and you must give write access to your Web server user.</p>
+<p>Assets found in that folder will from now on be served as static files by your Web server and will be automatically refreshed whenever ownCloud or one of its apps is updated.
 It&#8217;s important to note that apps installed via git might not always update their version number with every commit and this could lead to an out-of-sync asset folder.
 It is not recommended to enable asset-pipelining when using apps pulled via git.</p>
 <div class="section" id="parameters">
@@ -189,7 +190,7 @@ It is not recommended to enable asset-pipelining when using apps pulled via git.
   <span class="p">);</span>
 </pre></div>
 </div>
-<p>You can set this parameter in the <tt class="file docutils literal"><span class="pre">config/config.php</span></tt></p>
+<p>You can set this parameter in the <code class="file docutils literal"><span class="pre">config/config.php</span></code></p>
 </div>
 </div>
 

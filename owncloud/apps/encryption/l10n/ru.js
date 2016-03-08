@@ -25,6 +25,8 @@ OC.L10N.register(
     "Invalid private key for Encryption App. Please update your private key password in your personal settings to recover access to your encrypted files." : "Закрытый ключ приложения шифрования недействителен. Обновите закрытый ключ в личных настройках, чтобы восстановить доступ к зашифрованным файлам.",
     "Encryption App is enabled but your keys are not initialized, please log-out and log-in again" : "Приложение шифрования активно, но ваши ключи не инициализированы, выйдите из системы и войдите заново",
     "Encryption App is enabled and ready" : "Приложение шифрования включено и готово",
+    "Bad Signature" : "Некорректная подпись",
+    "Missing Signature" : "Подпись отсутствует",
     "one-time password for server-side-encryption" : "одноразовый пароль для шифрования на стороне сервера",
     "Can not decrypt this file, probably this is a shared file. Please ask the file owner to reshare the file with you." : "Не удалось расшифровать файл, возможно это опубликованный файл. Попросите владельца файла повторно открыть к нему доступ.",
     "Can not read this file, probably this is a shared file. Please ask the file owner to reshare the file with you." : "Не удается прочитать файл, возможно это публичный файл. Пожалуйста попросите владельца открыть доступ снова.",
@@ -32,6 +34,8 @@ OC.L10N.register(
     "The share will expire on %s." : "Доступ будет закрыт %s",
     "Cheers!" : "Всего наилучшего!",
     "Hey there,<br><br>the admin enabled server-side-encryption. Your files were encrypted using the password <strong>%s</strong>.<br><br>Please login to the web interface, go to the section \"ownCloud basic encryption module\" of your personal settings and update your encryption password by entering this password into the \"old log-in password\" field and your current login-password.<br><br>" : "Привет,<br><br>администратор включил шифрование на стороне сервера. Ваши файлы были зашифрованы с помощью пароля <strong>%s</strong>.<br><br>Пожалуйста войдите в веб-приложение, в разделе \"ownCloud простой модуль шифрования\" в личных настройках вам нужно обновить пароль шифрования.<br><br>",
+    "Encrypt the home storage" : "Зашифровать домашнюю директорию",
+    "Enabling this option encrypts all files stored on the main storage, otherwise only files on external storage will be encrypted" : "Данный параметр позволяет зашифровать все файлы, хранящиеся в главном хранилище, иначе только файлы на внешних хранилищах будут зашифрованы",
     "Enable recovery key" : "Включить ключ восстановления",
     "Disable recovery key" : "Отключить ключ восстановления",
     "The recovery key is an extra encryption key that is used to encrypt files. It allows recovery of a user's files if the user forgets his or her password." : "Ключ восстановления это дополнительный ключ, который используется для шифрования файлов. Он позволяет восстановить пользовательские файлы в случае утери пароля.",
@@ -52,8 +56,6 @@ OC.L10N.register(
     "Enable password recovery:" : "Включить восстановление пароля:",
     "Enabling this option will allow you to reobtain access to your encrypted files in case of password loss" : "Включение этой опции позволит вам получить доступ к своим зашифрованным файлам в случае утери пароля",
     "Enabled" : "Включено",
-    "Disabled" : "Отключено",
-    "Hey there,\n\nthe admin enabled server-side-encryption. Your files were encrypted using the password '%s'.\n\nPlease login to the web interface, go to the section 'ownCloud basic encryption module' of your personal settings and update your encryption password by entering this password into the 'old log-in password' field and your current login-password.\n\n" : "Привет,\n\nадминистратор включил шифрование на стороне сервера. Ваши файлы были зашифрованы с помощью пароля '%s'.\n\nПожалуйста войдите в веб-приложение, в разделе 'ownCloud простой модуль шифрования' в личных настройках вам нужно обновить пароль шифрования.\n\n",
-    "Hey there,\n\nthe admin enabled server-side-encryption. Your files were encrypted using the password '%s'.\n\nPlease login to the web interface, go to the section 'ownCloud basic encryption module' of your personal settings and update your encryption password by entering this password into the 'old log-in password' field and your current login-password.\n\n" : "Привет,\n\nадминистратор включил шифрование на стороне сервера. Ваши файлы были зашифрованы с помощью пароля '%s'.\n\nПожалуйста войдите в веб-приложение, в разделе 'ownCloud простой модуль шифрования' в личных настройках вам нужно обновить пароль шифрования.\n\n"
+    "Disabled" : "Отключено"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

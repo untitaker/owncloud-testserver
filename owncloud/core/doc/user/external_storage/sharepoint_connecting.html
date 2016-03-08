@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Connecting to SharePoint &mdash; ownCloud 8.2 User Manual 8.2 documentation</title>
+    <title>Connecting to SharePoint &mdash; ownCloud 9.0 User Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 User Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 User Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="External Storage" href="index.html" />
     <link rel="prev" title="Configuring External Storage" href="external_storage.html" />
 <script type="text/javascript">
@@ -92,13 +91,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 User Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 User Manual</a></h1>
 
     </div>
     
@@ -113,8 +112,8 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 User Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New for Users in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 User Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New for Users in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The ownCloud Web Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../files/index.html">Files &amp; Synchronization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pim/index.html">Contacts &amp; Calendar</a></li>
@@ -166,38 +165,38 @@ credentials. If you have to enter your credentials, click the red bar and you&#8
 get a login window. You should only have to do this once, as ownCloud will store
 your credentials.</p>
 <p>If your SharePoint login ever changes, go to your Personal page to update it in
-the <tt class="docutils literal"><span class="pre">Sharepoint</span> <span class="pre">Personal</span> <span class="pre">Configuration</span></tt> section.</p>
+the <code class="docutils literal"><span class="pre">Sharepoint</span> <span class="pre">Personal</span> <span class="pre">Configuration</span></code> section.</p>
 </div>
 <div class="section" id="personal-page">
 <h2>Personal Page<a class="headerlink" href="#personal-page" title="Permalink to this headline">¶</a></h2>
-<p>You can manage your SharePoint connections in the <tt class="docutils literal"><span class="pre">Sharepoint</span> <span class="pre">Personal</span>
-<span class="pre">Configuration</span></tt> section of your ownCloud Personal page. You&#8217;ll see two sections:
-the <tt class="docutils literal"><span class="pre">Admin</span> <span class="pre">added</span> <span class="pre">mount</span> <span class="pre">points</span></tt> section lists SharePoint mounts controlled by
+<p>You can manage your SharePoint connections in the <code class="docutils literal"><span class="pre">Sharepoint</span> <span class="pre">Personal</span>
+<span class="pre">Configuration</span></code> section of your ownCloud Personal page. You&#8217;ll see two sections:
+the <code class="docutils literal"><span class="pre">Admin</span> <span class="pre">added</span> <span class="pre">mount</span> <span class="pre">points</span></code> section lists SharePoint mounts controlled by
 your ownCloud admin. If users have permissions to mount their own SharePoint
-libraries you&#8217;ll also see a <tt class="docutils literal"><span class="pre">Personal</span> <span class="pre">mount</span> <span class="pre">points</span></tt> section.</p>
+libraries you&#8217;ll also see a <code class="docutils literal"><span class="pre">Personal</span> <span class="pre">mount</span> <span class="pre">points</span></code> section.</p>
 <p>There are two types of authentication available to you. If you have multiple
 SharePoint libraries that use the same authentication, enter your credentials
-in <tt class="docutils literal"><span class="pre">Sharepoint</span> <span class="pre">Personal</span> <span class="pre">Configuration</span></tt>. Then follow these steps to add your
+in <code class="docutils literal"><span class="pre">Sharepoint</span> <span class="pre">Personal</span> <span class="pre">Configuration</span></code>. Then follow these steps to add your
 libraries:</p>
 <ul class="simple">
-<li>Enter the name of your local mountpoint in the <tt class="docutils literal"><span class="pre">Local</span> <span class="pre">Folder</span> <span class="pre">Name</span></tt> column.
+<li>Enter the name of your local mountpoint in the <code class="docutils literal"><span class="pre">Local</span> <span class="pre">Folder</span> <span class="pre">Name</span></code> column.
 This can be an existing folder, or automatically create a new one.</li>
 <li>Enter your SharePoint server URL.</li>
-<li>Click the little refresh icon to the left of the <tt class="docutils literal"><span class="pre">Document</span> <span class="pre">Library</span></tt> field.
+<li>Click the little refresh icon to the left of the <code class="docutils literal"><span class="pre">Document</span> <span class="pre">Library</span></code> field.
 If your credentials and URL are correct you&#8217;ll get a dropdown list of SharePoint
 libraries to choose from.</li>
 <li>Select the document library you want to mount.</li>
 <li>Select &#8220;Use user credentials&#8221;.</li>
-<li>Click the <tt class="docutils literal"><span class="pre">Save</span></tt> button, and you&#8217;re done</li>
+<li>Click the <code class="docutils literal"><span class="pre">Save</span></code> button, and you&#8217;re done</li>
 </ul>
 <div class="figure">
 <img alt="../_images/sharepoint-drive-config-user.png" src="../_images/sharepoint-drive-config-user.png" />
 </div>
 <p>You may elect to use different authentication credentials for some of your
-SharePoint libraries. For these, you must first select <tt class="docutils literal"><span class="pre">use</span> <span class="pre">custom</span>
-<span class="pre">credentials</span></tt>, and then fill in the mountpoint and SharePoint site URL. Then
+SharePoint libraries. For these, you must first select <code class="docutils literal"><span class="pre">use</span> <span class="pre">custom</span>
+<span class="pre">credentials</span></code>, and then fill in the mountpoint and SharePoint site URL. Then
 ownCloud can authenticate you, and you can click the refresh icon to see your
-libraries. Then select the library you want to mount and click the <tt class="docutils literal"><span class="pre">Save</span></tt>
+libraries. Then select the library you want to mount and click the <code class="docutils literal"><span class="pre">Save</span></code>
 button.</p>
 </div>
 </div>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The ownCloud Web Interface &mdash; ownCloud 8.2 User Manual 8.2 documentation</title>
+    <title>The ownCloud Web Interface &mdash; ownCloud 9.0 User Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="_static/style.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -16,8 +15,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '8.2',
+        URL_ROOT:    './',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,9 +26,9 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 User Manual 8.2 documentation" href="index.html" />
+    <link rel="top" title="ownCloud 9.0 User Manual 9.0 documentation" href="contents.html" />
     <link rel="next" title="Files &amp; Synchronization" href="files/index.html" />
-    <link rel="prev" title="What’s New for Users in ownCloud 8.2" href="whats_new.html" />
+    <link rel="prev" title="What’s New for Users in ownCloud 9.0" href="whats_new.html" />
 <script type="text/javascript">
 (function () {
   /**
@@ -92,13 +91,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="contents.html">ownCloud 8.2 User Manual</a></h1>
+      <h1><a href="contents.html">ownCloud 9.0 User Manual</a></h1>
 
     </div>
     
@@ -113,8 +112,8 @@
 <li><a href="contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="index.html">ownCloud 8.2 User Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New for Users in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">ownCloud 9.0 User Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What&#8217;s New for Users in ownCloud 9.0</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">The ownCloud Web Interface</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#navigating-the-main-user-interface">Navigating the Main User Interface</a></li>
 </ul>
@@ -140,15 +139,24 @@
   <div class="section" id="the-owncloud-web-interface">
 <h1>The ownCloud Web Interface<a class="headerlink" href="#the-owncloud-web-interface" title="Permalink to this headline">¶</a></h1>
 <p>You can connect to your ownCloud server using any Web browser; just point it to
-your ownCloud server and enter your username and password.</p>
-<blockquote>
-<div><div class="figure">
+your ownCloud server and enter your username and password. Supported Web
+browsers are:</p>
+<ul>
+<li><p class="first">Firefox 14+</p>
+</li>
+<li><p class="first">Chrome 18+</p>
+</li>
+<li><p class="first">Safari 5+</p>
+</li>
+<li><p class="first">IE9+ (except Compatibility Mode)</p>
+<div class="figure">
 <img alt="ownCloud login screen." src="_images/oc_connect.png" />
 </div>
-</div></blockquote>
+</li>
+</ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Some apps like <tt class="docutils literal"><span class="pre">files_external</span></tt> or <tt class="docutils literal"><span class="pre">encryption</span></tt> will disable
+<p class="last">Some apps like <code class="docutils literal"><span class="pre">files_external</span></code> or <code class="docutils literal"><span class="pre">encryption</span></code> will disable
 the <strong>Stay logged in</strong> checkbox.</p>
 </div>
 <div class="section" id="navigating-the-main-user-interface">
@@ -173,7 +181,7 @@ This field displays the contents or user features of your selected app.</li>
 <li><strong>Navigation Bar</strong>: Located over the main viewing window (the Application
 View), this bar provides a type of breadcrumbs navigation that enables you to
 migrate to higher levels of the folder hierarchy up to the root level (home).</li>
-<li><strong>New</strong> button: Located in the Navigation Bar, the <tt class="docutils literal"><span class="pre">New</span></tt> button
+<li><strong>New</strong> button: Located in the Navigation Bar, the <code class="docutils literal"><span class="pre">New</span></code> button
 enables you to create new files, new folders, or upload files.</li>
 </ul>
 <div class="admonition note">
@@ -183,17 +191,14 @@ ownCloud Files Application View to upload them to ownCloud. Currently,
 the only Web browsers that support drag-and-drop folders are Chrome and
 Chromium.</p>
 </div>
-<ul>
-<li><p class="first"><strong>Search</strong> field: Click on the magnifier in the upper right hand corner of
-to search for files.</p>
-</li>
-<li><p class="first"><strong>Gallery</strong> button. This looks like four little squares, and takes you
-directly to your image gallery.</p>
-</li>
-<li><p class="first"><strong>Personal Settings</strong> menu: Click on your ownCloud username, located to the
-right of the Search field, to open your Personal Settings dropdown menu. Your
-Personal page provides the following settings and features:</p>
 <ul class="simple">
+<li><strong>Search</strong> field: Click on the magnifier in the upper right hand corner of
+to search for files.</li>
+<li><strong>Gallery</strong> button. This looks like four little squares, and takes you
+directly to your image gallery.</li>
+<li><strong>Personal Settings</strong> menu: Click on your ownCloud username, located to the
+right of the Search field, to open your Personal Settings dropdown menu. Your
+Personal page provides the following settings and features:<ul>
 <li>Links to download desktop and mobile apps</li>
 <li>Re-run the First Run Wizard</li>
 <li>Server usage and space availability</li>
@@ -207,9 +212,9 @@ Personal page provides the following settings and features:</p>
 <li>SSL certificate manager</li>
 <li>ownCloud Version information</li>
 </ul>
-<p>See <a class="reference internal" href="userpreferences.html"><em>Setting Your Preferences</em></a> section to learn more about these settings.</p>
 </li>
 </ul>
+<p>See <a class="reference internal" href="userpreferences.html"><em>Setting Your Preferences</em></a> section to learn more about these settings.</p>
 </div>
 </div>
 

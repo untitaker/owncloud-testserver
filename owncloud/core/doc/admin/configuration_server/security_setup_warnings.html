@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Warnings on Admin Page &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Warnings on Admin Page &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="ownCloud Server Configuration" href="index.html" />
     <link rel="next" title="Using the occ Command" href="occ_command.html" />
     <link rel="prev" title="ownCloud Server Configuration" href="index.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,9 +113,9 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">ownCloud Server Configuration</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Warnings on Admin Page</a><ul>
@@ -128,6 +127,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#dev-urandom-is-not-readable-by-php">/dev/urandom is not readable by PHP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#your-web-server-is-not-yet-set-up-properly-to-allow-file-synchronization">Your web server is not yet set up properly to allow file synchronization</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#outdated-nss-openssl-version">Outdated NSS / OpenSSL version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#your-web-server-is-not-set-up-properly-to-resolve-well-known-caldav-or-well-known-carddav">Your web server is not set up properly to resolve /.well-known/caldav/ or /.well-known/carddav/</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="occ_command.html">Using the occ Command</a></li>
@@ -166,6 +166,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -223,29 +225,29 @@ using HTTPS is a fundamental security measure. You must configure your Web
 server to support it, and then there are some settings in the <strong>Security</strong>
 section of your ownCloud Admin page to enable. The following manual pages
 describe how to enable HTTPS on the Apache and Nginx Web servers.</p>
-<p><a class="reference internal" href="../installation/source_installation.html#enabling-ssl-label"><em>Enabling SSL</em></a> (on Apache)</p>
-<p><a class="reference internal" href="harden_server.html#use-https-label"><em>Use HTTPS</em></a></p>
-<p><a class="reference internal" href="../installation/nginx_configuration.html#nginx-configuration-example"><em>Nginx Configuration</em></a></p>
+<p><a class="reference internal" href="../installation/source_installation.html#enabling-ssl-label"><span>Enabling SSL</span></a> (on Apache)</p>
+<p><a class="reference internal" href="harden_server.html#use-https-label"><span>Use HTTPS</span></a></p>
+<p><a class="reference internal" href="../installation/nginx_configuration.html#nginx-configuration-example"><span>Nginx Configuration</span></a></p>
 </div>
 <div class="section" id="the-test-with-getenv-path-only-returns-an-empty-response">
 <h2>The test with getenv(&#8220;PATH&#8221;) only returns an empty response<a class="headerlink" href="#the-test-with-getenv-path-only-returns-an-empty-response" title="Permalink to this headline">¶</a></h2>
 <p>Some environments are not passing a valid PATH variable to ownCloud. The
-<a class="reference internal" href="../installation/source_installation.html#php-fpm-tips-label"><em>php-fpm Configuration Notes</em></a> provides the information about how to configure your
+<a class="reference internal" href="../installation/source_installation.html#php-fpm-tips-label"><span>php-fpm Configuration Notes</span></a> provides the information about how to configure your
 environment.</p>
 </div>
 <div class="section" id="the-strict-transport-security-http-header-is-not-configured">
 <h2>The &#8220;Strict-Transport-Security&#8221; HTTP header is not configured<a class="headerlink" href="#the-strict-transport-security-http-header-is-not-configured" title="Permalink to this headline">¶</a></h2>
 <p>&#8220;The &#8220;Strict-Transport-Security&#8221; HTTP header is not configured to least &#8220;15768000&#8221; seconds.
 For enhanced security we recommend enabling HSTS as described in our security tips.&#8221;</p>
-<p>The HSTS header needs to be configured within your webserver by following the
-<a class="reference internal" href="harden_server.html#enable-hsts-label"><em>Enable HTTP Strict Transport Security</em></a> documentation</p>
+<p>The HSTS header needs to be configured within your Web server by following the
+<a class="reference internal" href="harden_server.html#enable-hsts-label"><span>Enable HTTP Strict Transport Security</span></a> documentation</p>
 </div>
 <div class="section" id="dev-urandom-is-not-readable-by-php">
 <h2>/dev/urandom is not readable by PHP<a class="headerlink" href="#dev-urandom-is-not-readable-by-php" title="Permalink to this headline">¶</a></h2>
 <p>&#8220;/dev/urandom is not readable by PHP which is highly discouraged for security reasons.
 Further information can be found in our documentation.&#8221;</p>
 <p>This message is another one which needs to be taken seriously. Please have a look
-at the <a class="reference internal" href="harden_server.html#dev-urandom-label"><em>Give PHP read access to /dev/urandom</em></a> documentation.</p>
+at the <a class="reference internal" href="harden_server.html#dev-urandom-label"><span>Give PHP read access to /dev/urandom</span></a> documentation.</p>
 </div>
 <div class="section" id="your-web-server-is-not-yet-set-up-properly-to-allow-file-synchronization">
 <h2>Your web server is not yet set up properly to allow file synchronization<a class="headerlink" href="#your-web-server-is-not-yet-set-up-properly-to-allow-file-synchronization" title="Permalink to this headline">¶</a></h2>
@@ -268,6 +270,11 @@ websites. To ensure that ownCloud will work properly you need to update OpenSSL
 to at least 1.0.2b or 1.0.1d. For NSS the patch version depends on your distribution
 and an heuristic is running the test which actually reproduces the bug. There
 are distributions such as RHEL/CentOS which have this backport still <a class="reference external" href="https://bugzilla.redhat.com/show_bug.cgi?id=1241172">pending</a>.</p>
+</div>
+<div class="section" id="your-web-server-is-not-set-up-properly-to-resolve-well-known-caldav-or-well-known-carddav">
+<h2>Your web server is not set up properly to resolve /.well-known/caldav/ or /.well-known/carddav/<a class="headerlink" href="#your-web-server-is-not-set-up-properly-to-resolve-well-known-caldav-or-well-known-carddav" title="Permalink to this headline">¶</a></h2>
+<p>Both URLs needs to be correctly redirected to the DAV endpoint of ownCloud. Please
+refer to <a class="reference internal" href="../issues/general_troubleshooting.html#service-discovery-label"><span>Service discovery</span></a> for more info.</p>
 </div>
 </div>
 

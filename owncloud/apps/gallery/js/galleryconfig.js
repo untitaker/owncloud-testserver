@@ -92,6 +92,7 @@
 					feature = configFeatures[i];
 					if (this._worksInCurrentBrowser(feature, 'native_svg')) {
 						features.push(feature);
+						Gallery.utility.addDomPurifyHooks();
 					}
 				}
 			}
@@ -162,7 +163,7 @@
 		 */
 		_setAlbumPermissions: function (albumConfig) {
 			return {
-				fileid: albumConfig.fileid,
+				path: albumConfig.path,
 				permissions: albumConfig.permissions
 			};
 		},

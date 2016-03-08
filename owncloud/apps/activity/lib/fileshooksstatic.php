@@ -1,23 +1,23 @@
 <?php
-
 /**
- * ownCloud - Activity App
+ * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @author Joas Schilling
- * @copyright 2014 Joas Schilling nickvergessen@owncloud.com
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @license AGPL-3.0
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or any later version.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
  */
 
 namespace OCA\Activity;
@@ -38,6 +38,7 @@ class FilesHooksStatic {
 		Util::connectHook('OC_Filesystem', 'delete', 'OCA\Activity\FilesHooksStatic', 'fileDelete');
 		Util::connectHook('\OCA\Files_Trashbin\Trashbin', 'post_restore', 'OCA\Activity\FilesHooksStatic', 'fileRestore');
 		Util::connectHook('OCP\Share', 'post_shared', 'OCA\Activity\FilesHooksStatic', 'share');
+		Util::connectHook('OCP\Share', 'pre_unshare', 'OCA\Activity\FilesHooksStatic', 'unShare');
 
 		$eventDispatcher = \OC::$server->getEventDispatcher();
 		$eventDispatcher->addListener('OCA\Files::loadAdditionalScripts', ['OCA\Activity\FilesHooksStatic', 'onLoadFilesAppScripts']);
@@ -92,10 +93,19 @@ class FilesHooksStatic {
 	}
 
 	/**
+	 * Manage sharing events
+	 * @param array $params The hook params
+	 */
+	public static function unShare($params) {
+		self::getHooks()->unShare($params);
+	}
+
+	/**
 	 * Load additional scripts when the files app is visible
 	 */
 	public static function onLoadFilesAppScripts() {
 		Util::addStyle('activity', 'style');
+		Util::addScript('activity', 'formatter');
 		Util::addScript('activity', 'activitymodel');
 		Util::addScript('activity', 'activitycollection');
 		Util::addScript('activity', 'activitytabview');

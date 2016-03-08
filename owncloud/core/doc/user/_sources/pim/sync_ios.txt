@@ -9,7 +9,7 @@ Calendar
 #. Select Add Account.
 #. Select Other as account type.
 #. Select Add CalDAV account.
-#. For server, type ``ADDRESS/remote.php/caldav/principals/username``
+#. For server, type ``example.com/remote.php/dav/principals/username``
 #. Enter your user name and password.
 #. Select Next.
 #. If your server does not support SSL, a warning will be displayed.
@@ -19,7 +19,7 @@ Calendar
 
    -  Select OK.
    -  Select advanced settings.
-   -  Make sure Use SSL is set to OFF.
+   -  If your server does not support SSL, make sure Use SSL is set to OFF.
    -  Change port to 80.
    -  Go back to account information and hit Save.
 
@@ -34,7 +34,7 @@ Address book
 #. Select Add Account.
 #. Select Other as account type.
 #. Select Add CardDAV account.
-#. For server, type ``ADDRESS/remote.php/carddav/principals/username``
+#. For server, type ``example.com/remote.php/dav/principals/username``
 #. Enter your user name and password.
 #. Select Next.
 #. If your server does not support SSL, a warning will be displayed.
@@ -44,7 +44,7 @@ Address book
 
    -  Select OK.
    -  Select advanced settings.
-   -  Make sure Use SSL is set to OFF.
+   -  If your server does not support SSL, make sure Use SSL is set to OFF.
    -  Change port to 80.
    -  Go back to account information and hit Save.
 
@@ -52,4 +52,4 @@ Now should now find your contacts in the address book of your iPhone.
 If it's still not working, have a look at the :doc:`troubleshooting`
 and `Troubleshooting Contacts & Calendar`_ guides.
 
-.. _Troubleshooting Contacts & Calendar: https://doc.owncloud.org/server/8.2/admin_manual/issues/index.html#troubleshooting-contacts-calendar
+.. _Troubleshooting Contacts & Calendar: https://doc.owncloud.org/server/9.0/admin_manual/issues/index.html#troubleshooting-contacts-calendar

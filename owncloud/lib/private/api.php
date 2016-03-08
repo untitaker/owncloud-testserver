@@ -13,7 +13,7 @@
  * @author Tom Needham <tom@owncloud.com>
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -188,7 +188,7 @@ class OC_API {
 	/**
 	 * merge the returned result objects into one response
 	 * @param array $responses
-	 * @return array|\OC_OCS_Result
+	 * @return OC_OCS_Result
 	 */
 	public static function mergeResponses($responses) {
 		// Sort into shipped and third-party
@@ -231,7 +231,8 @@ class OC_API {
 			$picked = reset($shipped['failed']);
 			$code = $picked['response']->getStatusCode();
 			$meta = $picked['response']->getMeta();
-			$response = new OC_OCS_Result($data, $code, $meta['message']);
+			$headers = $picked['response']->getHeaders();
+			$response = new OC_OCS_Result($data, $code, $meta['message'], $headers);
 			return $response;
 		} elseif(!empty($shipped['succeeded'])) {
 			$responses = array_merge($shipped['succeeded'], $thirdparty['succeeded']);
@@ -244,13 +245,16 @@ class OC_API {
 			$picked = reset($thirdparty['failed']);
 			$code = $picked['response']->getStatusCode();
 			$meta = $picked['response']->getMeta();
-			$response = new OC_OCS_Result($data, $code, $meta['message']);
+			$headers = $picked['response']->getHeaders();
+			$response = new OC_OCS_Result($data, $code, $meta['message'], $headers);
 			return $response;
 		} else {
 			$responses = $thirdparty['succeeded'];
 		}
 		// Merge the successful responses
-		$data = array();
+		$data = [];
+		$codes = [];
+		$header = [];
 
 		foreach($responses as $response) {
 			if($response['shipped']) {
@@ -258,8 +262,9 @@ class OC_API {
 			} else {
 				$data = array_merge_recursive($data, $response['response']->getData());
 			}
-			$codes[] = array('code' => $response['response']->getStatusCode(),
-				'meta' => $response['response']->getMeta());
+			$header = array_merge_recursive($header, $response['response']->getHeaders());
+			$codes[] = ['code' => $response['response']->getStatusCode(),
+				'meta' => $response['response']->getMeta()];
 		}
 
 		// Use any non 100 status codes
@@ -273,8 +278,7 @@ class OC_API {
 			}
 		}
 
-		$result = new OC_OCS_Result($data, $statusCode, $statusMessage);
-		return $result;
+		return new OC_OCS_Result($data, $statusCode, $statusMessage, $header);
 	}
 
 	/**
@@ -288,26 +292,27 @@ class OC_API {
 			case API::GUEST_AUTH:
 				// Anyone can access
 				return true;
-				break;
 			case API::USER_AUTH:
 				// User required
 				return self::loginUser();
-				break;
 			case API::SUBADMIN_AUTH:
 				// Check for subadmin
 				$user = self::loginUser();
 				if(!$user) {
 					return false;
 				} else {
-					$subAdmin = OC_SubAdmin::isSubAdmin($user);
+					$userObject = \OC::$server->getUserSession()->getUser();
+					if($userObject === null) {
+						return false;
+					}
+					$isSubAdmin = \OC::$server->getGroupManager()->getSubAdmin()->isSubAdmin($userObject);
 					$admin = OC_User::isAdminUser($user);
-					if($subAdmin || $admin) {
+					if($isSubAdmin || $admin) {
 						return true;
 					} else {
 						return false;
 					}
 				}
-				break;
 			case API::ADMIN_AUTH:
 				// Check for admin
 				$user = self::loginUser();
@@ -316,11 +321,9 @@ class OC_API {
 				} else {
 					return OC_User::isAdminUser($user);
 				}
-				break;
 			default:
 				// oops looks like invalid level supplied
 				return false;
-				break;
 		}
 	}
 
@@ -374,9 +377,16 @@ class OC_API {
 	 * @param string $format the format xml|json
 	 */
 	public static function respond($result, $format='xml') {
+		$request = \OC::$server->getRequest();
+
 		// Send 401 headers if unauthorised
 		if($result->getStatusCode() === API::RESPOND_UNAUTHORISED) {
-			header('WWW-Authenticate: Basic realm="Authorisation Required"');
+			// If request comes from JS return dummy auth request
+			if($request->getHeader('X-Requested-With') === 'XMLHttpRequest') {
+				header('WWW-Authenticate: DummyBasic realm="Authorisation Required"');
+			} else {
+				header('WWW-Authenticate: Basic realm="Authorisation Required"');
+			}
 			header('HTTP/1.0 401 Unauthorized');
 		}
 
@@ -386,7 +396,7 @@ class OC_API {
 
 		$meta = $result->getMeta();
 		$data = $result->getData();
-		if (self::isV2(\OC::$server->getRequest())) {
+		if (self::isV2($request)) {
 			$statusCode = self::mapStatusCodes($result->getStatusCode());
 			if (!is_null($statusCode)) {
 				$meta['statuscode'] = $statusCode;
@@ -432,6 +442,7 @@ class OC_API {
 
 	/**
 	 * Based on the requested format the response content type is set
+	 * @param string $format
 	 */
 	public static function setContentType($format = null) {
 		$format = is_null($format) ? self::requestedFormat() : $format;

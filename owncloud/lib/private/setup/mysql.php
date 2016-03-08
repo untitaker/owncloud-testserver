@@ -3,9 +3,10 @@
  * @author Bart Visscher <bartv@thisnet.nl>
  * @author Joas Schilling <nickvergessen@owncloud.com>
  * @author Michael Göhler <somebody.here@gmx.de>
+ * @author Roeland Jago Douma <rullzer@owncloud.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -70,7 +71,7 @@ class MySQL extends AbstractDatabase {
 	}
 
 	/**
-	 * @param IDbConnection $connection
+	 * @param IDBConnection $connection
 	 * @throws \OC\DatabaseSetupException
 	 */
 	private function createDBUser($connection) {
@@ -143,7 +144,7 @@ class MySQL extends AbstractDatabase {
 							$this->dbUser = $adminUser;
 
 							//create a random password so we don't need to store the admin password in the config file
-							$this->dbPassword =  $this->random->getMediumStrengthGenerator()->generate(30);
+							$this->dbPassword =  $this->random->generate(30);
 
 							$this->createDBUser($connection);
 

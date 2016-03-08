@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>User Management &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>User Management &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="next" title="User Management" href="user_configuration.html" />
     <link rel="prev" title="Automatic Configuration Setup" href="../configuration_server/automatic_configuration.html" />
 <script type="text/javascript">
@@ -92,13 +91,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -113,14 +112,15 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">User Management</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user_configuration.html">User Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reset_admin_password.html">Resetting a Lost Admin Password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reset_user_password.html">Resetting a User Password</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ftp_smb_imap.html">User Authentication with IMAP, SMB, and FTP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ldap.html">User Authentication with LDAP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ldap_cleanup.html">LDAP User Cleanup</a></li>
@@ -141,6 +141,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -168,6 +170,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reset_admin_password.html">Resetting a Lost Admin Password</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reset_user_password.html">Resetting a User Password</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_auth_ftp_smb_imap.html">User Authentication with IMAP, SMB, and FTP</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ftp_smb_imap.html#imap">IMAP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_auth_ftp_smb_imap.html#smb">SMB</a></li>
@@ -193,27 +196,9 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_provisioning_api.html">User Provisioning API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#instruction-set">Instruction set</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-adduser">users / adduser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-getusers">users / getusers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-getuser">users / getuser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-edituser">users / edituser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-deleteuser">users / deleteuser</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-getgroups">users / getgroups</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-addtogroup">users / addtogroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-removefromgroup">users / removefromgroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-createsubadmin">users / createsubadmin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-removesubadmin">users / removesubadmin</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#users-getsubadmingroups">users / getsubadmingroups</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#groups-getgroups">groups / getgroups</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#groups-addgroup">groups / addgroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#groups-getgroup">groups / getgroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#groups-getsubadmins">groups / getsubadmins</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#groups-deletegroup">groups / deletegroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#apps-getapps">apps / getapps</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#apps-getappinfo">apps / getappinfo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#apps-enable">apps / enable</a></li>
-<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#apps-disable">apps / disable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#instruction-set-for-users">Instruction Set For Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#instruction-set-for-groups">Instruction Set For Groups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_provisioning_api.html#instruction-set-for-apps">Instruction Set For Apps</a></li>
 </ul>
 </li>
 </ul>

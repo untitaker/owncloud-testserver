@@ -3,6 +3,7 @@ $TRANSLATIONS = array(
 "This file is too big to be opened. Please download the file instead." => "Berkas ini terlalu besar untuk dibuka. Sebagai gantinya, silakan unduh berkas ini.",
 "Cannot read the file." => "Tidak dapat membaca berkas.",
 "Invalid file path supplied." => "Lokasi berkas yang diberikan tidak sah.",
+"An internal server error occurred." => "Terjadi kesalahan server internal.",
 "Cannot save file as it has been modified since opening" => "Tidak dapat menyimpan berkas karena sudah diubah sejak dibuka",
 "Insufficient permissions" => "Izin tidak cukup",
 "File path not supplied" => "Lokasi berkas belum diberikan",
@@ -12,6 +13,8 @@ $TRANSLATIONS = array(
 "failed!" => "gagal!",
 "Saved" => "Disimpan",
 "There was a problem saving your changes. Click to resume editing." => "Terdapat masalah saat menyimpan perubahan. Klik untuk melanjutkan penyuntingan.",
-"An error occurred!" => "Terjadi kesalahan!"
+"An error occurred!" => "Terjadi kesalahan!",
+"Text file" => "Berkas teks",
+"New text file.txt" => "Teks baru file.txt"
 );
 $PLURAL_FORMS = "nplurals=1; plural=0;";

@@ -22,7 +22,7 @@
     "Could not detect Base DN, please enter it manually." : "Could not detect Base DN, please enter it manually.",
     "{nthServer}. Server" : "{nthServer}. Server",
     "No object found in the given Base DN. Please revise." : "No object found in the given Base DN. Please revise.",
-    "More than 1.000 directory entries available." : "More than 1,000 directory entries available.",
+    "More than 1,000 directory entries available." : "More than 1,000 directory entries available.",
     " entries available within the provided Base DN" : " entries available within the provided Base DN",
     "An error occurred. Please check the Base DN, as well as connection settings and credentials." : "An error occurred. Please check the Base DN, as well as connection settings and credentials.",
     "Do you really want to delete the current Server Configuration?" : "Do you really want to delete the current Server Configuration?",
@@ -76,6 +76,7 @@
     "Verify settings" : "Verify settings",
     "1. Server" : "1. Server",
     "%s. Server:" : "%s. Server:",
+    "Add a new and blank configuration" : "Add a new and blank configuration",
     "Copy current configuration into new directory binding" : "Copy current configuration into new directory binding",
     "Delete the current configuration" : "Delete the current configuration",
     "Host" : "Host",
@@ -119,6 +120,8 @@
     "Directory Settings" : "Directory Settings",
     "User Display Name Field" : "User Display Name Field",
     "The LDAP attribute to use to generate the user's display name." : "The LDAP attribute to use to generate the user's display name.",
+    "2nd User Display Name Field" : "2nd User Display Name Field",
+    "Optional. An LDAP attribute to be added to the display name in brackets. Results in e.g. »John Doe (john.doe@example.org)«." : "Optional. An LDAP attribute to be added to the display name in brackets. Results in e.g. »John Doe (john.doe@example.org)«.",
     "Base User Tree" : "Base User Tree",
     "One User Base DN per line" : "One User Base DN per line",
     "User Search Attributes" : "User Search Attributes",
@@ -129,6 +132,8 @@
     "One Group Base DN per line" : "One Group Base DN per line",
     "Group Search Attributes" : "Group Search Attributes",
     "Group-Member association" : "Group-Member association",
+    "Dynamic Group Member URL" : "Dynamic Group Member URL",
+    "The LDAP attribute that on group objects contains an LDAP search URL that determines what objects belong to the group. (An empty setting disables dynamic group membership functionality.)" : "The LDAP attribute that on group objects contains an LDAP search URL that determines what objects belong to the group. (An empty setting disables dynamic group membership functionality.)",
     "Nested Groups" : "Nested Groups",
     "When switched on, groups that contain groups are supported. (Only works if the group member attribute contains DNs.)" : "When switched on, groups that contain groups are supported. (Only works if the group member attribute contains DNs.)",
     "Paging chunksize" : "Paging chunksize",
@@ -150,8 +155,6 @@
     "Username-LDAP User Mapping" : "Username-LDAP User Mapping",
     "Usernames are used to store and assign (meta) data. In order to precisely identify and recognize users, each LDAP user will have an internal username. This requires a mapping from username to LDAP user. The created username is mapped to the UUID of the LDAP user. Additionally the DN is cached as well to reduce LDAP interaction, but it is not used for identification. If the DN changes, the changes will be found. The internal username is used all over. Clearing the mappings will have leftovers everywhere. Clearing the mappings is not configuration sensitive, it affects all LDAP configurations! Never clear the mappings in a production environment, only in a testing or experimental stage." : "Usernames are used to store and assign (meta) data. In order to precisely identify and recognise users, each LDAP user will have an internal username. This requires a mapping from username to LDAP user. The created username is mapped to the UUID of the LDAP user. Additionally the DN is cached as well to reduce LDAP interaction, but it is not used for identification. If the DN changes, the changes will be found. The internal username is used all over. Clearing the mappings will have leftovers everywhere. Clearing the mappings is not configuration sensitive, it affects all LDAP configurations! Never clear the mappings in a production environment, only in a testing or experimental stage.",
     "Clear Username-LDAP User Mapping" : "Clear Username-LDAP User Mapping",
-    "Clear Groupname-LDAP Group Mapping" : "Clear Groupname-LDAP Group Mapping",
-    "Backup (Replica) Host" : "Backup (Replica) Host",
-    "Backup (Replica) Port" : "Backup (Replica) Port"
+    "Clear Groupname-LDAP Group Mapping" : "Clear Groupname-LDAP Group Mapping"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

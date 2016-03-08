@@ -3,8 +3,9 @@
  * @author Bart Visscher <bartv@thisnet.nl>
  * @author Morris Jobke <hey@morrisjobke.de>
  * @author Robin Appelman <icewind@owncloud.com>
+ * @author Thomas Müller <thomas.mueller@tmit.eu>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -26,6 +27,9 @@ namespace OC\DB;
 
 class AdapterOCI8 extends Adapter {
 	public function lastInsertId($table) {
+		if (is_null($table)) {
+			throw new \InvalidArgumentException('Oracle requires a table name to be passed into lastInsertId()');
+		}
 		if ($table !== null) {
 			$suffix = '_SEQ';
 			$table = '"' . $table . $suffix . '"';

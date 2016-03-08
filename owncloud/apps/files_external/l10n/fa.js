@@ -18,6 +18,9 @@ OC.L10N.register(
     "Never" : "هرگز",
     "(group)" : "(گروه)",
     "Saved" : "ذخیره شد",
+    "Username" : "نام کاربری",
+    "Password" : "گذرواژه",
+    "Save" : "ذخیره",
     "Access key" : "کلید دسترسی",
     "Secret key" : "کلید مخفی",
     "None" : "هیچ‌کدام",
@@ -25,8 +28,6 @@ OC.L10N.register(
     "App secret" : "کد برنامه",
     "OAuth2" : "OAuth2",
     "OpenStack" : "OpenStack",
-    "Username" : "نام کاربری",
-    "Password" : "گذرواژه",
     "API key" : "کلید API ",
     "Username and password" : "نام کاربری و رمز عبور",
     "Public key" : "کلید عمومی",
@@ -57,9 +58,8 @@ OC.L10N.register(
     "Authentication" : "احراز هویت",
     "Configuration" : "پیکربندی",
     "Available for" : "در دسترس برای",
-    "Advanced settings" : "تنظیمات پیشرفته",
-    "Delete" : "حذف",
     "Add storage" : "اضافه کردن حافظه",
-    "Enable User External Storage" : "فعال سازی حافظه خارجی کاربر"
+    "Advanced settings" : "تنظیمات پیشرفته",
+    "Delete" : "حذف"
 },
 "nplurals=1; plural=0;");

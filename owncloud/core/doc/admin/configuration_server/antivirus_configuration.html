@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuring the ClamAV Antivirus Scanner &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Configuring the ClamAV Antivirus Scanner &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="ownCloud Server Configuration" href="index.html" />
     <link rel="next" title="Configuring Memory Caching" href="caching_configuration.html" />
     <link rel="prev" title="Configuring the Activity App" href="activity_configuration.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,9 +113,9 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">ownCloud Server Configuration</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="security_setup_warnings.html">Warnings on Admin Page</a></li>
@@ -161,6 +160,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -195,52 +196,56 @@ ClamAV in different ways.</p>
 <dt>Debian, Ubuntu, Linux Mint</dt>
 <dd><p class="first">On Debian and Ubuntu systems, and their many variants, install ClamAV with
 these commands:</p>
-<div class="last highlight-python"><pre>apt-get install clamav clamav-daemon</pre>
+<div class="last highlight-python"><div class="highlight"><pre>apt-get install clamav clamav-daemon
+</pre></div>
 </div>
 </dd>
 </dl>
 <p>The installer automatically creates default configuration files and launches the
-<tt class="docutils literal"><span class="pre">clamd</span></tt> and <tt class="docutils literal"><span class="pre">freshclam</span></tt> daemons. You don&#8217;t have to do anything more, though
+<code class="docutils literal"><span class="pre">clamd</span></code> and <code class="docutils literal"><span class="pre">freshclam</span></code> daemons. You don&#8217;t have to do anything more, though
 it&#8217;s a good idea to review the ClamAV documentation and your settings in
-<tt class="docutils literal"><span class="pre">/etc/clamav/</span></tt>. Enable verbose logging in both <tt class="docutils literal"><span class="pre">clamd.conf</span></tt> and
-<tt class="docutils literal"><span class="pre">freshclam.conf</span></tt> until you get any kinks worked out.</p>
+<code class="docutils literal"><span class="pre">/etc/clamav/</span></code>. Enable verbose logging in both <code class="docutils literal"><span class="pre">clamd.conf</span></code> and
+<code class="docutils literal"><span class="pre">freshclam.conf</span></code> until you get any kinks worked out.</p>
 <dl class="docutils">
 <dt>Red Hat 7, CentOS 7</dt>
 <dd><p class="first">On Red Hat 7 and related systems you must install the Extra Packages for
 Enterprise Linux (EPEL) repository, and then install ClamAV:</p>
-<div class="last highlight-python"><pre>yum install epel-release
+<div class="last highlight-python"><div class="highlight"><pre>yum install epel-release
 yum install clamav clamav-scanner clamav-scanner-systemd clamav-server
-clamav-server-systemd clamav-update</pre>
+clamav-server-systemd clamav-update
+</pre></div>
 </div>
 </dd>
 </dl>
-<p>This installs two configuration files: <tt class="docutils literal"><span class="pre">/etc/freshclam.conf</span></tt> and
-<tt class="docutils literal"><span class="pre">/etc/clamd.d/scan.conf</span></tt>. You must edit both of these before you can run
-ClamAV. Both files are well-commented, and <tt class="docutils literal"><span class="pre">man</span> <span class="pre">clamd.conf</span></tt> and <tt class="docutils literal"><span class="pre">man</span>
-<span class="pre">freshclam.conf</span></tt> explain all the options.  Refer to <tt class="docutils literal"><span class="pre">/etc/passwd</span></tt> and
-<tt class="docutils literal"><span class="pre">/etc/group</span></tt> when you need to verify the ClamAV user and group.</p>
-<p>First edit <tt class="docutils literal"><span class="pre">/etc/freshclam.conf</span></tt> and configure your options.
-<tt class="docutils literal"><span class="pre">freshclam</span></tt> updates your malware database, so you want it to run frequently to
+<p>This installs two configuration files: <code class="docutils literal"><span class="pre">/etc/freshclam.conf</span></code> and
+<code class="docutils literal"><span class="pre">/etc/clamd.d/scan.conf</span></code>. You must edit both of these before you can run
+ClamAV. Both files are well-commented, and <code class="docutils literal"><span class="pre">man</span> <span class="pre">clamd.conf</span></code> and <code class="docutils literal"><span class="pre">man</span>
+<span class="pre">freshclam.conf</span></code> explain all the options.  Refer to <code class="docutils literal"><span class="pre">/etc/passwd</span></code> and
+<code class="docutils literal"><span class="pre">/etc/group</span></code> when you need to verify the ClamAV user and group.</p>
+<p>First edit <code class="docutils literal"><span class="pre">/etc/freshclam.conf</span></code> and configure your options.
+<code class="docutils literal"><span class="pre">freshclam</span></code> updates your malware database, so you want it to run frequently to
 get updated malware signatures. Run it manually post-installation to download
 your first set of malware signatures:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">freshclam</span>
 </pre></div>
 </div>
-<p>The EPEL packages do not include an init file for <tt class="docutils literal"><span class="pre">freshclam</span></tt>, so the quick
+<p>The EPEL packages do not include an init file for <code class="docutils literal"><span class="pre">freshclam</span></code>, so the quick
 and easy way to set it up for regular checks is with a cron job. This example
 runs it every hour at 47 minutes past the hour:</p>
-<div class="highlight-python"><pre># m   h  dom mon dow  command
-  47  *  *   *    *  /usr/bin/freshclam --quiet</pre>
+<div class="highlight-python"><div class="highlight"><pre># m   h  dom mon dow  command
+  47  *  *   *    *  /usr/bin/freshclam --quiet
+</pre></div>
 </div>
 <p>Please avoid any multiples of 10, because those are when the ClamAV servers are
 hit the hardest for updates.</p>
-<p>Next, edit <tt class="docutils literal"><span class="pre">/etc/clamd.d/scan.conf</span></tt>. When you&#8217;re finished you must enable
-the <tt class="docutils literal"><span class="pre">clamd</span></tt> service file and start <tt class="docutils literal"><span class="pre">clamd</span></tt>:</p>
-<div class="highlight-python"><pre>systemctl enable clamd@scan.service
-systemctl start clamd@scan.service</pre>
+<p>Next, edit <code class="docutils literal"><span class="pre">/etc/clamd.d/scan.conf</span></code>. When you&#8217;re finished you must enable
+the <code class="docutils literal"><span class="pre">clamd</span></code> service file and start <code class="docutils literal"><span class="pre">clamd</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>systemctl enable clamd@scan.service
+systemctl start clamd@scan.service
+</pre></div>
 </div>
-<p>That should take care of everything. Enable verbose logging in <tt class="docutils literal"><span class="pre">scan.conf</span></tt>
-and <tt class="docutils literal"><span class="pre">freshclam.conf</span></tt> until it is running the way you want.</p>
+<p>That should take care of everything. Enable verbose logging in <code class="docutils literal"><span class="pre">scan.conf</span></code>
+and <code class="docutils literal"><span class="pre">freshclam.conf</span></code> until it is running the way you want.</p>
 </div>
 <div class="section" id="enabling-the-antivirus-app-for-files">
 <h2>Enabling the Antivirus App for Files<a class="headerlink" href="#enabling-the-antivirus-app-for-files" title="Permalink to this headline">¶</a></h2>
@@ -263,32 +268,33 @@ Everything.</p>
 <p>ClamAV runs in one of three modes:</p>
 <ul class="simple">
 <li>Daemon (Socket): ClamAV is running on the same server as ownCloud. The ClamAV
-daemon, <tt class="docutils literal"><span class="pre">clamd</span></tt>, runs in the background. When there is no activity <tt class="docutils literal"><span class="pre">clamd</span></tt>
+daemon, <code class="docutils literal"><span class="pre">clamd</span></code>, runs in the background. When there is no activity <code class="docutils literal"><span class="pre">clamd</span></code>
 places a minimal load on your system. If your users upload large volumes of
 files you will see high CPU usage.</li>
 <li>Daemon: ClamAV is running on a different server. This is a good option
 for ownCloud servers with high volumes of file uploads.</li>
 <li>Executable: ClamAV is running on the same server as ownCloud, and the
-<tt class="docutils literal"><span class="pre">clamscan</span></tt> command is started and then stopped with each file upload.
-<tt class="docutils literal"><span class="pre">clamscan</span></tt> is slow and not always reliable for on-demand usage; it is
+<code class="docutils literal"><span class="pre">clamscan</span></code> command is started and then stopped with each file upload.
+<code class="docutils literal"><span class="pre">clamscan</span></code> is slow and not always reliable for on-demand usage; it is
 better to use one of the daemon modes.</li>
 </ul>
 <dl class="docutils">
 <dt>Daemon (Socket)</dt>
-<dd><p class="first">ownCloud should detect your <tt class="docutils literal"><span class="pre">clamd</span></tt> socket and fill in the <tt class="docutils literal"><span class="pre">Socket</span></tt>
-field. This is the <tt class="docutils literal"><span class="pre">LocalSocket</span></tt> option in <tt class="docutils literal"><span class="pre">clamd.conf</span></tt>. You can
-run <tt class="docutils literal"><span class="pre">netstat</span></tt> to verify:</p>
-<div class="highlight-python"><pre>netstat -a|grep clam
-unix 2 [ ACC ] STREAM LISTENING 15857 /var/run/clamav/clamd.ctl</pre>
+<dd><p class="first">ownCloud should detect your <code class="docutils literal"><span class="pre">clamd</span></code> socket and fill in the <code class="docutils literal"><span class="pre">Socket</span></code>
+field. This is the <code class="docutils literal"><span class="pre">LocalSocket</span></code> option in <code class="docutils literal"><span class="pre">clamd.conf</span></code>. You can
+run <code class="docutils literal"><span class="pre">netstat</span></code> to verify:</p>
+<div class="highlight-python"><div class="highlight"><pre>netstat -a|grep clam
+unix 2 [ ACC ] STREAM LISTENING 15857 /var/run/clamav/clamd.ctl
+</pre></div>
 </div>
 <div class="figure">
 <img alt="../_images/antivirus-daemon-socket.png" src="../_images/antivirus-daemon-socket.png" />
 </div>
-<p>The <tt class="docutils literal"><span class="pre">Stream</span> <span class="pre">Length</span></tt> value sets the number of bytes read in one pass.
+<p>The <code class="docutils literal"><span class="pre">Stream</span> <span class="pre">Length</span></code> value sets the number of bytes read in one pass.
 10485760 bytes, or ten megabytes, is the default. This value should be
-no larger than the PHP <tt class="docutils literal"><span class="pre">memory_limit</span></tt> settings, or physical memory if
-<tt class="docutils literal"><span class="pre">memory_limit</span></tt> is set to -1 (no limit).</p>
-<p class="last"><tt class="docutils literal"><span class="pre">Action</span> <span class="pre">for</span> <span class="pre">infected</span> <span class="pre">files</span> <span class="pre">found</span> <span class="pre">while</span> <span class="pre">scanning</span></tt> gives you the choice of
+no larger than the PHP <code class="docutils literal"><span class="pre">memory_limit</span></code> settings, or physical memory if
+<code class="docutils literal"><span class="pre">memory_limit</span></code> is set to -1 (no limit).</p>
+<p class="last"><code class="docutils literal"><span class="pre">Action</span> <span class="pre">for</span> <span class="pre">infected</span> <span class="pre">files</span> <span class="pre">found</span> <span class="pre">while</span> <span class="pre">scanning</span></code> gives you the choice of
 logging any alerts without deleting the files, or immediately deleting
 infected files.</p>
 </dd>
@@ -296,11 +302,11 @@ infected files.</p>
 <dd><p class="first">For the Daemon option you need the hostname or IP address of the remote
 server running ClamAV, and the server&#8217;s port number.</p>
 <div class="last figure">
-<img alt="../_images/antivirus-daemon.png" src="../_images/antivirus-daemon.png" />
+<img alt="../_images/antivirus-daemon-socket.png" src="../_images/antivirus-daemon-socket.png" />
 </div>
 </dd>
 <dt>Executable</dt>
-<dd><p class="first">The Executable option requires the path to <tt class="docutils literal"><span class="pre">clamscan</span></tt>, which is the
+<dd><p class="first">The Executable option requires the path to <code class="docutils literal"><span class="pre">clamscan</span></code>, which is the
 interactive ClamAV scanning command. ownCloud should find it automatically.</p>
 <div class="last figure">
 <img alt="../_images/antivirus-executable.png" src="../_images/antivirus-executable.png" />

@@ -1,9 +1,11 @@
 <?php
 /**
  * @author Arthur Schiwon <blizzz@owncloud.com>
+ * @author Joas Schilling <nickvergessen@owncloud.com>
  * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Thomas Müller <thomas.mueller@tmit.eu>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -26,6 +28,9 @@ use OCA\user_ldap\lib\user\IUserTools;
 use OCA\user_ldap\lib\Connection;
 use OCA\user_ldap\lib\FilesystemHelper;
 use OCA\user_ldap\lib\LogWrapper;
+use OCP\IAvatarManager;
+use OCP\IConfig;
+use OCP\IUserManager;
 
 /**
  * User
@@ -42,7 +47,7 @@ class User {
 	 */
 	protected $connection;
 	/**
-	 * @var \OCP\IConfig
+	 * @var IConfig
 	 */
 	protected $config;
 	/**
@@ -58,10 +63,13 @@ class User {
 	 */
 	protected $log;
 	/**
-	 * @var \OCP\IAvatarManager
+	 * @var IAvatarManager
 	 */
 	protected $avatarManager;
-
+	/**
+	 * @var IUserManager
+	 */
+	protected $userManager;
 	/**
 	 * @var string
 	 */
@@ -87,19 +95,20 @@ class User {
 
 	/**
 	 * @brief constructor, make sure the subclasses call this one!
-	 * @param string the internal username
-	 * @param string the LDAP DN
+	 * @param string $username the internal username
+	 * @param string $dn the LDAP DN
 	 * @param IUserTools $access an instance that implements IUserTools for
 	 * LDAP interaction
-	 * @param \OCP\IConfig
-	 * @param FilesystemHelper
-	 * @param \OCP\Image any empty instance
-	 * @param LogWrapper
-	 * @param \OCP\IAvatarManager
+	 * @param IConfig $config
+	 * @param FilesystemHelper $fs
+	 * @param \OCP\Image $image any empty instance
+	 * @param LogWrapper $log
+	 * @param IAvatarManager $avatarManager
+	 * @param IUserManager $userManager
 	 */
 	public function __construct($username, $dn, IUserTools $access,
-		\OCP\IConfig $config, FilesystemHelper $fs, \OCP\Image $image,
-		LogWrapper $log, \OCP\IAvatarManager $avatarManager) {
+		IConfig $config, FilesystemHelper $fs, \OCP\Image $image,
+		LogWrapper $log, IAvatarManager $avatarManager, IUserManager $userManager) {
 
 		$this->access        = $access;
 		$this->connection    = $access->getConnection();
@@ -110,6 +119,7 @@ class User {
 		$this->image         = $image;
 		$this->log           = $log;
 		$this->avatarManager = $avatarManager;
+		$this->userManager   = $userManager;
 	}
 
 	/**
@@ -159,13 +169,22 @@ class User {
 		unset($attr);
 
 		//displayName
+		$displayName = $displayName2 = '';
 		$attr = strtolower($this->connection->ldapUserDisplayName);
 		if(isset($ldapEntry[$attr])) {
 			$displayName = $ldapEntry[$attr][0];
-			if(!empty($displayName)) {
-				$this->storeDisplayName($displayName);
-				$this->access->cacheUserDisplayName($this->getUsername(), $displayName);
-			}
+		}
+		$attr = strtolower($this->connection->ldapUserDisplayName2);
+		if(isset($ldapEntry[$attr])) {
+			$displayName2 = $ldapEntry[$attr][0];
+		}
+		if(!empty($displayName)) {
+			$this->composeAndStoreDisplayName($displayName);
+			$this->access->cacheUserDisplayName(
+				$this->getUsername(),
+				$displayName,
+				$displayName2
+			);
 		}
 		unset($attr);
 
@@ -341,6 +360,7 @@ class User {
 
 	/**
 	 * Stores a key-value pair in relation to this user
+	 *
 	 * @param string $key
 	 * @param string $value
 	 */
@@ -349,11 +369,19 @@ class User {
 	}
 
 	/**
-	 * Stores the display name in the databae
+	 * Composes the display name and stores it in the database. The final
+	 * display name is returned.
+	 *
 	 * @param string $displayName
+	 * @param string $displayName2
+	 * @returns string the effective display name
 	 */
-	public function storeDisplayName($displayName) {
+	public function composeAndStoreDisplayName($displayName, $displayName2 = '') {
+		if(!empty($displayName2)) {
+			$displayName .= ' (' . $displayName2 . ')';
+		}
 		$this->store('displayName', $displayName);
+		return $displayName;
 	}
 
 	/**
@@ -368,7 +396,7 @@ class User {
 	 * @brief checks whether an update method specified by feature was run
 	 * already. If not, it will marked like this, because it is expected that
 	 * the method will be run, when false is returned.
-	 * @param string email | quota | avatar (can be extended)
+	 * @param string $feature email | quota | avatar (can be extended)
 	 * @return bool
 	 */
 	private function wasRefreshed($feature) {
@@ -399,8 +427,8 @@ class User {
 			}
 		}
 		if(!is_null($email)) {
-			$this->config->setUserValue(
-				$this->uid, 'settings', 'email', $email);
+			$user = $this->userManager->get($this->uid);
+			$user->setEMailAddress($email);
 		}
 	}
 
@@ -429,7 +457,7 @@ class User {
 			}
 		}
 		if(!is_null($quota)) {
-			$this->config->setUserValue($this->uid, 'files', 'quota', $quota);
+			$user = $this->userManager->get($this->uid)->setQuota($quota);
 		}
 	}
 
@@ -473,8 +501,8 @@ class User {
 			$this->fs->setup($this->uid);
 		}
 
-		$avatar = $this->avatarManager->getAvatar($this->uid);
 		try {
+			$avatar = $this->avatarManager->getAvatar($this->uid);
 			$avatar->set($this->image);
 		} catch (\Exception $e) {
 			\OC::$server->getLogger()->notice(

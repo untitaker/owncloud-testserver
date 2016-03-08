@@ -65,7 +65,7 @@ part of the ownCloud installation, it will be downloaded from the app store,
 installed and enabled. 
 
 You can view new, unreviewed or unstable applications in the 
-`ownCloud Apps Store <http://apps.owncloud.com/>`_.
+`ownCloud Apps Store <https://apps.owncloud.com/>`_.
 
 To view or install apps from the ownCloud Apps Store:
 
@@ -94,7 +94,7 @@ API. If they are then they will not be installed.
 .. note:: If you would like to create or add your own ownCloud app, please use the 
     *Add your App...* button on the same page. This button redirects you to the 
     `App Development documentation 
-    <https://doc.owncloud.org/server/8.2/developer_manual/app/index.html>`_,
+    <https://doc.owncloud.org/server/9.0/developer_manual/app/index.html>`_,
     where you can find information about creating and adding your own apps.
 
 Using Custom App Directories
@@ -149,4 +149,4 @@ To enable installation from your own apps store:
   <?php
 
     "appstoreenabled" => true,
-    "appstoreurl" => "http://api.apps.owncloud.com/v1",
+    "appstoreurl" => "https://api.owncloud.com/v1",

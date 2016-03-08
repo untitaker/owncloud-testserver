@@ -26,7 +26,7 @@
 		/**
 		 * Initialises the slideshow
 		 *
-		 * @param {bool} autoPlay
+		 * @param {boolean} autoPlay
 		 * @param {number} interval
 		 * @param {Array} features
 		 */
@@ -76,7 +76,7 @@
 		 * Refreshes the slideshow's data
 		 *
 		 * @param {{name:string, url: string, path: string, fallBack: string}[]} images
-		 * @param {bool} autoPlay
+		 * @param {boolean} autoPlay
 		 */
 		setImages: function (images, autoPlay) {
 			this._hideImage();
@@ -121,16 +121,7 @@
 						$(img).css('outline', $border + 'px solid ' + backgroundColour);
 					}
 
-					// We cannot use nice things on IE8
-					if ($('html').is('.ie8')) {
-						$(img).addClass('scale')
-							.attr('data-scale', 'best-fit-down')
-							.attr('data-align', 'center');
-						this.zoomablePreviewContainer.append(img);
-						$(img).imageScale();
-					} else {
-						this.zoomablePreview.startBigshot(img, this.currentImage, image.mimeType);
-					}
+					this.zoomablePreview.startBigshot(img, this.currentImage, image.mimeType);
 
 					this._setUrl(image.path);
 					this.controls.show(currentImageId);
@@ -306,7 +297,6 @@
 		 * @private
 		 */
 		_isTransparent: function (mimeType) {
-			// TODO: Include fonts
 			return !(mimeType === 'image/jpeg'
 				|| mimeType === 'image/x-dcraw'
 				|| mimeType === 'application/font-sfnt'
@@ -356,8 +346,11 @@
 				xmlHttp.open("GET", source, false);
 				xmlHttp.send(null);
 				if (xmlHttp.status === 200) {
-					var pureSvg = DOMPurify.sanitize(xmlHttp.responseText);
-					svgPreview = "data:image/svg+xml;base64," + window.btoa(pureSvg);
+					var pureSvg = DOMPurify.sanitize(xmlHttp.responseText, {ADD_TAGS: ['filter']});
+					// Remove XML comment garbage left in the purified data
+					var badTag = pureSvg.indexOf(']&gt;');
+					var fixedPureSvg = pureSvg.substring(badTag < 0 ? 0 : 5, pureSvg.length);
+					svgPreview = "data:image/svg+xml;base64," + window.btoa(fixedPureSvg);
 				}
 			}
 

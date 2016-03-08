@@ -1,23 +1,22 @@
 <?php
-
 /**
- * ownCloud - Activity App
+ * @author Joas Schilling <nickvergessen@owncloud.com>
  *
- * @author Joas Schilling
- * @copyright 2014 Joas Schilling nickvergessen@owncloud.com
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @license AGPL-3.0
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or any later version.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Affero General Public
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
+ *
  */
 
 namespace OCA\Activity\AppInfo;
@@ -25,7 +24,9 @@ namespace OCA\Activity\AppInfo;
 use OC\Files\View;
 use OCA\Activity\Consumer;
 use OCA\Activity\Controller\Activities;
+use OCA\Activity\Controller\EndPoint;
 use OCA\Activity\Controller\Feed;
+use OCA\Activity\Controller\OCSEndPoint;
 use OCA\Activity\Controller\Settings;
 use OCA\Activity\Data;
 use OCA\Activity\DataHelper;
@@ -33,8 +34,9 @@ use OCA\Activity\GroupHelper;
 use OCA\Activity\FilesHooks;
 use OCA\Activity\MailQueueHandler;
 use OCA\Activity\Navigation;
-use OCA\Activity\ParameterHelper;
+use OCA\Activity\Parameter\Factory;
 use OCA\Activity\UserSettings;
+use OCA\Activity\ViewInfoCache;
 use OCP\AppFramework\App;
 use OCP\IContainer;
 
@@ -73,16 +75,16 @@ class Application extends App {
 			$server = $c->query('ServerContainer');
 			return new DataHelper(
 				$server->getActivityManager(),
-				new ParameterHelper(
+				new Factory(
 					$server->getActivityManager(),
 					$server->getUserManager(),
 					$server->getURLGenerator(),
 					$server->getContactsManager(),
-					new View(''),
-					$server->getConfig(),
+					$c->query('OCA\Activity\ViewInfoCache'),
 					$c->query('ActivityL10N'),
 					$c->query('CurrentUID')
 				),
+				$server->getL10NFactory(),
 				$c->query('ActivityL10N')
 			);
 		});
@@ -128,7 +130,8 @@ class Application extends App {
 				$c->query('DataHelper'),
 				$server->getMailer(),
 				$server->getURLGenerator(),
-				$server->getUserManager()
+				$server->getUserManager(),
+				$server->getActivityManager()
 			);
 		});
 
@@ -157,15 +160,15 @@ class Application extends App {
 			);
 		});
 
+		$container->registerService('OCA\Activity\ViewInfoCache', function() {
+			return new ViewInfoCache(
+				new View('')
+			);
+		});
+
 		/**
 		 * Core Services
 		 */
-		$container->registerService('URLGenerator', function(IContainer $c) {
-			/** @var \OC\Server $server */
-			$server = $c->query('ServerContainer');
-			return $server->getURLGenerator();
-		});
-
 		$container->registerService('CurrentUID', function(IContainer $c) {
 			/** @var \OC\Server $server */
 			$server = $c->query('ServerContainer');
@@ -194,6 +197,35 @@ class Application extends App {
 			);
 		});
 
+		$container->registerService('OCA\Activity\Controller\OCSEndPoint', function(IContainer $c) {
+			/** @var \OC\Server $server */
+			$server = $c->query('ServerContainer');
+
+			return new OCSEndPoint(
+				$c->query('ActivityData'),
+				$c->query('GroupHelper'),
+				$c->query('UserSettings'),
+				$server->getRequest(),
+				$server->getURLGenerator(),
+				$server->getUserSession(),
+				$server->getPreviewManager(),
+				$server->getMimeTypeDetector(),
+				new View(''),
+				$c->query('OCA\Activity\ViewInfoCache')
+			);
+		});
+
+		$container->registerService('EndPointController', function(IContainer $c) {
+			/** @var \OC\Server $server */
+			$server = $c->query('ServerContainer');
+
+			return new EndPoint(
+				$c->query('AppName'),
+				$server->getRequest(),
+				$c->query('OCA\Activity\Controller\OCSEndPoint')
+			);
+		});
+
 		$container->registerService('ActivitiesController', function(IContainer $c) {
 			/** @var \OC\Server $server */
 			$server = $c->query('ServerContainer');
@@ -201,16 +233,9 @@ class Application extends App {
 			return new Activities(
 				$c->query('AppName'),
 				$server->getRequest(),
+				$server->getConfig(),
 				$c->query('ActivityData'),
-				$c->query('GroupHelper'),
-				$c->query('Navigation'),
-				$c->query('UserSettings'),
-				$server->getDateTimeFormatter(),
-				$server->getPreviewManager(),
-				$server->getURLGenerator(),
-				$server->getMimeTypeDetector(),
-				new View(''),
-				$c->query('CurrentUID')
+				$c->query('Navigation')
 			);
 		});
 
@@ -224,7 +249,7 @@ class Application extends App {
 				$c->query('ActivityData'),
 				$c->query('GroupHelperSingleEntries'),
 				$c->query('UserSettings'),
-				$c->query('URLGenerator'),
+				$server->getURLGenerator(),
 				$server->getActivityManager(),
 				$server->getL10NFactory(),
 				$server->getConfig(),

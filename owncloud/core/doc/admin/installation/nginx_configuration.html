@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Nginx Configuration &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Nginx Configuration &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="Univention Corporate Server" href="ucs_installation.html" />
     <link rel="prev" title="SELinux Configuration" href="selinux_configuration.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,11 +113,12 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="system_requirements.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_recommendations.html">ownCloud Deployment Recommendations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Linux Installation Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="command_line_installation.html">Installing ownCloud From the Command Line</a></li>
@@ -155,6 +155,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -177,10 +179,12 @@ that it is accessed via http(s)://cloud.example.com.</li>
 <strong>ssl_certificate_key</strong> to suit your needs.</li>
 <li>Make sure your SSL certificates are readable by the server (see <a class="reference external" href="http://wiki.nginx.org/HttpSslModule">Nginx HTTP
 SSL Module documentation</a>).</li>
-<li><tt class="docutils literal"><span class="pre">add_header</span></tt> statements are only taken from the current level and are not cascaded
-from or to a different level. All necessary <tt class="docutils literal"><span class="pre">add_header</span></tt> statements must be defined
-in each level needed. For better readability is is possible to move <em>common</em> add
-header statements into a separate file and include that file wherever necessary.</li>
+<li><code class="docutils literal"><span class="pre">add_header</span></code> statements are only taken from the current level and are not cascaded
+from or to a different level. All necessary <code class="docutils literal"><span class="pre">add_header</span></code> statements must be defined
+in each level needed. For better readability it is possible to move <em>common</em> add
+header statements into a separate file and include that file wherever necessary.
+However, each <code class="docutils literal"><span class="pre">add_header</span></code> statement must be written in a single line to prevent
+connection problems with sync clients.</li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -188,7 +192,7 @@ header statements into a separate file and include that file wherever necessary.
 your webroot. If you&#8217;re using a subfolder you need to adjust the configuration
 accordingly.</p>
 </div>
-<div class="highlight-python"><pre>upstream php-handler {
+<div class="highlight-python"><div class="highlight"><pre>upstream php-handler {
   server 127.0.0.1:9000;
   #server unix:/var/run/php5-fpm.sock;
 }
@@ -208,11 +212,13 @@ server {
   ssl_certificate_key /etc/ssl/nginx/cloud.example.com.key;
 
   # Add headers to serve security related headers
-  add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;";
+  add_header Strict-Transport-Security &quot;max-age=15768000; includeSubDomains; preload;&quot;;
   add_header X-Content-Type-Options nosniff;
-  add_header X-Frame-Options "SAMEORIGIN";
-  add_header X-XSS-Protection "1; mode=block";
+  add_header X-Frame-Options &quot;SAMEORIGIN&quot;;
+  add_header X-XSS-Protection &quot;1; mode=block&quot;;
   add_header X-Robots-Tag none;
+  add_header X-Download-Options noopen;
+  add_header X-Permitted-Cross-Domain-Policies none;
 
   # Path to the root of your installation
   root /var/www/owncloud/;
@@ -231,11 +237,11 @@ server {
   error_page 403 /core/templates/403.php;
   error_page 404 /core/templates/404.php;
 
-  rewrite ^/.well-known/carddav /remote.php/carddav/ permanent;
-  rewrite ^/.well-known/caldav /remote.php/caldav/ permanent;
+  rewrite ^/.well-known/carddav /remote.php/dav/ permanent;
+  rewrite ^/.well-known/caldav /remote.php/dav/ permanent;
 
   # The following 2 rules are only needed for the user_webfinger app.
-  # Uncomment it if you're planning to use this app.
+  # Uncomment it if you&#39;re planning to use this app.
   #rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
   #rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
 
@@ -259,7 +265,7 @@ server {
 
     rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
 
-    try_files $uri $uri/ /index.php;
+    try_files $uri $uri/ =404;
   }
 
   location ~ \.php(?:$|/) {
@@ -276,22 +282,25 @@ server {
   # Adding the cache control header for js and css files
   # Make sure it is BELOW the location ~ \.php(?:$|/) { block
   location ~* \.(?:css|js)$ {
-    add_header Cache-Control "public, max-age=7200";
+    add_header Cache-Control &quot;public, max-age=7200&quot;;
     # Add headers to serve security related headers
-    add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;";
+    add_header Strict-Transport-Security &quot;max-age=15768000; includeSubDomains; preload;&quot;;
     add_header X-Content-Type-Options nosniff;
-    add_header X-Frame-Options "SAMEORIGIN";
-    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Frame-Options &quot;SAMEORIGIN&quot;;
+    add_header X-XSS-Protection &quot;1; mode=block&quot;;
     add_header X-Robots-Tag none;
-    # Optional: Don't log access to assets
+    add_header X-Download-Options noopen;
+    add_header X-Permitted-Cross-Domain-Policies none;
+    # Optional: Don&#39;t log access to assets
     access_log off;
   }
 
-  # Optional: Don't log access to other assets
+  # Optional: Don&#39;t log access to other assets
   location ~* \.(?:jpg|jpeg|gif|bmp|ico|png|swf)$ {
     access_log off;
   }
-}</pre>
+}
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -307,18 +316,19 @@ user&#8217;s logins and data in transit.</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">If you are using php-fpm please read <a class="reference internal" href="source_installation.html#php-fpm-tips-label"><em>php-fpm Configuration Notes</em></a></p>
+<p class="last">If you are using php-fpm please read <a class="reference internal" href="source_installation.html#php-fpm-tips-label"><span>php-fpm Configuration Notes</span></a></p>
 </div>
 <div class="section" id="suppressing-log-messages">
 <h2>Suppressing Log Messages<a class="headerlink" href="#suppressing-log-messages" title="Permalink to this headline">¶</a></h2>
 <p>If you&#8217;re seeing meaningless messages in your logfile, for example <a class="reference external" href="https://forum.owncloud.org/viewtopic.php?f=17&amp;t=20217">client
 denied by server configuration: /var/www/data/htaccesstest.txt</a>, add this section to
 your Nginx configuration to suppress them:</p>
-<div class="highlight-python"><pre>location = /data/htaccesstest.txt {
+<div class="highlight-python"><div class="highlight"><pre>location = /data/htaccesstest.txt {
   allow all;
   log_not_found off;
   access_log off;
-}</pre>
+}
+</pre></div>
 </div>
 </div>
 <div class="section" id="javascript-js-or-css-css-files-not-served-properly">
@@ -327,10 +337,12 @@ your Nginx configuration to suppress them:</p>
 or CSS (.css) files are not served properly leading to a 404 (File not found)
 error on those files and a broken webinterface.</p>
 <p>This could be caused by the:</p>
-<div class="highlight-python"><pre>location ~* \.(?:css|js)$ {</pre>
+<div class="highlight-python"><div class="highlight"><pre>location ~* \.(?:css|js)$ {
+</pre></div>
 </div>
 <p>block shown above not located <strong>below</strong> the:</p>
-<div class="highlight-python"><pre>location ~ \.php(?:$|/) {</pre>
+<div class="highlight-python"><div class="highlight"><pre>location ~ \.php(?:$|/) {
+</pre></div>
 </div>
 <p>block. Other custom configurations like caching JavaScript (.js)
 or CSS (.css) files via gzip could also cause such issues.</p>

@@ -4,7 +4,7 @@
  * @author Clark Tomlinson <fallen013@gmail.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -131,7 +131,8 @@ class Application extends \OCP\AppFramework\App {
 				$server = $c->getServer();
 				return new Crypt($server->getLogger(),
 					$server->getUserSession(),
-					$server->getConfig());
+					$server->getConfig(),
+					$server->getL10N($c->getAppName()));
 			});
 
 		$container->registerService('Session',
@@ -201,7 +202,8 @@ class Application extends \OCP\AppFramework\App {
 				$c->query('KeyManager'),
 				$c->query('Crypt'),
 				$c->query('Session'),
-				$server->getSession()
+				$server->getSession(),
+				$c->query('Util')
 			);
 		});
 

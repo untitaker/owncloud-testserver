@@ -1,8 +1,8 @@
 OC.L10N.register(
     "firstrunwizard",
     {
-    "Welcome to %s" : "Bienvenido a %s",
-    "Your personal web services. All your files, contacts, calendar and more, in one place." : "Sus servicios web personales. Todos sus archivos, contactos, calendario y más en un único lugar.",
+    "A safe home for all your data" : "Un lugar seguro para todos sus datos",
+    "Access & share your files, calendars, contacts, mail & more from any device, on your terms" : "Acceda y comparta sus archivos, calendarios, contactos, mail y más desde cualquier dispositivo, en sus términos",
     "Get the apps to sync your files" : "Obtenga las apps para sincronizar sus archivos",
     "Desktop client" : "Cliente de escritorio",
     "Android app" : "Aplicación de Android",
@@ -13,6 +13,6 @@ OC.L10N.register(
     "Documentation" : "Documentación",
     "Access files via WebDAV" : "Acceda a sus archivos vía WebDAV",
     "There’s more information in the <a target=\"_blank\" href=\"%s\">documentation</a> and on our <a target=\"_blank\" href=\"http://owncloud.org\">website</a>." : "Hay más información en la <a target=\"_blank\" href=\"%s\">documentación</a> y en nuestro  <a target=\"_blank\" href=\"http://owncloud.org\">sitio web</a>.",
-    "If you like ownCloud,\n\t<a href=\"mailto:?subject=ownCloud\n\t\t&body=ownCloud is a great open software to sync and share your files. \n\t\tYou can freely get it from http://owncloud.org\">\n\t\trecommend it to your friends</a>\n\tand <a href=\"http://owncloud.org/promote\"\n\t\ttarget=\"_blank\">spread the word</a>!" : "Si le gusta ownCloud,\n\t<a href=\"mailto:?subject=ownCloud\n\t\t&body=ownCloud es una gran software para sincronizar y compartir sus archivos. \n\t\tPuede descargarlo gratis de http://owncloud.org\">\n\t\t¡recomiéndeselo a sus amigos</a>\n\ty <a href=\"http://owncloud.org/promote\"\n\t\ttarget=\"_blank\">corra la voz</a>!"
+    "If you like ownCloud,\n\t<a href=\"mailto:?subject=ownCloud\n\t\t&body=ownCloud is a great open software to sync and share your files.\n\t\tYou can freely get it from http://owncloud.org\">\n\t\trecommend it to your friends</a>\n\tand <a href=\"http://owncloud.org/promote\"\n\t\ttarget=\"_blank\">spread the word</a>!" : "Si le gusta ownCloud,\n\t<a href=\"mailto:?subject=ownCloud\n\t\t&body=ownCloud es un fantástico software de código abierto para sincronizar y compartir sus archivos.\n\t\tPuede obtenerlo gratuitamente desde http://owncloud.org\">\n\t\trecomiéndeselo a sus amigos</a>\n\ty <a href=\"http://owncloud.org/promote\"\n\t\ttarget=\"_blank\">difunda la palabra</a>!"
 },
 "nplurals=2; plural=(n != 1);");

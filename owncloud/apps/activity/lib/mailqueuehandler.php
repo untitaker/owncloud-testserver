@@ -1,28 +1,27 @@
 <?php
-
 /**
- * ownCloud - Activity App
+ * @author Joas Schilling <nickvergessen@owncloud.com>
  *
- * @author Joas Schilling
- * @copyright 2014 Joas Schilling nickvergessen@owncloud.com
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @license AGPL-3.0
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or any later version.
+ * This code is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License, version 3,
+ * as published by the Free Software Foundation.
  *
- * This library is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Affero General Public License, version 3,
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
 
 namespace OCA\Activity;
 
+use OCP\Activity\IManager;
 use OCP\Defaults;
 use OCP\IDateTimeFormatter;
 use OCP\IDBConnection;
@@ -70,6 +69,9 @@ class MailQueueHandler {
 	/** @var IUserManager */
 	protected $userManager;
 
+	/** @var IManager */
+	protected $activityManager;
+
 	/**
 	 * Constructor
 	 *
@@ -79,19 +81,22 @@ class MailQueueHandler {
 	 * @param IMailer $mailer
 	 * @param IURLGenerator $urlGenerator
 	 * @param IUserManager $userManager
+	 * @param IManager $activityManager
 	 */
 	public function __construct(IDateTimeFormatter $dateFormatter,
 								IDBConnection $connection,
 								DataHelper $dataHelper,
 								IMailer $mailer,
 								IURLGenerator $urlGenerator,
-								IUserManager $userManager) {
+								IUserManager $userManager,
+								IManager $activityManager) {
 		$this->dateFormatter = $dateFormatter;
 		$this->connection = $connection;
 		$this->dataHelper = $dataHelper;
 		$this->mailer = $mailer;
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
+		$this->activityManager = $activityManager;
 	}
 
 	/**
@@ -214,11 +219,18 @@ class MailQueueHandler {
 		list($mailData, $skippedCount) = $this->getItemsForUser($userName, $maxTime);
 
 		$l = $this->getLanguage($lang);
+		$parser = new PlainTextParser($l);
 		$this->dataHelper->setUser($userName);
 		$this->dataHelper->setL10n($l);
 
 		$activityList = array();
 		foreach ($mailData as $activity) {
+			$event = $this->activityManager->generateEvent();
+			$event->setApp($activity['amq_appid'])
+				->setType($activity['amq_type'])
+				->setTimestamp($activity['amq_timestamp'])
+				->setSubject($activity['amq_subject'], []);
+
 			$relativeDateTime = $this->dateFormatter->formatDateTimeRelativeDay(
 				$activity['amq_timestamp'],
 				'long', 'medium',
@@ -226,8 +238,10 @@ class MailQueueHandler {
 			);
 
 			$activityList[] = array(
-				$this->dataHelper->translation(
-					$activity['amq_appid'], $activity['amq_subject'], $this->dataHelper->getParameters($activity['amq_subjectparams'])
+				$parser->parseMessage(
+					$this->dataHelper->translation(
+						$activity['amq_appid'], $activity['amq_subject'], $this->dataHelper->getParameters($event, 'subject', $activity['amq_subjectparams'])
+					)
 				),
 				$relativeDateTime,
 			);

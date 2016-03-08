@@ -117,31 +117,6 @@ class PreviewService extends Service {
 	}
 
 	/**
-	 * Makes sure we return previews of the asked dimensions and fix the cache
-	 * if necessary
-	 *
-	 * @param bool $square
-	 * @param bool $base64Encode
-	 *
-	 * @return \OC_Image|string
-	 * @throws InternalServerErrorServiceException
-	 */
-	public function previewValidator($square, $base64Encode) {
-		try {
-			$preview = $this->previewManager->previewValidator($square);
-			if ($base64Encode) {
-				$preview = $this->encode($preview);
-			}
-
-			return $preview;
-		} catch (\Exception $exception) {
-			throw new InternalServerErrorServiceException(
-				'There was an error while trying to fix the preview'
-			);
-		}
-	}
-
-	/**
 	 * Returns true if the passed mime type is supported
 	 *
 	 * In case of a failure, we just return that the media type is not supported
@@ -213,16 +188,20 @@ class PreviewService extends Service {
 		$count = 0;
 		try {
 			$fileHandle = $file->fopen('rb');
-			while (!feof($fileHandle) && $count < 2) {
-				$chunk = fread($fileHandle, 1024 * 100); //read 100kb at a time
-				$count += preg_match_all(
-					'#\x00\x21\xF9\x04.{4}\x00(\x2C|\x21)#s', $chunk, $matches
-				);
+			if ($fileHandle) {
+				while (!feof($fileHandle) && $count < 2) {
+					$chunk = fread($fileHandle, 1024 * 100); //read 100kb at a time
+					$count += preg_match_all(
+						'#\x00\x21\xF9\x04.{4}\x00(\x2C|\x21)#s', $chunk, $matches
+					);
+				}
+				fclose($fileHandle);
+			} else {
+				throw new \Exception();
 			}
-			fclose($fileHandle);
 		} catch (\Exception $exception) {
 			throw new InternalServerErrorServiceException(
-				'Something went wrong when trying to read a GIF file'
+				'Something went wrong when trying to read' . $file->getPath()
 			);
 		}
 

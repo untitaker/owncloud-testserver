@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Configuring External Storage (Configuration File) &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Configuring External Storage (Configuration File) &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="File Sharing and Management" href="index.html" />
     <link rel="next" title="External Storage Authentication mechanisms" href="external_storage/auth_mechanisms.html" />
     <link rel="prev" title="WebDAV" href="external_storage/webdav.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,15 +113,15 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">File Sharing and Management</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="file_sharing_configuration.html">File Sharing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="federated_cloud_sharing_configuration.html">Configuring Federated Cloud Sharing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="federated_cloud_sharing_configuration.html">Configuring Federation Sharing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="big_file_upload_configuration.html">Uploading big files &gt; 512MB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="collaborative_documents_configuration.html">Configuring the Collaborative Documents App</a></li>
 <li class="toctree-l2"><a class="reference internal" href="default_files_configuration.html">Providing Default Files</a></li>
@@ -156,6 +155,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -171,7 +172,7 @@
   <div class="section" id="configuring-external-storage-configuration-file">
 <h1>Configuring External Storage (Configuration File)<a class="headerlink" href="#configuring-external-storage-configuration-file" title="Permalink to this headline">¶</a></h1>
 <p>You may configure external storage mounts by creating and editing the
-<tt class="file docutils literal"><span class="pre">data/mount.json</span></tt>. This file contains all settings in JSON (JavaScript
+<code class="file docutils literal"><span class="pre">data/mount.json</span></code>. This file contains all settings in JSON (JavaScript
 Object Notation) format. At the moment two different types of entries exist:</p>
 <ul class="simple">
 <li><strong>Group mounts:</strong> each entry configures a mount for each user in group.</li>
@@ -196,10 +197,10 @@ available for use:</p>
 <li><a class="reference external" href="http://openstack.org/projects/storage/">OpenStack Swift</a></li>
 </ul>
 <p>You need to enable the <cite>External storage support</cite> app first. You can
-do this on the Apps page of your ownCloud Web GUI, or use the <tt class="docutils literal"><span class="pre">occ</span></tt> command.
+do this on the Apps page of your ownCloud Web GUI, or use the <code class="docutils literal"><span class="pre">occ</span></code> command.
 This example shows how to list apps, and how to enable the <cite>External storage
 support</cite> app on Debian Linux and its derivatives:</p>
-<div class="highlight-python"><pre>$ sudo -u www-data php occ app:list
+<div class="highlight-python"><div class="highlight"><pre>$ sudo -u www-data php occ app:list
 Enabled:
  [snip]
 Disabled:
@@ -207,13 +208,14 @@ Disabled:
  [snip]
 
  $ sudo -u www-data php occ app:enable files_external
- files_external enabled</pre>
+ files_external enabled
+</pre></div>
 </div>
-<p>See <a class="reference internal" href="../configuration_server/occ_command.html"><em>Using the occ Command</em></a> to learn more about <tt class="docutils literal"><span class="pre">occ</span></tt>.</p>
+<p>See <a class="reference internal" href="../configuration_server/occ_command.html"><em>Using the occ Command</em></a> to learn more about <code class="docutils literal"><span class="pre">occ</span></code>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">A non-blocking or correctly configured SELinux setup is needed
-for these backends to work. Please refer to the <a class="reference internal" href="../installation/selinux_configuration.html#selinux-config-label"><em>SELinux Configuration</em></a>.</p>
+for these backends to work. Please refer to the <a class="reference internal" href="../installation/selinux_configuration.html#selinux-config-label"><span>SELinux Configuration</span></a>.</p>
 </div>
 <p>It is recommended to use the <a class="reference internal" href="external_storage_configuration_gui.html"><em>Web-GUI</em></a> in the
 administrator panel to add, remove or modify mount options to prevent any problems!</p>
@@ -225,54 +227,55 @@ blogpost for more information.</p>
 </div>
 <div class="section" id="adding-files-to-external-storages">
 <h2>Adding files to external storages<a class="headerlink" href="#adding-files-to-external-storages" title="Permalink to this headline">¶</a></h2>
-<p>In general it is recommended to configure the background job <tt class="docutils literal"><span class="pre">Webcron</span></tt> or
-<tt class="docutils literal"><span class="pre">Cron</span></tt> as described in <a class="reference internal" href="../configuration_server/background_jobs_configuration.html"><em>Defining Background Jobs</em></a>
+<p>In general it is recommended to configure the background job <code class="docutils literal"><span class="pre">Webcron</span></code> or
+<code class="docutils literal"><span class="pre">Cron</span></code> as described in <a class="reference internal" href="../configuration_server/background_jobs_configuration.html"><em>Defining Background Jobs</em></a>
 so ownCloud is able to detect files added to your external storages without the need
 for a user to be browsing your ownCloud installation.</p>
 <p>Please also be aware that ownCloud might not always be able to find out what has been
 changed remotely (files changed without going through ownCloud), especially
 when it&#8217;s very deep in the folder hierarchy of the external storage.</p>
-<p>You might need to setup a cron job that runs <tt class="docutils literal"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">www-data</span> <span class="pre">php</span> <span class="pre">occ</span>
-<span class="pre">files:scan</span> <span class="pre">--all</span></tt> (or replace &#8220;&#8211;all&#8221; with the user name, see also
+<p>You might need to setup a cron job that runs <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">www-data</span> <span class="pre">php</span> <span class="pre">occ</span>
+<span class="pre">files:scan</span> <span class="pre">--all</span></code> (or replace &#8220;&#8211;all&#8221; with the user name, see also
 <a class="reference internal" href="../configuration_server/occ_command.html"><em>Using the occ Command</em></a>) to trigger a rescan of the user&#8217;s
 files periodically (for example every 15 minutes), which includes the mounted
 external storage.</p>
 </div>
 <div class="section" id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-json"><pre>{
-  "group":{
-    "admin":{
-        "\/$user\/files\/Admin_Stuff":{
-            "class":"\\OC\\Files\\Storage\\Local",
-            "options":{ ... },
-            "priority":150
-        }
-     }
-  },
-  "user":{
-    "all":{
-        "\/$user\/files\/Pictures":{
-            "class":"\\OC\\Files\\Storage\\DAV",
-            "options":{ ... },
-            "priority":100
-        }
-     },
-    "someuser":{
-        "\/someuser\/files\/Music":{
-            "class":"\\OC\\Files\\Storage\\FTP",
-            "options":{ ... },
-            "priority":100
-        }
-     }
-  }
-}</pre>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span>
+  <span class="s2">&quot;group&quot;</span><span class="p">:{</span>
+    <span class="s2">&quot;admin&quot;</span><span class="p">:{</span>
+        <span class="s2">&quot;\/$user\/files\/Admin_Stuff&quot;</span><span class="p">:{</span>
+            <span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">OC</span><span class="se">\\</span><span class="s2">Files</span><span class="se">\\</span><span class="s2">Storage</span><span class="se">\\</span><span class="s2">Local&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;options&quot;</span><span class="p">:{</span> <span class="o">...</span> <span class="p">},</span>
+            <span class="s2">&quot;priority&quot;</span><span class="p">:</span><span class="mi">150</span>
+        <span class="p">}</span>
+     <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;user&quot;</span><span class="p">:{</span>
+    <span class="s2">&quot;all&quot;</span><span class="p">:{</span>
+        <span class="s2">&quot;\/$user\/files\/Pictures&quot;</span><span class="p">:{</span>
+            <span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">OC</span><span class="se">\\</span><span class="s2">Files</span><span class="se">\\</span><span class="s2">Storage</span><span class="se">\\</span><span class="s2">DAV&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;options&quot;</span><span class="p">:{</span> <span class="o">...</span> <span class="p">},</span>
+            <span class="s2">&quot;priority&quot;</span><span class="p">:</span><span class="mi">100</span>
+        <span class="p">}</span>
+     <span class="p">},</span>
+    <span class="s2">&quot;someuser&quot;</span><span class="p">:{</span>
+        <span class="s2">&quot;\/someuser\/files\/Music&quot;</span><span class="p">:{</span>
+            <span class="s2">&quot;class&quot;</span><span class="p">:</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">OC</span><span class="se">\\</span><span class="s2">Files</span><span class="se">\\</span><span class="s2">Storage</span><span class="se">\\</span><span class="s2">FTP&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;options&quot;</span><span class="p">:{</span> <span class="o">...</span> <span class="p">},</span>
+            <span class="s2">&quot;priority&quot;</span><span class="p">:</span><span class="mi">100</span>
+        <span class="p">}</span>
+     <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
 </div>
 </div>
 <div class="section" id="priorities">
 <h2>Priorities<a class="headerlink" href="#priorities" title="Permalink to this headline">¶</a></h2>
 <p>An advanced feature is available, only configurable directly in
-<tt class="file docutils literal"><span class="pre">data/mount.json</span></tt>, which allows mount configurations to have an associated
+<code class="file docutils literal"><span class="pre">data/mount.json</span></code>, which allows mount configurations to have an associated
 priority. When two or more valid mount configurations exist for the same mount point,
 the one with the highest priority (defined by the largest number) will take precedence
 and become the active mount for the user.</p>
@@ -287,7 +290,7 @@ following order, with later mount types always overriding a previous mount type:
 <li>user -&gt; all : global mount configurations</li>
 <li>group : group mount configurations</li>
 <li>user (not all) : per-user mount configurations</li>
-<li><tt class="file docutils literal"><span class="pre">data/$user/mount.json</span></tt> : personal mount configurations</li>
+<li><code class="file docutils literal"><span class="pre">data/$user/mount.json</span></code> : personal mount configurations</li>
 </ul>
 </div>
 <div class="section" id="configuring-temporary-disk-space-needs">
@@ -301,8 +304,8 @@ cases, additional temporary space.</p>
 total transfer time of 6000s (1h 40min). The temporary space needed by ownCloud
 for this period of time is 30GB. Even though it is not mandatory, the location
 of the temp directory used by ownCloud can be configured manually. To do so,
-you need to maintain the <tt class="docutils literal"><span class="pre">tempdirectory</span></tt> parameter described in
-<tt class="docutils literal"><span class="pre">config.sample.php</span></tt></p>
+you need to maintain the <code class="docutils literal"><span class="pre">tempdirectory</span></code> parameter described in
+<code class="docutils literal"><span class="pre">config.sample.php</span></code></p>
 <p>As of writing, following external storage list uses temp files for up/download:</p>
 <ul class="simple">
 <li>FTP</li>
@@ -339,7 +342,7 @@ takes the following options:</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">You must ensure that the web server has sufficient permissions on the folder.</p>
+<p class="last">You must ensure that the Web server has sufficient permissions on the folder.</p>
 </div>
 </div>
 </div>
@@ -378,9 +381,9 @@ to ‘/’)</li>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The external storage <tt class="docutils literal"><span class="pre">FTP/FTPS/SFTP</span></tt> needs the <tt class="docutils literal"><span class="pre">allow_url_fopen</span></tt> PHP
-setting to be set to <tt class="docutils literal"><span class="pre">1</span></tt>. When having connection problems make sure that it is
-not set to <tt class="docutils literal"><span class="pre">0</span></tt> in your <tt class="docutils literal"><span class="pre">php.ini</span></tt>.</p>
+<p class="last">The external storage <code class="docutils literal"><span class="pre">FTP/FTPS/SFTP</span></code> needs the <code class="docutils literal"><span class="pre">allow_url_fopen</span></code> PHP
+setting to be set to <code class="docutils literal"><span class="pre">1</span></code>. When having connection problems make sure that it is
+not set to <code class="docutils literal"><span class="pre">0</span></code> in your <code class="docutils literal"><span class="pre">php.ini</span></code>.</p>
 </div>
 </div>
 </div>
@@ -416,9 +419,9 @@ to ‘/’)</li>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The external storage <tt class="docutils literal"><span class="pre">FTP/FTPS/SFTP</span></tt> needs the <tt class="docutils literal"><span class="pre">allow_url_fopen</span></tt> PHP
-setting to be set to <tt class="docutils literal"><span class="pre">1</span></tt>. When having connection problems make sure that it is
-not set to <tt class="docutils literal"><span class="pre">0</span></tt> in your <tt class="docutils literal"><span class="pre">php.ini</span></tt>.</p>
+<p class="last">The external storage <code class="docutils literal"><span class="pre">FTP/FTPS/SFTP</span></code> needs the <code class="docutils literal"><span class="pre">allow_url_fopen</span></code> PHP
+setting to be set to <code class="docutils literal"><span class="pre">1</span></code>. When having connection problems make sure that it is
+not set to <code class="docutils literal"><span class="pre">0</span></code> in your <code class="docutils literal"><span class="pre">php.ini</span></code>.</p>
 </div>
 </div>
 </div>
@@ -426,16 +429,16 @@ not set to <tt class="docutils literal"><span class="pre">0</span></tt> in your 
 <h3>SMB<a class="headerlink" href="#smb" title="Permalink to this headline">¶</a></h3>
 <p>The SMB backend mounts a folder on a remote Samba server, a NAS appliance or
 a Windows machine into the virtual file system. This requires
-<tt class="docutils literal"><span class="pre">php5-libsmbclient</span></tt> (<a class="reference external" href="https://software.opensuse.org/download.html?project=isv%3AownCloud%3Acommunity%3A8.1&amp;package=php5-libsmbclient">installation instructions</a>). It is part of the ‘External
-storage support’ app, the class to be used is <strong>\OC\Files\Storage\SMB</strong> and
-takes the following options:</p>
+<code class="docutils literal"><span class="pre">php5-libsmbclient</span></code> (<a class="reference external" href="https://download.owncloud.org/download/repositories/stable/owncloud/">installation instructions</a>).
+It is part of the ‘External storage support’ app, the class to be used
+is <strong>\OC\Files\Storage\SMB</strong> and takes the following options:</p>
 <ul class="simple">
 <li><strong>host</strong>: the host name of the samba server</li>
 <li><strong>user</strong>: the username or domain/username to login to the samba server</li>
 <li><strong>password</strong>: the password to login to the samba server</li>
 <li><strong>share</strong>: the share on the samba server to mount</li>
 <li><strong>root</strong>: the remote subfolder inside the samba share to mount (optional, defaults
-to ‘/’). To assign the ownCloud logon username automatically to the subfolder, use <tt class="docutils literal"><span class="pre">$user</span></tt> instead of a particular subfolder name.</li>
+to ‘/’). To assign the ownCloud logon username automatically to the subfolder, use <code class="docutils literal"><span class="pre">$user</span></code> instead of a particular subfolder name.</li>
 </ul>
 <div class="section" id="id4">
 <h4>Example<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
@@ -630,7 +633,7 @@ implementations:</p>
 <ol class="arabic simple">
 <li><strong>Login with ownCloud credentials</strong></li>
 </ol>
-<p>When a mountpoint has this option, for example <tt class="docutils literal"><span class="pre">SMB</span> <span class="pre">/</span> <span class="pre">CIFS</span> <span class="pre">using</span> <span class="pre">OC</span> <span class="pre">login</span></tt>,
+<p>When a mountpoint has this option, for example <code class="docutils literal"><span class="pre">SMB</span> <span class="pre">/</span> <span class="pre">CIFS</span> <span class="pre">using</span> <span class="pre">OC</span> <span class="pre">login</span></code>,
 the password will be intercepted when a user logs in and written to the PHP
 session (which is a file on the filesystem), and written encrypted into the
 session with a key from the configuration file. Every time that password is
@@ -638,18 +641,18 @@ required ownCloud reads it from the PHP session file.</p>
 <p>When you use this option, features such as sharing will not work properly from
 that mountpoint when the user is not logged-in.</p>
 <p>Depending on the implementation of the application, this means that the password
-could get leaked in the <tt class="docutils literal"><span class="pre">ps</span></tt> output, as we use <tt class="docutils literal"><span class="pre">smbclient</span></tt> for SMB storage
+could get leaked in the <code class="docutils literal"><span class="pre">ps</span></code> output, as we use <code class="docutils literal"><span class="pre">smbclient</span></code> for SMB storage
 access in the community version. There is a <a class="reference external" href="https://github.com/owncloud/core/issues/6092">bug report on this</a>. Consequently, we&#8217;re currently
 evaluating an alternative approach accessing the library directly, and thus not
 leaking the password anymore. This is already implemented in the Enterprise
 Edition in our Windows Network Drive application, and it will get into the
-community version once we have streamlined the code of the <tt class="docutils literal"><span class="pre">files_external</span></tt>
+community version once we have streamlined the code of the <code class="docutils literal"><span class="pre">files_external</span></code>
 application a little bit more.</p>
 <ol class="arabic simple" start="2">
 <li><strong>Stored credentials</strong></li>
 </ol>
-<p>When you enter credentials into the <tt class="docutils literal"><span class="pre">files_external</span></tt> dialog those are stored
-on the filesystem and encrypted with a key stored in <tt class="docutils literal"><span class="pre">config.php</span></tt>. This is
+<p>When you enter credentials into the <code class="docutils literal"><span class="pre">files_external</span></code> dialog those are stored
+on the filesystem and encrypted with a key stored in <code class="docutils literal"><span class="pre">config.php</span></code>. This is
 required since ownCloud needs access to those files and shares even when the
 user is not logged-in to have sharing and other key features properly working.</p>
 <p>To sum up:</p>

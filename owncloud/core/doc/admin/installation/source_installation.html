@@ -1,4 +1,3 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -7,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Manual Installation on Linux &mdash; ownCloud 8.2 Server Administration Manual 8.2 documentation</title>
+    <title>Manual Installation on Linux &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/style.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -17,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '8.2',
+        VERSION:     '9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +26,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/bootstrap.js"></script>
-    <link rel="top" title="ownCloud 8.2 Server Administration Manual 8.2 documentation" href="../index.html" />
+    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
     <link rel="up" title="Installation" href="index.html" />
     <link rel="next" title="ownCloud Community Appliance" href="appliance_installation.html" />
     <link rel="prev" title="Installing and Managing Apps" href="apps_management_installation.html" />
@@ -93,13 +92,13 @@
 </script>
 
   </head>
-  <body>
+  <body role="document">
   
 
 <div class="container">
   <div class="content">
     <div class="page-header">
-      <h1><a href="../contents.html">ownCloud 8.2 Server Administration Manual</a></h1>
+      <h1><a href="../contents.html">ownCloud 9.0 Server Administration Manual</a></h1>
 
     </div>
     
@@ -114,11 +113,12 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 8.2 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 8.2 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 8.2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="system_requirements.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_recommendations.html">ownCloud Deployment Recommendations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Linux Installation Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="command_line_installation.html">Installing ownCloud From the Command Line</a></li>
@@ -163,6 +163,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../enterprise_files_drop/index.html">Enabling Anonymous Uploads with Files Drop (ES Only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
 </ul>
 
 								</ul>
@@ -192,31 +194,33 @@ LAMP stack (Linux, Apache, MySQL/MariaDB, PHP). This document provides a
 complete walk-through for installing ownCloud on Ubuntu 14.04 LTS Server with
 Apache and MariaDB, using <a class="reference external" href="https://owncloud.org/install/">the ownCloud .tar archive</a>.</p>
 <ul class="simple">
-<li><a class="reference internal" href="#prerequisites-label"><em>Prerequisites</em></a></li>
-<li><a class="reference internal" href="#ubuntu-installation-label"><em>Example Installation on Ubuntu 14.04 LTS Server</em></a></li>
-<li><a class="reference internal" href="#apache-configuration-label"><em>Apache Web Server Configuration</em></a></li>
-<li><a class="reference internal" href="#enabling-ssl-label"><em>Enabling SSL</em></a></li>
-<li><a class="reference internal" href="#installation-wizard-label"><em>Installation Wizard</em></a></li>
-<li><a class="reference internal" href="#strong-permissions-label"><em>Setting Strong Directory Permissions</em></a></li>
-<li><a class="reference internal" href="#selinux-tips-label"><em>SELinux Configuration Tips</em></a></li>
-<li><a class="reference internal" href="#php-ini-tips-label"><em>php.ini Configuration Notes</em></a></li>
-<li><a class="reference internal" href="#php-fpm-tips-label"><em>php-fpm Configuration Notes</em></a></li>
-<li><a class="reference internal" href="#other-http-servers-label"><em>Other Web Servers</em></a></li>
+<li><a class="reference internal" href="#prerequisites-label"><span>Prerequisites</span></a></li>
+<li><a class="reference internal" href="#ubuntu-installation-label"><span>Example Installation on Ubuntu 14.04 LTS Server</span></a></li>
+<li><a class="reference internal" href="#apache-configuration-label"><span>Apache Web Server Configuration</span></a></li>
+<li><a class="reference internal" href="#enabling-ssl-label"><span>Enabling SSL</span></a></li>
+<li><a class="reference internal" href="#installation-wizard-label"><span>Installation Wizard</span></a></li>
+<li><a class="reference internal" href="installation_wizard.html#strong-perms-label"><span>Setting Strong Directory Permissions</span></a></li>
+<li><a class="reference internal" href="#selinux-tips-label"><span>SELinux Configuration Tips</span></a></li>
+<li><a class="reference internal" href="#php-ini-tips-label"><span>php.ini Configuration Notes</span></a></li>
+<li><a class="reference internal" href="#php-fpm-tips-label"><span>php-fpm Configuration Notes</span></a></li>
+<li><a class="reference internal" href="#other-http-servers-label"><span>Other Web Servers</span></a></li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Admins of SELinux-enabled distributions such as CentOS, Fedora, and
 Red Hat Enterprise Linux may need to set new rules to enable installing
-ownCloud. See <a class="reference internal" href="#selinux-tips-label"><em>SELinux Configuration Tips</em></a> for a suggested configuration.</p>
+ownCloud. See <a class="reference internal" href="#selinux-tips-label"><span>SELinux Configuration Tips</span></a> for a suggested configuration.</p>
 </div>
 <div class="section" id="prerequisites">
 <span id="prerequisites-label"></span><h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <p>The ownCloud .tar archive contains all of the required PHP modules. This section
 lists all required and optional PHP modules.  Consult the <a class="reference external" href="http://php.net/manual/en/extensions.php">PHP manual</a> for more information on modules.
-Your Linux distribution should have packages for all required modules.</p>
+Your Linux distribution should have packages for all required modules. You can
+check the precense of a module by typing <code class="docutils literal"><span class="pre">php</span> <span class="pre">-m</span> <span class="pre">|</span> <span class="pre">grep</span> <span class="pre">-i</span> <span class="pre">&lt;module_name&gt;</span></code>.
+If you get a result, the module is present.</p>
 <p>Required:</p>
 <ul class="simple">
-<li>php5 (&gt;= 5.5)</li>
+<li>php5 (&gt;= 5.4)</li>
 <li>PHP module ctype</li>
 <li>PHP module dom</li>
 <li>PHP module GD</li>
@@ -250,7 +254,8 @@ of non-ASCII characters)</li>
 <p>Required for specific apps:</p>
 <ul class="simple">
 <li>PHP module ldap (for LDAP integration)</li>
-<li><a class="reference external" href="https://software.opensuse.org/download.html?project=isv%3AownCloud%3Acommunity%3A8.1&amp;package=php5-libsmbclient">php5-libsmbclient</a> (SMB/CIFS integration)</li>
+<li><a class="reference external" href="https://download.owncloud.org/download/repositories/stable/owncloud/">php5-libsmbclient</a>
+(SMB/CIFS integration)</li>
 <li>PHP module ftp (for FTP storage / external user authentication)</li>
 <li>PHP module imap (for external user authentication)</li>
 </ul>
@@ -275,31 +280,36 @@ and configure a memcache.</p>
 <li>avconv or ffmpeg</li>
 <li>OpenOffice or LibreOffice</li>
 </ul>
+<p>For command line processing (<em>optional</em>):</p>
+<ul class="simple">
+<li>PHP module pcntl (enables command interruption by pressing <code class="docutils literal"><span class="pre">ctrl-c</span></code>)</li>
+</ul>
 <p>You don’t need the WebDAV module for your Web server (i.e. Apache’s
-<tt class="docutils literal"><span class="pre">mod_webdav</span></tt>), as ownCloud has a built-in WebDAV server of its own, SabreDAV.
-If <tt class="docutils literal"><span class="pre">mod_webdav</span></tt> is enabled you must disable it for ownCloud. (See
-<a class="reference internal" href="#apache-configuration-label"><em>Apache Web Server Configuration</em></a> for an example configuration.)</p>
+<code class="docutils literal"><span class="pre">mod_webdav</span></code>), as ownCloud has a built-in WebDAV server of its own, SabreDAV.
+If <code class="docutils literal"><span class="pre">mod_webdav</span></code> is enabled you must disable it for ownCloud. (See
+<a class="reference internal" href="#apache-configuration-label"><span>Apache Web Server Configuration</span></a> for an example configuration.)</p>
 </div>
 <div class="section" id="example-installation-on-ubuntu-14-04-lts-server">
 <span id="ubuntu-installation-label"></span><h2>Example Installation on Ubuntu 14.04 LTS Server<a class="headerlink" href="#example-installation-on-ubuntu-14-04-lts-server" title="Permalink to this headline">¶</a></h2>
 <p>On a machine running a pristine Ubuntu 14.04 LTS server, install the
 required and recommended modules for a typical ownCloud installation, using
 Apache and MariaDB, by issuing the following commands in a terminal:</p>
-<div class="highlight-python"><pre>apt-get install apache2 mariadb-server libapache2-mod-php5
+<div class="highlight-python"><div class="highlight"><pre>apt-get install apache2 mariadb-server libapache2-mod-php5
 apt-get install php5-gd php5-json php5-mysql php5-curl
-apt-get install php5-intl php5-mcrypt php5-imagick</pre>
+apt-get install php5-intl php5-mcrypt php5-imagick
+</pre></div>
 </div>
 <ul class="simple">
 <li>This installs the packages for the ownCloud core system. If you are planning
 on running additional apps, keep in mind that they might require additional
-packages.  See <a class="reference internal" href="#prerequisites-label"><em>Prerequisites</em></a> for details.</li>
+packages.  See <a class="reference internal" href="#prerequisites-label"><span>Prerequisites</span></a> for details.</li>
 <li>At the installation of the MySQL/MariaDB server, you will be prompted to
 create a root password. Be sure to remember your password as you will need it
 during ownCloud database setup.</li>
 </ul>
 <p>Now download the archive of the latest ownCloud version:</p>
 <ul>
-<li><p class="first">Go to the <a class="reference external" href="http://owncloud.org/install">ownCloud Download Page</a>.</p>
+<li><p class="first">Go to the <a class="reference external" href="https://owncloud.org/install">ownCloud Download Page</a>.</p>
 </li>
 <li><p class="first">Go to <strong>Download ownCloud Server &gt; Download &gt; Archive file for
 server owners</strong> and download either the tar.bz2 or .zip archive.</p>
@@ -311,49 +321,53 @@ server owners</strong> and download either the tar.bz2 or .zip archive.</p>
 or owncloud-x.y.z.tar.bz2.sha256.</p>
 </li>
 <li><p class="first">Verify the MD5 or SHA256 sum:</p>
-<div class="highlight-python"><pre>md5sum -c owncloud-x.y.z.tar.bz2.md5 &lt; owncloud-x.y.z.tar.bz2
+<div class="highlight-python"><div class="highlight"><pre>md5sum -c owncloud-x.y.z.tar.bz2.md5 &lt; owncloud-x.y.z.tar.bz2
 sha256sum -c owncloud-x.y.z.tar.bz2.sha256 &lt; owncloud-x.y.z.tar.bz2
 md5sum  -c owncloud-x.y.z.zip.md5 &lt; owncloud-x.y.z.zip
-sha256sum  -c owncloud-x.y.z.zip.sha256 &lt; owncloud-x.y.z.zip</pre>
+sha256sum  -c owncloud-x.y.z.zip.sha256 &lt; owncloud-x.y.z.zip
+</pre></div>
 </div>
 </li>
 <li><p class="first">You may also verify the PGP signature:</p>
-<div class="highlight-python"><pre>wget https://download.owncloud.org/community/owncloud-x.y.z.tar.bz2.asc
-wget https://www.owncloud.org/owncloud.asc
+<div class="highlight-python"><div class="highlight"><pre>wget https://download.owncloud.org/community/owncloud-x.y.z.tar.bz2.asc
+wget https://owncloud.org/owncloud.asc
 gpg --import owncloud.asc
-gpg --verify owncloud-x.y.z.tar.bz2.asc owncloud-x.y.z.tar.bz2</pre>
+gpg --verify owncloud-x.y.z.tar.bz2.asc owncloud-x.y.z.tar.bz2
+</pre></div>
 </div>
 </li>
 <li><p class="first">Now you can extract the archive contents. Run the appropriate unpacking
 command for your archive type:</p>
-<div class="highlight-python"><pre>tar -xjf owncloud-x.y.z.tar.bz2
-unzip owncloud-x.y.z.zip</pre>
+<div class="highlight-python"><div class="highlight"><pre>tar -xjf owncloud-x.y.z.tar.bz2
+unzip owncloud-x.y.z.zip
+</pre></div>
 </div>
 </li>
-<li><p class="first">This unpacks to a single <tt class="docutils literal"><span class="pre">owncloud</span></tt> directory. Copy the ownCloud directory
+<li><p class="first">This unpacks to a single <code class="docutils literal"><span class="pre">owncloud</span></code> directory. Copy the ownCloud directory
 to its final destination. When you are running the Apache HTTP server you may
 safely install ownCloud in your Apache document root:</p>
-<div class="highlight-python"><pre>cp -r owncloud /path/to/webserver/document-root</pre>
+<div class="highlight-python"><div class="highlight"><pre>cp -r owncloud /path/to/webserver/document-root
+</pre></div>
 </div>
-<p>where <tt class="docutils literal"><span class="pre">/path/to/webserver/document-root</span></tt> is replaced by the
-document root of your Web server. On Ubuntu systems this
-<tt class="docutils literal"><span class="pre">/var/www/html/owncloud</span></tt>, so your copying command is:</p>
-<div class="highlight-python"><pre>cp -r owncloud /var/www/html</pre>
+<p>where <code class="docutils literal"><span class="pre">/path/to/webserver/document-root</span></code> is replaced by the
+document root of your Web server:</p>
+<div class="highlight-python"><div class="highlight"><pre>cp -r owncloud /var/www
+</pre></div>
 </div>
 </li>
 </ul>
 <p>On other HTTP servers it is recommended to install ownCloud outside of the
 document root.</p>
-<blockquote>
-<div></div></blockquote>
 </div>
 <div class="section" id="apache-web-server-configuration">
 <span id="apache-configuration-label"></span><h2>Apache Web Server Configuration<a class="headerlink" href="#apache-web-server-configuration" title="Permalink to this headline">¶</a></h2>
 <p>On Debian, Ubuntu, and their derivatives, Apache installs with a useful
 configuration so all you have to do is create a
-<tt class="file docutils literal"><span class="pre">/etc/apache2/sites-available/owncloud.conf</span></tt> file with these lines in
+<code class="file docutils literal"><span class="pre">/etc/apache2/sites-available/owncloud.conf</span></code> file with these lines in
 it, replacing the <strong>Directory</strong> and other filepaths with your own filepaths:</p>
-<div class="highlight-xml"><pre>&lt;Directory /var/www/html/owncloud/&gt;
+<div class="highlight-python"><div class="highlight"><pre>Alias /owncloud &quot;/var/www/owncloud/&quot;
+
+&lt;Directory /var/www/owncloud/&gt;
   Options +FollowSymlinks
   AllowOverride All
 
@@ -361,44 +375,44 @@ it, replacing the <strong>Directory</strong> and other filepaths with your own f
   Dav off
  &lt;/IfModule&gt;
 
- SetEnv HOME /var/www/html/owncloud
- SetEnv HTTP_HOME /var/www/html/owncloud
+ SetEnv HOME /var/www/owncloud
+ SetEnv HTTP_HOME /var/www/owncloud
 
-&lt;/Directory&gt;</pre>
+&lt;/Directory&gt;
+</pre></div>
 </div>
-<p>If you install ownCloud outside of Apache&#8217;s DocumentRoot, then you must add an
-<strong>Alias</strong> directive at the top of the file. In this example ownCloud is installed in
-<tt class="docutils literal"><span class="pre">/var/www/owncloud</span></tt>:</p>
-<div class="highlight-python"><pre>Alias /owncloud "/var/www/owncloud/"</pre>
-</div>
-<p>Then create a symlink to <tt class="file docutils literal"><span class="pre">/etc/apache2/sites-enabled</span></tt>:</p>
+<p>Then create a symlink to <code class="file docutils literal"><span class="pre">/etc/apache2/sites-enabled</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ln</span> <span class="o">-</span><span class="n">s</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apache2</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">available</span><span class="o">/</span><span class="n">owncloud</span><span class="o">.</span><span class="n">conf</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">apache2</span><span class="o">/</span><span class="n">sites</span><span class="o">-</span><span class="n">enabled</span><span class="o">/</span><span class="n">owncloud</span><span class="o">.</span><span class="n">conf</span>
 </pre></div>
 </div>
 <div class="section" id="additional-apache-configurations">
 <h3>Additional Apache Configurations<a class="headerlink" href="#additional-apache-configurations" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">For ownCloud to work correctly, we need the module <tt class="docutils literal"><span class="pre">mod_rewrite</span></tt>. Enable it
+<li><p class="first">For ownCloud to work correctly, we need the module <code class="docutils literal"><span class="pre">mod_rewrite</span></code>. Enable it
 by running:</p>
-<div class="highlight-python"><pre>a2enmod rewrite</pre>
+<div class="highlight-python"><div class="highlight"><pre>a2enmod rewrite
+</pre></div>
 </div>
-<p>Additional recommended modules are <tt class="docutils literal"><span class="pre">mod_headers</span></tt>, <tt class="docutils literal"><span class="pre">mod_env</span></tt>, <tt class="docutils literal"><span class="pre">mod_dir</span></tt> and <tt class="docutils literal"><span class="pre">mod_mime</span></tt>:</p>
-<div class="highlight-python"><pre>a2enmod headers
+<p>Additional recommended modules are <code class="docutils literal"><span class="pre">mod_headers</span></code>, <code class="docutils literal"><span class="pre">mod_env</span></code>, <code class="docutils literal"><span class="pre">mod_dir</span></code> and <code class="docutils literal"><span class="pre">mod_mime</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>a2enmod headers
 a2enmod env
 a2enmod dir
-a2enmod mime</pre>
+a2enmod mime
+</pre></div>
 </div>
-<p>If you&#8217;re running <tt class="docutils literal"><span class="pre">mod_fcgi</span></tt> instead of the standard <tt class="docutils literal"><span class="pre">mod_php</span></tt> also enable:</p>
-<div class="highlight-python"><pre>a2enmod setenvif</pre>
+<p>If you&#8217;re running <code class="docutils literal"><span class="pre">mod_fcgi</span></code> instead of the standard <code class="docutils literal"><span class="pre">mod_php</span></code> also enable:</p>
+<div class="highlight-python"><div class="highlight"><pre>a2enmod setenvif
+</pre></div>
 </div>
 </li>
 <li><p class="first">You must disable any server-configured authentication for ownCloud, as it
 uses Basic authentication internally for DAV services. If you have turned on
-authentication on a parent folder (via e.g. an <tt class="docutils literal"><span class="pre">AuthType</span> <span class="pre">Basic</span></tt>
+authentication on a parent folder (via e.g. an <code class="docutils literal"><span class="pre">AuthType</span> <span class="pre">Basic</span></code>
 directive), you can turn off the authentication specifically for the ownCloud
 entry. Following the above example configuration file, add the following line
-in the <tt class="docutils literal"><span class="pre">&lt;Directory</span></tt> section:</p>
-<div class="highlight-python"><pre>Satisfy Any</pre>
+in the <code class="docutils literal"><span class="pre">&lt;Directory</span></code> section:</p>
+<div class="highlight-python"><div class="highlight"><pre>Satisfy Any
+</pre></div>
 </div>
 </li>
 <li><p class="first">When using SSL, take special note of the ServerName. You should specify one in
@@ -407,12 +421,13 @@ certificate. If you want your ownCloud to be reachable via the internet, then
 set both of these to the domain you want to reach your ownCloud server.</p>
 </li>
 <li><p class="first">Now restart Apache:</p>
-<div class="highlight-python"><pre>service apache2 restart</pre>
+<div class="highlight-python"><div class="highlight"><pre>service apache2 restart
+</pre></div>
 </div>
 </li>
 <li><p class="first">If you&#8217;re running ownCloud in a subdirectory and want to use CalDAV or
 CardDAV clients make sure you have configured the correct
-<a class="reference internal" href="../issues/index.html#service-discovery-label"><em>Service discovery</em></a> URLs.</p>
+<a class="reference internal" href="../issues/general_troubleshooting.html#service-discovery-label"><span>Service discovery</span></a> URLs.</p>
 </li>
 </ul>
 </div>
@@ -428,9 +443,10 @@ user&#8217;s logins and data in transit.</p>
 <p>Apache installed under Ubuntu comes already set-up with a simple
 self-signed certificate. All you have to do is to enable the ssl module and
 the default site. Open a terminal and run:</p>
-<div class="highlight-python"><pre>a2enmod ssl
+<div class="highlight-python"><div class="highlight"><pre>a2enmod ssl
 a2ensite default-ssl
-service apache2 reload</pre>
+service apache2 reload
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
@@ -443,29 +459,29 @@ for good deals on commercial certificates.</p>
 </div>
 <div class="section" id="installation-wizard">
 <span id="installation-wizard-label"></span><h2>Installation Wizard<a class="headerlink" href="#installation-wizard" title="Permalink to this headline">¶</a></h2>
-<p>After restarting Apache you must complete your installation by
-running either the graphical Installation Wizard, or on the command line with
-the <tt class="docutils literal"><span class="pre">occ</span></tt> command. To enable this, temporarily change the ownership on your
-ownCloud directories to your HTTP user (see <a class="reference internal" href="installation_wizard.html#strong-perms-label"><em>Setting Strong Directory Permissions</em></a> to learn
-how to find your HTTP user):</p>
-<div class="highlight-python"><pre>chown -R www-data:www-data /var/www/html/owncloud/</pre>
+<p>After restarting Apache you must complete your installation by running either
+the graphical Installation Wizard, or on the command line with the <code class="docutils literal"><span class="pre">occ</span></code>
+command. To enable this, temporarily change the ownership on your ownCloud
+directories to your HTTP user (see <a class="reference internal" href="installation_wizard.html#strong-perms-label"><span>Setting Strong Directory Permissions</span></a> to learn how to
+find your HTTP user):</p>
+<div class="highlight-python"><div class="highlight"><pre>chown -R www-data:www-data /var/www/owncloud/
+</pre></div>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Admins of SELinux-enabled distributions may need to write new SELinux
 rules to complete their ownCloud installation; see
-<a class="reference internal" href="#selinux-tips-label"><em>SELinux Configuration Tips</em></a>.</p>
+<a class="reference internal" href="#selinux-tips-label"><span>SELinux Configuration Tips</span></a>.</p>
 </div>
-<p>To use <tt class="docutils literal"><span class="pre">occ</span></tt> see <a class="reference internal" href="command_line_installation.html"><em>Installing ownCloud From the Command Line</em></a>.</p>
+<p>To use <code class="docutils literal"><span class="pre">occ</span></code> see <a class="reference internal" href="command_line_installation.html"><em>Installing ownCloud From the Command Line</em></a>.</p>
 <p>To use the graphical Installation Wizard see <a class="reference internal" href="installation_wizard.html"><em>Installation Wizard</em></a>.</p>
-<p>After your installation is complete and you can log into ownCloud, you must
-apply strong permissions to your ownCloud directory.</p>
 </div>
 <div class="section" id="setting-strong-directory-permissions">
-<span id="strong-permissions-label"></span><h2>Setting Strong Directory Permissions<a class="headerlink" href="#setting-strong-directory-permissions" title="Permalink to this headline">¶</a></h2>
+<h2>Setting Strong Directory Permissions<a class="headerlink" href="#setting-strong-directory-permissions" title="Permalink to this headline">¶</a></h2>
 <p>After completing installation, you must immediately set the directory
 permissions in your ownCloud installation as strictly as possible for stronger
-security. Please refer to <a class="reference internal" href="installation_wizard.html#strong-perms-label"><em>Setting Strong Directory Permissions</em></a>.</p>
+security. Please refer to <a class="reference internal" href="installation_wizard.html#strong-perms-label"><span>Setting Strong Directory Permissions</span></a>.</p>
+<p>Now your ownCloud server is ready to use.</p>
 </div>
 <div class="section" id="selinux-configuration-tips">
 <span id="selinux-tips-label"></span><h2>SELinux Configuration Tips<a class="headerlink" href="#selinux-configuration-tips" title="Permalink to this headline">¶</a></h2>
@@ -474,16 +490,18 @@ SELinux-enabled distributions such as Fedora and CentOS.</p>
 </div>
 <div class="section" id="php-ini-configuration-notes">
 <span id="php-ini-tips-label"></span><h2>php.ini Configuration Notes<a class="headerlink" href="#php-ini-configuration-notes" title="Permalink to this headline">¶</a></h2>
-<p>Keep in mind that changes to <tt class="docutils literal"><span class="pre">php.ini</span></tt> may have to be done on more than one
-ini file. This can be the case, for example, for the <tt class="docutils literal"><span class="pre">date.timezone</span></tt> setting.</p>
-<p><strong>php.ini - used by the webserver:</strong></p>
-<div class="highlight-python"><pre>  /etc/php5/apache2/php.ini
+<p>Keep in mind that changes to <code class="docutils literal"><span class="pre">php.ini</span></code> may have to be done on more than one
+ini file. This can be the case, for example, for the <code class="docutils literal"><span class="pre">date.timezone</span></code> setting.</p>
+<p><strong>php.ini - used by the Web server:</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>  /etc/php5/apache2/php.ini
 or
   /etc/php5/fpm/php.ini
-or ...</pre>
+or ...
+</pre></div>
 </div>
 <p><strong>php.ini - used by the php-cli and so by ownCloud CRON jobs:</strong></p>
-<div class="highlight-python"><pre>/etc/php5/cli/php.ini</pre>
+<div class="highlight-python"><div class="highlight"><pre>/etc/php5/cli/php.ini
+</pre></div>
 </div>
 </div>
 <div class="section" id="php-fpm-configuration-notes">
@@ -493,11 +511,11 @@ or ...</pre>
 in older PHP releases with the handling of XML data you are highly encouraged to run
 at least PHP 5.5.22 or 5.6.6 when in a threaded environment.</p>
 <p><strong>System environment variables</strong></p>
-<p>When you are using <tt class="docutils literal"><span class="pre">php-fpm</span></tt>, system environment variables like
+<p>When you are using <code class="docutils literal"><span class="pre">php-fpm</span></code>, system environment variables like
 PATH, TMP or others are not automatically populated in the same way as
-when using <tt class="docutils literal"><span class="pre">php-cli</span></tt>. A PHP call like <tt class="docutils literal"><span class="pre">getenv('PATH');</span></tt> can therefore
+when using <code class="docutils literal"><span class="pre">php-cli</span></code>. A PHP call like <code class="docutils literal"><span class="pre">getenv('PATH');</span></code> can therefore
 return an empty result. So you may need to manually configure environment
-varibles in the appropropriate <tt class="docutils literal"><span class="pre">php-fpm</span></tt> ini/config file.</p>
+varibles in the appropropriate <code class="docutils literal"><span class="pre">php-fpm</span></code> ini/config file.</p>
 <p>Here are some example root paths for these ini/config files:</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -508,26 +526,28 @@ varibles in the appropropriate <tt class="docutils literal"><span class="pre">ph
 <tr class="row-odd"><td>Ubuntu/Mint</td>
 <td>CentOS/Red Hat/Fedora</td>
 </tr>
-<tr class="row-even"><td><tt class="docutils literal"><span class="pre">/etc/php5/fpm/</span></tt></td>
-<td><tt class="docutils literal"><span class="pre">/etc/php-fpm.d/</span></tt></td>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">/etc/php5/fpm/</span></code></td>
+<td><code class="docutils literal"><span class="pre">/etc/php-fpm.d/</span></code></td>
 </tr>
 </tbody>
 </table>
-<p>In both examples, the ini/config file is called <tt class="docutils literal"><span class="pre">www.conf</span></tt>, and depending on
+<p>In both examples, the ini/config file is called <code class="docutils literal"><span class="pre">www.conf</span></code>, and depending on
 the distro version or customizations you have made, it may be in a subdirectory.</p>
 <p>Usually, you will find some or all of the environment variables
 already in the file, but commented out like this:</p>
-<div class="highlight-python"><pre>;env[HOSTNAME] = $HOSTNAME
+<div class="highlight-python"><div class="highlight"><pre>;env[HOSTNAME] = $HOSTNAME
 ;env[PATH] = /usr/local/bin:/usr/bin:/bin
 ;env[TMP] = /tmp
 ;env[TMPDIR] = /tmp
-;env[TEMP] = /tmp</pre>
+;env[TEMP] = /tmp
+</pre></div>
 </div>
-<p>Uncomment the appropriate existing entries. Then run <tt class="docutils literal"><span class="pre">printenv</span> <span class="pre">PATH</span></tt> to
+<p>Uncomment the appropriate existing entries. Then run <code class="docutils literal"><span class="pre">printenv</span> <span class="pre">PATH</span></code> to
 confirm your paths, for example:</p>
-<div class="highlight-python"><pre>$ printenv PATH
+<div class="highlight-python"><div class="highlight"><pre>$ printenv PATH
 /home/user/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:
-/sbin:/bin:/</pre>
+/sbin:/bin:/
+</pre></div>
 </div>
 <p>If any of your system environment variables are not present in the file then
 you must add them.</p>
@@ -536,18 +556,17 @@ or server, the configuration files are almost certain to be located somewhere
 else, for security and flexibility reasons, so check your documentation for the
 correct locations.</p>
 <p>Please keep in mind that it is possible to create different settings for
-<tt class="docutils literal"><span class="pre">php-cli</span></tt> and <tt class="docutils literal"><span class="pre">php-fpm</span></tt>, and for different domains and Web sites.
-The best way to check your settings is with <a class="reference internal" href="../issues/index.html#label-phpinfo"><em>PHP Version and Information</em></a>.</p>
+<code class="docutils literal"><span class="pre">php-cli</span></code> and <code class="docutils literal"><span class="pre">php-fpm</span></code>, and for different domains and Web sites.
+The best way to check your settings is with <a class="reference internal" href="../issues/general_troubleshooting.html#label-phpinfo"><span>PHP Version and Information</span></a>.</p>
 <p><strong>Maximum upload size</strong></p>
 <p>If you want to increase the maximum upload size, you will also have to modify
-your <tt class="docutils literal"><span class="pre">php-fpm</span></tt> configuration and increase the <tt class="docutils literal"><span class="pre">upload_max_filesize</span></tt> and
-<tt class="docutils literal"><span class="pre">post_max_size</span></tt> values. You will need to restart <tt class="docutils literal"><span class="pre">php5-fpm</span></tt> and your HTTP
+your <code class="docutils literal"><span class="pre">php-fpm</span></code> configuration and increase the <code class="docutils literal"><span class="pre">upload_max_filesize</span></code> and
+<code class="docutils literal"><span class="pre">post_max_size</span></code> values. You will need to restart <code class="docutils literal"><span class="pre">php5-fpm</span></code> and your HTTP
 server in order for these changes to be applied.</p>
-<p><strong>.htaccess notes for webservers &lt;&gt; Apache</strong></p>
-<p>ownCloud comes with its own <tt class="docutils literal"><span class="pre">owncloud/.htaccess</span></tt> file. <tt class="docutils literal"><span class="pre">php-fpm</span></tt> can&#8217;t
-read PHP settings in <tt class="docutils literal"><span class="pre">.htaccess</span></tt> unless the <tt class="docutils literal"><span class="pre">htscanner</span></tt> PECL extension is
-installed. If <tt class="docutils literal"><span class="pre">php-fpm</span></tt> is used without this PECL extension installed,
-settings and permissions must be set in the <tt class="docutils literal"><span class="pre">owncloud/.user.ini</span></tt> file.</p>
+<p><strong>.htaccess notes for Web servers &lt;&gt; Apache</strong></p>
+<p>ownCloud comes with its own <code class="docutils literal"><span class="pre">owncloud/.htaccess</span></code> file. Because <code class="docutils literal"><span class="pre">php-fpm</span></code> can&#8217;t
+read PHP settings in <code class="docutils literal"><span class="pre">.htaccess</span></code> these settings and permissions must be set
+in the <code class="docutils literal"><span class="pre">owncloud/.user.ini</span></code> file.</p>
 </div>
 <div class="section" id="other-web-servers">
 <span id="other-http-servers-label"></span><h2>Other Web Servers<a class="headerlink" href="#other-web-servers" title="Permalink to this headline">¶</a></h2>

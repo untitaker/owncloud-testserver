@@ -24,7 +24,7 @@ OC.L10N.register(
     "Could not detect Base DN, please enter it manually." : "Kon basis DN niet vaststellen, voer de gegevens handmatig in.",
     "{nthServer}. Server" : "{nthServer}. Server",
     "No object found in the given Base DN. Please revise." : "Geen object gevonden in de basis DN. Review instellingen.",
-    "More than 1.000 directory entries available." : "Meer dan 1000 directory namen beschikbaar.",
+    "More than 1,000 directory entries available." : "Meer dan 1000 directory namen beschikbaar.",
     " entries available within the provided Base DN" : "accounts beschikbaar binnen de provider Basis DN",
     "An error occurred. Please check the Base DN, as well as connection settings and credentials." : "Er trad een fout op. Controleer de Basis DN en de verbindingsinstellingen en inloggegevens.",
     "Do you really want to delete the current Server Configuration?" : "Wilt u werkelijk de huidige Serverconfiguratie verwijderen?",
@@ -122,6 +122,8 @@ OC.L10N.register(
     "Directory Settings" : "Mapinstellingen",
     "User Display Name Field" : "Veld gebruikers weergavenaam",
     "The LDAP attribute to use to generate the user's display name." : "Het te gebruiken LDAP attribuut voor het genereren van de weergavenaam voor de gebruiker.",
+    "2nd User Display Name Field" : "2e gebruiker weergavenaam veld",
+    "Optional. An LDAP attribute to be added to the display name in brackets. Results in e.g. »John Doe (john.doe@example.org)«." : "Optioneel. Een LDAP attribuut wat word toegevoegd aan de weergave neem tussen haakjes. Bijvoorbeeld »John Doe (john.doe@example.org)«.",
     "Base User Tree" : "Basis Gebruikers Structuur",
     "One User Base DN per line" : "Een User Base DN per regel",
     "User Search Attributes" : "Attributen voor gebruikerszoekopdrachten",
@@ -132,6 +134,8 @@ OC.L10N.register(
     "One Group Base DN per line" : "Een Group Base DN per regel",
     "Group Search Attributes" : "Attributen voor groepszoekopdrachten",
     "Group-Member association" : "Groepslid associatie",
+    "Dynamic Group Member URL" : "Dynamisch Groepslid URL",
+    "The LDAP attribute that on group objects contains an LDAP search URL that determines what objects belong to the group. (An empty setting disables dynamic group membership functionality.)" : "Het LDAP attribuut wat op groep object een LDAP zoek URL bevat wat gebruikt word om groep lidmaatschap op te halen. (Een leeg veld schakeld dynamisch groep lidmaatschap uit.)",
     "Nested Groups" : "Geneste groepen",
     "When switched on, groups that contain groups are supported. (Only works if the group member attribute contains DNs.)" : "Wanneer ingeschakeld worden groepen binnen groepen ondersteund. (Werkt alleen als het groepslid attribuut DNs bevat)",
     "Paging chunksize" : "Paging chunkgrootte",
@@ -153,8 +157,6 @@ OC.L10N.register(
     "Username-LDAP User Mapping" : "Gebruikersnaam-LDAP gebruikers vertaling",
     "Usernames are used to store and assign (meta) data. In order to precisely identify and recognize users, each LDAP user will have an internal username. This requires a mapping from username to LDAP user. The created username is mapped to the UUID of the LDAP user. Additionally the DN is cached as well to reduce LDAP interaction, but it is not used for identification. If the DN changes, the changes will be found. The internal username is used all over. Clearing the mappings will have leftovers everywhere. Clearing the mappings is not configuration sensitive, it affects all LDAP configurations! Never clear the mappings in a production environment, only in a testing or experimental stage." : "ownCloud maakt gebruik van gebruikersnamen om (meta) data op te slaan en toe te wijzen. Om gebruikers uniek te identificeren, krijgt elke LDAP-gebruiker ook een interne gebruikersnaam. Dit vereist een koppeling van de ownCloud gebruikersnaam aan een ​​LDAP-gebruiker. De gecreëerde gebruikersnaam is gekoppeld aan de UUID van de LDAP-gebruiker. Aanvullend wordt ook de 'DN' gecached om het aantal LDAP-interacties te verminderen, maar dit wordt niet gebruikt voor identificatie. Als de DN verandert, zullen de veranderingen worden gevonden. De interne naam wordt overal gebruikt. Het wissen van de koppeling zal overal resten achterlaten. Het wissen van koppelingen is niet configuratiegevoelig, maar het raakt wel alle LDAP instellingen! Zorg ervoor dat deze koppelingen nooit in een productieomgeving gewist worden. Maak ze alleen leeg in een test- of ontwikkelomgeving.",
     "Clear Username-LDAP User Mapping" : "Leegmaken Gebruikersnaam-LDAP gebruikers vertaling",
-    "Clear Groupname-LDAP Group Mapping" : "Leegmaken Groepsnaam-LDAP groep vertaling",
-    "Backup (Replica) Host" : "Backup (Replica) Host",
-    "Backup (Replica) Port" : "Backup (Replica) Poort"
+    "Clear Groupname-LDAP Group Mapping" : "Leegmaken Groepsnaam-LDAP groep vertaling"
 },
 "nplurals=2; plural=(n != 1);");

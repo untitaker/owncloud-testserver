@@ -24,7 +24,7 @@ OC.L10N.register(
     "Could not detect Base DN, please enter it manually." : "Klarte ikke å påvise basis-DN. Det må skrives inn manuelt.",
     "{nthServer}. Server" : "{nthServer}. server",
     "No object found in the given Base DN. Please revise." : "Intet objekt funnet i angitt basis-DN. Revider oppsettet.",
-    "More than 1.000 directory entries available." : "Mer enn 1000 katalogoppføringer tilgjengelig.",
+    "More than 1,000 directory entries available." : "Mer enn 1.000 katalogoppføringer tilgjengelig.",
     " entries available within the provided Base DN" : "oppføringer tilgjengelig innenfor angitt basis-DN",
     "An error occurred. Please check the Base DN, as well as connection settings and credentials." : "Det oppstod en feil. Sjekk basis-DN, tilkoblingsoppsett og påloggingsdetaljer.",
     "Do you really want to delete the current Server Configuration?" : "Er du sikker på at du vil slette aktiv tjener-konfigurasjon?",
@@ -122,6 +122,8 @@ OC.L10N.register(
     "Directory Settings" : "Innstillinger for katalog",
     "User Display Name Field" : "Felt med brukerens visningsnavn",
     "The LDAP attribute to use to generate the user's display name." : "LDAP-attributten som skal brukes til å generere brukerens visningsnavn.",
+    "2nd User Display Name Field" : "2. felt med brukerens visningsnavn",
+    "Optional. An LDAP attribute to be added to the display name in brackets. Results in e.g. »John Doe (john.doe@example.org)«." : "Valgfritt. En LDAP-attributt som skal legges til visningsnavnet i parentes. Resulterer i f.eks. »John Doe (john.doe@example.org)«.",
     "Base User Tree" : "Basis for bruker-tre",
     "One User Base DN per line" : "En basis-DN for brukere pr. linje",
     "User Search Attributes" : "Attributter for brukersøk",
@@ -132,6 +134,8 @@ OC.L10N.register(
     "One Group Base DN per line" : "En basis-DN for grupper pr. linje",
     "Group Search Attributes" : "Attributter for gruppesøk",
     "Group-Member association" : "gruppe-medlem assosiasjon",
+    "Dynamic Group Member URL" : "URL for dynamisk gruppemedlem",
+    "The LDAP attribute that on group objects contains an LDAP search URL that determines what objects belong to the group. (An empty setting disables dynamic group membership functionality.)" : "LDAP-attributten som, på gruppe-objekter, inneholder en LDAP søke-URL som bestemmer hvilke objekter som hører til gruppen. (En tom innstilling deaktiverer funksjonaliteten for dynamisk gruppemedlemskap.)",
     "Nested Groups" : "Nestede grupper",
     "When switched on, groups that contain groups are supported. (Only works if the group member attribute contains DNs.)" : "Grupper som inneholder grupper er tillatt når denne er slått på. (Virker bare hvis gruppenes member-attributt inneholder DN-er.)",
     "Paging chunksize" : "Sidestørrelse",
@@ -153,8 +157,6 @@ OC.L10N.register(
     "Username-LDAP User Mapping" : "Tilknytning av brukernavn til LDAP-bruker",
     "Usernames are used to store and assign (meta) data. In order to precisely identify and recognize users, each LDAP user will have an internal username. This requires a mapping from username to LDAP user. The created username is mapped to the UUID of the LDAP user. Additionally the DN is cached as well to reduce LDAP interaction, but it is not used for identification. If the DN changes, the changes will be found. The internal username is used all over. Clearing the mappings will have leftovers everywhere. Clearing the mappings is not configuration sensitive, it affects all LDAP configurations! Never clear the mappings in a production environment, only in a testing or experimental stage." : "Brukernavn brukes til å lagre og tilordne (meta)data. For at brukere skal identifiseres og gjenkjennes presist, vil hver LDAP-bruker ha et internt brukernavn. Dette krever en tilknytning fra brukernavn til LDAP-bruker. Brukernavn som opprettes blir knyttet til LDAP-brukerens UUID. I tillegg mellomlagres DN for å redusere LDAP-kommunikasjon, men det brukes ikke til identifisering. Hvis DN endres vil endringene bli oppdaget. Det interne brukernavnet brukes alle steder. Nullstilling av tilknytningene vil etterlate seg rester overalt. Nullstilling av tilknytningene skjer ikke pr. konfigurasjon, det påvirker alle LDAP-konfigurasjoner! Nullstill aldri tilknytningene i et produksjonsmiljø, kun ved testing eller eksperimentering.",
     "Clear Username-LDAP User Mapping" : "Nullstill tilknytning av brukernavn til LDAP-bruker",
-    "Clear Groupname-LDAP Group Mapping" : "Nullstill tilknytning av gruppenavn til LDAP-gruppe",
-    "Backup (Replica) Host" : "Sikkerhetskopierings (Replica) vert",
-    "Backup (Replica) Port" : "Reserve (Replika) Port"
+    "Clear Groupname-LDAP Group Mapping" : "Nullstill tilknytning av gruppenavn til LDAP-gruppe"
 },
 "nplurals=2; plural=(n != 1);");

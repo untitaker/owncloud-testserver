@@ -2,7 +2,7 @@
 /**
  * @author Joas Schilling <nickvergessen@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -22,11 +22,11 @@
 namespace OCA\Notifications;
 
 
-use OC\Notification\IAction;
-use OC\Notification\IManager;
-use OC\Notification\INotification;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\Notification\IAction;
+use OCP\Notification\IManager;
+use OCP\Notification\INotification;
 
 class Handler {
 	/** @var IDBConnection */
@@ -91,7 +91,7 @@ class Handler {
 	}
 
 	/**
-	 * Delete the notifications matching the given id
+	 * Delete the notification matching the given id
 	 *
 	 * @param int $id
 	 * @param string $user
@@ -108,16 +108,44 @@ class Handler {
 	}
 
 	/**
-	 * Return the notifications matching the given Notification
+	 * Get the notification matching the given id
 	 *
-	 * @param INotification $notification
-	 * @return array [notification_id => INotification]
+	 * @param int $id
+	 * @param string $user
+	 * @return null|INotification
 	 */
-	public function get(INotification $notification) {
+	public function getById($id, $user) {
 		$sql = $this->connection->getQueryBuilder();
 		$sql->select('*')
 			->from('notifications')
-			->orderBy('notification_id', 'DESC');
+			->where($sql->expr()->eq('notification_id', $sql->createParameter('id')))
+			->setParameter('id', $id)
+			->andWhere($sql->expr()->eq('user', $sql->createParameter('user')))
+			->setParameter('user', $user);
+		$statement = $sql->execute();
+
+		$notification = null;
+		if ($row = $statement->fetch()) {
+			$notification = $this->notificationFromRow($row);
+		}
+		$statement->closeCursor();
+
+		return $notification;
+	}
+
+	/**
+	 * Return the notifications matching the given Notification
+	 *
+	 * @param INotification $notification
+	 * @param int $limit
+	 * @return array [notification_id => INotification]
+	 */
+	public function get(INotification $notification, $limit = 25) {
+		$sql = $this->connection->getQueryBuilder();
+		$sql->select('*')
+			->from('notifications')
+			->orderBy('notification_id', 'DESC')
+			->setMaxResults($limit);
 
 		$this->sqlWhere($sql, $notification);
 		$statement = $sql->execute();
@@ -148,12 +176,17 @@ class Handler {
 				->setParameter('user', $notification->getUser());
 		}
 
+		if ($notification->getDateTime()->getTimestamp() !== 0) {
+			$sql->andWhere($sql->expr()->eq('timestamp', $sql->createParameter('timestamp')))
+				->setParameter('timestamp', $notification->getDateTime()->getTimestamp());
+		}
+
 		if ($notification->getObjectType() !== '') {
 			$sql->andWhere($sql->expr()->eq('object_type', $sql->createParameter('objectType')))
 				->setParameter('objectType', $notification->getObjectType());
 		}
 
-		if ($notification->getObjectId() !== 0) {
+		if ($notification->getObjectId() !== '') {
 			$sql->andWhere($sql->expr()->eq('object_id', $sql->createParameter('objectId')))
 				->setParameter('objectId', $notification->getObjectId());
 		}
@@ -172,11 +205,6 @@ class Handler {
 			$sql->andWhere($sql->expr()->eq('link', $sql->createParameter('link')))
 				->setParameter('link', $notification->getLink());
 		}
-
-		if ($notification->getIcon() !== '') {
-			$sql->andWhere($sql->expr()->eq('icon', $sql->createParameter('icon')))
-				->setParameter('icon', $notification->getIcon());
-		}
 	}
 
 	/**
@@ -193,7 +221,7 @@ class Handler {
 			->setParameter('user', $notification->getUser());
 
 		$sql->setValue('timestamp', $sql->createParameter('timestamp'))
-			->setParameter('timestamp', $notification->getTimestamp());
+			->setParameter('timestamp', $notification->getDateTime()->getTimestamp());
 
 		$sql->setValue('object_type', $sql->createParameter('objectType'))
 			->setParameter('objectType', $notification->getObjectType());
@@ -216,17 +244,14 @@ class Handler {
 		$sql->setValue('link', $sql->createParameter('link'))
 			->setParameter('link', $notification->getLink());
 
-		$sql->setValue('icon', $sql->createParameter('icon'))
-			->setParameter('icon', $notification->getIcon());
-
 		$actions = [];
 		foreach ($notification->getActions() as $action) {
 			/** @var IAction $action */
 			$actions[] = [
 				'label' => $action->getLabel(),
-				'icon' => $action->getIcon(),
 				'link' => $action->getLink(),
 				'type' => $action->getRequestType(),
+				'primary' => $action->isPrimary(),
 			];
 		}
 		$sql->setValue('actions', $sql->createParameter('actions'))
@@ -240,11 +265,14 @@ class Handler {
 	 * @return INotification
 	 */
 	protected function notificationFromRow(array $row) {
+		$dateTime = new \DateTime();
+		$dateTime->setTimestamp((int) $row['timestamp']);
+
 		$notification = $this->manager->createNotification();
 		$notification->setApp($row['app'])
 			->setUser($row['user'])
-			->setTimestamp((int) $row['timestamp'])
-			->setObject($row['object_type'], (int) $row['object_id'])
+			->setDateTime($dateTime)
+			->setObject($row['object_type'], $row['object_id'])
 			->setSubject($row['subject'], (array) json_decode($row['subject_parameters'], true));
 
 		if ($row['message'] !== '') {
@@ -253,17 +281,14 @@ class Handler {
 		if ($row['link'] !== '') {
 			$notification->setLink($row['link']);
 		}
-		if ($row['icon'] !== '') {
-			$notification->setIcon($row['icon']);
-		}
 
 		$actions = (array) json_decode($row['actions'], true);
 		foreach ($actions as $actionData) {
 			$action = $notification->createAction();
 			$action->setLabel($actionData['label'])
 				->setLink($actionData['link'], $actionData['type']);
-			if ($actionData['icon']) {
-				$action->setIcon($actionData['icon']);
+			if (isset($actionData['primary'])) {
+				$action->setPrimary($actionData['primary']);
 			}
 			$notification->addAction($action);
 		}

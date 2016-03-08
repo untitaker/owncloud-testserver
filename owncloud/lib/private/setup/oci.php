@@ -4,10 +4,12 @@
  * @author Bart Visscher <bartv@thisnet.nl>
  * @author Joas Schilling <nickvergessen@owncloud.com>
  * @author Jörn Friedrich Dreyer <jfd@butonic.de>
+ * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Roeland Jago Douma <rullzer@owncloud.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  * @author Victor Dubiniuk <dubiniuk@owncloud.com>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -40,7 +42,7 @@ class OCI extends AbstractDatabase {
 		// allow empty hostname for oracle
 		$this->dbHost = $config['dbhost'];
 
-		\OC_Config::setValues([
+		$this->config->setSystemValues([
 			'dbhost'		=> $this->dbHost,
 			'dbtablespace'	=> $this->dbtablespace,
 		]);
@@ -66,7 +68,7 @@ class OCI extends AbstractDatabase {
 		} else {
 			$easy_connect_string = '//'.$e_host.'/'.$e_dbname;
 		}
-		\OCP\Util::writeLog('setup oracle', 'connect string: ' . $easy_connect_string, \OCP\Util::DEBUG);
+		$this->logger->debug('connect string: ' . $easy_connect_string, ['app' => 'setup.oci']);
 		$connection = @oci_connect($this->dbUser, $this->dbPassword, $easy_connect_string);
 		if(!$connection) {
 			$errorMessage = $this->getLastError();
@@ -93,7 +95,7 @@ class OCI extends AbstractDatabase {
 		if (!$stmt) {
 			$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 			$entry .= $this->trans->t('Offending command was: "%s"', array($query)) . '<br />';
-			\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+			$this->logger->warning($entry, ['app' => 'setup.oci']);
 		}
 		$result = oci_execute($stmt);
 		if($result) {
@@ -105,7 +107,7 @@ class OCI extends AbstractDatabase {
 				//add prefix to the oracle user name to prevent collisions
 				$this->dbUser='oc_'.$username;
 				//create a new password so we don't need to store the admin config in the config file
-				$this->dbPassword=\OC_Util::generateRandomBytes(30);
+				$this->dbPassword = \OC::$server->getSecureRandom()->generate(30, \OCP\Security\ISecureRandom::CHAR_LOWER.\OCP\Security\ISecureRandom::CHAR_DIGITS);
 
 				//oracle passwords are treated as identifiers:
 				//  must start with alphanumeric char
@@ -116,7 +118,7 @@ class OCI extends AbstractDatabase {
 			}
 		}
 
-		\OC_Config::setValues([
+		$this->config->setSystemValues([
 			'dbuser'		=> $this->dbUser,
 			'dbname'		=> $this->dbName,
 			'dbpassword'	=> $this->dbPassword,
@@ -131,9 +133,9 @@ class OCI extends AbstractDatabase {
 		oci_close($connection);
 
 		// connect to the oracle database (schema=$this->dbuser) an check if the schema needs to be filled
-		$this->dbUser = \OC_Config::getValue('dbuser');
+		$this->dbUser = $this->config->getSystemValue('dbuser');
 		//$this->dbname = \OC_Config::getValue('dbname');
-		$this->dbPassword = \OC_Config::getValue('dbpassword');
+		$this->dbPassword = $this->config->getSystemValue('dbpassword');
 
 		$e_host = addslashes($this->dbHost);
 		$e_dbname = addslashes($this->dbName);
@@ -155,7 +157,7 @@ class OCI extends AbstractDatabase {
 		if (!$stmt) {
 			$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 			$entry .= $this->trans->t('Offending command was: "%s"', array($query)) . '<br />';
-			\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+			$this->logger->warning( $entry, ['app' => 'setup.oci']);
 		}
 		$result = oci_execute($stmt);
 
@@ -178,14 +180,14 @@ class OCI extends AbstractDatabase {
 		if (!$stmt) {
 			$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 			$entry .= $this->trans->t('Offending command was: "%s"', array($query)) . '<br />';
-			\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+			$this->logger->warning($entry, ['app' => 'setup.oci']);
 		}
 		oci_bind_by_name($stmt, ':un', $name);
 		$result = oci_execute($stmt);
 		if(!$result) {
 			$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 			$entry .= $this->trans->t('Offending command was: "%s"', array($query)) . '<br />';
-			\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+			$this->logger->warning($entry, ['app' => 'setup.oci']);
 		}
 
 		if(! oci_fetch_row($stmt)) {
@@ -196,7 +198,8 @@ class OCI extends AbstractDatabase {
 			if (!$stmt) {
 				$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 				$entry .= $this->trans->t('Offending command was: "%s"', array($query)) . '<br />';
-				\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+				$this->logger->warning($entry, ['app' => 'setup.oci']);
+
 			}
 			//oci_bind_by_name($stmt, ':un', $name);
 			$result = oci_execute($stmt);
@@ -204,7 +207,8 @@ class OCI extends AbstractDatabase {
 				$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 				$entry .= $this->trans->t('Offending command was: "%s", name: %s, password: %s',
 					array($query, $name, $password)) . '<br />';
-				\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+				$this->logger->warning($entry, ['app' => 'setup.oci']);
+
 			}
 		} else { // change password of the existing role
 			$query = "ALTER USER :un IDENTIFIED BY :pw";
@@ -212,7 +216,7 @@ class OCI extends AbstractDatabase {
 			if (!$stmt) {
 				$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 				$entry .= $this->trans->t('Offending command was: "%s"', array($query)) . '<br />';
-				\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+				$this->logger->warning($entry, ['app' => 'setup.oci']);
 			}
 			oci_bind_by_name($stmt, ':un', $name);
 			oci_bind_by_name($stmt, ':pw', $password);
@@ -220,7 +224,7 @@ class OCI extends AbstractDatabase {
 			if(!$result) {
 				$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 				$entry .= $this->trans->t('Offending command was: "%s"', array($query)) . '<br />';
-				\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+				$this->logger->warning($entry, ['app' => 'setup.oci']);
 			}
 		}
 		// grant necessary roles
@@ -229,14 +233,14 @@ class OCI extends AbstractDatabase {
 		if (!$stmt) {
 			$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 			$entry .= $this->trans->t('Offending command was: "%s"', array($query)) . '<br />';
-			\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+			$this->logger->warning($entry, ['app' => 'setup.oci']);
 		}
 		$result = oci_execute($stmt);
 		if(!$result) {
 			$entry = $this->trans->t('DB Error: "%s"', array($this->getLastError($connection))) . '<br />';
 			$entry .= $this->trans->t('Offending command was: "%s", name: %s, password: %s',
 				array($query, $name, $password)) . '<br />';
-			\OCP\Util::writeLog('setup.oci', $entry, \OCP\Util::WARN);
+			$this->logger->warning($entry, ['app' => 'setup.oci']);
 		}
 	}
 

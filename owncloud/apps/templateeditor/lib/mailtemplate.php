@@ -63,7 +63,7 @@ class MailTemplate extends \OC_Template {
 		if($this->isEditable()) {
 			list($app, $filename) = explode('/templates/', $this->path, 2);
 			$name = substr($filename, 0, -4);
-			list(, $template) = $this->findTemplate($this->theme, $app, $name, '');
+			list(, $template) = $this->findTemplate($this->theme, $app, $name);
 			return new MailTemplateResponse($template);
 		}
 		throw new SecurityException('Template not editable.', 403);
@@ -73,7 +73,7 @@ class MailTemplate extends \OC_Template {
 		if($this->isEditable()) {
 			list($app, $filename) = explode('/templates/', $this->path, 2);
 			$name = substr($filename, 0, -4);
-			list(, $template) = $this->findTemplate($this->theme, $app, $name, '');
+			list(, $template) = $this->findTemplate($this->theme, $app, $name);
 			\OC_Response::sendFile($template);
 		} else {
 			throw new SecurityException('Template not editable.', 403);
@@ -124,9 +124,11 @@ class MailTemplate extends \OC_Template {
 					if (rename($absolutePath.'.bak', $absolutePath)) {
 						return true;
 					}
+				} else if (unlink($absolutePath)) {
+					return true;
 				}
 			}
-			return false;
+			return !file_exists($absolutePath);
 		}
 		throw new NotPermittedException('Template not editable.', 403);
 	}
@@ -162,10 +164,12 @@ class MailTemplate extends \OC_Template {
 	 * @return array with keys containing the path and values containing the name of a template
 	 */
 	public static function getEditableTemplates() {
-		$l10n = \OC_L10N::get('templateeditor');
+		$l10n = \OC::$server->getL10NFactory()->get('templateeditor');
 		$templates = array(
-			'core/templates/mail.php' => $l10n->t('Sharing email (HTML)'),
-			'core/templates/altmail.php' => $l10n->t('Sharing email (plain text fallback)'),
+			'core/templates/mail.php' => $l10n->t('Sharing email - public link shares (HTML)'),
+			'core/templates/altmail.php' => $l10n->t('Sharing email - public link shares (plain text fallback)'),
+			'core/templates/internalmail.php' => $l10n->t('Sharing email (HTML)'),
+			'core/templates/internalaltmail.php' => $l10n->t('Sharing email (plain text fallback)'),
 			'core/lostpassword/templates/email.php' => $l10n->t('Lost password mail'),
 			'settings/templates/email.new_user.php' => $l10n->t('New user email (HTML)'),
 			'settings/templates/email.new_user_plain_text.php' => $l10n->t('New user email (plain text fallback)'),

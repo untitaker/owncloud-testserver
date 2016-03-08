@@ -11,12 +11,14 @@
  * @author Lorenzo M. Catucci <lorenzo@sancho.ccd.uniroma2.it>
  * @author Lukas Reschke <lukas@owncloud.com>
  * @author Lyonel Vincent <lyonel@ezix.org>
+ * @author Mario Kolling <mario.kolling@serpro.gov.br>
  * @author Morris Jobke <hey@morrisjobke.de>
  * @author Nicolas Grekas <nicolas.grekas@gmail.com>
- * @author Robin McCorkell <rmccorkell@karoshi.org.uk>
- * @author Scrutinizer Auto-Fixer <auto-fixer@scrutinizer-ci.com>
+ * @author Ralph Krimmel <rkrimme1@gwdg.de>
+ * @author Renaud Fortier <Renaud.Fortier@fsaa.ulaval.ca>
+ * @author Robin McCorkell <robin@mccorkell.me.uk>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2016, ownCloud, Inc.
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -177,7 +179,7 @@ class Access extends LDAPUtility implements user\IUserTools {
 			//in case an error occurs , e.g. object does not exist
 			return false;
 		}
-		if (empty($attr)) {
+		if (empty($attr) && ($filter === 'objectclass=*' || $this->ldap->countEntries($cr, $rr) === 1)) {
 			\OCP\Util::writeLog('user_ldap', 'readAttribute: '.$dn.' found', \OCP\Util::DEBUG);
 			return array();
 		}
@@ -518,6 +520,7 @@ class Access extends LDAPUtility implements user\IUserTools {
 	private function ldap2ownCloudNames($ldapObjects, $isUsers) {
 		if($isUsers) {
 			$nameAttribute = $this->connection->ldapUserDisplayName;
+			$sndAttribute  = $this->connection->ldapUserDisplayName2;
 		} else {
 			$nameAttribute = $this->connection->ldapGroupDisplayName;
 		}
@@ -539,13 +542,14 @@ class Access extends LDAPUtility implements user\IUserTools {
 				if($isUsers) {
 					//cache the user names so it does not need to be retrieved
 					//again later (e.g. sharing dialogue).
-					$this->cacheUserExists($ocName);
-					if(!is_null($nameByLDAP)) {
-						$this->cacheUserDisplayName($ocName, $nameByLDAP);
+					if(is_null($nameByLDAP)) {
+						continue;
 					}
+					$sndName = isset($ldapObject[$sndAttribute][0])
+						? $ldapObject[$sndAttribute][0] : '';
+					$this->cacheUserDisplayName($ocName, $nameByLDAP, $sndName);
 				}
 			}
-			continue;
 		}
 		return $ownCloudNames;
 	}
@@ -572,8 +576,11 @@ class Access extends LDAPUtility implements user\IUserTools {
 	 * caches the user display name
 	 * @param string $ocName the internal ownCloud username
 	 * @param string $displayName the display name
+	 * @param string $displayName2 the second display name
 	 */
-	public function cacheUserDisplayName($ocName, $displayName) {
+	public function cacheUserDisplayName($ocName, $displayName, $displayName2 = '') {
+		$user = $this->userManager->get($ocName);
+		$displayName = $user->composeAndStoreDisplayName($displayName, $displayName2);
 		$cacheKeyTrunk = 'getDisplayName';
 		$this->connection->writeToCache($cacheKeyTrunk.$ocName, $displayName);
 	}
@@ -706,8 +713,16 @@ class Access extends LDAPUtility implements user\IUserTools {
 	 * @param array $ldapRecords
 	 */
 	public function batchApplyUserAttributes(array $ldapRecords){
+		$displayNameAttribute = strtolower($this->connection->ldapUserDisplayName);
 		foreach($ldapRecords as $userRecord) {
+			if(!isset($userRecord[$displayNameAttribute])) {
+				// displayName is obligatory
+				continue;
+			}
 			$ocName  = $this->dn2ocname($userRecord['dn'][0]);
+			if($ocName === false) {
+				continue;
+			}
 			$this->cacheUserExists($ocName);
 			$user = $this->userManager->get($ocName);
 			if($user instanceof OfflineUser) {
@@ -864,14 +879,13 @@ class Access extends LDAPUtility implements user\IUserTools {
 	 * @param bool $pagedSearchOK whether a paged search has been executed
 	 * @param bool $skipHandling required for paged search when cookies to
 	 * prior results need to be gained
-	 * @return array|false array with the search result as first value and pagedSearchOK as
-	 * second | false if not successful
+	 * @return bool cookie validity, true if we have more pages, false otherwise.
 	 */
 	private function processPagedSearchStatus($sr, $filter, $base, $iFoundItems, $limit, $offset, $pagedSearchOK, $skipHandling) {
+		$cookie = null;
 		if($pagedSearchOK) {
 			$cr = $this->connection->getConnectionResource();
 			foreach($sr as $key => $res) {
-				$cookie = null;
 				if($this->ldap->controlPagedResultResponse($cr, $res, $cookie)) {
 					$this->setPagedResultCookie($base[$key], $filter, $limit, $offset, $cookie);
 				}
@@ -892,6 +906,12 @@ class Access extends LDAPUtility implements user\IUserTools {
 				\OCP\Util::writeLog('user_ldap', 'Paged search was not available', \OCP\Util::INFO);
 			}
 		}
+		/* ++ Fixing RHDS searches with pages with zero results ++
+		 * Return cookie status. If we don't have more pages, with RHDS
+		 * cookie is null, with openldap cookie is an empty string and
+		 * to 386ds '0' is a valid cookie. Even if $iFoundItems == 0
+		 */
+		return !empty($cookie) || $cookie === '0';
 	}
 
 	/**
@@ -920,7 +940,6 @@ class Access extends LDAPUtility implements user\IUserTools {
 		$this->connection->getConnectionResource();
 
 		do {
-			$continue = false;
 			$search = $this->executeSearch($filter, $base, $attr,
 										   $limitPerPage, $offset);
 			if($search === false) {
@@ -928,12 +947,20 @@ class Access extends LDAPUtility implements user\IUserTools {
 			}
 			list($sr, $pagedSearchOK) = $search;
 
-			$count = $this->countEntriesInSearchResults($sr, $limitPerPage, $continue);
+			/* ++ Fixing RHDS searches with pages with zero results ++
+			 * countEntriesInSearchResults() method signature changed
+			 * by removing $limit and &$hasHitLimit parameters
+			 */
+			$count = $this->countEntriesInSearchResults($sr);
 			$counter += $count;
 
-			$this->processPagedSearchStatus($sr, $filter, $base, $count, $limitPerPage,
+			$hasMorePages = $this->processPagedSearchStatus($sr, $filter, $base, $count, $limitPerPage,
 										$offset, $pagedSearchOK, $skipHandling);
 			$offset += $limitPerPage;
+			/* ++ Fixing RHDS searches with pages with zero results ++
+			 * Continue now depends on $hasMorePages value
+			 */
+			$continue = $pagedSearchOK && $hasMorePages;
 		} while($continue && (is_null($limit) || $limit <= 0 || $limit > $counter));
 
 		return $counter;
@@ -941,20 +968,15 @@ class Access extends LDAPUtility implements user\IUserTools {
 
 	/**
 	 * @param array $searchResults
-	 * @param int $limit
-	 * @param bool $hasHitLimit
 	 * @return int
 	 */
-	private function countEntriesInSearchResults($searchResults, $limit, &$hasHitLimit) {
+	private function countEntriesInSearchResults($searchResults) {
 		$cr = $this->connection->getConnectionResource();
 		$counter = 0;
 
 		foreach($searchResults as $res) {
 			$count = intval($this->ldap->countEntries($cr, $res));
 			$counter += $count;
-			if($count > 0 && $count === $limit) {
-				$hasHitLimit = true;
-			}
 		}
 
 		return $counter;
@@ -975,38 +997,53 @@ class Access extends LDAPUtility implements user\IUserTools {
 			//otherwise search will fail
 			$limit = null;
 		}
-		$search = $this->executeSearch($filter, $base, $attr, $limit, $offset);
-		if($search === false) {
-			return array();
-		}
-		list($sr, $pagedSearchOK) = $search;
-		$cr = $this->connection->getConnectionResource();
 
-		if($skipHandling) {
-			//i.e. result do not need to be fetched, we just need the cookie
-			//thus pass 1 or any other value as $iFoundItems because it is not
-			//used
-			$this->processPagedSearchStatus($sr, $filter, $base, 1, $limit,
-											$offset, $pagedSearchOK,
-											$skipHandling);
-			return array();
-		}
-
-		// Do the server-side sorting
-		foreach(array_reverse($attr) as $sortAttr){
-			foreach($sr as $searchResource) {
-				$this->ldap->sort($cr, $searchResource, $sortAttr);
-			}
-		}
-
+		/* ++ Fixing RHDS searches with pages with zero results ++
+		 * As we can have pages with zero results and/or pages with less
+		 * than $limit results but with a still valid server 'cookie',
+		 * loops through until we get $continue equals true and
+		 * $findings['count'] < $limit
+		 */
 		$findings = array();
-		foreach($sr as $res) {
-			$findings = array_merge($findings, $this->ldap->getEntries($cr	, $res ));
-		}
+		$savedoffset = $offset;
+		do {
+			$continue = false;
+			$search = $this->executeSearch($filter, $base, $attr, $limit, $offset);
+			if($search === false) {
+				return array();
+			}
+			list($sr, $pagedSearchOK) = $search;
+			$cr = $this->connection->getConnectionResource();
 
-		$this->processPagedSearchStatus($sr, $filter, $base, $findings['count'],
-										$limit, $offset, $pagedSearchOK,
+			if($skipHandling) {
+				//i.e. result do not need to be fetched, we just need the cookie
+				//thus pass 1 or any other value as $iFoundItems because it is not
+				//used
+				$this->processPagedSearchStatus($sr, $filter, $base, 1, $limit,
+								$offset, $pagedSearchOK,
+								$skipHandling);
+				return array();
+			}
+
+			// Do the server-side sorting
+			foreach(array_reverse($attr) as $sortAttr){
+				foreach($sr as $searchResource) {
+					$this->ldap->sort($cr, $searchResource, $sortAttr);
+				}
+			}
+
+
+			foreach($sr as $res) {
+				$findings = array_merge($findings, $this->ldap->getEntries($cr	, $res ));
+			}
+
+			$continue = $this->processPagedSearchStatus($sr, $filter, $base, $findings['count'],
+								$limit, $offset, $pagedSearchOK,
 										$skipHandling);
+			$offset += $limit;
+		} while ($continue && $pagedSearchOK && $findings['count'] < $limit);
+		// reseting offset
+		$offset = $savedoffset;
 
 		// if we're here, probably no connection resource is returned.
 		// to make ownCloud behave nicely, we simply give back an empty array.
@@ -1171,7 +1208,7 @@ class Access extends LDAPUtility implements user\IUserTools {
 		$searchWords = explode(' ', trim($search));
 		$wordFilters = array();
 		foreach($searchWords as $word) {
-			$word .= '*';
+			$word = $this->prepareSearchTerm($word);
 			//every word needs to appear at least once
 			$wordMatchOneAttrFilters = array();
 			foreach($searchAttributes as $attr) {
@@ -1204,7 +1241,8 @@ class Access extends LDAPUtility implements user\IUserTools {
 				);
 			}
 		}
-		$search = empty($search) ? '*' : $search.'*';
+
+		$search = $this->prepareSearchTerm($search);
 		if(!is_array($searchAttributes) || count($searchAttributes) === 0) {
 			if(empty($fallbackAttribute)) {
 				return '';
@@ -1219,6 +1257,22 @@ class Access extends LDAPUtility implements user\IUserTools {
 			return '('.$filter[0].')';
 		}
 		return $this->combineFilterWithOr($filter);
+	}
+
+	/**
+	 * returns the search term depending on whether we are allowed
+	 * list users found by ldap with the current input appended by
+	 * a *
+	 * @return string
+	 */
+	private function prepareSearchTerm($term) {
+		$config = \OC::$server->getConfig();
+
+		$allowEnum = $config->getAppValue('core', 'shareapi_allow_share_dialog_user_enumeration', 'yes');
+
+		$result = empty($term) ? '*' :
+			$allowEnum !== 'no' ? $term . '*' : $term;
+		return $result;
 	}
 
 	/**
@@ -1250,7 +1304,7 @@ class Access extends LDAPUtility implements user\IUserTools {
 			return false;
 		}
 		$result=$testConnection->bind();
-		$this->connection->bind();
+		$this->ldap->unbind($this->connection->getConnectionResource());
 		return $result;
 	}
 
@@ -1689,7 +1743,13 @@ class Access extends LDAPUtility implements user\IUserTools {
 				}
 
 			}
-		} else if($this->connection->hasPagedResultSupport && $limit === 0) {
+		/* ++ Fixing RHDS searches with pages with zero results ++
+		 * We coudn't get paged searches working with our RHDS for login ($limit = 0),
+		 * due to pages with zero results.
+		 * So we added "&& !empty($this->lastCookie)" to this test to ignore pagination
+		 * if we don't have a previous paged search.
+		 */
+		} else if($this->connection->hasPagedResultSupport && $limit === 0 && !empty($this->lastCookie)) {
 			// a search without limit was requested. However, if we do use
 			// Paged Search once, we always must do it. This requires us to
 			// initialize it with the configured page size.

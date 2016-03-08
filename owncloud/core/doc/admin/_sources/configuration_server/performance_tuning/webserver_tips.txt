@@ -1,6 +1,6 @@
-==============
-Webserver Tips
-==============
+===============
+Web server Tips
+===============
 
 PHP safe mode
 -------------
@@ -12,30 +12,21 @@ on/off``. If it is on, then add this line to ``php.ini`` to turn it off::
 
  safe_mode = Off
 
-Raise max_file_uploads of PHP
------------------------------
-
-The PHP setting ``max_file_uploads`` within the ``php.ini`` defaults to ``20``
-on most environments which allows that number of simultaneous uploads.
-Currently the ownCloud sync client is doing ``3`` parallel uploads which means
-that at least ``6`` clients can upload files simultaneously. Depending on your
-server usage it is recommended to raise this number to a higher value.
 
 Enable the SPDY / http_v2 protocol
 ----------------------------------
 
-Your webserver can be configured to use the SPDY / http_v2 protocol which could 
-improve 
+Your Web server can be configured to use the SPDY / http_v2 protocol which could improve 
 the overall performance of ownCloud. Please have a look at the documentation of 
-your webservers module for more information:
+your Web servers module for more information:
 
-* `Apache mod-spdy <https://code.google.com/p/mod-spdy/>`_
-
-* `nginx (<1.9.5) ngx_http_spdy_module 
-  <http://nginx.org/en/docs/http/ngx_http_spdy_module.html>`_
-
-* `nginx (+1.9.5) ngx_http_http2_module 
-  <http://nginx.org/en/docs/http/ngx_http_v2_module.html>`_
+====================  ==================
+Web server            Module Name / Link
+====================  ==================
+Apache                `mod-spdy <https://code.google.com/p/mod-spdy/>`_
+nginx (<1.9.5)        `ngx_http_spdy_module <http://nginx.org/en/docs/http/ngx_http_spdy_module.html>`_
+nginx (+1.9.5)        `ngx_http_http2_module <http://nginx.org/en/docs/http/ngx_http_v2_module.html>`_
+====================  ==================
 
 .. note:: If you want to enable SPDY for Apache please note the `Known Issues 
    <https://code.google.com/p/mod-spdy/wiki/KnownIssues>`_
@@ -46,11 +37,9 @@ your webservers module for more information:
    1.) be aware that this module is not built in by default due to a dependency 
    to the openssl version used on your system. It will be enabled with the 
    ``--with-http_v2_module`` configuration parameter during compilation. The 
-   dependency should be checked automatically. You can check the presence of 
-   http_v2
+   dependency should be checked automatically. You can check the presence of http_v2
    with ``nginx -V 2>&1 | grep http_v2 -o``. An example how to compile nginx can
-   be found in section "Configure Nginx with the ``nginx-cache-purge`` module" 
-   below.
+   be found in section "Configure Nginx with the ``nginx-cache-purge`` module" below.
    
    2.) When you have used SPDY before, the nginx config has to be changed from 
    ``listen 443 ssl spdy;`` to ``listen 443 ssl http2;``
@@ -132,7 +121,7 @@ down errors.
 Nginx: caching ownCloud gallery thumbnails
 ------------------------------------------
 
-One of the optimizations for ownCloud when using Nginx as the webserver is to 
+One of the optimizations for ownCloud when using Nginx as the Web server is to 
 combine FastCGI caching with "Cache Purge", a `3rdparty Nginx module 
 <http://wiki.nginx.org/3rdPartyModules>`_  that adds the ability to purge 
 content from `FastCGI`, `proxy`, `SCGI` and `uWSGI` caches. This mechanism 
@@ -175,8 +164,7 @@ Compile Nginx with the ``nginx-cache-purge`` module
     sudo apt-key add nginx_signing.key
     sudo vi /etc/apt/sources.list.d/nginx.list
     
-Add the following lines (if different, replace ``{trusty}`` by your 
-distribution 
+Add the following lines (if different, replace ``{trusty}`` by your distribution 
  
 name)::
 
@@ -302,8 +290,8 @@ Add at the *beginning*, but *outside* the ``server{}`` block::
 
 .. note:: Please adopt or delete any regex line in the ``map`` block according 
    your needs and the ownCloud version used.
-.. note:: As an alternative to mapping, you can use as many ``if`` statements 
-   in your server block as necessary::
+.. note:: As an alternative to mapping, you can use as many ``if`` statements in 
+   your server block as necessary::
    
     set $skip_cache 1;
     if ($request_uri ~* "thumbnail.php")      { set $skip_cache 0; }
