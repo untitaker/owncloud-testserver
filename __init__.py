@@ -71,28 +71,13 @@ class ServerMixin(object):
     def get_storage_args(self):
         def inner(collection='test'):
             fileext = self.storage_class.fileext
-            if fileext == '.vcf':
-                dav_path = ('/remote.php/carddav/addressbooks/{}/'
-                            .format(username))
-            elif fileext == '.ics':
-                dav_path = ('/remote.php/caldav/calendars/{}/'
-                            .format(username))
-            else:
-                raise RuntimeError(fileext)
+            dav_path = '/remote.php/dav/'
 
             rv = {'url': base + dav_path, 'collection': collection,
                   'username': username, 'password': password}
 
             if collection is not None:
-                if fileext == '.vcf':
-                    # Work around
-                    # https://github.com/owncloud/contacts/issues/802 This is
-                    # really the only reason this stupid CSRF-token-scraping
-                    # still exists.
-                    from vdirsyncer.utils.compat import urlquote
-                    rv['url'] += create_address_book(collection) + '/'
-                else:
-                    return self.storage_class.create_collection(**rv)
+                return self.storage_class.create_collection(**rv)
 
             return rv
 
