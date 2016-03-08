@@ -30,6 +30,6 @@ if [ ! -d owncloud ]; then
     tar xjf owncloud.tar.bz2
 fi
 
-pip install pytest-xprocess==0.8
+pip install pytest-xprocess
 
 sh $DIR/reset.sh
