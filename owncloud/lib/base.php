@@ -392,12 +392,15 @@ class OC {
 			$tmpl->assign('isAppsOnlyUpgrade', false);
 		}
 
+		$releaseNotes = new \OC\ReleaseNotes(\OC::$server->getDatabaseConnection());
+
 		// get third party apps
 		$ocVersion = \OCP\Util::getVersion();
 		$tmpl->assign('appsToUpgrade', $appManager->getAppsNeedingUpgrade($ocVersion));
 		$tmpl->assign('incompatibleAppsList', $appManager->getIncompatibleApps($ocVersion));
 		$tmpl->assign('productName', 'ownCloud'); // for now
 		$tmpl->assign('oldTheme', $oldTheme);
+		$tmpl->assign('releaseNotes', $releaseNotes->getReleaseNotes($installedVersion, $currentVersion));
 		$tmpl->printPage();
 	}
 
@@ -509,7 +512,9 @@ class OC {
 			require_once $vendorAutoLoad;
 
 		} catch (\RuntimeException $e) {
-			OC_Response::setStatus(OC_Response::STATUS_SERVICE_UNAVAILABLE);
+			if (!self::$CLI) {
+				OC_Response::setStatus(OC_Response::STATUS_SERVICE_UNAVAILABLE);
+			}
 			// we can't use the template error page here, because this needs the
 			// DI container which isn't available yet
 			print($e->getMessage());
@@ -714,6 +719,9 @@ class OC {
 				try {
 					$cache = new \OC\Cache\File();
 					$cache->gc();
+				} catch (\OC\ServerNotAvailableException $e) {
+					// not a GC exception, pass it on
+					throw $e;
 				} catch (\Exception $e) {
 					// a GC exception should not prevent users from using OC,
 					// so log the exception
@@ -724,7 +732,8 @@ class OC {
 	}
 
 	private static function registerEncryptionWrapper() {
-		\OCP\Util::connectHook('OC_Filesystem', 'preSetup', 'OC\Encryption\Manager', 'setupStorage');
+		$manager = self::$server->getEncryptionManager();
+		\OCP\Util::connectHook('OC_Filesystem', 'preSetup', $manager, 'setupStorage');
 	}
 
 	private static function registerEncryptionHooks() {
@@ -825,7 +834,7 @@ class OC {
 		}
 
 		$request = \OC::$server->getRequest();
-		$requestPath = $request->getPathInfo();
+		$requestPath = $request->getRawPathInfo();
 		if (substr($requestPath, -3) !== '.js') { // we need these files during the upgrade
 			self::checkMaintenanceMode();
 			self::checkUpgrade();

@@ -4,6 +4,8 @@ script('contacts', 'vendor/angular/angular');
 script('contacts', 'vendor/angular-route/angular-route');
 script('contacts', 'vendor/angular-uuid4/angular-uuid4');
 script('contacts', 'vendor/angular-cache/dist/angular-cache');
+script('contacts', 'vendor/angular-sanitize/angular-sanitize');
+script('contacts', 'vendor/ui-select/dist/select');
 
 // DAV libraries
 script('contacts', 'dav/dav');
@@ -14,10 +16,11 @@ script('contacts', 'public/script');
 
 script('contacts', 'vendor/angular-bootstrap/ui-bootstrap.min');
 script('contacts', 'vendor/angular-bootstrap/ui-bootstrap-tpls.min');
+script('contacts', 'vendor/jquery-timepicker/jquery.ui.timepicker');
 
 // all styles
 style('contacts', 'public/style');
-
+vendor_style('select2/select2');
 ?>
 
 <div id="app" ng-app="contactsApp">
@@ -28,11 +31,17 @@ style('contacts', 'public/style');
 		<div id="app-settings">
 			<div id="app-settings-header">
 				<button class="settings-button"
-						data-apps-slide-toggle="#app-settings-content"
-				>Settings</button>
+						data-apps-slide-toggle="#app-settings-content">
+					<?php p($l->t('Settings'));?>
+				</button>
 			</div>
 			<div id="app-settings-content">
 				<addressBookList></addressBookList>
+				<input type="file" id="contact-import" class="hidden-visually" contactimport />
+				<label for="contact-import" class="button" id="upload">
+					<?php p($l->t('Import'));?>
+					<span class="icon-upload"></span>
+				</label>
 			</div>
 		</div>
 	</div>
