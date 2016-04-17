@@ -14,6 +14,7 @@ if [ "$CI" = "true" ]; then
     sudo apt-get update || true
 
     sudo apt-get install \
+        php5-cgi \
         php5 php5-cli \
         php5-gd php5-json php5-sqlite php5-curl \
         php5-intl php5-mcrypt php5-imagick
