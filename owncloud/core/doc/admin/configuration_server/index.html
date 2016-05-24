@@ -85,11 +85,10 @@
 <li class="toctree-l2"><a class="reference internal" href="logging_configuration.html">Logging Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="harden_server.html">Hardening and Security Guidance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reverse_proxy_configuration.html">Reverse Proxy Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="search_configuration.html">Enabling Full-Text Search</a></li>
 <li class="toctree-l2"><a class="reference internal" href="thirdparty_php_configuration.html">Using Third Party PHP Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tuning/index.html">Server Tuning &amp; Performance Tips</a></li>
 <li class="toctree-l2"><a class="reference internal" href="js_css_asset_management_configuration.html">JavaScript and CSS Asset Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="automatic_configuration.html">Automatic Configuration Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oc_server_tuning.html">ownCloud Server Tuning</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -137,7 +136,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="security_setup_warnings.html">Warnings on Admin Page</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="security_setup_warnings.html#cache-warnings">Cache Warnings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="security_setup_warnings.html#transactional-file-locking">Transactional file locking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="security_setup_warnings.html#transactional-file-locking-is-disabled">Transactional file locking is disabled</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security_setup_warnings.html#you-are-accessing-this-site-via-http">You are accessing this site via HTTP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security_setup_warnings.html#the-test-with-getenv-path-only-returns-an-empty-response">The test with getenv(&#8220;PATH&#8221;) only returns an empty response</a></li>
 <li class="toctree-l2"><a class="reference internal" href="security_setup_warnings.html#the-strict-transport-security-http-header-is-not-configured">The &#8220;Strict-Transport-Security&#8221; HTTP header is not configured</a></li>
@@ -165,7 +164,7 @@
 <li class="toctree-l2"><a class="reference internal" href="occ_command.html#ldap-commands">LDAP Commands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="occ_command.html#logging-commands">Logging Commands</a></li>
 <li class="toctree-l2"><a class="reference internal" href="occ_command.html#maintenance-commands">Maintenance Commands</a></li>
-<li class="toctree-l2"><a class="reference internal" href="occ_command.html#security">Security</a></li>
+<li class="toctree-l2"><a class="reference internal" href="occ_command.html#security-import-ssl-certificates">Security (Import SSL Certificates)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="occ_command.html#shibboleth-modes-enterprise-only">Shibboleth Modes (Enterprise only)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="occ_command.html#trashbin">Trashbin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="occ_command.html#user-commands">User Commands</a></li>
@@ -264,16 +263,8 @@
 <li class="toctree-l2"><a class="reference internal" href="reverse_proxy_configuration.html#example">Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="search_configuration.html">Enabling Full-Text Search</a></li>
 <li class="toctree-l1"><a class="reference internal" href="thirdparty_php_configuration.html">Using Third Party PHP Components</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="thirdparty_php_configuration.html#managing-third-party-parameters">Managing Third Party Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="performance_tuning/index.html">Server Tuning &amp; Performance Tips</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="performance_tuning/oc_server_tuning.html">ownCloud Server Tuning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tuning/database_best_practice.html">Database Best Practice</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tuning/webserver_tips.html">Web server Tips</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tuning/ssl_encryption_app.html">SSL / Encryption App</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="js_css_asset_management_configuration.html">JavaScript and CSS Asset Management</a><ul>
@@ -283,6 +274,15 @@
 <li class="toctree-l1"><a class="reference internal" href="automatic_configuration.html">Automatic Configuration Setup</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="automatic_configuration.html#parameters">Parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="automatic_configuration.html#automatic-configurations-examples">Automatic Configurations Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="oc_server_tuning.html">ownCloud Server Tuning</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="oc_server_tuning.html#using-cron-to-perform-background-jobs">Using cron to perform background jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oc_server_tuning.html#enable-javascript-and-css-asset-management">Enable JavaScript and CSS Asset Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oc_server_tuning.html#caching">Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oc_server_tuning.html#using-mariadb-mysql-instead-of-sqlite">Using MariaDB/MySQL instead of SQLite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oc_server_tuning.html#using-redis-based-transactional-file-locking">Using Redis-based Transactional File Locking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oc_server_tuning.html#ssl-encryption-app">SSL / Encryption App</a></li>
 </ul>
 </li>
 </ul>

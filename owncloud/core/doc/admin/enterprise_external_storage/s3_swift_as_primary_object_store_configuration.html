@@ -125,22 +125,19 @@
   <div class="section" id="configuring-s3-and-openstack-swift-objects-as-primary-storage">
 <h1>Configuring S3 and OpenStack Swift Objects as Primary Storage<a class="headerlink" href="#configuring-s3-and-openstack-swift-objects-as-primary-storage" title="Permalink to this headline">¶</a></h1>
 <p>In ownCloud Enterprise Subscription, you can configure S3 objects as primary
-storage. This replaces the default data directory, which is
-<code class="docutils literal"><span class="pre">/var/www/owncloud/data</span></code> on default Linux installations, and
-<code class="docutils literal"><span class="pre">C:\inetpub\wwwroot\owncloud\data</span></code> on Windows servers. However, you may need
-to keep the <code class="docutils literal"><span class="pre">data/</span></code> directory for these reasons:</p>
+storage. This replaces the default ownCloud <code class="docutils literal"><span class="pre">owncloud/data</span></code> directory. You may
+still need to keep the <code class="docutils literal"><span class="pre">owncloud/data</span></code> directory for these reasons:</p>
 <ul class="simple">
 <li>The ownCloud log file is saved in the data directory</li>
-<li>Legacy apps may not support using anything but the <code class="docutils literal"><span class="pre">data/</span></code> directory</li>
+<li>Legacy apps may not support using anything but the <code class="docutils literal"><span class="pre">owncloud/data</span></code> directory</li>
 </ul>
 <p>You can move your logfile by changing its location in <code class="docutils literal"><span class="pre">config.php</span></code>. You may still need
-<code class="docutils literal"><span class="pre">data/</span></code> for backwards compatibility with some apps.</p>
+<code class="docutils literal"><span class="pre">owncloud/data</span></code> for backwards compatibility with some apps.</p>
 <div class="section" id="implications">
 <h2>Implications<a class="headerlink" href="#implications" title="Permalink to this headline">¶</a></h2>
-<p>It is important to note that ownCloud in object store mode will expect exclusive
-access to the object store container, because it only stores the binary data
-for each file. The metadata is currently kept in the local database for
-performance reasons.</p>
+<p>ownCloud in object store mode expects exclusive access to the object store
+container, because it only stores the binary data for each file. The metadata
+are kept in the local database for performance reasons.</p>
 <p>The current implementation is incompatible with any app that uses
 direct file I/O and circumvents the ownCloud virtual filesystem. That includes
 Encryption and Gallery. Gallery stores thumbnails directly in the
@@ -150,7 +147,7 @@ to be fetched in addition to any requested file.</p>
 <div class="section" id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p>Look in <code class="docutils literal"><span class="pre">config.sample.php</span></code> for a example configurations. Copy the
-relevant part to your <code class="docutils literal"><span class="pre">config.php</span></code> file. Any objectstore needs to implement
+relevant part to your <code class="docutils literal"><span class="pre">config.php</span></code> file. Any object store needs to implement
 <code class="docutils literal"><span class="pre">\\OCP\\Files\\ObjectStore\\IObjectStore</span></code> and can be passed parameters in the
 constructor with the <code class="docutils literal"><span class="pre">arguments</span></code> key:</p>
 <div class="highlight-python"><div class="highlight"><pre>&#39;objectstore&#39; =&gt; array(
@@ -171,6 +168,7 @@ into the virtual filesystem. The class to be used is <code class="docutils liter
         &#39;key&#39; =&gt; &#39;yourkey&#39;,
         &#39;secret&#39; =&gt; &#39;yoursecret&#39;,
         &#39;bucket&#39; =&gt; &#39;your-oc-bucket&#39;,
+        &#39;region&#39; =&gt; &#39;region-of-your-oc-bucket&#39;
       ),
 ),
 </pre></div>

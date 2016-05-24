@@ -2,11 +2,13 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "Kontakte",
+    "Address book name" : "Emër libri adresash",
     "No contacts in here" : "S’ka kontakte këtu",
     "Name" : "Emër",
     "Organization" : "Organizëm",
     "Title" : "Titull",
     "Add field ..." : "Shtoni fushë...",
+    "Import" : "Importoje",
     "Add contact" : "Shtoni kontakt",
     "No search result for {query}" : "S’pat përfundime kërkimi për {query}",
     "All contacts" : "Krejt kontaktet",
@@ -18,7 +20,9 @@ OC.L10N.register(
     "Country" : "Vend",
     "Address" : "Adresë",
     "(new group)" : "(grup i ri)",
+    "New contact" : "Kontakt i ri",
     "{addressbook} shared by {owner}" : "{addressbook} ndarë nga {owner}",
+    "Invalid file type." : "Lloj i pavlefshëm kartele.",
     "Nickname" : "Nofkë",
     "Notes" : "Shënime",
     "Website" : "Sajt",
@@ -37,7 +41,7 @@ OC.L10N.register(
     "Fax work" : "Faks pune",
     "Pager" : "Faques",
     "Voice" : "Zë",
-    "Settings" : "Rregullime",
-    "Import" : "Importoje"
+    "Social Network" : "Rrjet Shoqëror",
+    "Settings" : "Rregullime"
 },
 "nplurals=2; plural=(n != 1);");

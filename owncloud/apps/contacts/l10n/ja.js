@@ -7,6 +7,7 @@ OC.L10N.register(
     "Organization" : "所属",
     "Title" : "タイトル",
     "Add field ..." : "項目を追加",
+    "Import" : "インポート",
     "Add contact" : "連絡先を追加",
     "No search result for {query}" : "{query} に関する検索結果はありません。",
     "All contacts" : "すべての連絡先",
@@ -18,6 +19,7 @@ OC.L10N.register(
     "Country" : "国名",
     "Address" : "アドレス",
     "(new group)" : "(新規グループ)",
+    "New contact" : "新しい連絡先",
     "{addressbook} shared by {owner}" : " {owner}と共有中の{addressbook} ",
     "Nickname" : "ニックネーム",
     "Notes" : "ノート",
@@ -37,7 +39,6 @@ OC.L10N.register(
     "Fax work" : "職場FAX",
     "Pager" : "ポケベル",
     "Voice" : "音声番号",
-    "Settings" : "設定",
-    "Import" : "インポート"
+    "Settings" : "設定"
 },
 "nplurals=1; plural=0;");

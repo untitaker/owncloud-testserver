@@ -2,12 +2,15 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "Névjegyek",
+    "Address book name" : "Címjegyzék neve",
     "No contacts in here" : "Nincsenek névjegyek",
     "Name" : "Név",
     "Organization" : "Szervezet",
     "Title" : "Cím",
     "Add field ..." : "Mező hozzáadása",
+    "Import" : "Importálás",
     "Add contact" : "Névjegy hozzáadása",
+    "No search result for {query}" : "{query} keresésre nincs találat.",
     "All contacts" : "Összes névjegy",
     "Not grouped" : "Nem csoportosított",
     "Post Office Box" : "Postaláda",
@@ -17,6 +20,7 @@ OC.L10N.register(
     "Country" : "Ország",
     "Address" : "Cím",
     "(new group)" : "(új csoport)",
+    "New contact" : "Új névjegy",
     "{addressbook} shared by {owner}" : "{addressbook} megosztója {owner}",
     "Nickname" : "Becenév",
     "Notes" : "Jegyzetek",
@@ -36,7 +40,6 @@ OC.L10N.register(
     "Fax work" : "Munkahelyi fax",
     "Pager" : "Személyhívó",
     "Voice" : "Hang",
-    "Settings" : "Beállítások",
-    "Import" : "Importálás"
+    "Settings" : "Beállítások"
 },
 "nplurals=2; plural=(n != 1);");

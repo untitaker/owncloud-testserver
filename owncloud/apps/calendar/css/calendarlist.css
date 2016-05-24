@@ -24,7 +24,6 @@
 
 #app-navigation .calendar-list {
 	max-height: 400px;
-	overflow-y: scroll;
 }
 #app-navigation .app-navigation-input {
 	width: 95%;
@@ -46,18 +45,12 @@
 	width: 100%;
 	padding: 8px;
 }
-#app-navigation .loading {
-	margin-left: 5px;
-	height: 30px;
-	width: 92%;
-	background-size: 20px;
-}
 #app-navigation .new-entity,
 #app-navigation .subscription-title {
 	display: block;
 	width: 100%;
 	line-height: 44px;
-	padding: 0 25px;
+	padding: 0 44px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -70,10 +63,8 @@
 	cursor: pointer;
 }
 #app-navigation .new-entity .new-entity-title:before {
-	left: 10px;
-	width: 10px;
+	left: 18px;
 	position: absolute;
-	font-weight: bold;
 	font-size: 150%;
 	content: '+';
 }
@@ -100,36 +91,32 @@
 }
 
 #app-navigation .app-navigation-list-item .calendarCheckbox {
-	border: 1px solid #000000;
-	cursor: pointer;
-	margin-left: 5px;
-	margin-top: 15px;
-	width: 10px;
 	position: absolute;
-	height: 10px;
-	top: 2px;
-	left: 5px;
+	margin-left: 17px;
+	margin-top: 16px;
+	width: 12px;
+	height: 12px;
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
 }
 #app-navigation .app-navigation-list-item .calendarCheckbox.unchecked {
 	background: transparent !important;
-	border-color: #aaa;
 }
-#app-navigation .app-navigation-list-item .loading {
-	margin-left: 6px;
-	margin-top: 16px;
-	width: 10px;
+#app-navigation .app-navigation-list-item .icon-loading-small {
 	position: absolute;
-	height: 10px;
-	top: 2px;
-	left: 5px;
-	background-size: 10px;
+	margin-left: 15px;
+	margin-top: 14px;
 }
 #app-navigation .app-navigation-list-item .utils {
 	height: 44px;
 	padding: 0 5px 0 0;
 }
 #app-navigation .app-navigation-list-item .utils .action span {
-	opacity: 0.6;
+	opacity: .3;
+}
+#app-navigation .app-navigation-list-item .utils .action:hover span {
+	opacity: 1;
 }
 #app-navigation .app-navigation-list-item .active {
 	background: transparent !important;
@@ -144,7 +131,7 @@
 	/* Core Override */
 }
 #app-navigation .app-navigation-list-item > a {
-	padding: 0 25px !important;
+	padding: 0 66px 0 44px !important;
 }
 #app-navigation .app-navigation-list-item .editfieldset {
 	padding: 0 4px;
@@ -164,15 +151,15 @@
 #app-navigation .app-navigation-list-item .caldavURL input {
 	width: 75%;
 }
-#app-navigation .app-navigation-list-item:hover .utils {
+#app-navigation .app-navigation-list-item .utils {
 	display: inline-block;
 }
-#app-navigation .app-navigation-list-item:hover .utils .action span {
+#app-navigation .app-navigation-list-item .utils .action span {
 	display: inline-block;
 	line-height: 44px;
 	height: 16px;
 	width: 16px;
-	padding: 14px 2px 14px 2px;
+	padding: 12px 6px 12px 6px;
 	cursor: pointer;
 }
 
@@ -186,11 +173,6 @@
 #app-navigation .app-navigation-list-item:hover .utils > a {
 	background-color: transparent !important;
 }
-#app-navigation .app-navigation-list-item:hover a {
-	text-overflow: ellipsis;
-	overflow: hidden;
-	width: 130px;
-}
 #app-navigation > ul {
   height: auto;
 }
@@ -201,17 +183,24 @@
   height: 30px;
 }
 .colorpicker .colorpicker-list {
-  display: block;
+  display: flex;
   width: 100%;
   height: 100%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 .colorpicker .colorpicker-list li {
-  height: 100%;
-  width: 29px !important;
-  float: left;
+  height: 24px;
+  width: 24px !important;
 }
 .colorpicker .colorpicker-list li.selected {
   border: 1px solid #333;
+}
+.colorpicker .colorpicker-list li.randomcolour {
+  background-image: url('../img/random.svg');
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 /*scroll issues */
@@ -238,15 +227,56 @@ ul.dropdown-menu {
 	height: 100px;
     overflow: scroll;
     border: 1px #ddd solid;
-    border-radius: 3px;
+    border-radius: 0 0 3px 3px;
 	margin-top: -7px;
     margin-left: 6px;
-    width: 226px;
+    width: 94%;
 }
 ul.dropdown-menu  li {
 	height: 25px;
 }
 
+#app-navigation ul.dropdown-menu a {
+	min-height: 22px;
+	max-height: 22px;
+	padding: 0 10px;
+	line-height: 2;
+}
+
 ul.dropdown-menu li > a:hover {
 	background-color: grey !important;
+}
+
+
+/* Fullcalendar modifications */
+
+.fc th,
+.fc .fc-axis,
+.fc-day-grid-event .fc-time,
+.fc-ltr .fc-basic-view .fc-day-number,
+.fc-time-grid-event .fc-time {
+	opacity: .8;
+	font-size: 80%;
+	font-weight: normal;
+}
+.fc-day-number.fc-other-month {
+	opacity: .1 !important;
+}
+
+.fc td.fc-widget-header {
+	border-top: none;
+}
+.fc th, .fc td {
+	border-left: none;
+	border-bottom: none;
+}
+.fc-unthemed th, .fc-unthemed td, .fc-unthemed thead, .fc-unthemed tbody, .fc-unthemed .fc-divider, .fc-unthemed .fc-row, .fc-unthemed .fc-popover {
+	border-color: #f8f8f8;
+}
+
+/* properly size events */
+.fc-event {
+	font-size: 13px;
+	line-height: initial;
+	padding-left: 3px;
 }

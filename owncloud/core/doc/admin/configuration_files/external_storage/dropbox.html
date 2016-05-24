@@ -87,7 +87,6 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../external_storage_configuration_gui.html#available-storage-backends">Available storage backends</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../external_storage_configuration_gui.html#allow-users-to-mount-external-storage">Allow Users to Mount External Storage</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../external_storage_configuration_gui.html#adding-files-to-external-storages">Adding Files to External Storages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../external_storage_configuration_gui.html#configuration-file">Configuration File</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../external_storage_configuration.html">Configuring External Storage (Configuration File)</a></li>
@@ -95,6 +94,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../encryption_configuration.html">Encryption Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../files_locking_transactional.html">Transactional File Locking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../previews_configuration.html">Previews Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../file_versioning.html">Controlling File Versions and Aging</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../configuration_database/index.html">Database Configuration</a></li>
@@ -140,44 +140,46 @@
 safely ignore any references to OAuth 2.0 in the Dropbox configuration.</p>
 <p>Connecting Dropbox is a little more work because you have to create a Dropbox
 app. Log into the <a class="reference external" href="http://www.dropbox.com/developers">Dropbox Developers page</a>
-and click <strong>App Console</strong>:</p>
+and click <strong>Create Your App</strong>:</p>
 <div class="figure">
-<img alt="../../_images/dropbox.png" src="../../_images/dropbox.png" />
+<img alt="Create your app." src="../../_images/dropbox.png" />
 </div>
-<p>If you have not already created any Dropbox apps it will ask you to accept
-their terms and conditions. Then you are presented with the choice to create
-either a Drop-ins App or a Dropbox API App. Click <strong>Dropbox API App</strong>, and then
-check:</p>
-<ul class="simple">
-<li>Files and datastores.</li>
-<li>No &#8211; My app needs access to files already on Dropbox.</li>
-<li>All file types &#8211; My app needs access to a user&#8217;s full Dropbox. Only
-supported via the CoreAPI.</li>
-</ul>
-<p>Then enter whatever name you want for your app.</p>
+<p>Next, for <strong>Choose an API</strong> check <strong>Dropbox API</strong>.</p>
 <div class="figure">
-<img alt="../../_images/dropbox-app.png" src="../../_images/dropbox-app.png" />
+<img alt="Select Dropbox API." src="../../_images/dropbox-1.png" />
 </div>
-<p>Now click the <strong>Create App</strong> button. Under <strong>Status</strong>, do not click
-<strong>Development (Apply for production status)</strong> because that is for apps that you
-want to release publicly.</p>
-<p>Click <strong>Enable additional users</strong> to allow multiple ownCloud users to use your
-new Dropbox share.</p>
-<p>Note your App key and App secret, which you will enter in the External Storage
-form on your ownCloud Admin page.</p>
+<p>The next option is choosing which folders to share, or to share everything in
+your Dropbox.</p>
 <div class="figure">
-<img alt="../../_images/dropbox-configapp.png" src="../../_images/dropbox-configapp.png" />
+<img alt="Folder selection." src="../../_images/dropbox-2.png" />
 </div>
-<p>Your ownCloud configuration requires only the local mount name, the App Key and
-the App Secret, and which users or groups have access to the share.</p>
+<p>Then enter your app name. This is anything you want it to be.</p>
 <div class="figure">
-<img alt="../../_images/dropbox-oc.png" src="../../_images/dropbox-oc.png" />
+<img alt="Name your app." src="../../_images/dropbox-3.png" />
 </div>
-<p>You must be logged into Dropbox, and when ownCloud successfully verifies your
-connection Dropbox will ask for verification to connect to your Dropbox
-account. Click <strong>Allow</strong>, and you&#8217;re done.</p>
+<p>Then click the <strong>Create App</strong> button.</p>
+<p>Now you are on your app page, which displays its settings and more options. Do
+not click <strong>Development (Apply for production)</strong> because that is for apps
+that you want to release publicly.</p>
 <div class="figure">
-<img alt="../../_images/dropbox-allowshare.png" src="../../_images/dropbox-allowshare.png" />
+<img alt="Your app's page." src="../../_images/dropbox-4.png" />
+</div>
+<p>Click <strong>Enable additional users</strong> to allow multiple ownCloud users to access
+your new Dropbox share.</p>
+<p>Now go to your ownCloud Admin page. Your ownCloud configuration requires only
+the local mount name, the <strong>App Key</strong> and the <strong>App Secret</strong>, and which users
+or groups have access to the share. Remember the little gear icon at the
+far right for additional options.</p>
+<p>After entering your local mount name, <strong>App Key</strong> and <strong>App Secret</strong>, click
+<strong>Grant access</strong>.</p>
+<div class="figure">
+<img alt="ownCloud Dropbox configuration." src="../../_images/dropbox-6.png" />
+</div>
+<p>If you are not already logged into Dropbox, you will be prompted to login
+and authorize access. This happens only once, when you are first creating
+the new share. Click <strong>Allow</strong>, and you&#8217;re done.</p>
+<div class="figure">
+<img alt="Allow Dropbox access." src="../../_images/dropbox-5.png" />
 </div>
 <p>See <a class="reference internal" href="../external_storage_configuration_gui.html"><em>Configuring External Storage (GUI)</em></a> for additional mount
 options and information.</p>

@@ -39,6 +39,9 @@ class Local extends \OC\Files\Storage\Common {
 	protected $datadir;
 
 	public function __construct($arguments) {
+		if (!isset($arguments['datadir']) || !is_string($arguments['datadir'])) {
+			throw new \InvalidArgumentException('No data directory set for local storage');
+		}
 		$this->datadir = $arguments['datadir'];
 		if (substr($this->datadir, -1) !== '/') {
 			$this->datadir .= '/';
@@ -176,7 +179,18 @@ class Local extends \OC\Files\Storage\Common {
 	}
 
 	public function file_get_contents($path) {
-		return file_get_contents($this->getSourcePath($path));
+		// file_get_contents() has a memory leak: https://bugs.php.net/bug.php?id=61961
+		$fileName = $this->getSourcePath($path);
+
+		$fileSize = filesize($fileName);
+		if ($fileSize === 0) {
+			return '';
+		}
+
+		$handle = fopen($fileName,'rb');
+		$content = fread($handle, $fileSize);
+		fclose($handle);
+		return $content;
 	}
 
 	public function file_put_contents($path, $data) {

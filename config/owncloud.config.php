@@ -9,7 +9,7 @@ $CONFIG = array (
   ),
   'overwrite.cli.url' => 'http://127.0.0.1:8080',
   'dbtype' => 'sqlite3',
-  'version' => '9.0.1.3',
+  'version' => '9.0.2.2',
   'logtimezone' => 'UTC',
   'installed' => true,
   'theme' => '',

@@ -1,6 +1,6 @@
 {
     "hashes": {
-        "appinfo\/app.php": "a72709a6dd90fe5526152c3b09917a5d7cc38447d87c2b5001f3553214a99c6cad35501e367c77d4d0f0cfd5617a2c22750e4626ba20c8df2f3b7d23b17f3614",
+        "appinfo\/app.php": "f57285c1ba9d4768a02a4b5fba8b6f5c97d98fc4317cbff9d2ae0eba0dd0581d00ee3b9c734395ca59aafc109a15231ddfca8d23500dfc7ebc69559b49cc08be",
         "appinfo\/application.php": "7977008699cd05c0fb2ccff8a69566ea22d45d2fecb137d6ca44f983ae9f5830af05551f8ffdd28b7504ad3b868bf3eaa4b86840a458ecab9f7199b7aa07f618",
         "appinfo\/database.xml": "e47a1dbb058426bbc3822f308d1feaee1908c2402ab89c31e7d34e7717b749d9d80470283b7811c825655ab9f7b44b11959ef578464292bec89d0a88c57805e6",
         "appinfo\/info.xml": "8b9a656a6fad14f3b092eeeb2e1093a23955b3035b23ae3780636b6f664de7a021a6dfae01b6961572d5a8b87f794a3f1599a136222c098c79d7ebe4732c1142",
@@ -20,7 +20,7 @@
         "command\/syncsystemaddressbook.php": "8cb9850f7dee53e13516c2339b11ba5128551d49cd4fa66136e83f7b484fbc4a442c4980eb7260582d8a15e32575881e9a0d339d9b0b1444eff93449c2fd7086",
         "lib\/caldav\/birthdayservice.php": "600c16ade417722379b2e3654b93b8ab9bf781e3433b2be1ffd6896c17d4e8bb7b8608a90ab9db9b3684f45342efca4f4cbc88c5680980aa883108e28e12038b",
         "lib\/caldav\/caldavbackend.php": "f42fb3981ee196f256e4646d0f35fe16a2ffc5be62276da2ff49ee33c4adcc32456a57d07fac0d72a9af29ef656974c1a0531fa2afaf9bab8b06359b2ec0c306",
-        "lib\/caldav\/calendar.php": "1a8f6e404d5798e5d39c39add5c4782a0a5e375b210ee479a186697f6f3ffd9c035287f0add333dbc419239c39e623d049e7e4fae452289ae6e93711e3a31da0",
+        "lib\/caldav\/calendar.php": "38cc66db76b849048ed8a16a4fc71ca08c6a16d584bc5b18316537e579b7036dac264445b8a0529eef142d5317f6011e514f897b0f07d8ae0695974ebe6ee4c6",
         "lib\/caldav\/calendarhome.php": "0d4b9b390840af907cb853e0bdebe8d1d3d58141fd7bd6dbbe157f293f000d4734d1415ec8830d76374a6087797849133170ae0f2d404564ed2b5cc93d16796e",
         "lib\/caldav\/calendarroot.php": "7ce5ecc632ccad8851f2a2da7070149bca306199684854d86ad38eb21aa04e6f0608dc0e9a9df10b688d622f6527fd1c486e441ea5a90de8a67385d01674be5c",
         "lib\/caldav\/schedule\/imipplugin.php": "cf007526cdbbdc934bf1cf5d8a65db89a868a71d8c5f83e7b469adde5950d28872f979e5d819d96126c6a8cb524cbf3da7b7f154638b0a5490ef73b52f94d858",
@@ -86,13 +86,13 @@
         "lib\/files\/fileshome.php": "eb039d37f8d242689f66367db4b752163eef66377f5cc3caed664d2e5d9a54615a4375ee4e015434aae8705ea1dacc922d86b8dd738f74f1aa54b17545f22302",
         "lib\/files\/rootcollection.php": "7caf34275636f86606e1a2ec72aeb6f39382eabd7358743cdcf20efdae28fea1402c14f1a26366e81feb4a15f45ddb7db943c00371f37f468cb47325b0206f55",
         "lib\/files\/sharing\/publiclinkcheckplugin.php": "5946d6cba61db3b2938daa17821bdfa0c029c3aaf4822ba913b1e6c2fb25a583cce8be7b9bb17f824f57dbcfe821ced9482d4426860323a8b4b2931685b44d4a",
-        "lib\/hookmanager.php": "57f6460296ec8d2fb2d3c7565c0d18578cbf25dfee5b993b49d6cd34dbe7a526acfca1bc2c31b848f54956060e3bedcbf2b5e07f9ffa741856af512470c13f0b",
+        "lib\/hookmanager.php": "fa138eb40758a9ebdfa8800b48f63a8d97e421fe02a61d320dde359c6b7c139efd786de65ef82fd22e8b35e26337c9645a4c22d1765206468007d3053fcab186",
         "lib\/migration\/addressbookadapter.php": "70387df878d940cbe5812d2e185f01e606abfa0d8987d1207c1a245d16f0ea9b2a525c5d71f02237c1098b8a126dbb1a73c5ae1ff25cabbf62936b814d4101b3",
         "lib\/migration\/calendaradapter.php": "f6ec4d3accc6346c7a96d1e9ea1f13312b332b23d4408b55840160b837e2652337b23b4ca39ee08260bb1b0c447bed6981a7955a370af67f7d94905835f9adee",
         "lib\/migration\/migrateaddressbooks.php": "e85daf8b3f4fc41644c0e9f599aa3628fb5df68ec058f11fd29659fd41686b0b874cf80358df2fc3eb2742e3e9cb4314f3ff7f01f4c0431d5aa4fa9adbfb4cb5",
         "lib\/migration\/migratecalendars.php": "333d31c3c04d8de4cd87a64f76e62f7bbda6fa9ba8b80221314d69bd77d33463bdd1a36af21e08cb681f227d641646c83c6267ccad0f259947ed9647b7bc52e8",
         "lib\/rootcollection.php": "a717c4207a530a686a8c051992716b0a58f7258b9dec01f7e16090503d842c62b1b023e2e438654d03c06b62aa1cb68bc54a2da4c6e32580c8352ef27b3bd1fb",
-        "lib\/server.php": "3ab1e42f608cd6cf9a2826259693917ce9e1288e6aef3eb4322c1fc9a4bb35310c813340a77d4aa4c6af1708a07f6f6b7a41f002da545c5b1b77b7a6ed3f5abb",
+        "lib\/server.php": "1f87a7b8fadfd6a773d13bccfbfb6aeb5944e7bc25a5da53819bec6044e3783d10bdeaf82f6780e8c7cecd59ead505095dd326b3c655e392ee562d402a4e422c",
         "lib\/systemtag\/systemtagmappingnode.php": "6a75f2845b41c8408576346bc07b687202fcb1cedf2c9f8cd9d694472305be578ea1407320d98ab291de18dd15d46ce7aa4f0db497d1ee2880b0c91ee2e9843d",
         "lib\/systemtag\/systemtagnode.php": "91ca97e82a16aeed853cf93d55c9e9e9039e065e6e1e5f5f5f12603a298774c1b1ad6d9ba38c03ca5e2706eb24ded2bd224412504ddfea7cf97c078d2499c335",
         "lib\/systemtag\/systemtagplugin.php": "6990cb2d8e48b8c8cef43da7a01cd479905b063ce41ac1766e0ace836727fbc6e0c033946b770c6a054699e3ae9b65271121ae7051ca42da5d89026681872d39",
@@ -102,6 +102,6 @@
         "lib\/systemtag\/systemtagsrelationscollection.php": "3c01f249308908ad481e945a448e33b9c3f542e79b51c832acba057bc1064dcf58b79495fc457ddb8f077113dd70e54f2d2f2d6e90a2eaa7a5df4ec6c4038aac",
         "templates\/exception.php": "d93ceca733b5679b793e86e4c96a3b8367c755396f9569aca94f499fea757f5f6aa9bbb09bd910da69505d757605ff05af5626025512b610c1d749f608f88bf6"
     },
-    "signature": "rPMTPPeqH0S\/VpE++D\/4dlwwdu+z5NzcX2qPCz+Qf\/lUh0QJsKbvx2yaOacbMd+QU1gATQZnCYcMDnrbyRPHIZyp4\/oKz8YlTK6YsLAbY475YXzlp\/79iCC08Z6W6lzutOl4QUYAs7KXpPyBIhWuqIwJmDf2VAt95bNO73w8TAR0NQlINUT2ZJG7PvVd9Az72XGjf3c6YCREsBmObSaizNh2\/dnpxi5+Wt0DJl09sYdtn\/3A+p0IIyrpgc7k\/35o2VwS\/hD0Q2cC1o+aB7rIzUxgEM\/kZRswvC8PyGxiM9\/xxumn5L3Y7Yie0gl4c9XNa8vZr3rgEwNtF\/sSpVctBA==",
+    "signature": "grQaEC6IKEaDVa88dlxZ1rj8dbEV4JPaqW+2kV2vPL5S6+TgKVPMp\/SOk7kJmt0UyiIQ5QwvEphrVYwD8\/7Vk\/f5RYxU34qNTSkLJS+yOx\/HkYGXFNB7O5pNDXr5v3fTZT+aficYtEdicyI\/aZWYH1O9cGuPufFhHFImVAGTAKH3m8u37tGJJ6L+R8+NLFOjvan3mrKmHpxrgWSUAQ\/o4mhzk2Cohi5IXt2gzU0\/+0xFxNbIBki\/HyctvJU0UOMPBDnXeyOKeiAW\/GaKErtNUMtp9AnhI\/3SgNbAx+Mpc5psztoP6ncZca5Hlc6TrcQCz8HLd\/pYaQQ14KwOg2oSBg==",
     "certificate": "-----BEGIN CERTIFICATE-----\r\nMIID8TCCAdkCAhAAMA0GCSqGSIb3DQEBCwUAMG0xCzAJBgNVBAYTAlVTMQ8wDQYD\r\nVQQIDAZCb3N0b24xFjAUBgNVBAoMDW93bkNsb3VkIEluYy4xNTAzBgNVBAMMLG93\r\nbkNsb3VkIENvZGUgU2lnbmluZyBJbnRlcm1lZGlhdGUgQXV0aG9yaXR5MB4XDTE2\r\nMDIwMzE3NTE0OVoXDTI2MDEzMTE3NTE0OVowDzENMAsGA1UEAwwEY29yZTCCASIw\r\nDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAPHdSljnHI+ueQd27UyWPO9n4Lqt\r\nbK0kdekiC3si7Mee7uXXJaGuqXJozHEZYB1LIFLdCU\/itCxEk9hyLcyNzeT+nRT\/\r\nzDuOYdbLgCj7\/A5bX+u3jc29UlCYybSFchfMdvn7a0njCna4dE+73b4yEj16tS2h\r\nS1EUygSzgicWlJqMD3Z9Qc+zLEpdhq9oDdDB8HURi2NW4KzIraVncSH+zF1QduOh\r\nnERDnF8x48D3FLdTxGA0W\/Kg4gYsq4NRvU6g3DJNdp4YfqRSFMmLFDCgzDuhan7D\r\nwgRlI9NAeHbnyoUPtrDBUceI7shIbC\/i87xk9ptqV0AyFonkJtK6lWwZjNkCAwEA\r\nATANBgkqhkiG9w0BAQsFAAOCAgEAAMgymqZE1YaHYlRGwvTE7gGDY3gmFOMaxQL4\r\nE5m0CnkBz4BdIPRsQFFdOv3l\/MIWkw5ED3vUB925VpQZYFSiEuv5NbnlPaHZlIMI\r\nn8AV\/sTP5jue3LhtAN4EM63xNBhudAT6wVsvGwOuQOx9Xv+ptO8Po7sTuNYP0CMH\r\nEOQN+\/q8tYlSm2VW+dAlaJ+zVZwZldhVjL+lSH4E9ktWn3PmgNQeKfcnJISUbus6\r\nZtsYDF\/X96\/Z2ZQvMXOKksgvU6XlvIxllcyebC9Bxe\/h0D63GCO2tqN5CWQzIIqn\r\napUynPX8BlLaaExqYGERwlUi\/yOGaUVPUjEPVehviOQYgAqxlrkJk1dWeCrwUori\r\nCXpi+IUYkidfgiJ9F88M3ElpwqIaXp7G3\/4oHBuE2u6M+L+1\/vqPJeTCAWUxxpJE\r\nyYmM+db6D4TySFpQPENNzPS8bpR6T8w2hRumkldC42HrnyJJbpjOieTXhXzjdPvZ\r\nIEP9JGtkhB2du6nBF2MNAq2TqRXpcfQrQEbnQ13aV9bl+roTwwO+SOWK\/wgvdOMI\r\nSTQ0Xk0sTGlmQjPYPkibVceaWMR3sX4cNt5c33YhJys5jxHoAh42km4nN9tfykR5\r\ncrl5lBlKjXh2GP0+omSO3x1jX4+iQPCW2TWoyKkUdLu\/hGHG2w8RrTeme+kATECH\r\nYSu356M=\r\n-----END CERTIFICATE-----"
 }

@@ -1,12 +1,15 @@
 { "translations": {
-    "Contacts" : "Contatos",
-    "No contacts in here" : "Nenhum contato aqui",
+    "Contacts" : "Contactos",
+    "Address book name" : "Nome do livro de endereços",
+    "No contacts in here" : "Nenhum contacto aqui",
     "Name" : "Nome",
     "Organization" : "Organização",
     "Title" : "Título ",
     "Add field ..." : "Adicionar campo ...",
+    "Import" : "Importar",
     "Add contact" : "Adicionar contacto",
-    "All contacts" : "Todos os contatos",
+    "No search result for {query}" : "Sem resultados de procura para {query}",
+    "All contacts" : "Todos os contactos",
     "Not grouped" : "Não agrupados",
     "Post Office Box" : "Caixa Postal",
     "Postal Code" : "Código Postal",
@@ -15,6 +18,7 @@
     "Country" : "País",
     "Address" : "Endereço",
     "(new group)" : "(novo grupo)",
+    "New contact" : "Novo contacto",
     "{addressbook} shared by {owner}" : "{addressbook} partilhado por {owner}",
     "Nickname" : "Alcunha",
     "Notes" : "Notas",
@@ -34,7 +38,6 @@
     "Fax work" : "Fax do emprego",
     "Pager" : "Pager",
     "Voice" : "Voz",
-    "Settings" : "Definições",
-    "Import" : "Importar"
+    "Settings" : "Definições"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

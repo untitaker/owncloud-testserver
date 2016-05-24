@@ -2,11 +2,13 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "Kontakty",
+    "Address book name" : "Název adresáře kontaktů",
     "No contacts in here" : "Nejsou zde žádné kontakty",
     "Name" : "Název",
     "Organization" : "Organizace",
     "Title" : "Název",
     "Add field ..." : "Přidat pole...",
+    "Import" : "Importovat",
     "Add contact" : "Přidat kontakt",
     "No search result for {query}" : "Žádný nález pro {query}",
     "All contacts" : "Všechny kontakty",
@@ -18,7 +20,9 @@ OC.L10N.register(
     "Country" : "Země",
     "Address" : "Adresa",
     "(new group)" : "(nová skupina)",
+    "New contact" : "Nový kontakt",
     "{addressbook} shared by {owner}" : "{addressbook} sdílí {owner}",
+    "Invalid file type." : "Neplatný typ souboru.",
     "Nickname" : "Přezdívka",
     "Notes" : "Poznámky",
     "Website" : "Stránka",
@@ -37,7 +41,6 @@ OC.L10N.register(
     "Fax work" : "Fax do práce",
     "Pager" : "Pager",
     "Voice" : "Hlas",
-    "Settings" : "Nastavení",
-    "Import" : "Importovat"
+    "Settings" : "Nastavení"
 },
 "nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");

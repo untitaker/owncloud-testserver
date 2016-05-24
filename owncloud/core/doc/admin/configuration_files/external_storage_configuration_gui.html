@@ -87,7 +87,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#available-storage-backends">Available storage backends</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#allow-users-to-mount-external-storage">Allow Users to Mount External Storage</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#adding-files-to-external-storages">Adding Files to External Storages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configuration-file">Configuration File</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="external_storage_configuration.html">Configuring External Storage (Configuration File)</a></li>
@@ -95,6 +94,7 @@
 <li class="toctree-l2"><a class="reference internal" href="encryption_configuration.html">Encryption Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="files_locking_transactional.html">Transactional File Locking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="previews_configuration.html">Previews Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_versioning.html">Controlling File Versions and Aging</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_database/index.html">Database Configuration</a></li>
@@ -260,14 +260,6 @@ when it&#8217;s very deep in the folder hierarchy of the external storage.</p>
 (or replace &#8220;&#8211;all&#8221; with the user name, see also <a class="reference internal" href="../configuration_server/occ_command.html"><em>Using the occ Command</em></a>)
 to trigger a rescan of the user&#8217;s files periodically (for example every 15 minutes), which includes
 the mounted external storage.</p>
-</div>
-<div class="section" id="configuration-file">
-<h2>Configuration File<a class="headerlink" href="#configuration-file" title="Permalink to this headline">¶</a></h2>
-<p>Storage mount configurations are stored in a JSON formatted file. Admin
-storages are stored in <code class="docutils literal"><span class="pre">data/mount.json</span></code>, while personal storages are stored
-in <code class="docutils literal"><span class="pre">data/$user/mount.json</span></code>. For more advanced use cases, including
-provisioning external storages from outside ownCloud, see
-<a class="reference internal" href="external_storage_configuration.html"><em>Configuring External Storage (Configuration File)</em></a>.</p>
 </div>
 </div>
 

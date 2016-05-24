@@ -6,14 +6,19 @@
     "Organization" : "Οργανισμός",
     "Title" : "Τίτλος",
     "Add field ..." : "Προσθήκη πεδίου...",
+    "Import" : "Εισαγωγή",
     "Add contact" : "Προσθήκη επαφής",
+    "No search result for {query}" : "Δεν βρέθηκε αποτέλεσμα αναζήτησης για {query}",
     "All contacts" : "Όλες οι επαφές",
     "Not grouped" : "Οχι ομαδοποιημένα",
+    "Post Office Box" : "Ταχυδρομική θυρίδα",
     "Postal Code" : "Ταχυδρομικός Κωδικός",
     "City" : "Πόλη",
     "State or province" : "Νομός ή περιφέρεια",
     "Country" : "Χώρα",
     "Address" : "Διεύθυνση",
+    "(new group)" : "(νέα ομάδα)",
+    "New contact" : "Νέα επαφή",
     "{addressbook} shared by {owner}" : "Το {addressbook} διαμοιράστηκε από τον/την {owner}",
     "Nickname" : "Παρατσούκλι",
     "Notes" : "Σημειώσεις",
@@ -29,9 +34,10 @@
     "Phone" : "Τηλέφωνο",
     "Mobile" : "Κινητό",
     "Fax" : "Φαξ",
+    "Fax home" : "Φαξ σπίτι",
+    "Fax work" : "Φαξ εργασία",
     "Pager" : "Βομβητής",
     "Voice" : "Ομιλία",
-    "Settings" : "Ρυθμίσεις",
-    "Import" : "Εισαγωγή"
+    "Settings" : "Ρυθμίσεις"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

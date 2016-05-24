@@ -7,6 +7,7 @@ OC.L10N.register(
     "Organization" : "Organisation",
     "Title" : "Rubrik",
     "Add field ..." : "Lägg till fält ...",
+    "Import" : "Importera",
     "Add contact" : "Lägg till en kontakt",
     "No search result for {query}" : "Inget sökresultat för {query}",
     "All contacts" : "Alla kontakter",
@@ -18,6 +19,7 @@ OC.L10N.register(
     "Country" : "Land",
     "Address" : "Adress",
     "(new group)" : "(ny grupp)",
+    "New contact" : "Ny kontakt",
     "{addressbook} shared by {owner}" : "{addressbook} delad av {owner}",
     "Nickname" : "Smeknamn",
     "Notes" : "Anteckningar",
@@ -37,7 +39,6 @@ OC.L10N.register(
     "Fax work" : "Fax arbete",
     "Pager" : "Personsökare",
     "Voice" : "Röst",
-    "Settings" : "Inställningar",
-    "Import" : "Importera"
+    "Settings" : "Inställningar"
 },
 "nplurals=2; plural=(n != 1);");

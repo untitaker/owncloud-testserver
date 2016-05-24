@@ -73,7 +73,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">ownCloud Server Configuration</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Warnings on Admin Page</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#cache-warnings">Cache Warnings</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#transactional-file-locking">Transactional file locking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transactional-file-locking-is-disabled">Transactional file locking is disabled</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#you-are-accessing-this-site-via-http">You are accessing this site via HTTP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-test-with-getenv-path-only-returns-an-empty-response">The test with getenv(&#8220;PATH&#8221;) only returns an empty response</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-strict-transport-security-http-header-is-not-configured">The &#8220;Strict-Transport-Security&#8221; HTTP header is not configured</a></li>
@@ -98,11 +98,10 @@
 <li class="toctree-l2"><a class="reference internal" href="logging_configuration.html">Logging Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="harden_server.html">Hardening and Security Guidance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reverse_proxy_configuration.html">Reverse Proxy Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="search_configuration.html">Enabling Full-Text Search</a></li>
 <li class="toctree-l2"><a class="reference internal" href="thirdparty_php_configuration.html">Using Third Party PHP Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tuning/index.html">Server Tuning &amp; Performance Tips</a></li>
 <li class="toctree-l2"><a class="reference internal" href="js_css_asset_management_configuration.html">JavaScript and CSS Asset Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="automatic_configuration.html">Automatic Configuration Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oc_server_tuning.html">ownCloud Server Tuning</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -172,12 +171,10 @@ you need to upgrade, or, if you&#8217;re not using it, remove it.</p>
 <p>You are not required to use any caches, but caches improve server performance.
 See <a class="reference internal" href="caching_configuration.html"><em>Configuring Memory Caching</em></a>.</p>
 </div>
-<div class="section" id="transactional-file-locking">
-<h2>Transactional file locking<a class="headerlink" href="#transactional-file-locking" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="transactional-file-locking-is-disabled">
+<h2>Transactional file locking is disabled<a class="headerlink" href="#transactional-file-locking-is-disabled" title="Permalink to this headline">¶</a></h2>
 <p>&#8220;Transactional file locking is disabled, this might lead to issues with race
 conditions.&#8221;</p>
-<p>&#8220;Transactional file locking is using the database as locking backend, for best
-performance it&#8217;s advised to configure a memcache for locking.&#8221;</p>
 <p>Please see <a class="reference internal" href="../configuration_files/files_locking_transactional.html"><em>Transactional File Locking</em></a> on how
 to correctly configure your environment for transactional file locking.</p>
 </div>

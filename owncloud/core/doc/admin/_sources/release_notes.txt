@@ -6,6 +6,11 @@ ownCloud |version| Release Notes
 Changes in 9.0
 --------------
 
+9.0 requires .ico files for favicons. This will change in 9.1, which will 
+use .svg files. See `Changing favicon 
+<https://doc.owncloud.org/server/9.0/developer_manual/core/theming.html#changing
+-favicon>`_ in the Developer Manual.
+
 Home folder rule is enforced in the user_ldap application in new ownCloud installations; see
 :doc:`configuration_user/user_auth_ldap`. This affects ownCloud 8.0.10, 8.1.5 and 8.2.0 and up.
 
@@ -26,6 +31,18 @@ See :doc:`installation/linux_installation`.
 
 New option for the ownCloud admin to enable or disable sharing on individual external mountpoints
 (see :ref:`external_storage_mount_options_label`). Sharing on such mountpoints is disabled by default.
+
+Enterprise 9.0
+--------------
+
+``owncloud-enterprise`` packages are no longer available for CentOS6, RHEL6, 
+Debian7, or any version of Fedora. A new package, 
+``owncloud-enterprise-files``, is available for all supported platforms. This 
+new package comes without dependencies, and is installable on a larger number of 
+platforms. System administrators on these older distros must install their own 
+LAMP stacks and databases. On newer supported distros, install 
+``owncloud-enterprise`` as usual. See 
+:doc:`enterprise_installation/linux_installation`.
 
 Changes in 8.2
 --------------
@@ -322,11 +339,11 @@ Nate, then search for ``*te``::
 
  occ ldap:search "*te"
 
-Refine searches by adjusting your search attributes in the ``User Search 
-Attributes`` form in your LDAP configuration on the Admin page. For example, if 
-your search attributes are ``givenName`` and ``sn`` you can find users by first 
-name + last name very quickly. For example, you'll find Terri Hanson by 
-searching for ``te ha``. Trailing whitespaces are ignored.
+Refine searches by adjusting the ``User Search Attributes`` field of the 
+Advanced tab in your LDAP configuration on the Admin page. For example, if your 
+search attributes are ``givenName`` and ``sn`` you can find users by first name 
++ last name very quickly. For example, you'll find Terri Hanson by searching for 
+``te ha``. Trailing whitespaces are ignored.
 
 .. https://github.com/owncloud/core/issues/12647
 

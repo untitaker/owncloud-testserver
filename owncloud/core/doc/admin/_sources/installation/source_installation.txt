@@ -19,7 +19,9 @@ Apache and MariaDB, using `the ownCloud .tar archive
 
 * :ref:`prerequisites_label`
 * :ref:`ubuntu_installation_label`
+* :ref:`binlog_format_label`
 * :ref:`apache_configuration_label`
+* :ref:`pretty_urls_label` 
 * :ref:`enabling_ssl_label`
 * :ref:`installation_wizard_label`
 * :ref:`strong_perms_label`
@@ -80,8 +82,8 @@ Database connectors (pick the one for your database:)
 Required for specific apps:
 
 * PHP module ldap (for LDAP integration)
-* `php5-libsmbclient <https://download.owncloud.org/download/repositories/stable/owncloud/>`_
-  (SMB/CIFS integration)
+* PHP module smbclient  (SMB/CIFS integration, see 
+  :doc:`../configuration_files/external_storage/smb`)
 * PHP module ftp (for FTP storage / external user authentication)
 * PHP module imap (for external user authentication)
 
@@ -96,7 +98,7 @@ memcaches:
 * PHP module apc
 * PHP module apcu
 * PHP module memcached
-* PHP module redis (required for Transactional File Locking)
+* PHP module redis (>= 2.2.5, required for Transactional File Locking)
 
 See :doc:`../configuration_server/caching_configuration` to learn how to select 
 and configure a memcache.
@@ -180,6 +182,22 @@ Now download the archive of the latest ownCloud version:
 On other HTTP servers it is recommended to install ownCloud outside of the 
 document root.
 
+.. _binlog_format_label:
+
+BINLOG_FORMAT = STATEMENT
+-------------------------
+
+If your ownCloud installation fails and you see this in your ownCloud log::
+
+ An unhandled exception has been thrown: exception ‘PDOException’ with message 
+ 'SQLSTATE[HY000]: General error: 1665 Cannot execute statement: impossible to 
+ write to binary log since BINLOG_FORMAT = STATEMENT and at least one table 
+ uses a storage engine limited to row-based logging. InnoDB is limited to 
+ row-logging when transaction isolation level is READ COMMITTED or READ 
+ UNCOMMITTED.'
+
+See :ref:`db-binlog-label`.
+
 .. _apache_configuration_label:
    
 Apache Web Server Configuration
@@ -249,6 +267,15 @@ Additional Apache Configurations
 * If you're running ownCloud in a subdirectory and want to use CalDAV or 
   CardDAV clients make sure you have configured the correct 
   :ref:`service-discovery-label` URLs.
+  
+.. _pretty_urls_label:  
+  
+Pretty URLs
+-----------
+
+Pretty URLs are created automatically when ``.htaccess`` is writable by the 
+HTTP user, ``mod_env`` and ``mod_rewrite`` are installed, and 
+``'overwrite.cli.url'`` in your ``config.php`` is set to any non-null value.
 
 .. _enabling_ssl_label:
 
@@ -267,11 +294,8 @@ the default site. Open a terminal and run::
      a2ensite default-ssl
      service apache2 reload
 
-.. note:: Self-signed certificates have their drawbacks - especially when you
-          plan to make your ownCloud server publicly accessible. You might want
-          to consider getting a certificate signed by a commercial signing
-          authority. Check with your domain name registrar or hosting service 
-          for good deals on commercial certificates.   
+.. note:: See :ref:`security_commands_label` for help on managing self-signed 
+   certificates.   
     
 .. _installation_wizard_label:
     
@@ -316,7 +340,7 @@ SELinux-enabled distributions such as Fedora and CentOS.
 php.ini Configuration Notes
 ---------------------------
 
-Keep in mind that changes to ``php.ini`` may have to be done on more than one 
+Keep in mind that changes to ``php.ini`` may have to be configured on more than one 
 ini file. This can be the case, for example, for the ``date.timezone`` setting.
 
 **php.ini - used by the Web server:**

@@ -2,11 +2,13 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "Yhteystiedot",
+    "Address book name" : "Osoitekirjan nimi",
     "No contacts in here" : "Ei yhteytietoja",
     "Name" : "Nimi",
     "Organization" : "Organisaatio",
     "Title" : "Otsikko",
     "Add field ..." : "Lisää kenttä...",
+    "Import" : "Tuo",
     "Add contact" : "Lisää yhteystieto",
     "No search result for {query}" : "Ei tuloksia haulle {query}",
     "All contacts" : "Kaikki yhteystiedot",
@@ -18,7 +20,9 @@ OC.L10N.register(
     "Country" : "Maa",
     "Address" : "Osoite",
     "(new group)" : "(uusi ryhmä)",
+    "New contact" : "Uusi yhteystieto",
     "{addressbook} shared by {owner}" : "Osoitekirjan {addressbook} jakoi {owner}",
+    "Invalid file type." : "Virheellinen tiedostotyyppi.",
     "Nickname" : "Kutsumanimi",
     "Notes" : "Huomiot",
     "Website" : "Verkkosivusto",
@@ -37,7 +41,7 @@ OC.L10N.register(
     "Fax work" : "Faksi, työ",
     "Pager" : "Hakulaite",
     "Voice" : "Ääni",
-    "Settings" : "Asetukset",
-    "Import" : "Tuo"
+    "Social Network" : "Sosiaalinen verkko",
+    "Settings" : "Asetukset"
 },
 "nplurals=2; plural=(n != 1);");

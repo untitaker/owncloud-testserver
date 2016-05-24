@@ -116,6 +116,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="release_notes.html">ownCloud 9.0 Release Notes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#changes-in-9-0">Changes in 9.0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#enterprise-9-0">Enterprise 9.0</a></li>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#changes-in-8-2">Changes in 8.2</a></li>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#changes-in-8-1">Changes in 8.1</a></li>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#enterprise-8-1-only">Enterprise 8.1 Only</a></li>
@@ -195,6 +196,7 @@
 <li class="toctree-l3"><a class="reference internal" href="installation/linux_installation.html#repos-stable-or-version">Repos: Stable or Version?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/linux_installation.html#installing-owncloud-enterprise-subscription">Installing ownCloud Enterprise Subscription</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/linux_installation.html#downgrading-not-supported">Downgrading Not Supported</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation/linux_installation.html#binlog-format-statement">BINLOG_FORMAT = STATEMENT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/linux_installation.html#additional-installation-guides-and-notes">Additional Installation Guides and Notes</a></li>
 </ul>
 </li>
@@ -206,7 +208,10 @@
 <li class="toctree-l3"><a class="reference internal" href="installation/installation_wizard.html#setting-strong-directory-permissions">Setting Strong Directory Permissions</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="installation/command_line_installation.html">Installing ownCloud From the Command Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/command_line_installation.html">Installing ownCloud From the Command Line</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation/command_line_installation.html#binlog-format-statement">BINLOG_FORMAT = STATEMENT</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="installation/apps_management_installation.html">Installing and Managing Apps</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="installation/apps_management_installation.html#supported-apps">Supported Apps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/apps_management_installation.html#viewing-enabled-apps">Viewing Enabled Apps</a></li>
@@ -224,7 +229,9 @@
 <li class="toctree-l2"><a class="reference internal" href="installation/source_installation.html">Manual Installation on Linux</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#prerequisites">Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#example-installation-on-ubuntu-14-04-lts-server">Example Installation on Ubuntu 14.04 LTS Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#binlog-format-statement">BINLOG_FORMAT = STATEMENT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#apache-web-server-configuration">Apache Web Server Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#pretty-urls">Pretty URLs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#enabling-ssl">Enabling SSL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#installation-wizard">Installation Wizard</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/source_installation.html#setting-strong-directory-permissions">Setting Strong Directory Permissions</a></li>
@@ -237,16 +244,6 @@
 <li class="toctree-l2"><a class="reference internal" href="installation/appliance_installation.html">ownCloud Community Appliance</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="installation/appliance_installation.html#instructions-for-virtualbox-and-ova">Instructions for VirtualBox and OVA</a></li>
 <li class="toctree-l3"><a class="reference internal" href="installation/appliance_installation.html#software-appliances">Software Appliances</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="installation/php_54_installation.html">Installing PHP 5.4 on RHEL 6 and CentOS 6</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="installation/php_54_installation.html#rhel-6">RHEL 6</a></li>
-<li class="toctree-l3"><a class="reference internal" href="installation/php_54_installation.html#centos-6">CentOS 6</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="installation/php_55_installation.html">Installing PHP 5.5 on RHEL 7 and CentOS 7</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="installation/php_55_installation.html#rhel-7-upgrade-to-php-5-5">RHEL 7 Upgrade to PHP 5.5</a></li>
-<li class="toctree-l3"><a class="reference internal" href="installation/php_55_installation.html#centos-7-upgrade-to-php-5-5">CentOS 7 Upgrade to PHP 5.5</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="installation/selinux_configuration.html">SELinux Configuration</a><ul>
@@ -263,7 +260,7 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration_server/index.html">ownCloud Server Configuration</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="configuration_server/security_setup_warnings.html">Warnings on Admin Page</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#cache-warnings">Cache Warnings</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#transactional-file-locking">Transactional file locking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#transactional-file-locking-is-disabled">Transactional file locking is disabled</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#you-are-accessing-this-site-via-http">You are accessing this site via HTTP</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#the-test-with-getenv-path-only-returns-an-empty-response">The test with getenv(&#8220;PATH&#8221;) only returns an empty response</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/security_setup_warnings.html#the-strict-transport-security-http-header-is-not-configured">The &#8220;Strict-Transport-Security&#8221; HTTP header is not configured</a></li>
@@ -291,7 +288,7 @@
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/occ_command.html#ldap-commands">LDAP Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/occ_command.html#logging-commands">Logging Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/occ_command.html#maintenance-commands">Maintenance Commands</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_server/occ_command.html#security">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_server/occ_command.html#security-import-ssl-certificates">Security (Import SSL Certificates)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/occ_command.html#shibboleth-modes-enterprise-only">Shibboleth Modes (Enterprise only)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/occ_command.html#trashbin">Trashbin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/occ_command.html#user-commands">User Commands</a></li>
@@ -390,16 +387,8 @@
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/reverse_proxy_configuration.html#example">Example</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_server/search_configuration.html">Enabling Full-Text Search</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_server/thirdparty_php_configuration.html">Using Third Party PHP Components</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/thirdparty_php_configuration.html#managing-third-party-parameters">Managing Third Party Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_server/performance_tuning/index.html">Server Tuning &amp; Performance Tips</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="configuration_server/performance_tuning/oc_server_tuning.html">ownCloud Server Tuning</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_server/performance_tuning/database_best_practice.html">Database Best Practice</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_server/performance_tuning/webserver_tips.html">Web server Tips</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_server/performance_tuning/ssl_encryption_app.html">SSL / Encryption App</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_server/js_css_asset_management_configuration.html">JavaScript and CSS Asset Management</a><ul>
@@ -409,6 +398,15 @@
 <li class="toctree-l2"><a class="reference internal" href="configuration_server/automatic_configuration.html">Automatic Configuration Setup</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/automatic_configuration.html#parameters">Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_server/automatic_configuration.html#automatic-configurations-examples">Automatic Configurations Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_server/oc_server_tuning.html">ownCloud Server Tuning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration_server/oc_server_tuning.html#using-cron-to-perform-background-jobs">Using cron to perform background jobs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_server/oc_server_tuning.html#enable-javascript-and-css-asset-management">Enable JavaScript and CSS Asset Management</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_server/oc_server_tuning.html#caching">Caching</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_server/oc_server_tuning.html#using-mariadb-mysql-instead-of-sqlite">Using MariaDB/MySQL instead of SQLite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_server/oc_server_tuning.html#using-redis-based-transactional-file-locking">Using Redis-based Transactional File Locking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="configuration_server/oc_server_tuning.html#ssl-encryption-app">SSL / Encryption App</a></li>
 </ul>
 </li>
 </ul>
@@ -498,7 +496,6 @@
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/external_storage_configuration_gui.html#available-storage-backends">Available storage backends</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/external_storage_configuration_gui.html#allow-users-to-mount-external-storage">Allow Users to Mount External Storage</a></li>
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/external_storage_configuration_gui.html#adding-files-to-external-storages">Adding Files to External Storages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_files/external_storage_configuration_gui.html#configuration-file">Configuration File</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_files/external_storage_configuration.html">Configuring External Storage (Configuration File)</a></li>
@@ -528,6 +525,10 @@
 <li class="toctree-l3"><a class="reference internal" href="configuration_files/previews_configuration.html#parameters">Parameters</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_files/file_versioning.html">Controlling File Versions and Aging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="configuration_files/file_versioning.html#enterprise-file-retention">Enterprise File Retention</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configuration_database/index.html">Database Configuration</a><ul>
@@ -542,19 +543,10 @@
 <li class="toctree-l3"><a class="reference internal" href="configuration_database/linux_database_configuration.html#troubleshooting">Troubleshooting</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="configuration_database/oracle_db_configuration.html">Oracle Database Setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="configuration_database/oracle_db_configuration.html#outline-of-steps">Outline of Steps</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_database/oracle_db_configuration.html#configuring-oracle">Configuring Oracle</a></li>
-<li class="toctree-l3"><a class="reference internal" href="configuration_database/oracle_db_configuration.html#configure-owncloud">Configure ownCloud</a></li>
-</ul>
-</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="configuration_mimetypes/index.html">Mimetypes Management</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="configuration_mimetypes/mimetype_aliases.html">Mimetype aliases</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="configuration_mimetypes/mimetype_aliases.html#adding-custom-aliases">Adding custom aliases</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_mimetypes/mimetype_aliases.html">Mimetype Aliases</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_mimetypes/mimetype_mapping.html">Mimetype mapping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="configuration_mimetypes/index.html#icon-retrieval">Icon retrieval</a></li>
 </ul>
@@ -637,6 +629,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="enterprise_installation/linux_installation.html">Installing &amp; Upgrading ownCloud Enterprise Subscription</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="enterprise_installation/linux_installation.html#manual-installation">Manual Installation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_installation/linux_installation.html#selinux">SELinux</a></li>
 </ul>
 </li>
@@ -644,6 +637,12 @@
 <li class="toctree-l2"><a class="reference internal" href="enterprise_installation/license_keys_installation.html">License Keys</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_installation/license_keys_installation.html#introduction">Introduction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_installation/license_keys_installation.html#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="enterprise_installation/oracle_db_configuration.html">Oracle Database Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="enterprise_installation/oracle_db_configuration.html#outline-of-steps">Outline of Steps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enterprise_installation/oracle_db_configuration.html#configuring-oracle">Configuring Oracle</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enterprise_installation/oracle_db_configuration.html#configure-owncloud">Configure ownCloud</a></li>
 </ul>
 </li>
 </ul>
@@ -683,9 +682,9 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="enterprise_external_storage/windows-network-drive_configuration.html">Installing and Configuring the Windows Network Drive App</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_external_storage/windows-network-drive_configuration.html#installation">Installation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="enterprise_external_storage/windows-network-drive_configuration.html#additional-installation-steps">Additional Installation Steps</a></li>
 <li class="toctree-l3"><a class="reference internal" href="enterprise_external_storage/windows-network-drive_configuration.html#creating-a-new-share">Creating a New Share</a></li>
-<li class="toctree-l3"><a class="reference internal" href="enterprise_external_storage/windows-network-drive_configuration.html#personal-smb-mounts">Personal SMB Mounts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enterprise_external_storage/windows-network-drive_configuration.html#personal-wnd-mounts">Personal WND Mounts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enterprise_external_storage/windows-network-drive_configuration.html#libsmclient-issues">libsmclient Issues</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="enterprise_external_storage/s3_swift_as_primary_object_store_configuration.html">Configuring S3 and OpenStack Swift Objects as Primary Storage</a><ul>

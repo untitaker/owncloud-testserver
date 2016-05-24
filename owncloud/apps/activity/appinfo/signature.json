@@ -1,7 +1,7 @@
 {
     "hashes": {
         "appinfo\/app.php": "b16a102a310bdc11786716373a1a8c89ac72760a48ae6f244bc3f3fffe27ad2f625377c95a90f0ecebe7919ba386f43be738726a28236f1e8bcd924a1f224037",
-        "appinfo\/application.php": "9cae73b3d3cecb8c6b152dbcc5d3f04e3e1ec08a04ebe02f2f493325f038a376d86fc8d12120fd001c2d4e40d5f448f2bd28e803f1758a2f8e53bcca911b11ad",
+        "appinfo\/application.php": "4523d26d299f8a06cce9d6ffec46816c5590df9314ccda90a3c1de2fb4daf495a949d637c0228ac24087626598ec0db8fc80c9c5b9bdea0608d3972fc466e5fe",
         "appinfo\/database.xml": "f25ed7b8d0e45f2c3ea035c791230d7755545de1ad00e12a0674d05eed76768561bae3813007c110f7f954c4e5c7e01b9b07695a2dff1cc11f67c438c13aa56e",
         "appinfo\/info.xml": "3b094337d98735945f70b4bf3c2c29ca833816d724b27f15102280667e53bbd28a91cafaa1e75fe2f11f6cafea08d8a52b5f5515c15b0a29e8e6b7de460fdf34",
         "appinfo\/install.php": "e2724cc237ec5ba2dc24d9d59e836c9b7b34cd8c0d81398c632b3a19118c525cb70d35247de531b68d3c1a7c579a74f09559766d848a52f373a3c85b554d625c",
@@ -10,8 +10,8 @@
         "controller\/activities.php": "3ee3cb5e77d81ed882b776f9b2d4cca96bdab6c8455452cd287ba75a8fe6f38c544e614d27c862b6c90a85b08447611cf56b8edbfdc3f9886c96892e0eea4282",
         "controller\/endpoint.php": "8eee988983e868e1d65c13f0f1bc99546909c30d7b97e77729eb40b69118bc5d4a0f2e081a0a8e4837882c17bd6cbf27eef7f77d5990c683ecd24cf8e10f5651",
         "controller\/feed.php": "7eb574b1b1b9e21222aa74211ee39bac49554dff5ba8966eefa9190c011ef9f1dd4fa9d535b7bfefe7c0ac3b2c9d59d1167d546efe24c5d06394df9ca6eed930",
-        "controller\/ocsendpoint.php": "af278bbba00499573e7edc0c4981d4778fc5b1fbc0b3a0fbe7b653a06e247ea173b84e3fcf71d3e9257a24b07e3c7431d616ba031ab118e27e8e74d40c73d3ca",
-        "controller\/settings.php": "e0b949f46d21ca2e957fd600f2eead81a8a5498740da685f68832d79f23f1d044eba70022acf157b75d0fcb4d828df3984393cd514debda269c455441d7f73f3",
+        "controller\/ocsendpoint.php": "e73c7b4068e1a07b961191f27eff6ded56e0524f45e8e39e7deff61eb4071112f0d93b0c09b182886622d8f429bc3355599d18a38e6308819d7ed4e9596248e5",
+        "controller\/settings.php": "f0f3a3b7b873bcd082f003488d9b9cfd31c232f999acf98ed2ad41b8ba12486bf4527357dcc6f014e7788a68796a786241c680957951e0587054fa7a21b2e0fb",
         "css\/settings.css": "53700e08ddbe0ec5815ba9860b8ed663d7c6ce9a6c2aa2191c1f6cf940990e689bebb1c1106952808ba4b9220b219bf4a1d65aabc886d9c5519ef7885080c9a5",
         "css\/style.css": "47070a6d59f6d4e0a1ee3213e34b9f9814275c3617cf168b627585b572338e397c155cb6aad71c77f8bba927a2878b26991c77ee54d52c5d4dbb242d6110cff6",
         "docs\/endpoint-v2.md": "2778005e1ff39df8292d45a981a0e5e95c13a7afbead40a09777e4b7cba4b7365b5a1866905e77bb2d787b4a2aaa4efc6faaf8c25d1c57d5e957cc2d41a80a51",
@@ -166,7 +166,7 @@
         "lib\/data.php": "49093a47f0b3b9660eb035a3119696f1c45925c07f4c0b09d956832c89456058c3f6281ec24eea20b1fe166ad33d501a90beecac95f1b6d81ebc6b5181196da3",
         "lib\/datahelper.php": "00d6e5cc1500629ad64979f22099e1539b949f92db9b0eeafd53dcec40953103b1fc24afe2faa8ccded2bb3222c004d562f58edccccd2f785fea42b266c2bd98",
         "lib\/exception\/invalidfilterexception.php": "72d6389d16220f64908d6abd6feaf1acb73525bb5860c863111d23c1c8f9b7756b7c58017a89855ebdef7b8ba3bebfb34deb01e2a7b8a0a8e070c19d85e36a45",
-        "lib\/fileshooks.php": "29769df03f37a2ad46156ec0c2b2cc2b7776358769c46a97a7cf1e0fa90ebe6f4b543a8cfe3a9aaa5ee1b688f3a32ca20a319a283eba0b54c1ae40fc08739f54",
+        "lib\/fileshooks.php": "13a192357278e7e467857d5fbee356d6110091428534cc0994d3477434e6dd6de65f88c38fb2db36e501c99be36af455a74a3ecf8d059093cef92979c8328625",
         "lib\/fileshooksstatic.php": "ad4004f51fab5d94f00974f96e72229ca32ff119f4cdda7ebfe7aba8dad6f543c614f0444c535d580e5159be8366c3a4ccf7fde7fe76332944abdc29ad29f56e",
         "lib\/formatter\/baseformatter.php": "77468a075d931c0403bdf5018643e115e9e086b22a71a4ef6c860119bb207cc89cf22dec87f77d5162263d01edbfeb2bdb1186d35d04e0d961d879fda57c8dca",
         "lib\/formatter\/cloudidformatter.php": "ebc514852f3689ff8e184a9049fdd386b36bdaee555dd0b38490002e71364a3cf4f140a58a0b64e1b39e69f1dc76f86c0ebd5e184e0bf739559a022e588166e6",
@@ -176,13 +176,13 @@
         "lib\/grouphelper.php": "fe2f0731ff0538e570cc2bb2cbb14acce42c6d8894d2356c4fadc1a5a08b96244c993b90e55e7de02bf70e72aec19e0870349648b69db195499ecae1e4394887",
         "lib\/hooks.php": "92ae17851c9ac67bea8f866f907d0ecba2bfad0cd9b52c11c72bc677881461b55e984d67efd9b42cb66f7464b451d7f928ed45e9bf99d18bcea950bc786dde7f",
         "lib\/mailqueuehandler.php": "455f4ff34f90b10d86e13860e8ff7231a137da71c0bbbc05630d24fb131a99ecf665a35e5e3448163fa4cb248c445e5254a2afbe3826613c0a018ac8620318ab",
-        "lib\/navigation.php": "ee50eb899ed0ccbe43286e5996331c4d208d1334aefc61d1a79fee48c321e68452867bbda3602e85b359ef53f05af7612de4ef90d85e09d36e5c92498f3b562d",
+        "lib\/navigation.php": "0167bc824b75e71cd289db1e438dc628d116f28b0653a12b6b25b28f0a86dbed5b1ebae3acb685e717627025dfab24a1d8d4fb3d282c3af070fd8a342d865406",
         "lib\/parameter\/collection.php": "f393e7c79af7ab2922723cc6819d1c5a9b7601a11930d2b74a2b9cde9bebb2894b3aeda906c619a1b4889db5ddf425d6acda6087775c2ca0b44826cbea556885",
         "lib\/parameter\/factory.php": "c11a01dfdc580494b0fae1ed1f082e94420553e7334672bfd7cc989b663150def625ab602d2a523f0a7648a4826b1bb579f2bb7927b73e611d115f0dd03aeaa0",
         "lib\/parameter\/iparameter.php": "19c5397b46f7ad18689327046ee46c8bf6dbd4798aafc6f0b93b3b97ace7912692b7fb6ca6f7d30b2295dd976fbc20eb64606ad45e065fcc6a3ee09dd5ae7f8b",
         "lib\/parameter\/parameter.php": "e046c9f328afa21cfca42d208c4307a9dcf365d9a280416dd2de9471d4bd71268ebd3eb94f315bd319eb8692b41e9ca2514450a22f5f1ec3e698a05099bc3bb4",
         "lib\/plaintextparser.php": "e048631c9ece3758cb412c027f65fd3f7a95ee9a9672a6471719cb6342a159cbb4f8f0b44ce000e82e669386074a344b0c1aafd2ce641b0c8c289d290907e1ba",
-        "lib\/usersettings.php": "5f7cac66fb27e0525bc26648c88cf65b6fd80b16c3f7f085afe3ce82a8db0a00fec4e81b1e353d5c2c269e9b1dfcf4ea4dd337d351360b28d81c7a9aa2b229bd",
+        "lib\/usersettings.php": "6c4f17fb943cf82440b6a3ac91aa0a63d7fd14987d2137fb2a8ad4d6a4c42ef085d3d28dd7c971c7ceab108b2681e765ade34913fdae12e6e2c6d9260966bff2",
         "lib\/viewinfocache.php": "7ff8807b3ff400e7cb4e4a63a5a230b6c50daaaec88101f8f5a23082d88fc3c6e4f401526b423d7b7a74207f20073c1f64b40a68967063c53ed353c48a1b4198",
         "personal.php": "92b76817e97c3a5cd2f273f2217ec38224cc2a1bea2880f0cd960ba398f537c13b7ecbbf23a0488d04d9a40e94a8117564d52529dd1d63052fd0e1a44c981120",
         "templates\/email.notification.php": "e68aff208d3abab791697afe9627cdcfc588931ba7297ff40a8ed8f9c137936d2a1525d6cba5dbb44a42a559870e726331936a47408ea6b221d42046aaf222ac",
@@ -191,6 +191,6 @@
         "templates\/stream.app.navigation.php": "14edcbf380ad436f1a0013e474b6da62af19d5893b85282a23f94f88084baf6ac10ae769b06896a6ecfc65b5159f4c0dfa4e47b821f61f6893e1cf9adecb3225",
         "templates\/stream.body.php": "b45409969bb9794b5625e589b7a325e1d2e539f71b0837caffcec083d7d3d62c30a6454c066a19e2e86b6d2eb992fff80de2df5532b74a7998c1a4d8565cd51c"
     },
-    "signature": "T+9ZIZtZgp+r+xYjv24qIfEmNGUwPupfg7M+JoEehkaaF06FhPo5OiDi9s3wI0J+SQhhCCb6wwXmeuEASiKXgCVCFRQIRdGqvp2DCnpD7KiO7LOYryuwc4Xo\/bDOkdwDoQzD4adsyS4AAAYCqN\/LGTEpdzKiUsiD9Oc0cwXIxHuXZ\/Kj7yWPAAJM3qntOMZiheewQslqT4wA8wmwAxrKhk0wED3PWw67v9NNnfNK3XyppIcuEhoPWTJMIhip5ZTTModT4YNgOBrjO6LP\/+r98ulZHTN3FcQ6lGUXbKRrObDb\/AImlpiN5+lrGk768iaoOZMerCD9SLAnFCIh4fbLEA==",
+    "signature": "cgf\/Mj+EhnD34UfBm2\/jhwV78os8B7\/R5Sxo1wqwjrwLZjyGcBnit\/aT4InxelczeBDlER2EpF1DeIeGTHrBCumJBTUxWDmJtTL8nXTo7LtjyibDfD8keJ82EfRyeyw61O6HJWqaR78c9Vr9kPKexzTUWF3G6cNYiOUybd4AljtcPSGSRFyXhwYT1IbIEkhwTWZoWYzMW32gZ6y+54\/2FPrt1OEPeNsv3hdpGrwcAE6oeNtmroZAWtAx07x+g4sQa8ooGb7l6Xwv6Nxx37JhR83swDcFDBIyxRS3INmbDbwDzjufA0f\/BdLDKIrrm88LDweNZykhfL+3O97SVtPGYQ==",
     "certificate": "-----BEGIN CERTIFICATE-----\r\nMIID8TCCAdkCAhAAMA0GCSqGSIb3DQEBCwUAMG0xCzAJBgNVBAYTAlVTMQ8wDQYD\r\nVQQIDAZCb3N0b24xFjAUBgNVBAoMDW93bkNsb3VkIEluYy4xNTAzBgNVBAMMLG93\r\nbkNsb3VkIENvZGUgU2lnbmluZyBJbnRlcm1lZGlhdGUgQXV0aG9yaXR5MB4XDTE2\r\nMDIwMzE3NTE0OVoXDTI2MDEzMTE3NTE0OVowDzENMAsGA1UEAwwEY29yZTCCASIw\r\nDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAPHdSljnHI+ueQd27UyWPO9n4Lqt\r\nbK0kdekiC3si7Mee7uXXJaGuqXJozHEZYB1LIFLdCU\/itCxEk9hyLcyNzeT+nRT\/\r\nzDuOYdbLgCj7\/A5bX+u3jc29UlCYybSFchfMdvn7a0njCna4dE+73b4yEj16tS2h\r\nS1EUygSzgicWlJqMD3Z9Qc+zLEpdhq9oDdDB8HURi2NW4KzIraVncSH+zF1QduOh\r\nnERDnF8x48D3FLdTxGA0W\/Kg4gYsq4NRvU6g3DJNdp4YfqRSFMmLFDCgzDuhan7D\r\nwgRlI9NAeHbnyoUPtrDBUceI7shIbC\/i87xk9ptqV0AyFonkJtK6lWwZjNkCAwEA\r\nATANBgkqhkiG9w0BAQsFAAOCAgEAAMgymqZE1YaHYlRGwvTE7gGDY3gmFOMaxQL4\r\nE5m0CnkBz4BdIPRsQFFdOv3l\/MIWkw5ED3vUB925VpQZYFSiEuv5NbnlPaHZlIMI\r\nn8AV\/sTP5jue3LhtAN4EM63xNBhudAT6wVsvGwOuQOx9Xv+ptO8Po7sTuNYP0CMH\r\nEOQN+\/q8tYlSm2VW+dAlaJ+zVZwZldhVjL+lSH4E9ktWn3PmgNQeKfcnJISUbus6\r\nZtsYDF\/X96\/Z2ZQvMXOKksgvU6XlvIxllcyebC9Bxe\/h0D63GCO2tqN5CWQzIIqn\r\napUynPX8BlLaaExqYGERwlUi\/yOGaUVPUjEPVehviOQYgAqxlrkJk1dWeCrwUori\r\nCXpi+IUYkidfgiJ9F88M3ElpwqIaXp7G3\/4oHBuE2u6M+L+1\/vqPJeTCAWUxxpJE\r\nyYmM+db6D4TySFpQPENNzPS8bpR6T8w2hRumkldC42HrnyJJbpjOieTXhXzjdPvZ\r\nIEP9JGtkhB2du6nBF2MNAq2TqRXpcfQrQEbnQ13aV9bl+roTwwO+SOWK\/wgvdOMI\r\nSTQ0Xk0sTGlmQjPYPkibVceaWMR3sX4cNt5c33YhJys5jxHoAh42km4nN9tfykR5\r\ncrl5lBlKjXh2GP0+omSO3x1jX4+iQPCW2TWoyKkUdLu\/hGHG2w8RrTeme+kATECH\r\nYSu356M=\r\n-----END CERTIFICATE-----"
 }

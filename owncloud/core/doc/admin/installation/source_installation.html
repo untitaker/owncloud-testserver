@@ -80,7 +80,9 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="">Manual Installation on Linux</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#example-installation-on-ubuntu-14-04-lts-server">Example Installation on Ubuntu 14.04 LTS Server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#binlog-format-statement">BINLOG_FORMAT = STATEMENT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#apache-web-server-configuration">Apache Web Server Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pretty-urls">Pretty URLs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#enabling-ssl">Enabling SSL</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installation-wizard">Installation Wizard</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#setting-strong-directory-permissions">Setting Strong Directory Permissions</a></li>
@@ -91,8 +93,6 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="appliance_installation.html">ownCloud Community Appliance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="php_54_installation.html">Installing PHP 5.4 on RHEL 6 and CentOS 6</a></li>
-<li class="toctree-l2"><a class="reference internal" href="php_55_installation.html">Installing PHP 5.5 on RHEL 7 and CentOS 7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="selinux_configuration.html">SELinux Configuration</a></li>
 </ul>
 </li>
@@ -155,7 +155,9 @@ Apache and MariaDB, using <a class="reference external" href="https://owncloud.o
 <ul class="simple">
 <li><a class="reference internal" href="#prerequisites-label"><span>Prerequisites</span></a></li>
 <li><a class="reference internal" href="#ubuntu-installation-label"><span>Example Installation on Ubuntu 14.04 LTS Server</span></a></li>
+<li><a class="reference internal" href="#binlog-format-label"><span>BINLOG_FORMAT = STATEMENT</span></a></li>
 <li><a class="reference internal" href="#apache-configuration-label"><span>Apache Web Server Configuration</span></a></li>
+<li><a class="reference internal" href="#pretty-urls-label"><span>Pretty URLs</span></a></li>
 <li><a class="reference internal" href="#enabling-ssl-label"><span>Enabling SSL</span></a></li>
 <li><a class="reference internal" href="#installation-wizard-label"><span>Installation Wizard</span></a></li>
 <li><a class="reference internal" href="installation_wizard.html#strong-perms-label"><span>Setting Strong Directory Permissions</span></a></li>
@@ -213,8 +215,8 @@ of non-ASCII characters)</li>
 <p>Required for specific apps:</p>
 <ul class="simple">
 <li>PHP module ldap (for LDAP integration)</li>
-<li><a class="reference external" href="https://download.owncloud.org/download/repositories/stable/owncloud/">php5-libsmbclient</a>
-(SMB/CIFS integration)</li>
+<li>PHP module smbclient  (SMB/CIFS integration, see
+<a class="reference internal" href="../configuration_files/external_storage/smb.html"><em>SMB/CIFS</em></a>)</li>
 <li>PHP module ftp (for FTP storage / external user authentication)</li>
 <li>PHP module imap (for external user authentication)</li>
 </ul>
@@ -229,7 +231,7 @@ memcaches:</p>
 <li>PHP module apc</li>
 <li>PHP module apcu</li>
 <li>PHP module memcached</li>
-<li>PHP module redis (required for Transactional File Locking)</li>
+<li>PHP module redis (&gt;= 2.2.5, required for Transactional File Locking)</li>
 </ul>
 <p>See <a class="reference internal" href="../configuration_server/caching_configuration.html"><em>Configuring Memory Caching</em></a> to learn how to select
 and configure a memcache.</p>
@@ -318,6 +320,19 @@ document root of your Web server:</p>
 <p>On other HTTP servers it is recommended to install ownCloud outside of the
 document root.</p>
 </div>
+<div class="section" id="binlog-format-statement">
+<span id="binlog-format-label"></span><h2>BINLOG_FORMAT = STATEMENT<a class="headerlink" href="#binlog-format-statement" title="Permalink to this headline">¶</a></h2>
+<p>If your ownCloud installation fails and you see this in your ownCloud log:</p>
+<div class="highlight-python"><div class="highlight"><pre>An unhandled exception has been thrown: exception ‘PDOException’ with message
+&#39;SQLSTATE[HY000]: General error: 1665 Cannot execute statement: impossible to
+write to binary log since BINLOG_FORMAT = STATEMENT and at least one table
+uses a storage engine limited to row-based logging. InnoDB is limited to
+row-logging when transaction isolation level is READ COMMITTED or READ
+UNCOMMITTED.&#39;
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../configuration_database/linux_database_configuration.html#db-binlog-label"><span>MySQL / MariaDB with Binary Logging Enabled</span></a>.</p>
+</div>
 <div class="section" id="apache-web-server-configuration">
 <span id="apache-configuration-label"></span><h2>Apache Web Server Configuration<a class="headerlink" href="#apache-web-server-configuration" title="Permalink to this headline">¶</a></h2>
 <p>On Debian, Ubuntu, and their derivatives, Apache installs with a useful
@@ -391,6 +406,12 @@ CardDAV clients make sure you have configured the correct
 </ul>
 </div>
 </div>
+<div class="section" id="pretty-urls">
+<span id="pretty-urls-label"></span><h2>Pretty URLs<a class="headerlink" href="#pretty-urls" title="Permalink to this headline">¶</a></h2>
+<p>Pretty URLs are created automatically when <code class="docutils literal"><span class="pre">.htaccess</span></code> is writable by the
+HTTP user, <code class="docutils literal"><span class="pre">mod_env</span></code> and <code class="docutils literal"><span class="pre">mod_rewrite</span></code> are installed, and
+<code class="docutils literal"><span class="pre">'overwrite.cli.url'</span></code> in your <code class="docutils literal"><span class="pre">config.php</span></code> is set to any non-null value.</p>
+</div>
 <div class="section" id="enabling-ssl">
 <span id="enabling-ssl-label"></span><h2>Enabling SSL<a class="headerlink" href="#enabling-ssl" title="Permalink to this headline">¶</a></h2>
 <div class="admonition note">
@@ -409,11 +430,8 @@ service apache2 reload
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Self-signed certificates have their drawbacks - especially when you
-plan to make your ownCloud server publicly accessible. You might want
-to consider getting a certificate signed by a commercial signing
-authority. Check with your domain name registrar or hosting service
-for good deals on commercial certificates.</p>
+<p class="last">See <a class="reference internal" href="../configuration_server/occ_command.html#security-commands-label"><span>Security (Import SSL Certificates)</span></a> for help on managing self-signed
+certificates.</p>
 </div>
 </div>
 <div class="section" id="installation-wizard">
@@ -449,7 +467,7 @@ SELinux-enabled distributions such as Fedora and CentOS.</p>
 </div>
 <div class="section" id="php-ini-configuration-notes">
 <span id="php-ini-tips-label"></span><h2>php.ini Configuration Notes<a class="headerlink" href="#php-ini-configuration-notes" title="Permalink to this headline">¶</a></h2>
-<p>Keep in mind that changes to <code class="docutils literal"><span class="pre">php.ini</span></code> may have to be done on more than one
+<p>Keep in mind that changes to <code class="docutils literal"><span class="pre">php.ini</span></code> may have to be configured on more than one
 ini file. This can be the case, for example, for the <code class="docutils literal"><span class="pre">date.timezone</span></code> setting.</p>
 <p><strong>php.ini - used by the Web server:</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>  /etc/php5/apache2/php.ini

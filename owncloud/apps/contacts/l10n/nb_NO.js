@@ -7,6 +7,7 @@ OC.L10N.register(
     "Organization" : "Organisasjon",
     "Title" : "Tittel",
     "Add field ..." : "Nytt felt ...",
+    "Import" : "Importer",
     "Add contact" : "Ny kontakt",
     "All contacts" : "Alle kontakter",
     "Not grouped" : "Ikke gruppert",
@@ -17,6 +18,7 @@ OC.L10N.register(
     "Country" : "Land",
     "Address" : "Adresse",
     "(new group)" : "(ny gruppe)",
+    "New contact" : "Ny kontakt",
     "{addressbook} shared by {owner}" : "{addressbook} delt av {owner}",
     "Nickname" : "Kallenavn",
     "Notes" : "Notater",
@@ -36,7 +38,6 @@ OC.L10N.register(
     "Fax work" : "Faks jobb",
     "Pager" : "Pager",
     "Voice" : "Svarer",
-    "Settings" : "Innstillinger",
-    "Import" : "Importer"
+    "Settings" : "Innstillinger"
 },
 "nplurals=2; plural=(n != 1);");

@@ -2,12 +2,15 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "Contactos",
+    "Address book name" : "Nombre de libreta de direcciones",
     "No contacts in here" : "No hay contactos aquí",
     "Name" : "Nombre",
     "Organization" : "Organización",
     "Title" : "Título",
     "Add field ..." : "Añadiendo campo ...",
+    "Import" : "Importar",
     "Add contact" : "Añadir contacto",
+    "No search result for {query}" : "Sin resultados para {query}",
     "All contacts" : "Todos los contactos",
     "Not grouped" : "No agrupado",
     "Post Office Box" : "Buzón de correo",
@@ -16,7 +19,10 @@ OC.L10N.register(
     "State or province" : "Estado o provincia",
     "Country" : "País",
     "Address" : "Dirección",
+    "(new group)" : "(nuevo grupo)",
+    "New contact" : "Nuevo contacto",
     "{addressbook} shared by {owner}" : "{addressbook} compartido por {owner}",
+    "Invalid file type." : "Tipo de archivo inválido",
     "Nickname" : "Apodo",
     "Notes" : "Notas",
     "Website" : "Sitio web",
@@ -35,7 +41,6 @@ OC.L10N.register(
     "Fax work" : "Fax del trabajo",
     "Pager" : "Localizador",
     "Voice" : "Voz",
-    "Settings" : "Ajustes",
-    "Import" : "Importar"
+    "Settings" : "Ajustes"
 },
 "nplurals=2; plural=(n != 1);");

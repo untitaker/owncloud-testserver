@@ -2,11 +2,13 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "Stiki",
+    "Address book name" : "Ime imenika",
     "No contacts in here" : "Ni dodanega nobenega stika!",
     "Name" : "Ime",
     "Organization" : "Ustanova",
     "Title" : "Naslov",
     "Add field ..." : "Dodaj polje ...",
+    "Import" : "Uvozi",
     "Add contact" : "Dodaj stik",
     "No search result for {query}" : "Ni zadetkov iskanja za {query}",
     "All contacts" : "Vsi stiki",
@@ -18,7 +20,9 @@ OC.L10N.register(
     "Country" : "Država",
     "Address" : "Naslov",
     "(new group)" : "(nova skupina)",
+    "New contact" : "Nov stik",
     "{addressbook} shared by {owner}" : "Souporabo imenika {addressbook} je omogočil uporabnik {owner}",
+    "Invalid file type." : "Neveljavna vrsta datoteke.",
     "Nickname" : "Vzdevek",
     "Notes" : "Sporočilca",
     "Website" : "Spletna stran",
@@ -37,7 +41,6 @@ OC.L10N.register(
     "Fax work" : "Službeni faks",
     "Pager" : "Pozivnik",
     "Voice" : "Glas",
-    "Settings" : "Nastavitve",
-    "Import" : "Uvozi"
+    "Settings" : "Nastavitve"
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

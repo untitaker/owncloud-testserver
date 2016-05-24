@@ -84,6 +84,7 @@
 <li class="toctree-l2"><a class="reference internal" href="encryption_configuration.html">Encryption Configuration</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Transactional File Locking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="previews_configuration.html">Previews Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_versioning.html">Controlling File Versions and Aging</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_database/index.html">Database Configuration</a></li>
@@ -154,10 +155,7 @@ version 8.2.1. If your ownCloud server still has the File Locking app, you
 must visit your Apps page to verify that it is disabled; the File Locking
 app and Transactional File Locking cannot both operate at the same time.</p>
 </div>
-<p>When you see the warning on your ownCloud admin page &#8220;Transactional file locking
-is using the database as locking backend, for best performance it&#8217;s advised to
-configure a memcache for locking&#8221;, you are not required to use a memcache. File
-locking is enabled by default, using the database locking backend. This
+<p>File locking is enabled by default, using the database locking backend. This
 places a significant load on your database. Using <code class="docutils literal"><span class="pre">memcache.locking</span></code> relieves
 the database load and improves performance. Admins of ownCloud servers with
 heavy workloads should install a memcache. (See

@@ -77,6 +77,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#repos-stable-or-version">Repos: Stable or Version?</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#installing-owncloud-enterprise-subscription">Installing ownCloud Enterprise Subscription</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#downgrading-not-supported">Downgrading Not Supported</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#binlog-format-statement">BINLOG_FORMAT = STATEMENT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#additional-installation-guides-and-notes">Additional Installation Guides and Notes</a></li>
 </ul>
 </li>
@@ -86,8 +87,6 @@
 <li class="toctree-l2"><a class="reference internal" href="apps_supported.html">Supported Apps in ownCloud</a></li>
 <li class="toctree-l2"><a class="reference internal" href="source_installation.html">Manual Installation on Linux</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appliance_installation.html">ownCloud Community Appliance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="php_54_installation.html">Installing PHP 5.4 on RHEL 6 and CentOS 6</a></li>
-<li class="toctree-l2"><a class="reference internal" href="php_55_installation.html">Installing PHP 5.5 on RHEL 7 and CentOS 7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="selinux_configuration.html">SELinux Configuration</a></li>
 </ul>
 </li>
@@ -135,13 +134,14 @@
 <h1>Preferred Linux Installation Method<a class="headerlink" href="#preferred-linux-installation-method" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="changes-in-9-0">
 <h2>Changes in 9.0<a class="headerlink" href="#changes-in-9-0" title="Permalink to this headline">¶</a></h2>
-<p>Linux distribution packages (from <a class="reference external" href="https://download.owncloud.org/download/repositories/9.0/owncloud/">Open
-Build Service</a>) have been divided into two packages for ownCloud
-9, <code class="docutils literal"><span class="pre">owncloud-deps</span></code> and <code class="docutils literal"><span class="pre">owncloud-files</span></code>. The <code class="docutils literal"><span class="pre">owncloud-files</span></code> package
-installs only ownCloud, with no Apache, database, or PHP dependencies. To
-install a complete system, including dependencies (Apache, PHP) install the
-metapackage <code class="docutils literal"><span class="pre">owncloud</span></code>. Install your desired database separately, before you
-install ownCloud.</p>
+<p>Linux distribution packages (from <a class="reference external" href="https://download.owncloud.org/download/repositories/9.0/owncloud/">Open Build Service</a>) have been divided into
+multiple packages for ownCloud 9: <code class="docutils literal"><span class="pre">owncloud-deps</span></code> and <code class="docutils literal"><span class="pre">owncloud-files</span></code>.</p>
+<p>The <code class="docutils literal"><span class="pre">owncloud-files</span></code> package installs only ownCloud, with no Apache, database,
+or PHP dependencies.</p>
+<p>The <code class="docutils literal"><span class="pre">owncloud-deps</span></code> packages install all dependencies: Apache, PHP, and MySQL.
+<code class="docutils literal"><span class="pre">owncloud-deps</span></code> is not intended to be installed by itself, but rather is
+pulled in by the metapackage <code class="docutils literal"><span class="pre">owncloud</span></code>.</p>
+<p>Install <code class="docutils literal"><span class="pre">owncloud</span></code> to get a complete installation with dependencies.</p>
 <p>Split packages are available for the following Linux distributions:</p>
 <ul class="simple">
 <li>CentOS 7</li>
@@ -151,22 +151,22 @@ install ownCloud.</p>
 <li>Ubuntu 14.04, 15.10</li>
 <li>openSUSE 13.2, Leap 42.1</li>
 </ul>
-<p><code class="docutils literal"><span class="pre">owncloud-files</span></code> is available for the following distributions. You will
-have to install your own LAMP stack first. This allows you to create your own custom LAMP
-stack without dependency conflicts with the ownCloud package. Browse
-<a class="reference external" href="http://download.owncloud.org/download/repositories/9.0/owncloud/">http://download.owncloud.org/download/repositories/9.0/owncloud/</a> to
-find the <code class="docutils literal"><span class="pre">owncloud-files</span></code> package for your distro:</p>
+<p><code class="docutils literal"><span class="pre">owncloud-files</span></code> is available for the following distributions, but not
+<code class="docutils literal"><span class="pre">owncoud-deps</span></code>. You will have to install your own LAMP stack first. This
+allows you to create your own custom LAMP stack without dependency conflicts
+with the ownCloud package. Browse
+<a class="reference external" href="http://download.owncloud.org/download/repositories/9.0/owncloud/">http://download.owncloud.org/download/repositories/9.0/owncloud/</a> to find
+the <code class="docutils literal"><span class="pre">owncloud-files</span></code> package for your distro:</p>
 <ul class="simple">
-<li>CentOS 6, 7</li>
+<li>CentOS 6</li>
 <li>Debian 7</li>
 <li>RHEL 6</li>
-<li>SLES 12</li>
 <li>Ubuntu 12.04, 14.10</li>
 </ul>
-<p>Repositories for Fedora, openSUSE Tumbleweed and Ubuntu 15.04 were dropped. If you use
-Fedora, the CentOS 7 packages will most likely work (the owncloud-files one at least).
-openSUSE users similarly can rely on LEAP packages for Tumbleweed and Ubuntu 15.04 users
-can use 15.10 ones.</p>
+<p>Repositories for Fedora, openSUSE Tumbleweed and Ubuntu 15.04 were dropped. If
+you use Fedora, install <code class="docutils literal"><span class="pre">owncloud-files</span></code> over your own LAMP stack. openSUSE
+users can rely on LEAP packages for Tumbleweed, and Ubuntu 15.04 users can use
+the 15.10 packages.</p>
 <p>Follow the instructions on the download page to install ownCloud. Then run the
 Installation Wizard to complete your installation. (see
 <a class="reference internal" href="installation_wizard.html"><em>Installation Wizard</em></a>).</p>
@@ -206,6 +206,19 @@ your data from backup. Before doing this, file a support ticket (if you have
 paid support) or ask for help in the ownCloud forums to see if your issue can be
 resolved without downgrading.</p>
 </div>
+<div class="section" id="binlog-format-statement">
+<h2>BINLOG_FORMAT = STATEMENT<a class="headerlink" href="#binlog-format-statement" title="Permalink to this headline">¶</a></h2>
+<p>If your ownCloud installation fails and you see this in your ownCloud log:</p>
+<div class="highlight-python"><div class="highlight"><pre>An unhandled exception has been thrown: exception ‘PDOException’ with message
+&#39;SQLSTATE[HY000]: General error: 1665 Cannot execute statement: impossible to
+write to binary log since BINLOG_FORMAT = STATEMENT and at least one table
+uses a storage engine limited to row-based logging. InnoDB is limited to
+row-logging when transaction isolation level is READ COMMITTED or READ
+UNCOMMITTED.&#39;
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../configuration_database/linux_database_configuration.html#db-binlog-label"><span>MySQL / MariaDB with Binary Logging Enabled</span></a>.</p>
+</div>
 <div class="section" id="additional-installation-guides-and-notes">
 <h2>Additional Installation Guides and Notes<a class="headerlink" href="#additional-installation-guides-and-notes" title="Permalink to this headline">¶</a></h2>
 <p>See <a class="reference internal" href="installation_wizard.html"><em>Installation Wizard</em></a> for important steps such as choosing the best
@@ -221,13 +234,9 @@ official community repository, and more packages are in
 the <a class="reference external" href="https://aur.archlinux.org/packages/?O=0&amp;K=owncloud">Arch User Repository</a>.</p>
 <p><strong>Mageia:</strong> The <a class="reference external" href="https://wiki.mageia.org/en/OwnCloud">Mageia Wiki</a> has a good page on installing ownCloud from the
 Mageia software repository.</p>
-<p><strong>Debian/Ubuntu:</strong> The package installs an additional Apache config file to
-<code class="docutils literal"><span class="pre">/etc/apache2/conf-available/owncloud.conf</span></code> which contains an <code class="docutils literal"><span class="pre">Alias</span></code> to the
-owncloud installation directory as well as some more needed configuration
-options.</p>
-<p><strong>Running ownCloud in a subdir</strong>: If you&#8217;re running ownCloud in a subdir and
-want to use CalDAV or CardDAV clients make sure you have configured the correct
-<a class="reference internal" href="../issues/general_troubleshooting.html#service-discovery-label"><span>Service discovery</span></a> URLs.</p>
+<p><strong>Running ownCloud in a subdirectory</strong>: If you&#8217;re running ownCloud in a
+subdirectory and want to use CalDAV or CardDAV clients make sure you have
+configured the correct <a class="reference internal" href="../issues/general_troubleshooting.html#service-discovery-label"><span>Service discovery</span></a> URLs.</p>
 <p><strong>Note for MySQL/MariaDB environments</strong>: Please refer to <a class="reference internal" href="../configuration_database/linux_database_configuration.html#db-binlog-label"><span>MySQL / MariaDB with Binary Logging Enabled</span></a>
 on how to correctly configure your environment if you have binary logging enabled.</p>
 </div>

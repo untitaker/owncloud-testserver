@@ -89,7 +89,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#ldap-commands">LDAP Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#logging-commands">Logging Commands</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#maintenance-commands">Maintenance Commands</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#security">Security</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#security-import-ssl-certificates">Security (Import SSL Certificates)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#shibboleth-modes-enterprise-only">Shibboleth Modes (Enterprise only)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#trashbin">Trashbin</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#user-commands">User Commands</a></li>
@@ -111,11 +111,10 @@
 <li class="toctree-l2"><a class="reference internal" href="logging_configuration.html">Logging Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="harden_server.html">Hardening and Security Guidance</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reverse_proxy_configuration.html">Reverse Proxy Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="search_configuration.html">Enabling Full-Text Search</a></li>
 <li class="toctree-l2"><a class="reference internal" href="thirdparty_php_configuration.html">Using Third Party PHP Components</a></li>
-<li class="toctree-l2"><a class="reference internal" href="performance_tuning/index.html">Server Tuning &amp; Performance Tips</a></li>
 <li class="toctree-l2"><a class="reference internal" href="js_css_asset_management_configuration.html">JavaScript and CSS Asset Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="automatic_configuration.html">Automatic Configuration Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="oc_server_tuning.html">ownCloud Server Tuning</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
@@ -187,7 +186,7 @@ run from the <code class="file docutils literal"><span class="pre">owncloud/</sp
 <li><a class="reference internal" href="#ldap-commands-label"><span>LDAP Commands</span></a></li>
 <li><a class="reference internal" href="#logging-commands-label"><span>Logging Commands</span></a></li>
 <li><a class="reference internal" href="#maintenance-commands-label"><span>Maintenance Commands</span></a></li>
-<li><a class="reference internal" href="#security-commands-label"><span>Security</span></a></li>
+<li><a class="reference internal" href="#security-commands-label"><span>Security (Import SSL Certificates)</span></a></li>
 <li><a class="reference internal" href="#shibboleth-label"><span>Shibboleth Modes (Enterprise only)</span></a></li>
 <li><a class="reference internal" href="#trashbin-label"><span>Trashbin</span></a></li>
 <li><a class="reference internal" href="#user-commands-label"><span>User Commands</span></a></li>
@@ -833,10 +832,21 @@ you can run the following LDAP commands with <code class="docutils literal"><spa
 [--limit=&quot;...&quot;] search
 </pre></div>
 </div>
-<p>This example searches for usernames that start with &#8220;rob&#8221;:</p>
-<div class="highlight-python"><div class="highlight"><pre>sudo -u www-data php occ ldap:search rob
+<p>Searches will match at the beginning of the attribute value only. This example
+searches for givenNames that start with &#8220;rob&#8221;:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo -u www-data php occ ldap:search &quot;rob&quot;
 </pre></div>
 </div>
+<p>This will find robbie, roberta, and robin. Broaden the search to find, for
+example, <code class="docutils literal"><span class="pre">jeroboam</span></code> with the asterisk wildcard:</p>
+<div class="highlight-python"><div class="highlight"><pre>sudo -u www-data php occ ldap:search &quot;*rob&quot;
+</pre></div>
+</div>
+<p>User search attributes are set with <code class="docutils literal"><span class="pre">ldap:set-config</span></code>
+(below). For example, if your search attributes are
+<code class="docutils literal"><span class="pre">givenName</span></code> and <code class="docutils literal"><span class="pre">sn</span></code> you can find users by first name + last name very
+quickly. For example, you&#8217;ll find Terri Hanson by searching for <code class="docutils literal"><span class="pre">te</span> <span class="pre">ha</span></code>.
+Trailing whitespaces are ignored.</p>
 <p>Check if an LDAP user exists. This works only if the ownCloud server is
 connected to an LDAP server:</p>
 <div class="highlight-python"><div class="highlight"><pre>sudo -u www-data php occ ldap:check-user robert
@@ -962,8 +972,8 @@ command after modifying <code class="docutils literal"><span class="pre">config/
 mimetype, run <code class="docutils literal"><span class="pre">maintenance:mimetype:update-db</span> <span class="pre">--repair-filecache</span></code> to apply the
 change to existing files.</p>
 </div>
-<div class="section" id="security">
-<span id="security-commands-label"></span><h2>Security<a class="headerlink" href="#security" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="security-import-ssl-certificates">
+<span id="security-commands-label"></span><h2>Security (Import SSL Certificates)<a class="headerlink" href="#security-import-ssl-certificates" title="Permalink to this headline">¶</a></h2>
 <p>Use these commands to manage server-wide SSL certificates. These are useful when you create federation shares with other ownCloud servers that use self-signed certificates:</p>
 <div class="highlight-python"><div class="highlight"><pre>security
  security:certificates         list trusted certificates

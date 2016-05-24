@@ -2,11 +2,13 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "Контакты",
+    "Address book name" : "Название адресной книги",
     "No contacts in here" : "Здесь нет контактов",
     "Name" : "Наименование контакта",
     "Organization" : "Организация",
     "Title" : "Заголовок",
     "Add field ..." : "Добавить поле ...",
+    "Import" : "Импорт",
     "Add contact" : "Добавить контакт",
     "No search result for {query}" : "По запросу {query} ничего не найдено",
     "All contacts" : "Все контакты",
@@ -18,6 +20,7 @@ OC.L10N.register(
     "Country" : "Страна",
     "Address" : "Адрес",
     "(new group)" : "(новая группа)",
+    "New contact" : "Новый контакт",
     "{addressbook} shared by {owner}" : "{addressbook} поделился {owner}",
     "Nickname" : "Псевдоним",
     "Notes" : "Заметки",
@@ -37,7 +40,6 @@ OC.L10N.register(
     "Fax work" : "Факс работы",
     "Pager" : "Пейджер",
     "Voice" : "Голосовая почта",
-    "Settings" : "Настройки",
-    "Import" : "Импорт"
+    "Settings" : "Настройки"
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

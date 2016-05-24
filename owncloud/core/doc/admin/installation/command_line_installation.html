@@ -74,13 +74,14 @@
 <li class="toctree-l2"><a class="reference internal" href="deployment_recommendations.html">ownCloud Deployment Recommendations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Linux Installation Method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">Installation Wizard</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Installing ownCloud From the Command Line</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Installing ownCloud From the Command Line</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#binlog-format-statement">BINLOG_FORMAT = STATEMENT</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="apps_management_installation.html">Installing and Managing Apps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="apps_supported.html">Supported Apps in ownCloud</a></li>
 <li class="toctree-l2"><a class="reference internal" href="source_installation.html">Manual Installation on Linux</a></li>
 <li class="toctree-l2"><a class="reference internal" href="appliance_installation.html">ownCloud Community Appliance</a></li>
-<li class="toctree-l2"><a class="reference internal" href="php_54_installation.html">Installing PHP 5.4 on RHEL 6 and CentOS 6</a></li>
-<li class="toctree-l2"><a class="reference internal" href="php_55_installation.html">Installing PHP 5.5 on RHEL 7 and CentOS 7</a></li>
 <li class="toctree-l2"><a class="reference internal" href="selinux_configuration.html">SELinux Configuration</a></li>
 </ul>
 </li>
@@ -164,6 +165,19 @@ a PHP fatal error message.</p>
 directories (see <a class="reference internal" href="installation_wizard.html#strong-perms-label"><span>Setting Strong Directory Permissions</span></a>). This is an extremely important
 step. It helps protect your ownCloud installation, and ensures that it will run
 correctly.</p>
+<div class="section" id="binlog-format-statement">
+<h2>BINLOG_FORMAT = STATEMENT<a class="headerlink" href="#binlog-format-statement" title="Permalink to this headline">¶</a></h2>
+<p>If your ownCloud installation fails and you see this in your ownCloud log:</p>
+<div class="highlight-python"><div class="highlight"><pre>An unhandled exception has been thrown: exception ‘PDOException’ with message
+&#39;SQLSTATE[HY000]: General error: 1665 Cannot execute statement: impossible to
+write to binary log since BINLOG_FORMAT = STATEMENT and at least one table
+uses a storage engine limited to row-based logging. InnoDB is limited to
+row-logging when transaction isolation level is READ COMMITTED or READ
+UNCOMMITTED.&#39;
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../configuration_database/linux_database_configuration.html#db-binlog-label"><span>MySQL / MariaDB with Binary Logging Enabled</span></a>.</p>
+</div>
 </div>
 
 

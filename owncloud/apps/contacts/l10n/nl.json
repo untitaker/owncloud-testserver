@@ -1,10 +1,12 @@
 { "translations": {
     "Contacts" : "Contactpersonen",
+    "Address book name" : "Adresboek naam",
     "No contacts in here" : "Hier geen contactpersonen gevonden",
     "Name" : "Naam",
     "Organization" : "Organisatie",
     "Title" : "Titel",
     "Add field ..." : "Voeg veld toe",
+    "Import" : "Importeer",
     "Add contact" : "Contactpersoon toevoegen",
     "No search result for {query}" : "Geen zoekresultaten voor {query}",
     "All contacts" : "Alle contactpersonen",
@@ -16,7 +18,9 @@
     "Country" : "Land",
     "Address" : "Adres",
     "(new group)" : "(nieuwe groep)",
+    "New contact" : "Nieuwe contactpersoon",
     "{addressbook} shared by {owner}" : "{addressbook} gedeeld door {owner}",
+    "Invalid file type." : "Ongeldig bestands formaat.",
     "Nickname" : "Roepnaam",
     "Notes" : "Notities",
     "Website" : "Website",
@@ -35,7 +39,7 @@
     "Fax work" : "Fax werk",
     "Pager" : "Pieper",
     "Voice" : "Stem",
-    "Settings" : "Instellingen",
-    "Import" : "Importeer"
+    "Social Network" : "Sociaal Netwerk",
+    "Settings" : "Instellingen"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

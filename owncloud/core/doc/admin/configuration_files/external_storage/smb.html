@@ -87,7 +87,6 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../external_storage_configuration_gui.html#available-storage-backends">Available storage backends</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../external_storage_configuration_gui.html#allow-users-to-mount-external-storage">Allow Users to Mount External Storage</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../external_storage_configuration_gui.html#adding-files-to-external-storages">Adding Files to External Storages</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../external_storage_configuration_gui.html#configuration-file">Configuration File</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../external_storage_configuration.html">Configuring External Storage (Configuration File)</a></li>
@@ -95,6 +94,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../encryption_configuration.html">Encryption Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../files_locking_transactional.html">Transactional File Locking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../previews_configuration.html">Previews Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../file_versioning.html">Controlling File Versions and Aging</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../configuration_database/index.html">Database Configuration</a></li>
@@ -140,8 +140,11 @@
 with the SMB/CIFS backend.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The SMB/CIFS backend requires <code class="docutils literal"><span class="pre">smbclient</span></code> to be installed on the
-ownCloud server. This should be included in any Linux distribution.</p>
+<p class="last">The SMB/CIFS backend requires <code class="docutils literal"><span class="pre">smbclient</span></code> or
+the PHP smbclient module to be installed on the ownCloud server. The PHP
+smbclient module is preferred, but either will work. These
+should be included in any Linux distribution. (See <a class="reference external" href="https://pecl.php.net/package/smbclient">PECL smbclient</a> if your distro does not include
+them.)</p>
 </div>
 <p>You need the following information:</p>
 <ul class="simple">
@@ -157,19 +160,11 @@ automatically to the subfolder, use <code class="docutils literal"><span class="
 subfolder name.</li>
 <li>And finally, the ownCloud users and groups who get access to the share.</li>
 </ul>
-<p>Optionally, you can specify a <code class="docutils literal"><span class="pre">Domain</span></code>. This is useful in
-cases where the
-SMB server requires a domain and a username, and an advanced authentication
+<p>Optionally, you can specify a <code class="docutils literal"><span class="pre">Domain</span></code>. This is useful in cases where the SMB
+server requires a domain and a username, and an advanced authentication
 mechanism like session credentials is used so that the username cannot be
 modified. This is concatenated with the username, so the backend gets
 <code class="docutils literal"><span class="pre">domain\username</span></code></p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">For improved reliability and performance, we recommended installing
-<code class="docutils literal"><span class="pre">libsmbclient-php</span></code>, a native PHP module for connecting to
-SMB servers. It is available as <code class="docutils literal"><span class="pre">php5-libsmbclient</span></code> in the ownCloud
-<a class="reference external" href="https://download.owncloud.org/download/repositories/stable/owncloud/">OBS repositories</a></p>
-</div>
 <div class="figure">
 <a class="reference internal image-reference" href="../../_images/smb.png"><img alt="Samba external storage configuration." src="../../_images/smb.png" style="width: 683.25px; height: 123.0px;" /></a>
 </div>

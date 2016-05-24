@@ -2,11 +2,13 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "Contacts",
+    "Address book name" : "Address book name",
     "No contacts in here" : "No contacts in here",
     "Name" : "Name",
     "Organization" : "Organisation",
     "Title" : "Title",
     "Add field ..." : "Add field ...",
+    "Import" : "Import",
     "Add contact" : "Add contact",
     "No search result for {query}" : "No search result for {query}",
     "All contacts" : "All contacts",
@@ -18,7 +20,9 @@ OC.L10N.register(
     "Country" : "Country",
     "Address" : "Address",
     "(new group)" : "(new group)",
+    "New contact" : "New contact",
     "{addressbook} shared by {owner}" : "{addressbook} shared by {owner}",
+    "Invalid file type." : "Invalid file type.",
     "Nickname" : "Nickname",
     "Notes" : "Notes",
     "Website" : "Website",
@@ -37,7 +41,7 @@ OC.L10N.register(
     "Fax work" : "Fax work",
     "Pager" : "Pager",
     "Voice" : "Voice",
-    "Settings" : "Settings",
-    "Import" : "Import"
+    "Social Network" : "Social Network",
+    "Settings" : "Settings"
 },
 "nplurals=2; plural=(n != 1);");

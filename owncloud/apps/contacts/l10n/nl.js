@@ -2,11 +2,13 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "Contactpersonen",
+    "Address book name" : "Adresboek naam",
     "No contacts in here" : "Hier geen contactpersonen gevonden",
     "Name" : "Naam",
     "Organization" : "Organisatie",
     "Title" : "Titel",
     "Add field ..." : "Voeg veld toe",
+    "Import" : "Importeer",
     "Add contact" : "Contactpersoon toevoegen",
     "No search result for {query}" : "Geen zoekresultaten voor {query}",
     "All contacts" : "Alle contactpersonen",
@@ -18,7 +20,9 @@ OC.L10N.register(
     "Country" : "Land",
     "Address" : "Adres",
     "(new group)" : "(nieuwe groep)",
+    "New contact" : "Nieuwe contactpersoon",
     "{addressbook} shared by {owner}" : "{addressbook} gedeeld door {owner}",
+    "Invalid file type." : "Ongeldig bestands formaat.",
     "Nickname" : "Roepnaam",
     "Notes" : "Notities",
     "Website" : "Website",
@@ -37,7 +41,7 @@ OC.L10N.register(
     "Fax work" : "Fax werk",
     "Pager" : "Pieper",
     "Voice" : "Stem",
-    "Settings" : "Instellingen",
-    "Import" : "Importeer"
+    "Social Network" : "Sociaal Netwerk",
+    "Settings" : "Instellingen"
 },
 "nplurals=2; plural=(n != 1);");

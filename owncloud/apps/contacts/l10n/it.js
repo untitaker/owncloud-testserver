@@ -8,6 +8,7 @@ OC.L10N.register(
     "Organization" : "Organizzazione",
     "Title" : "Titolo",
     "Add field ..." : "Aggiungi campo...",
+    "Import" : "Importa",
     "Add contact" : "Aggiungi contatto",
     "No search result for {query}" : "Nessun risultato di ricerca per {query}",
     "All contacts" : "Tuuti i contatti",
@@ -19,7 +20,9 @@ OC.L10N.register(
     "Country" : "Stato",
     "Address" : "Indirizzo",
     "(new group)" : "(nuovo gruppo)",
+    "New contact" : "Nuovo contatto",
     "{addressbook} shared by {owner}" : "{addressbook} condivisa da {owner}",
+    "Invalid file type." : "Tipo di file non valido.",
     "Nickname" : "Pseudonimo",
     "Notes" : "Note",
     "Website" : "Sito web",
@@ -38,7 +41,7 @@ OC.L10N.register(
     "Fax work" : "Fax lavoro",
     "Pager" : "Cercapersone",
     "Voice" : "Voce",
-    "Settings" : "Impostazioni",
-    "Import" : "Importa"
+    "Social Network" : "Rete sociale",
+    "Settings" : "Impostazioni"
 },
 "nplurals=2; plural=(n != 1);");

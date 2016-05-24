@@ -195,12 +195,18 @@ class Scanner extends BasicEmitter implements IScanner {
 					$fileId = -1;
 				}
 				if (!empty($newData)) {
+					// Reset the checksum if the data has changed
+					$newData['checksum'] = '';
 					$data['fileid'] = $this->addToCache($file, $newData, $fileId);
 				}
 				if (isset($cacheData['size'])) {
 					$data['oldSize'] = $cacheData['size'];
 				} else {
 					$data['oldSize'] = 0;
+				}
+
+				if (isset($cacheData['encrypted'])) {
+					$data['encrypted'] = $cacheData['encrypted'];
 				}
 
 				// post-emit only if it was a file. By that we avoid counting/treating folders as files
@@ -220,6 +226,9 @@ class Scanner extends BasicEmitter implements IScanner {
 				}
 			}
 
+			if ($data && !isset($data['encrypted'])) {
+				$data['encrypted'] = false;
+			}
 			return $data;
 		}
 
@@ -287,6 +296,7 @@ class Scanner extends BasicEmitter implements IScanner {
 		}
 		if ($lock) {
 			if ($this->storage->instanceOfStorage('\OCP\Files\Storage\ILockingStorage')) {
+				$this->storage->acquireLock('scanner::' . $path, ILockingProvider::LOCK_EXCLUSIVE, $this->lockingProvider);
 				$this->storage->acquireLock($path, ILockingProvider::LOCK_SHARED, $this->lockingProvider);
 			}
 		}
@@ -298,6 +308,7 @@ class Scanner extends BasicEmitter implements IScanner {
 		if ($lock) {
 			if ($this->storage->instanceOfStorage('\OCP\Files\Storage\ILockingStorage')) {
 				$this->storage->releaseLock($path, ILockingProvider::LOCK_SHARED, $this->lockingProvider);
+				$this->storage->releaseLock('scanner::' . $path, ILockingProvider::LOCK_EXCLUSIVE, $this->lockingProvider);
 			}
 		}
 		return $data;
@@ -448,26 +459,38 @@ class Scanner extends BasicEmitter implements IScanner {
 	 * walk over any folders that are not fully scanned yet and scan them
 	 */
 	public function backgroundScan() {
-		$lastPath = null;
-		while (($path = $this->cache->getIncomplete()) !== false && $path !== $lastPath) {
-			try {
-				$this->scan($path, self::SCAN_RECURSIVE, self::REUSE_ETAG);
-				\OC_Hook::emit('Scanner', 'correctFolderSize', array('path' => $path));
-				if ($this->cacheActive) {
-					$this->cache->correctFolderSize($path);
-				}
-			} catch (\OCP\Files\StorageInvalidException $e) {
-				// skip unavailable storages
-			} catch (\OCP\Files\StorageNotAvailableException $e) {
-				// skip unavailable storages
-			} catch (\OCP\Files\ForbiddenException $e) {
-				// skip forbidden storages
-			} catch (\OCP\Lock\LockedException $e) {
-				// skip unavailable storages
+		if (!$this->cache->inCache('')) {
+			$this->runBackgroundScanJob(function () {
+				$this->scan('', self::SCAN_RECURSIVE, self::REUSE_ETAG);
+			}, '');
+		} else {
+			$lastPath = null;
+			while (($path = $this->cache->getIncomplete()) !== false && $path !== $lastPath) {
+				$this->runBackgroundScanJob(function() use ($path) {
+					$this->scan($path, self::SCAN_RECURSIVE, self::REUSE_ETAG);
+				}, $path);
+				// FIXME: this won't proceed with the next item, needs revamping of getIncomplete()
+				// to make this possible
+				$lastPath = $path;
 			}
-			// FIXME: this won't proceed with the next item, needs revamping of getIncomplete()
-			// to make this possible
-			$lastPath = $path;
+		}
+	}
+
+	private function runBackgroundScanJob(callable $callback, $path) {
+		try {
+			$callback();
+			\OC_Hook::emit('Scanner', 'correctFolderSize', array('path' => $path));
+			if ($this->cacheActive && $this->cache instanceof Cache) {
+				$this->cache->correctFolderSize($path);
+			}
+		} catch (\OCP\Files\StorageInvalidException $e) {
+			// skip unavailable storages
+		} catch (\OCP\Files\StorageNotAvailableException $e) {
+			// skip unavailable storages
+		} catch (\OCP\Files\ForbiddenException $e) {
+			// skip forbidden storages
+		} catch (\OCP\Lock\LockedException $e) {
+			// skip unavailable storages
 		}
 	}
 

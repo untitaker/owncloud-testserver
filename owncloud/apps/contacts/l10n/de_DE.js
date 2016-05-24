@@ -8,6 +8,7 @@ OC.L10N.register(
     "Organization" : "Organisation",
     "Title" : "Titel",
     "Add field ..." : "Feld hinzufügen …",
+    "Import" : "Importieren",
     "Add contact" : "Kontakt hinzufügen",
     "No search result for {query}" : "Keine Suchergebnisse zu {query}",
     "All contacts" : "Alle Kontakte",
@@ -19,12 +20,14 @@ OC.L10N.register(
     "Country" : "Land",
     "Address" : "Adresse",
     "(new group)" : "(neue Gruppe)",
+    "New contact" : "Neuer Kontakt",
     "{addressbook} shared by {owner}" : "{addressbook} geteilt von {owner}",
+    "Invalid file type." : "Ungültiger Dateityp.",
     "Nickname" : "Spitzname",
     "Notes" : "Notizen",
     "Website" : "Internetseite",
     "Federated Cloud ID" : "Federated-Cloud-ID",
-    "Home" : "Zuhause",
+    "Home" : "Privat",
     "Work" : "Arbeit",
     "Other" : "Andere",
     "Groups" : "Gruppen",
@@ -38,7 +41,7 @@ OC.L10N.register(
     "Fax work" : "Fax geschäftlich",
     "Pager" : "Pager",
     "Voice" : "Anruf",
-    "Settings" : "Einstellungen",
-    "Import" : "Importieren"
+    "Social Network" : "Soziales Netzwerk",
+    "Settings" : "Einstellungen"
 },
 "nplurals=2; plural=(n != 1);");

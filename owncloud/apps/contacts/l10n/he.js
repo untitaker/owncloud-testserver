@@ -2,11 +2,13 @@ OC.L10N.register(
     "contacts",
     {
     "Contacts" : "אנשי קשר",
+    "Address book name" : "שם ספר כתובות",
     "No contacts in here" : "אין כאן אנשי קשר",
     "Name" : "שם",
     "Organization" : "ארגון",
     "Title" : "כותרת",
     "Add field ..." : "הוספת שדה...",
+    "Import" : "יבוא",
     "Add contact" : "הוסף איש קשר",
     "No search result for {query}" : "אין תוצאות חיפוש עבור {query}",
     "All contacts" : "כל אנשי הקשר",
@@ -18,6 +20,7 @@ OC.L10N.register(
     "Country" : "מדינה",
     "Address" : "כתובת",
     "(new group)" : "(קבוצה חדשה)",
+    "New contact" : "איש קשר חדש",
     "{addressbook} shared by {owner}" : "{addressbook} שותף על ידי {owner}",
     "Nickname" : "כינוי",
     "Notes" : "הערות",
@@ -37,7 +40,6 @@ OC.L10N.register(
     "Fax work" : "פקס בעבודה",
     "Pager" : "זימונית",
     "Voice" : "קולי",
-    "Settings" : "הגדרות",
-    "Import" : "יבוא"
+    "Settings" : "הגדרות"
 },
 "nplurals=2; plural=(n != 1);");

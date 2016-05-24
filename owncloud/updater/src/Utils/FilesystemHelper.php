@@ -168,7 +168,7 @@ class FilesystemHelper {
 		}
 	}
 
-	protected function rmdirr($dir) {
+	public function rmdirr($dir) {
 		if(is_dir($dir)) {
 			$files = scandir($dir);
 			foreach($files as $file) {
@@ -196,10 +196,12 @@ class FilesystemHelper {
 	 */
 	public function tripleMove($old, $new, $temp, $dirName){
 		if ($this->fileExists($old . '/' . $dirName)){
-			$this->move($old . '/' . $dirName, $temp . '/' . $dirName);
+			$this->copyr($old . '/' . $dirName, $temp . '/' . $dirName, false);
+			$this->rmdirr($old . '/' . $dirName);
 		}
 		if ($this->fileExists($new . '/' . $dirName)){
-			$this->move($new . '/' . $dirName, $old . '/' . $dirName);
+			$this->copyr($new . '/' . $dirName, $old . '/' . $dirName, false);
+			$this->rmdirr($new . '/' . $dirName);
 		}
 	}
 

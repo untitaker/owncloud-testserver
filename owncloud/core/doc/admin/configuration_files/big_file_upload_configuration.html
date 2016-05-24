@@ -90,6 +90,7 @@
 <li class="toctree-l2"><a class="reference internal" href="encryption_configuration.html">Encryption Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="files_locking_transactional.html">Transactional File Locking</a></li>
 <li class="toctree-l2"><a class="reference internal" href="previews_configuration.html">Previews Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_versioning.html">Controlling File Versions and Aging</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration_database/index.html">Database Configuration</a></li>
@@ -221,11 +222,11 @@ necessary, once bug #51747 is fixed.</p>
 wiki entry.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">For <code class="docutils literal"><span class="pre">client_body_temp_path</span></code> make sure it is pointing to a path/partition which
-holds enough space for the filesize you want to upload. Also place it at least at the same
-partition the <code class="docutils literal"><span class="pre">upload_tmp_dir</span></code> or <code class="docutils literal"><span class="pre">tempdirectory</span></code> settings described below are pointing
-to. For optimal performance <code class="docutils literal"><span class="pre">client_body_temp_path</span></code> and <code class="docutils literal"><span class="pre">upload_tmp_dir/tempdirectory</span></code>
-should be also placed on different devices/hard drives.</p>
+<p class="last">Make sure that <code class="docutils literal"><span class="pre">client_body_temp_path</span></code> points to a partition with
+adequate space for your upload file size, and on the same partition as
+the <code class="docutils literal"><span class="pre">upload_tmp_dir</span></code> or <code class="docutils literal"><span class="pre">tempdirectory</span></code> (see below). For optimal
+performance, place these on a separate hard drive that is dedicated to
+swap and temp storage.</p>
 </div>
 </div>
 </div>

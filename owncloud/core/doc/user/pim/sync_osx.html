@@ -108,10 +108,10 @@
   <div class="section" id="synchronizing-with-os-x">
 <h1>Synchronizing with OS X<a class="headerlink" href="#synchronizing-with-os-x" title="Permalink to this headline">¶</a></h1>
 <p>To use ownCloud with iCal you will need to use the following URL:</p>
-<div class="highlight-python"><div class="highlight"><pre>https://example.com/remote.php/dav/principals/username/
+<div class="highlight-python"><div class="highlight"><pre>https://example.com/remote.php/dav/principals/users/USERNAME/
 </pre></div>
 </div>
-<p>The setup is basically the same as with iOS using the path <code class="docutils literal"><span class="pre">https://example.com/remote.php/dav/principals/username/</span></code>
+<p>The setup is basically the same as with iOS using the path <code class="docutils literal"><span class="pre">https://example.com/remote.php/dav/principals/users/USERNAME/</span></code>
 to sync with ownCloud. For OS X 10.7 Lion and 10.8 Mountain Lion everything works
 fine, but OS X 10.6 (Snow Leopard) and older needs some fiddling to work. A user
 contributed the following:</p>
@@ -136,7 +136,7 @@ your favorite text editor.
 </div>
 <ol class="arabic" start="8">
 <li><p class="first">Make it look like this. Please note that the :443 after <strong>example.com</strong> is important:</p>
-<div class="highlight-python"><div class="highlight"><pre>&lt;key&gt;servername&lt;/key &lt;string&gt;https://example.com:443/owncloud/remote.php/dav/principals/username&lt;/string&gt; &lt;key&gt;username&lt;/key &lt;string&gt;username&lt;/string&gt;
+<div class="highlight-python"><div class="highlight"><pre>&lt;key&gt;servername&lt;/key &lt;string&gt;https://example.com:443/owncloud/remote.php/dav/principals/users/USERNAME&lt;/string&gt; &lt;key&gt;username&lt;/key &lt;string&gt;username&lt;/string&gt;
 </pre></div>
 </div>
 </li>
