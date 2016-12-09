@@ -8,16 +8,16 @@ echo "install.sh: Own directory is $DIR"
 
 if [ "$CI" = "true" ]; then
     # http://doc.owncloud.org/server/6.0/admin_manual/installation/installation_source.html#installation-of-packages-on-ubuntu-12-04-4-lts-server
-    sudo add-apt-repository -y ppa:ondrej/php5-5.6
+    sudo add-apt-repository -y ppa:ondrej/php
     # who cares if one or two repos are down. As long as i'm able to install
     # these packages...
     sudo apt-get update || true
 
     sudo apt-get install \
-        php5-cgi \
-        php5 php5-cli \
-        php5-gd php5-json php5-sqlite php5-curl \
-        php5-intl php5-mcrypt php5-imagick
+        php php-cgi php-cli \
+        php-gd php-json php-sqlite3 php-curl \
+        php-intl php-mcrypt php-imagick \
+        php-xml php-zip
 fi
 
 cd "$DIR"
