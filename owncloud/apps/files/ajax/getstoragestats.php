@@ -1,12 +1,12 @@
 <?php
 /**
  * @author Jörn Friedrich Dreyer <jfd@butonic.de>
- * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Lukas Reschke <lukas@statuscode.ch>
  * @author Robin Appelman <icewind@owncloud.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ OCP\JSON::checkLoggedIn();
 
 // send back json
 try {
-	OCP\JSON::success(array('data' => \OCA\Files\Helper::buildFileStorageStatistics($dir)));
+	OCP\JSON::success(['data' => \OCA\Files\Helper::buildFileStorageStatistics($dir)]);
 } catch (\OCP\Files\NotFoundException $e) {
 	OCP\JSON::error(['data' => ['message' => 'Folder not found']]);
 }

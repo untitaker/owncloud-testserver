@@ -1,9 +1,9 @@
 <?php
 /**
- * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Joas Schilling <coding@schilljs.com>
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -31,6 +31,7 @@ $eventDispatcher->addListener(
 		\OCP\Util::addScript('comments', 'commentsummarymodel');
 		\OCP\Util::addScript('comments', 'commentstabview');
 		\OCP\Util::addScript('comments', 'filesplugin');
+		\OCP\Util::addScript('comments', 'activitytabviewplugin');
 		\OCP\Util::addStyle('comments', 'comments');
 	}
 );
@@ -51,3 +52,10 @@ $managerListener = function(\OCP\Comments\CommentsEvent $event) use ($activityMa
 };
 
 $eventDispatcher->addListener(\OCP\Comments\CommentsEvent::EVENT_ADD, $managerListener);
+
+$eventDispatcher->addListener(\OCP\Comments\CommentsEntityEvent::EVENT_ENTITY, function(\OCP\Comments\CommentsEntityEvent $event) {
+	$event->addEntityCollection('files', function($name) {
+		$nodes = \OC::$server->getUserFolder()->getById(intval($name));
+		return !empty($nodes);
+	});
+});

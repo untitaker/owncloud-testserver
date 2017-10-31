@@ -21,11 +21,14 @@
 
 namespace Owncloud\Updater\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class PostUpgradeCleanupCommand
+ *
+ * @package Owncloud\Updater\Command
+ */
 class PostUpgradeCleanupCommand extends Command {
 
 	protected function configure(){
@@ -35,6 +38,10 @@ class PostUpgradeCleanupCommand extends Command {
 		;
 	}
 
+	/**
+	 * @param InputInterface $input
+	 * @param OutputInterface $output
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output){
 		$registry = $this->container['utils.registry'];
 		$fsHelper = $this->container['utils.filesystemhelper'];
@@ -58,6 +65,14 @@ class PostUpgradeCleanupCommand extends Command {
 		
 		//Cleanup Filesystem
 		$fsHelper->removeIfExists($locator->getExtractionBaseDir());
+
+		//Retrigger integrity check
+		try {
+			$this->container['utils.occrunner']->run('integrity:check-core');
+		} catch (\Exception $e){
+			$this->getApplication()->getLogger()->error('Integrity check failed');
+			$this->getApplication()->logException($e);
+		}
 
 		//Cleanup updater cache
 		$registry->clearAll();

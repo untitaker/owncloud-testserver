@@ -1,15 +1,17 @@
 <?php
 /**
  * @author Andreas Fischer <bantu@owncloud.com>
- * @author Bart Visscher <bartv@thisnet.nl>
- * @author Björn Schießle <schiessle@owncloud.com>
- * @author Frank Karlitschek <frank@owncloud.org>
+ * @author Björn Schießle <bjoern@schiessle.org>
+ * @author Frank Karlitschek <frank@karlitschek.de>
  * @author Jörn Friedrich Dreyer <jfd@butonic.de>
- * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Lukas Reschke <lukas@statuscode.ch>
  * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Piotr Filiciak <piotr@filiciak.pl>
  * @author Robin Appelman <icewind@owncloud.com>
+ * @author Thomas Müller <thomas.mueller@tmit.eu>
+ * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -30,13 +32,17 @@
 OCP\User::checkLoggedIn();
 \OC::$server->getSession()->close();
 
-$files = isset($_GET['files']) ? (string)$_GET['files'] : '';
-$dir = isset($_GET['dir']) ? (string)$_GET['dir'] : '';
+// files can be an array with multiple "files[]=one.txt&files[]=two.txt" or a single file with "files=filename.txt"
+$files_list = isset($_GET['files']) ? $_GET['files'] : '';
+$dir = isset($_GET['dir']) ? $_GET['dir']: '';
 
-$files_list = json_decode($files);
 // in case we get only a single file
 if (!is_array($files_list)) {
-	$files_list = array($files);
+	$files_list = [$files_list];
+} else {
+	$files_list = array_map(function($file) {
+		return $file;
+	}, $files_list);
 }
 
 /**
@@ -50,4 +56,13 @@ if(isset($_GET['downloadStartSecret'])
 	setcookie('ocDownloadStarted', $_GET['downloadStartSecret'], time() + 20, '/');
 }
 
-OC_Files::get($dir, $files_list, $_SERVER['REQUEST_METHOD'] == 'HEAD');
+$server_params = ['head' => \OC::$server->getRequest()->getMethod() == 'HEAD'];
+
+/**
+ * Http range requests support
+ */
+if (isset($_SERVER['HTTP_RANGE'])) {
+	$server_params['range'] = \OC::$server->getRequest()->getHeader('Range');
+}
+
+OC_Files::get($dir, $files_list, $server_params);

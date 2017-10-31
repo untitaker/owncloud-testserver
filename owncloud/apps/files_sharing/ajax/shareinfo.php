@@ -1,11 +1,14 @@
 <?php
 /**
- * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Björn Schießle <bjoern@schiessle.org>
+ * @author Joas Schilling <coding@schilljs.com>
  * @author Morris Jobke <hey@morrisjobke.de>
  * @author Robin Appelman <icewind@owncloud.com>
+ * @author Stefan Weil <sw@weilnetz.de>
+ * @author Thomas Müller <thomas.mueller@tmit.eu>
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -22,14 +25,26 @@
  *
  */
 
+/**
+ * @deprecated fetches all metadata, kept for compatibility with older instances
+ */
+
 OCP\JSON::checkAppEnabled('files_sharing');
+
+OC::$server->getLogger()->warning(
+	'Deprecated api access from '.OC::$server->getRequest()->getRemoteAddress().
+	'. Ask remote to upgrade.', ['app' => 'files_sharing']
+);
 
 if (!isset($_GET['t'])) {
 	\OC_Response::setStatus(400); //400 Bad Request
 	exit;
 }
 
-if (OCA\Files_Sharing\Helper::isOutgoingServer2serverShareEnabled() === false) {
+$federatedSharingApp = new \OCA\FederatedFileSharing\AppInfo\Application('federatedfilesharing');
+$federatedShareProvider = $federatedSharingApp->getFederatedShareProvider();
+
+if ($federatedShareProvider->isOutgoingServer2serverShareEnabled() === false) {
 	\OC_Response::setStatus(404); // 404 not found
 	exit;
 }
@@ -55,36 +70,44 @@ $path = $data['realPath'];
 $isWritable = $linkItem['permissions'] & (\OCP\Constants::PERMISSION_UPDATE | \OCP\Constants::PERMISSION_CREATE);
 if (!$isWritable) {
 	\OC\Files\Filesystem::addStorageWrapper('readonly', function ($mountPoint, $storage) {
-		return new \OC\Files\Storage\Wrapper\PermissionsMask(array('storage' => $storage, 'mask' => \OCP\Constants::PERMISSION_READ + \OCP\Constants::PERMISSION_SHARE));
+		return new \OC\Files\Storage\Wrapper\PermissionsMask(['storage' => $storage, 'mask' => \OCP\Constants::PERMISSION_READ + \OCP\Constants::PERMISSION_SHARE]);
 	});
 }
 
 $rootInfo = \OC\Files\Filesystem::getFileInfo($path);
 $rootView = new \OC\Files\View('');
 
+$shareManager = \OC::$server->getShareManager();
+$share = $shareManager->getShareByToken($token);
+$sharePermissions= (int)$share->getPermissions();
+
 /**
  * @param \OCP\Files\FileInfo $dir
  * @param \OC\Files\View $view
  * @return array
  */
-function getChildInfo($dir, $view) {
+function getChildInfo($dir, $view, $sharePermissions) {
 	$children = $view->getDirectoryContent($dir->getPath());
-	$result = array();
+	$result = [];
 	foreach ($children as $child) {
-		$formated = \OCA\Files\Helper::formatFileInfo($child);
+		$formatted = \OCA\Files\Helper::formatFileInfo($child);
 		if ($child->getType() === 'dir') {
-			$formated['children'] = getChildInfo($child, $view);
+			$formatted['children'] = getChildInfo($child, $view, $sharePermissions);
 		}
-		$formated['mtime'] = $formated['mtime'] / 1000;
-		$result[] = $formated;
+		$formatted['mtime'] = $formatted['mtime'] / 1000;
+		$formatted['permissions'] = $sharePermissions & (int)$formatted['permissions'];
+		$result[] = $formatted;
 	}
 	return $result;
 }
 
 $result = \OCA\Files\Helper::formatFileInfo($rootInfo);
 $result['mtime'] = $result['mtime'] / 1000;
+$result['permissions'] = (int)$result['permissions'] & $sharePermissions;
+
+
 if ($rootInfo->getType() === 'dir') {
-	$result['children'] = getChildInfo($rootInfo, $rootView);
+	$result['children'] = getChildInfo($rootInfo, $rootView, $sharePermissions);
 }
 
-OCP\JSON::success(array('data' => $result));
+OCP\JSON::success(['data' => $result, 'message' => 'DEPRECATED API']);

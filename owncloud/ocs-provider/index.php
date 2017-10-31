@@ -1,8 +1,9 @@
 <?php
 /**
- * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Joas Schilling <coding@schilljs.com>
+ * @author Lukas Reschke <lukas@statuscode.ch>
  *
- * @copyright Copyright (c) 2015, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -20,13 +21,12 @@
  */
 
 require_once('../lib/base.php');
-require_once(__DIR__ . '/provider.php');
 
 header('Content-Type: application/json');
 
 $server = \OC::$server;
 
-$controller = new Provider(
+$controller = new \OC\OCS\Provider(
 	'ocs_provider',
 	$server->getRequest(),
 	$server->getAppManager()

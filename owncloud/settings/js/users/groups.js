@@ -31,7 +31,7 @@ GroupList = {
 
 	setUserCount: function (groupLiElement, usercount) {
 		if ($sortGroupBy !== 1) {
-			// If we don't sort by group count we dont display them either
+			// If we don't sort by group count we don't display them either
 			return;
 		}
 
@@ -136,10 +136,6 @@ GroupList = {
 					var addedGroup = result.groupname;
 					UserList.availableGroups = $.unique($.merge(UserList.availableGroups, [addedGroup]));
 					GroupList.addGroup(result.groupname);
-
-					$('.groupsselect, .subadminsselect')
-						.append($('<option>', { value: result.groupname })
-							.text(result.groupname));
 				}
 				GroupList.toggleAddGroup();
 			}).fail(function(result) {

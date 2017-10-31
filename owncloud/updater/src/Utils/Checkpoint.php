@@ -22,9 +22,12 @@
 namespace Owncloud\Updater\Utils;
 
 use Owncloud\Updater\Console\Application;
-use Owncloud\Updater\Utils\FilesystemHelper;
-use Owncloud\Updater\Utils\Locator;
 
+/**
+ * Class Checkpoint
+ *
+ * @package Owncloud\Updater\Utils
+ */
 class Checkpoint {
 
 	const CORE_DIR = 'core';
@@ -53,7 +56,7 @@ class Checkpoint {
 	/**
 	 * Creates a checkpoint
 	 * @return string
-	 * @throws Exception if base checkpoint directory is not writable
+	 * @throws \Exception if base checkpoint directory is not writable
 	 */
 	public function create(){
 		$checkpointId = $this->createCheckpointId();
@@ -72,10 +75,10 @@ class Checkpoint {
 				$this->fsHelper->copyr($coreItem, $cpItemPath, true);
 			}
 			//copy config.php
-			$configDirSrc = $this->locator->getOwncloudRootPath() . '/config';
+			$configDirSrc = $this->locator->getOwnCloudRootPath() . '/config';
 			$configDirDst = $checkpointCorePath . '/config';
 			$this->fsHelper->copyr($configDirSrc, $configDirDst, true);
-
+			
 			$checkpointAppPath = $checkpointPath . '/' . self::APP_DIR;
 			$this->fsHelper->mkdir($checkpointAppPath);
 			$appManager = Application::$container['utils.appmanager'];
@@ -100,12 +103,12 @@ class Checkpoint {
 	 * Restore a checkpoint by id
 	 * @param string $checkpointId id of checkpoint
 	 * @return array
-	 * @throws UnexpectedValueException if there is no checkpoint with this id
+	 * @throws \UnexpectedValueException if there is no checkpoint with this id
 	 */
 	public function restore($checkpointId){
 		$this->assertCheckpointExists($checkpointId);
 		$checkpointDir = $this->locator->getCheckpointDir() . '/' . $checkpointId;
-		$ocRoot = $this->locator->getOwncloudRootPath();
+		$ocRoot = $this->locator->getOwnCloudRootPath();
 		$this->fsHelper->copyr($checkpointDir . '/' . self::CORE_DIR, $ocRoot, false);
 		$this->fsHelper->copyr($checkpointDir . '/' . self::APP_DIR, $ocRoot . '/' . self::APP_DIR, false);
 	}
@@ -114,7 +117,7 @@ class Checkpoint {
 	 * Remove a checkpoint by id
 	 * @param string $checkpointId id of checkpoint
 	 * @return array
-	 * @throws UnexpectedValueException if there is no checkpoint with this id
+	 * @throws \UnexpectedValueException if there is no checkpoint with this id
 	 */
 	public function remove($checkpointId){
 		$this->assertCheckpointExists($checkpointId);
@@ -152,10 +155,19 @@ class Checkpoint {
 	}
 
 	/**
+	 * Get the most recent checkpoint Id
+	 * @return string|bool
+	 */
+	public function getLastCheckpointId(){
+		$allCheckpointIds = $this->getAllCheckpointIds();
+		return count($allCheckpointIds) > 0 ? end($allCheckpointIds) : false;
+	}
+
+	/**
 	 * Return array of all checkpoint ids
 	 * @return array
 	 */
-	protected function getAllCheckpointIds(){
+	public function getAllCheckpointIds(){
 		$checkpointDir = $this->locator->getCheckpointDir();
 		$content = $this->fsHelper->isDir($checkpointDir) ? $this->fsHelper->scandir($checkpointDir) : [];
 		$checkpoints = array_filter(
@@ -182,14 +194,14 @@ class Checkpoint {
 	 * @param string $checkpointId id of checkpoint
 	 * @return string
 	 */
-	protected function getCheckpointPath($checkpointId){
+	public function getCheckpointPath($checkpointId){
 		return $this->locator->getCheckpointDir() . '/' . $checkpointId;
 	}
 
 	/**
 	 * Produce an error on non-existing checkpoints
 	 * @param string $checkpointId id of checkpoint
-	 * @throws UnexpectedValueException if there is no checkpoint with this id
+	 * @throws \UnexpectedValueException if there is no checkpoint with this id
 	 */
 	private function assertCheckpointExists($checkpointId){
 		if (!$this->checkpointExists($checkpointId) || $checkpointId === ''){

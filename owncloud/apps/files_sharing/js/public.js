@@ -71,7 +71,8 @@ OCA.Sharing.PublicApp = {
 					folderDropOptions: folderDropOptions,
 					fileActions: fileActions,
 					detailsViewEnabled: false,
-					filesClient: filesClient
+					filesClient: filesClient,
+					enableUpload: true
 				}
 			);
 			this.files = OCA.Files.Files;
@@ -139,7 +140,7 @@ OCA.Sharing.PublicApp = {
 			}).then(function (data) {
 				self._showTextPreview(data, previewHeight);
 			});
-		} else if (previewSupported === 'true' ||
+		} else if ((previewSupported === 'true' && mimetype.substr(0, mimetype.indexOf('/')) !== 'video') ||
 			mimetype.substr(0, mimetype.indexOf('/')) === 'image' &&
 			mimetype !== 'image/svg+xml') {
 			img.attr('src', OC.filePath('files_sharing', 'ajax', 'publicpreview.php') + '?' + OC.buildQueryString(params));
@@ -149,21 +150,49 @@ OCA.Sharing.PublicApp = {
 			img.attr('width', 128);
 			img.appendTo('#imgframe');
 		}
+		else if (previewSupported === 'true') {
+			$('#imgframe > video').attr('poster', OC.filePath('files_sharing', 'ajax', 'publicpreview.php') + '?' + OC.buildQueryString(params));
+		}
 
 		if (this.fileList) {
 			// TODO: move this to a separate PublicFileList class that extends OCA.Files.FileList (+ unit tests)
 			this.fileList.getDownloadUrl = function (filename, dir, isDir) {
 				var path = dir || this.getCurrentDirectory();
+				var base = OC.generateUrl('/s/' + token + '/download') + '?' + OC.buildQueryString({path: path});
+
+				var filesPart = '';
 				if (_.isArray(filename)) {
-					filename = JSON.stringify(filename);
+					_.each(filename, function(name) {
+						filesPart += '&files[]=' + encodeURIComponent(name);
+					});
+				} else {
+					filesPart = '&files=' + encodeURIComponent(filename || '');
 				}
-				var params = {
-					path: path
-				};
-				if (filename) {
-					params.files = filename;
+				return base + filesPart;
+			};
+
+			this.fileList.getUploadUrl = function(fileName, dir) {
+				if (_.isUndefined(dir)) {
+					dir = this.getCurrentDirectory();
 				}
-				return OC.generateUrl('/s/' + token + '/download') + '?' + OC.buildQueryString(params);
+
+				var pathSections = dir.split('/');
+				if (!_.isUndefined(fileName)) {
+					pathSections.push(fileName);
+				}
+				var encodedPath = '';
+				_.each(pathSections, function(section) {
+					if (section !== '') {
+						encodedPath += '/' + encodeURIComponent(section);
+					}
+				});
+				var base = '';
+
+				if (!this._uploader.isXHRUpload()) {
+					// also add auth in URL due to POST workaround
+					base = OC.getProtocol() + '://' + token + '@' + OC.getHost() + (OC.getPort() ? ':' + OC.getPort() : '');
+				}
+				return base + OC.getRootPath() + '/public.php/webdav' + encodedPath;
 			};
 
 			this.fileList.getAjaxUrl = function (action, params) {
@@ -199,20 +228,12 @@ OCA.Sharing.PublicApp = {
 				OCA.Files.FileList.prototype.updateEmptyContent.apply(this, arguments);
 			};
 
-			var file_upload_start = $('#file_upload_start');
-			file_upload_start.on('fileuploadadd', function (e, data) {
-				var fileDirectory = '';
-				if (typeof data.files[0].relativePath !== 'undefined') {
-					fileDirectory = data.files[0].relativePath;
+			this.fileList._uploader.on('fileuploadadd', function(e, data) {
+				if (!data.headers) {
+					data.headers = {};
 				}
 
-				// Add custom data to the upload handler
-				data.formData = {
-					requesttoken: $('#publicUploadRequestToken').val(),
-					dirToken: $('#dirToken').val(),
-					subdir: data.targetDir || self.fileList.getCurrentDirectory(),
-					file_directory: fileDirectory
-				};
+				data.headers.Authorization = 'Basic ' + btoa(token + ':');
 			});
 
 			// do not allow sharing from the public page
@@ -240,10 +261,10 @@ OCA.Sharing.PublicApp = {
 
 			var remote = $(this).find('input[type="text"]').val();
 			var token = $('#sharingToken').val();
-			var owner = $('#save').data('owner');
-			var ownerDisplayName = $('#save').data('owner-display-name');
-			var name = $('#save').data('name');
-			var isProtected = $('#save').data('protected') ? 1 : 0;
+			var owner = $('#header').data('owner');
+			var ownerDisplayName = $('#header').data('owner-display-name');
+			var name = $('#header').data('name');
+			var isProtected = $('#header').data('protected') ? 1 : 0;
 			OCA.Sharing.PublicApp._saveToOwnCloud(remote, token, owner, ownerDisplayName, name, isProtected);
 		});
 
@@ -292,11 +313,29 @@ OCA.Sharing.PublicApp = {
 	},
 
 	_saveToOwnCloud: function (remote, token, owner, ownerDisplayName, name, isProtected) {
+		var toggleLoading = function() {
+			var iconClass = $('#save-button-confirm').attr('class');
+			var loading = iconClass.indexOf('icon-loading-small') !== -1;
+			if(loading) {
+				$('#save-button-confirm')
+				.removeClass("icon-loading-small")
+				.addClass("icon-confirm");
+				
+			}
+			else {
+				$('#save-button-confirm')
+				.removeClass("icon-confirm")
+				.addClass("icon-loading-small");
+
+			}
+		};
+
+		toggleLoading();
 		var location = window.location.protocol + '//' + window.location.host + OC.webroot;
 		
 		if(remote.substr(-1) !== '/') {
 			remote += '/'
-		};
+		}
 
 		var url = remote + 'index.php/apps/files#' + 'remote=' + encodeURIComponent(location) // our location is the remote for the other server
 			+ "&token=" + encodeURIComponent(token) + "&owner=" + encodeURIComponent(owner) +"&ownerDisplayName=" + encodeURIComponent(ownerDisplayName) + "&name=" + encodeURIComponent(name) + "&protected=" + isProtected;
@@ -309,6 +348,7 @@ OCA.Sharing.PublicApp = {
 			// this check needs to happen on the server due to the Content Security Policy directive
 			$.get(OC.generateUrl('apps/files_sharing/testremote'), {remote: remote}).then(function (protocol) {
 				if (protocol !== 'http' && protocol !== 'https') {
+					toggleLoading();
 					OC.dialogs.alert(t('files_sharing', 'No ownCloud installation (7 or higher) found at {remote}', {remote: remote}),
 						t('files_sharing', 'Invalid ownCloud url'));
 				} else {

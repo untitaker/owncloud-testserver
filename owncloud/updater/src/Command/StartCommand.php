@@ -21,12 +21,15 @@
 
 namespace Owncloud\Updater\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
+/**
+ * Class StartCommand
+ *
+ * @package Owncloud\Updater\Command
+ */
 class StartCommand extends Command {
 
 	protected $stack = [
@@ -38,12 +41,7 @@ class StartCommand extends Command {
 		[ 'command' => 'upgrade:backupData'],
 		[ 'command' => 'upgrade:checkpoint', '--create' => '1'],
 		[ 'command' => 'upgrade:preUpgradeRepair'],
-		[ 'command' => 'upgrade:dbUpgrade', 'simulation' => 'true'],
-		[ 'command' => 'upgrade:dbUpgrade'],
-		[ 'command' => 'upgrade:disableNotShippedApps'],
 		[ 'command' => 'upgrade:executeCoreUpgradeScripts'],
-		[ 'command' => 'upgrade:upgradeShippedApps'],
-		[ 'command' => 'upgrade:enableNotShippedApps'],
 		[ 'command' => 'upgrade:cleanCache'],
 		[ 'command' => 'upgrade:postUpgradeRepair'],
 		[ 'command' => 'upgrade:restartWebServer'],
@@ -59,6 +57,10 @@ class StartCommand extends Command {
 		;
 	}
 
+	/**
+	 * @param InputInterface $input
+	 * @param OutputInterface $output
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output){
 		$app = $this->getApplication();
 		foreach ($this->stack as $command){

@@ -22,8 +22,12 @@
 namespace Owncloud\Updater\Utils;
 
 use GuzzleHttp\Client;
-use Owncloud\Updater\Utils\Feed;
 
+/**
+ * Class Fetcher
+ *
+ * @package Owncloud\Updater\Utils
+ */
 class Fetcher {
 
 	const DEFAULT_BASE_URL = 'https://updates.owncloud.com/server/';
@@ -62,9 +66,10 @@ class Fetcher {
 	}
 
 	/**
-	 * Download new owncloud package
+	 * Download new ownCloud package
 	 * @param Feed $feed
 	 * @param Callable $onProgress
+	 * @throws \Exception
 	 * @throws \UnexpectedValueException
 	 */
 	public function getOwncloud(Feed $feed, callable $onProgress){
@@ -133,6 +138,9 @@ class Fetcher {
 		return new Feed($tmp);
 	}
 
+	/**
+	 * @return mixed|string
+	 */
 	public function getUpdateChannel(){
 		$channel = $this->configReader->getByPath('apps.core.OC_Channel');
 		if (is_null($channel)) {
@@ -155,7 +163,13 @@ class Fetcher {
 		$version['edition'] = $this->configReader->getEdition();
 		$version['build'] = $this->locator->getBuild();
 
-		$url = self::DEFAULT_BASE_URL . '?version=' . implode('x', $version);
+		// Read updater server URL from config
+		$updaterServerUrl = $this->configReader->get(['system', 'updater.server.url']);
+		if ((bool) $updaterServerUrl === false){
+			$updaterServerUrl = self::DEFAULT_BASE_URL;
+		}
+
+		$url = $updaterServerUrl . '?version=' . implode('x', $version);
 		return $url;
 	}
 

@@ -1,15 +1,14 @@
 <?php
 	/** @var array $_ */
-	/** @var OC_L10N $l */
+	/** @var \OCP\IL10N $l */
 script('encryption', 'settings-personal');
-script('core', 'multiselect');
 ?>
 <form id="ocDefaultEncryptionModule" class="section">
-	<h2><?php p($l->t('ownCloud basic encryption module')); ?></h2>
+	<h2 class="app-name"><?php p($l->t('ownCloud basic encryption module')); ?></h2>
 
 	<?php if ($_["initialized"] === \OCA\Encryption\Session::NOT_INITIALIZED ): ?>
 
-	<?php p($l->t("Encryption App is enabled but your keys are not initialized, please log-out and log-in again")); ?>
+	<?php p($l->t("Encryption App is enabled, but your keys are not initialized. Please log-out and log-in again.")); ?>
 
 	<?php elseif ( $_["initialized"] === \OCA\Encryption\Session::INIT_EXECUTED ): ?>
 		<p>
@@ -53,20 +52,20 @@ script('core', 'multiselect');
 			<br />
 			<input
 			type='radio'
-			id='userEnableRecovery'
+			id='userEnableRecoveryCheckbox'
 			name='userEnableRecovery'
 			value='1'
 			<?php echo ( $_["recoveryEnabledForUser"] ? 'checked="checked"' : '' ); ?> />
-			<label for="userEnableRecovery"><?php p( $l->t( "Enabled" ) ); ?></label>
+			<label for="userEnableRecoveryCheckbox"><?php p( $l->t( "Enabled" ) ); ?></label>
 			<br />
 
 			<input
 			type='radio'
-			id='userDisableRecovery'
+			id='userDisableRecoveryCheckbox'
 			name='userEnableRecovery'
 			value='0'
 			<?php echo ( $_["recoveryEnabledForUser"] === false ? 'checked="checked"' : '' ); ?> />
-			<label for="userDisableRecovery"><?php p( $l->t( "Disabled" ) ); ?></label>
+			<label for="userDisableRecoveryCheckbox"><?php p( $l->t( "Disabled" ) ); ?></label>
 		</p>
 	<?php endif; ?>
 </form>

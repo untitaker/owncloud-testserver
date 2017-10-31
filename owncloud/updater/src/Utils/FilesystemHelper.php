@@ -21,15 +21,34 @@
 
 namespace Owncloud\Updater\Utils;
 
+/**
+ * Class FilesystemHelper
+ *
+ * @package Owncloud\Updater\Utils
+ */
 class FilesystemHelper {
 
 	/**
 	 * Wrapper for filemtime function
 	 * @param string $path
-	 * @return array
+	 * @return integer
 	 */
 	public function filemtime($path){
 		return filemtime($path);
+	}
+
+	/**
+	 * Wrapper for scandir function. 
+	 * Filters current and parent directories
+	 * @param string $path
+	 * @return array
+	 */
+	public function scandirFiltered($path){
+		$content = $this->scandir($path);
+		if (is_array($content)){
+			return array_diff($content, ['.', '..']);
+		}
+		return [];
 	}
 
 	/**
@@ -156,6 +175,9 @@ class FilesystemHelper {
 		}
 	}
 
+	/**
+	 * @param string $path
+	 */
 	public function removeIfExists($path) {
 		if (!file_exists($path)) {
 			return;
@@ -168,6 +190,10 @@ class FilesystemHelper {
 		}
 	}
 
+	/**
+	 * @param $dir
+	 * @return bool
+	 */
 	public function rmdirr($dir) {
 		if(is_dir($dir)) {
 			$files = scandir($dir);

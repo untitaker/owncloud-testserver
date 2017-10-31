@@ -8,7 +8,9 @@ OC.L10N.register(
     "Federation" : "Federation",
     "ownCloud Federation allows you to connect with other trusted ownClouds to exchange the user directory. For example this will be used to auto-complete external users for federated sharing." : "ownCloud Federation allows you to connect with other trusted ownClouds to exchange the user directory. For example this will be used to auto-complete external users for federated sharing.",
     "Add server automatically once a federated share was created successfully" : "Add server automatically once a federated share was created successfully",
+    "Trusted ownCloud Servers" : "Trusted ownCloud Servers",
+    "+ Add ownCloud server" : "+ Add ownCloud server",
     "ownCloud Server" : "ownCloud Server",
-    "Trusted ownCloud Servers" : "Trusted ownCloud Servers"
+    "Add" : "Add"
 },
 "nplurals=2; plural=(n != 1);");

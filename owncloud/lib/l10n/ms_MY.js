@@ -1,12 +1,15 @@
 OC.L10N.register(
     "lib",
     {
+    "Username" : "Nama pengguna",
+    "Password" : "Kata laluan",
+    "Apps" : "Aplikasi",
+    "General" : "Umum",
+    "Search" : "Cari",
     "Help" : "Bantuan",
-    "Personal" : "Peribadi",
+    "Settings" : "Tetapan",
     "Users" : "Pengguna",
-    "Admin" : "Admin",
     "web services under your control" : "Perkhidmatan web di bawah kawalan anda",
-    "Authentication error" : "Ralat pengesahan",
-    "Apps" : "Aplikasi"
+    "Authentication error" : "Ralat pengesahan"
 },
 "nplurals=1; plural=0;");

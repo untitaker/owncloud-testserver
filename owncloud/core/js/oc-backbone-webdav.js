@@ -120,7 +120,15 @@
 		}
 
 		var parts = url.split('/');
-		return parts[parts.length - 1];
+		var result;
+		do {
+			result = parts[parts.length - 1];
+			parts.pop();
+			// note: first result can be empty when there is a trailing slash,
+			// so we take the part before that
+		} while (!result && parts.length > 0);
+
+		return decodeURIComponent(result);
 	}
 
 	function isSuccessStatus(status) {
@@ -134,8 +142,8 @@
 			var changedProp = davProperties[key];
 			var value = attrs[key];
 			if (!changedProp) {
-				console.warn('No matching DAV property for property "' + key);
-				changedProp = key;
+				// no matching DAV property for property, skip
+				continue;
 			}
 			if (_.isBoolean(value) || _.isNumber(value)) {
 				// convert to string
@@ -172,12 +180,43 @@
 	}
 
 	function callPropPatch(client, options, model, headers) {
+		var changes = model.changed;
+		if (options.wait && _.isEmpty(changes)) {
+			// usually with "wait" mode, the changes aren't set yet,
+			changes = options.data;
+
+			// if options.patch is not set, then data contains all the data
+			// instead of just the properties to patch
+			if (!options.patch) {
+				// remove reserved properties
+				delete changes.href;
+				delete changes[_.result(model, 'idAttribute')];
+
+				// note: there is no way to diff with previous values here so
+				// we just send everything
+			}
+		}
 		return client.propPatch(
 			options.url,
-			convertModelAttributesToDavProperties(model.changed, options.davProperties),
+			convertModelAttributesToDavProperties(changes, options.davProperties),
 			headers
 		).then(function(result) {
+			if (result.status === 207 && result.body && result.body.length > 0) {
+				if (_.find(result.body[0].propStat, function(propStat) {
+					var statusCode = parseInt(propStat.status.split(' ')[1], 10);
+					return statusCode >= 400;
+				})) {
+					// in REST, validation errors are usually represented with 422 Unprocessable Entity,
+					result.status = 422;
+				}
+			}
+
 			if (isSuccessStatus(result.status)) {
+				// with wait, we set the changes only after success
+				if (options.wait) {
+					model.set(changes, options);
+				}
+
 				if (_.isFunction(options.success)) {
 					// pass the object's own values because the server
 					// does not return the updated model
@@ -190,13 +229,43 @@
 
 	}
 
+	function callMkCol(client, options, model, headers) {
+		var props = convertModelAttributesToDavProperties(model.attributes, options.davProperties);
+		if (!props['{DAV:}resourcetype']) {
+			props['{DAV:}resourcetype'] = '<d:collection/>';
+		}
+		return client.mkcol(
+			options.url,
+			props,
+			headers
+		).then(function(result) {
+			if (isSuccessStatus(result.status)) {
+				if (_.isFunction(options.success)) {
+					// pass the object's own values because the server
+					// does not return the updated model
+					options.success(model.toJSON());
+				}
+			} else if (_.isFunction(options.error)) {
+				options.error(result);
+			}
+		});
+	}
+
 	function callMethod(client, options, model, headers) {
-		headers['Content-Type'] = 'application/json';
+		var data = options.data;
+		if (_.isObject(data)) {
+			headers['Content-Type'] = 'application/json';
+			data = JSON.stringify(data);
+		} else if (_.isString(data) && data.substr(0, 6) === '<?xml ') {
+			headers['Content-Type'] = 'application/xml';
+		} else {
+			headers['Content-Type'] = 'text/plain';
+		}
 		return client.request(
 			options.type,
 			options.url,
 			headers,
-			options.data
+			data
 		).then(function(result) {
 			if (!isSuccessStatus(result.status)) {
 				if (_.isFunction(options.error)) {
@@ -247,22 +316,64 @@
 			return callPropFind(client, options, model, headers);
 		} else if (options.type === 'PROPPATCH') {
 			return callPropPatch(client, options, model, headers);
+		} else if (options.type === 'MKCOL') {
+			return callMkCol(client, options, model, headers);
 		} else {
 			return callMethod(client, options, model, headers);
 		}
 	}
 
 	/**
+	 * 
+	 */
+	function getTypeForMethod(method, model) {
+		var type = methodMap[method];
+
+		if (!type) {
+			// return method directly
+			return method;
+		}
+
+		// TODO: use special attribute "resourceType" instead
+		var isWebdavCollection = model instanceof WebdavCollectionNode;
+
+		// need to override default behavior and decide what to do
+		if (method === 'create') {
+			if (isWebdavCollection) {
+				if (!_.isUndefined(model.id)) {
+					// create new collection with known id
+					type = 'MKCOL';
+				} else {
+					// unsupported
+					throw 'Cannot create Webdav collection without id';
+				}
+			} else {
+				if (!_.isUndefined(model.id)) {
+					// need to create it first
+					type = 'PUT';
+				} else {
+					// creating without known id, will receive it after creation
+					type = 'POST';
+				}
+			}
+		} else if (method === 'update') {
+			// it exists, only update properties
+			type = 'PROPPATCH';
+			// force PUT usage ?
+			if (model.usePUT || (model.collection && model.collection.usePUT)) {
+				type = 'PUT';
+			}
+		}
+
+		return type;
+	}
+
+	/**
 	 * DAV transport
 	 */
 	function davSync(method, model, options) {
-		var params = {type: methodMap[method] || method};
+		var params = {type: getTypeForMethod(method, model)};
 		var isCollection = (model instanceof Backbone.Collection);
-
-		if (method === 'update' && (model.usePUT || (model.collection && model.collection.usePUT))) {
-			// use PUT instead of PROPPATCH
-			params.type = 'PUT';
-		}
 
 		// Ensure that we have a URL.
 		if (!options.url) {
@@ -271,7 +382,7 @@
 
 		// Ensure that we have the appropriate request data.
 		if (options.data == null && model && (method === 'create' || method === 'update' || method === 'patch')) {
-			params.data = JSON.stringify(options.attrs || model.toJSON(options));
+			params.data = options.attrs || model.toJSON(options);
 		}
 
 		// Don't process data on a non-GET request.
@@ -279,7 +390,7 @@
 			params.processData = false;
 		}
 
-		if (params.type === 'PROPFIND' || params.type === 'PROPPATCH') {
+		if (params.type === 'PROPFIND' || params.type === 'PROPPATCH' || params.type === 'MKCOL') {
 			var davProperties = model.davProperties;
 			if (!davProperties && model.model) {
 				// use dav properties from model in case of collection
@@ -320,9 +431,98 @@
 		return xhr;
 	}
 
+
+	/**
+	 * Regular Webdav leaf node
+	 */
+	var WebdavNode = Backbone.Model.extend({
+		sync: davSync,
+
+		constructor: function() {
+			this.on('sync', this._onSync, this);
+			this._isNew = true;
+			Backbone.Model.prototype.constructor.apply(this, arguments);
+		},
+
+		_onSync: function() {
+			this._isNew = false;
+		},
+
+		isNew: function() {
+			// we can't rely on the id so use a dummy attribute
+			return !!this._isNew;
+		}
+	});
+
+	/**
+	 * Children collection for a Webdav collection node
+	 */
+	var WebdavChildrenCollection = Backbone.Collection.extend({
+		sync: davSync,
+
+		collectionNode: null,
+		model: WebdavNode,
+
+		constructor: function() {
+			this.on('sync', this._onSync, this);
+			Backbone.Collection.prototype.constructor.apply(this, arguments);
+		},
+
+		initialize: function(models, options) {
+			options = options || {};
+
+			this.collectionNode = options.collectionNode;
+
+			return Backbone.Collection.prototype.initialize.apply(this, arguments);
+		},
+
+		_onSync: function(model) {
+			if (model instanceof Backbone.Model) {
+				// since we saved, mark as non-new
+				if (!_.isUndefined(model._isNew)) {
+					model._isNew = false;
+				}
+			} else {
+				// since we fetched, mark models as non-new
+				model.each(function(model) {
+					if (!_.isUndefined(model._isNew)) {
+						model._isNew = false;
+					}
+				});
+			}
+		},
+
+		url: function() {
+			return this.collectionNode.url();
+		}
+	});
+
+	/**
+	 * Webdav collection which is a special node, represented by a backbone model
+	 * and a sub-collection for its children.
+	 */
+	var WebdavCollectionNode = WebdavNode.extend({
+		sync: davSync,
+
+		childrenCollectionClass: WebdavChildrenCollection,
+
+		_childrenCollection: null,
+
+		getChildrenCollection: function() {
+			if (!this._childrenCollection) {
+				this._childrenCollection = new this.childrenCollectionClass([], {collectionNode: this});
+			}
+			return this._childrenCollection;
+		}
+	});
+
 	// exports
 	Backbone.davCall = davCall;
 	Backbone.davSync = davSync;
+
+	Backbone.WebdavNode = WebdavNode;
+	Backbone.WebdavChildrenCollection = WebdavChildrenCollection;
+	Backbone.WebdavCollectionNode = WebdavCollectionNode;
 
 })(OC.Backbone);
 

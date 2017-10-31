@@ -17,12 +17,12 @@ script('core', [
 ]);
 style('settings', 'settings');
 
-$userlistParams = array();
-$allGroups=array();
-foreach($_["groups"] as $group) {
+$userlistParams = [];
+$allGroups= [];
+foreach($_["adminGroup"] as $group) {
 	$allGroups[] = $group['name'];
 }
-foreach($_["adminGroup"] as $group) {
+foreach($_["groups"] as $group) {
 	$allGroups[] = $group['name'];
 }
 $userlistParams['subadmingroups'] = $allGroups;
@@ -44,6 +44,13 @@ translation('settings');
 			<?php print_unescaped($this->inc('users/part.setquota')); ?>
 
 			<div id="userlistoptions">
+				<p>
+					<input type="checkbox" name="IsEnabled" value="IsEnabled" id="CheckboxIsEnabled" 
+						class="checkbox" <?php if ($_['show_is_enabled'] === 'true') print_unescaped('checked="checked"'); ?> />
+					<label for="CheckboxIsEnabled">
+						<?php p($l->t('Show enabled/disabled option')) ?>
+					</label>
+				</p>
 				<p>
 					<input type="checkbox" name="StorageLocation" value="StorageLocation" id="CheckboxStorageLocation" 
 						class="checkbox" <?php if ($_['show_storage_location'] === 'true') print_unescaped('checked="checked"'); ?> />

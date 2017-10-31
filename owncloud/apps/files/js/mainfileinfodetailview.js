@@ -12,14 +12,22 @@
 	var TEMPLATE =
 		'<div class="thumbnailContainer"><a href="#" class="thumbnail action-default"><div class="stretcher"/></a></div>' +
 		'<div class="file-details-container">' +
-		'<div class="fileName"><h3 title="{{name}}" class="ellipsis">{{name}}</h3></div>' +
+		'<div class="fileName">' +
+			'<h3 title="{{name}}" class="ellipsis">{{name}}</h3>' +
+			'<a class="permalink" href="{{permalink}}" title="{{permalinkTitle}}">' +
+				'<span class="icon icon-public"></span>' +
+				'<span class="hidden-visually">{{permalinkTitle}}</span>' +
+			'</a>' +
+		'</div>' +
 		'	<div class="file-details ellipsis">' +
-		'		<a href="#" ' +
-		'		class="action action-favorite favorite">' +
-		'			<img class="svg" alt="{{starAltText}}" src="{{starIcon}}" />' +
+		'		<a href="#" class="action action-favorite favorite permanent">' +
+		'			<span class="icon {{starClass}}" title="{{starAltText}}"></span>' +
 		'		</a>' +
 		'		{{#if hasSize}}<span class="size" title="{{altSize}}">{{size}}</span>, {{/if}}<span class="date" title="{{altDate}}">{{date}}</span>' +
 		'	</div>' +
+		'</div>' +
+		'<div class="hidden permalink-field">' +
+			'<input type="text" value="{{permalink}}" placeholder="{{permalinkTitle}}" readonly="readonly"/>' +
 		'</div>';
 
 	/**
@@ -50,7 +58,9 @@
 
 		events: {
 			'click a.action-favorite': '_onClickFavorite',
-			'click a.action-default': '_onClickDefaultAction'
+			'click a.action-default': '_onClickDefaultAction',
+			'click a.permalink': '_onClickPermalink',
+			'focus .permalink-field>input': '_onFocusPermalink'
 		},
 
 		template: function(data) {
@@ -72,6 +82,20 @@
 			}
 		},
 
+		_onClickPermalink: function() {
+			var $row = this.$('.permalink-field');
+			$row.toggleClass('hidden');
+			if (!$row.hasClass('hidden')) {
+				$row.find('>input').focus();
+			}
+			// cancel click, user must right-click + copy or middle click
+			return false;
+		},
+
+		_onFocusPermalink: function() {
+			this.$('.permalink-field>input').select();
+		},
+
 		_onClickFavorite: function(event) {
 			event.preventDefault();
 			this._fileActions.triggerAction('Favorite', this.model, this._fileList);
@@ -87,6 +111,11 @@
 			this.render();
 		},
 
+		_makePermalink: function(fileId) {
+			var baseUrl = OC.getProtocol() + '://' + OC.getHost();
+			return baseUrl + OC.generateUrl('/f/{fileId}', {fileId: fileId});
+		},
+
 		setFileInfo: function(fileInfo) {
 			if (this.model) {
 				this.model.off('change', this._onModelChanged, this);
@@ -95,6 +124,19 @@
 			if (this.model) {
 				this.model.on('change', this._onModelChanged, this);
 			}
+
+			if (this.model) {
+				var properties = [];
+				if( !this.model.has('size') ) {
+					properties.push(OC.Files.Client.PROPERTY_SIZE);
+					properties.push(OC.Files.Client.PROPERTY_GETCONTENTLENGTH);
+				}
+
+				if( properties.length > 0){
+					this.model.reloadProperties(properties);
+				}
+			}
+
 			this.render();
 		},
 
@@ -118,7 +160,9 @@
 					altDate: OC.Util.formatDate(this.model.get('mtime')),
 					date: OC.Util.relativeModifiedDate(this.model.get('mtime')),
 					starAltText: isFavorite ? t('files', 'Favorited') : t('files', 'Favorite'),
-					starIcon: OC.imagePath('core', isFavorite ? 'actions/starred' : 'actions/star')
+					starClass: isFavorite ? 'icon-starred' : 'icon-star',
+					permalink: this._makePermalink(this.model.get('id')),
+					permalinkTitle: t('files', 'Private link:  Only people who have access to the file/folder can use it. Use it as a permanent link for yourself or to point others to files within shares')
 				}));
 
 				// TODO: we really need OC.Previews
@@ -196,7 +240,7 @@
 					}
 
 					// only set background when we have an actual preview
-					// when we dont have a preview we show the mime icon in the error handler
+					// when we don't have a preview we show the mime icon in the error handler
 					$iconDiv.css({
 						'background-image': 'url("' + previewUrl + '")',
 						height: (targetHeight > smallPreviewSize)? 'auto': targetHeight,

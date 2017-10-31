@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Code Signing &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
+    <title>Code Signing &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '9.0',
+        VERSION:     '10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,9 +28,9 @@
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../contents.html" />
     <link rel="up" title="Issues and Troubleshooting" href="index.html" />
-    <link rel="next" title="Enterprise Subscription Installation (ES Only)" href="../enterprise_installation/index.html" />
+    <link rel="next" title="Impersonating Users" href="impersonate_users.html" />
     <link rel="prev" title="General Troubleshooting" href="general_troubleshooting.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -66,37 +66,28 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_database/index.html">Database Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_mimetypes/index.html">Mimetypes Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upgrading/index.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Issues and Troubleshooting</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="general_troubleshooting.html">General Troubleshooting</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Code Signing</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#faq">FAQ</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#fixing-invalid-code-integrity-messages">Fixing Invalid Code Integrity Messages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rescans">Rescans</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#errors">Errors</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="impersonate_users.html">Impersonating Users</a></li>
 </ul>
 </li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Branded ownCloud Clients (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_server_branding/index.html">Enterprise Server Branding (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_file_management/index.html">Enterprise File Management (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appliance/index.html">The ownCloud X Appliance</a></li>
 </ul>
 
 								</ul>
@@ -114,7 +105,7 @@
     </a>
   </li>
   <li class="next">
-    <a href="../enterprise_installation/index.html" title="Next Chapter: Enterprise Subscription Installation (ES Only)"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Enterprise Su... &raquo;</span>
+    <a href="impersonate_users.html" title="Next Chapter: Impersonating Users"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Impersonating... &raquo;</span>
     </a>
   </li>
 </ul>
@@ -154,8 +145,7 @@ version branch in version.php to something else than &#8220;stable&#8221;.</p>
 </div>
 <div class="section" id="is-code-signing-mandatory-for-apps">
 <h3>Is Code Signing Mandatory For Apps?<a class="headerlink" href="#is-code-signing-mandatory-for-apps" title="Permalink to this headline">¶</a></h3>
-<p>Code signing is optional for all third-party applications. Applications
-with a tag of &#8220;Official&#8221; on apps.owncloud.com require code signing.</p>
+<p>Code signing is optional for all third-party applications.</p>
 </div>
 </div>
 <div class="section" id="fixing-invalid-code-integrity-messages">
@@ -177,7 +167,7 @@ the following options:</p>
 </ol>
 <img alt="Links for resolving code integrity warnings." src="../_images/code-integrity-admin.png" />
 <p>To debug issues caused by the code integrity check click on &#8220;List of invalid
-files…&#8221;, and you will be shown a text document listing the different issues. The
+files...&#8221;, and you will be shown a text document listing the different issues. The
 content of the file will look similar to the following example:</p>
 <div class="highlight-python"><div class="highlight"><pre>Technical information
 =====================
@@ -197,6 +187,10 @@ Results
       - EXCEPTION
               - OC\IntegrityCheck\Exceptions\InvalidSignatureException
               - Signature data not found.
+- tasks
+      - EXCEPTION
+              - OC\IntegrityCheck\Exceptions\InvalidSignatureException
+              - Certificate has been revoked.
 
 Raw output
 ==========
@@ -257,6 +251,15 @@ Array
                 )
 
         )
+    [tasks] =&gt; Array
+        (
+            [EXCEPTION] =&gt; Array
+                (
+                    [class] =&gt; OC\IntegrityCheck\Exceptions\InvalidSignatureException
+                    [message] =&gt; Certificate has been revoked.
+                )
+
+        )
 
 )
 </pre></div>
@@ -267,12 +270,32 @@ Array
 &#8220;index.php&#8221; and &#8220;version.php&#8221; do have the wrong version.</li>
 <li>In the ownCloud core the unrequired extra file &#8220;/test.php&#8221; has been found.</li>
 <li>It was not possible to verify the signature of the calendar application.</li>
+<li>The certificate of the task application was revoked.</li>
 </ol>
-<p>The solution is to upload the correct &#8220;index.php&#8221; and &#8220;version.php&#8221; files, and
-delete the &#8220;test.php&#8221; file. For the calendar exception contact the developer of
-the application. For other means on how to receive support please take a look at
+<p>You have to do the following steps to solve this:</p>
+<ol class="arabic simple">
+<li>Upload the correct &#8220;index.php&#8221; and &#8220;version.php&#8221; files from e.g. the archive of your ownCloud version.</li>
+<li>Delete the &#8220;test.php&#8221; file.</li>
+<li>Contact the developer of the application. A new version of the app containing a valid signature file needs to be released.</li>
+<li>Contact the developer of the application. A new version of the app signed with a valid signature needs to be released.</li>
+</ol>
+<p>For other means on how to receive support please take a look at
 <a class="reference external" href="https://owncloud.org/support/">https://owncloud.org/support/</a>. After fixing these problems verify by clicking
 &#8220;Rescan…&#8221;.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When using a FTP client to upload those files make sure it is using the
+<code class="docutils literal"><span class="pre">Binary</span></code> transfer mode instead of the <code class="docutils literal"><span class="pre">ASCII</span></code> transfer mode.</p>
+</div>
+</div>
+<div class="section" id="rescans">
+<span id="rescans-label"></span><h2>Rescans<a class="headerlink" href="#rescans" title="Permalink to this headline">¶</a></h2>
+<p>Rescans are triggered at installation, and by updates. You may run scans manually with the <code class="docutils literal"><span class="pre">occ</span></code> command. The first command scans the ownCloud core files, and the second command scans the named app. There is not yet a command to manually scan all apps:</p>
+<div class="highlight-python"><div class="highlight"><pre>occ integrity:check-core
+occ integrity:check-app $appid
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="../configuration/server/occ_command.html"><em>Using the occ Command</em></a> to learn more about using <code class="docutils literal"><span class="pre">occ</span></code>.</p>
 </div>
 <div class="section" id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline">¶</a></h2>
@@ -324,6 +347,10 @@ others.</li>
 <li>There was a problem with verifying the signature of <code class="docutils literal"><span class="pre">signature.json</span></code>.</li>
 </ul>
 </li>
+<li><code class="docutils literal"><span class="pre">Certificate</span> <span class="pre">has</span> <span class="pre">been</span> <span class="pre">revoked.</span></code><ul>
+<li>The certificate which was used to sign the application was revoked.</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -340,7 +367,7 @@ others.</li>
     </a>
   </li>
   <li class="next">
-    <a href="../enterprise_installation/index.html" title="Next Chapter: Enterprise Subscription Installation (ES Only)"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Enterprise Su... &raquo;</span>
+    <a href="impersonate_users.html" title="Next Chapter: Impersonating Users"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Impersonating... &raquo;</span>
     </a>
   </li>
 </ul>

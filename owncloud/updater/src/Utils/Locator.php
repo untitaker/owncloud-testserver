@@ -23,13 +23,18 @@ namespace Owncloud\Updater\Utils;
 
 use \Owncloud\Updater\Console\Application;
 
+/**
+ * Class Locator
+ *
+ * @package Owncloud\Updater\Utils
+ */
 class Locator {
 
 	/**
 	 * absolute path to ownCloud root
 	 * @var string 
 	 */
-	protected $owncloudRootPath;
+	protected $ownCloudRootPath;
 
 	/**
 	 * absolute path to updater root
@@ -43,21 +48,24 @@ class Locator {
 	 */
 	public function __construct($baseDir){
 		$this->updaterRootPath = $baseDir;
-		$this->owncloudRootPath = dirname($baseDir);
+		$this->ownCloudRootPath = dirname($baseDir);
 	}
 
-	public function getOwncloudRootPath(){
-		return $this->owncloudRootPath;
+	/**
+	 * @return string
+	 */
+	public function getOwnCloudRootPath(){
+		return $this->ownCloudRootPath;
 	}
 
 	/**
 	 * expected items in the core
-	 * @return array
+	 * @return string[]
 	 */
 	public function getRootDirContent(){
 		return [
 			"3rdparty",
-			"config/config.sample.php",
+			"config",
 			"core",
 			"l10n",
 			"lib",
@@ -70,8 +78,9 @@ class Locator {
 			".tag",
 			".user.ini",
 			"AUTHORS",
+			"CHANGELOG.md",
 			"console.php",
-			"COPYING-AGPL",
+			"COPYING",
 			"cron.php",
 			"db_structure.xml",
 			"index.html",
@@ -82,10 +91,13 @@ class Locator {
 			"remote.php",
 			"robots.txt",
 			"status.php",
-			"version.php"
+			"version.php",
 		];
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getUpdaterContent(){
 		return [
 			'app',
@@ -102,6 +114,7 @@ class Locator {
 			'README.md',
 			'.travis.yml',
 			'.scrutinizer.yml',
+			'nbproject',
 		];
 	}
 
@@ -112,7 +125,7 @@ class Locator {
 	public function getRootDirItems(){
 		$items = $this->getRootDirContent();
 		$items = array_map(
-			function($item){ return $this->owncloudRootPath . "/" . $item;	},
+			function($item){ return $this->ownCloudRootPath . "/" . $item;	},
 			$items
 		);
 		return $items;
@@ -177,7 +190,7 @@ class Locator {
 	 * @return string
 	 */
 	public function getPathToOccFile(){
-		return $this->owncloudRootPath . '/occ';
+		return $this->ownCloudRootPath . '/occ';
 	}
 
 	/**
@@ -198,7 +211,7 @@ class Locator {
 	public function getChannelFromVersionsFile(){
 		include $this->getPathToVersionFile();
 
-		/** @var $OC_Version string */
+		/** @var $OC_Channel string */
 		return $OC_Channel;
 	}
 
@@ -213,15 +226,33 @@ class Locator {
 		return $OC_Build;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getSecretFromConfig(){
+		include $this->getPathToConfigFile();
+		if (isset($CONFIG['updater.secret'])){
+			return $CONFIG['updater.secret'];
+		}
+		return '';
+	}
+
+	/**
+	 * @param string $filePostfix
+	 * @return array
+	 */
 	public function getPathtoConfigFiles($filePostfix = 'config.php'){
 		// Only config.php for now
 		return [
-			$this->owncloudRootPath . '/config/' . $filePostfix
+			$this->ownCloudRootPath . '/config/' . $filePostfix
 		];
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getPathToConfigFile(){
-		return $this->owncloudRootPath . '/config/config.php';
+		return $this->ownCloudRootPath . '/config/config.php';
 	}
 
 	/**
@@ -229,7 +260,7 @@ class Locator {
 	 * @return string
 	 */
 	public function getPathToVersionFile(){
-		return $this->owncloudRootPath . '/version.php';
+		return $this->ownCloudRootPath . '/version.php';
 	}
 
 }

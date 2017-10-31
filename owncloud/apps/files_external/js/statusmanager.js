@@ -78,6 +78,7 @@ OCA.External.StatusManager = {
 			defObj = $.ajax({
 				type: 'GET',
 				url: OC.webroot + '/index.php/apps/files_external/' + ((mountData.type === 'personal') ? 'userstorages' : 'userglobalstorages') + '/' + mountData.id,
+				data: {'testOnly' : false},
 				success: function (response) {
 					if (response && response.status === 0) {
 						self.mountStatus[mountData.mount_point] = response;
@@ -154,7 +155,9 @@ OCA.External.StatusManager = {
 				},
 				error: function (jqxhr, state, error) {
 					self.mountPointList = [];
-					OC.Notification.showTemporary(t('files_external', 'Couldn\'t get the list of external mount points: {type}', {type: error}));
+					OC.Notification.show(t('files_external', 'Couldn\'t get the list of external mount points: {type}', 
+						{type: error}), {type: 'error'}
+					);
 				},
 				complete: function () {
 					self.isGetMountPointListRunning = false;
@@ -179,16 +182,21 @@ OCA.External.StatusManager = {
 					} else {
 						OC.dialogs.confirm(t('files_external', 'There was an error with message: ') + mountData.error + '. Do you want to review mount point config in admin settings page?', t('files_external', 'External mount error'), function (e) {
 							if (e === true) {
-								OC.redirect(OC.generateUrl('/settings/admin#files_external'));
+								if (OC.isUserAdmin()) {
+									OC.redirect(OC.generateUrl('/settings/admin?sectionid=storage'));
+								}
+								else {
+									OC.redirect(OC.generateUrl('/settings/personal?sectionid=storage'));
+								}
 							}
-						});
+						}, true);
 					}
 				} else {
 					OC.dialogs.confirm(t('files_external', 'There was an error with message: ') + mountData.error + '. Do you want to review mount point config in personal settings page?', t('files_external', 'External mount error'), function (e) {
 						if (e === true) {
-							OC.redirect(OC.generateUrl('/settings/personal#' + t('files_external', 'external-storage')));
+							OC.redirect(OC.generateUrl('/settings/personal?sectionid=storage'));
 						}
-					});
+					}, true);
 				}
 			}
 		}, this));
@@ -262,7 +270,9 @@ OCA.External.StatusManager = {
 			// check if we have a list first
 			if (list === undefined && !self.emptyWarningShown) {
 				self.emptyWarningShown = true;
-				OC.Notification.showTemporary(t('files_external', 'Couldn\'t get the list of Windows network drive mount points: empty response from the server'));
+				OC.Notification.show(t('files_external', 'Couldn\'t get the list of Windows network drive mount points: empty response from the server'), 
+					{type: 'error'}
+				);
 				return;
 			}
 			if (list && list.length > 0) {
@@ -292,7 +302,9 @@ OCA.External.StatusManager = {
 							}
 						});
 						if (showNotification) {
-							OC.Notification.showTemporary(t('files_external', 'Some of the configured external mount points are not connected. Please click on the red row(s) for more information'));
+							OC.Notification.show(t('files_external', 'Some of the configured external mount points are not connected. Please click on the red row(s) for more information'), 
+								{type: 'error'}
+							);
 						}
 					}
 				});
@@ -411,14 +423,14 @@ OCA.External.StatusManager = {
 					}
 				},
 				success: function (data) {
-					OC.Notification.showTemporary(t('files_external', 'Credentials saved'));
+					OC.Notification.show(t('files_external', 'Credentials saved'), {type: 'error'});
 					dialog.ocdialog('close');
 					/* Trigger status check again */
 					OCA.External.StatusManager.recheckConnectivityForMount([OC.basename(data.mountPoint)], true);
 				},
 				error: function () {
 					$('.oc-dialog-close').show();
-					OC.Notification.showTemporary(t('files_external', 'Credentials saving failed'));
+					OC.Notification.show(t('files_external', 'Credentials saving failed'), {type: 'error'});
 				}
 			});
 			return false;
@@ -497,7 +509,7 @@ OCA.External.StatusManager.Utils = {
 		if (folder instanceof $) {
 			trFolder = folder;
 		} else {
-			// cant use here FileList.findFileEl(OCA.External.StatusManager.Utils.jqSelEscape(folder)); return incorrect instance of filelist
+			// can't use here FileList.findFileEl(OCA.External.StatusManager.Utils.jqSelEscape(folder)); return incorrect instance of filelist
 			trFolder = $('#fileList tr[data-file=\"' + OCA.External.StatusManager.Utils.jqSelEscape(folder) + '\"]');
 		}
 		trFolder.removeClass('externalErroredRow').removeClass('externalDisabledRow');
@@ -536,7 +548,7 @@ OCA.External.StatusManager.Utils = {
 	 * of the tr matching the folder name
 	 */
 	getIconRoute: function (tr) {
-		var icon = OC.imagePath('core', 'filetypes/folder-external');
+		var icon = OC.MimeType.getIconUrl('dir-external');
 		var backend = null;
 
 		if (tr instanceof $) {

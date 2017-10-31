@@ -2,39 +2,97 @@
 System Requirements
 ===================
 
-Memory
-------
+Officially Recommended & Supported Options
+------------------------------------------
 
-Memory requirements for running an ownCloud server are greatly variable, 
-depending on the numbers of users and files, and volume of server activity. 
-ownCloud needs a minimum of 128MB RAM, and we recommend a minimum of 512MB.
+For *best performance*, *stability*, *support*, and *full functionality* we officially recommend and support:
 
-Recommended Setup for Running ownCloud
---------------------------------------
+Server
+^^^^^^
 
-For best performance, stability, support, and full functionality we recommend:
+================= =============================================================
+Platform          Options
+================= =============================================================
+Operating System  Ubuntu 16.04, Debian 7 and 8, SUSE Linux Enterprise Server 12 
+                  and 12 SP1, Red Hat Enterprise Linux/Centos 6.5 and 7 
+Database          MySQL or MariaDB 5.5+, Oracle 11g, PostgreSQL, & SQLite
+Web server        Apache 2.4 with mod_php
+PHP Runtime       PHP (5.6+, 7.0, & 7.1)
+================= =============================================================
 
-* Red Hat Enterprise Linux 7
-* MySQL/MariaDB
-* PHP 5.4 +
-* Apache 2.4 with mod_php
+.. note::
+   
+   - Red Hat Enterprise Linux & Centos 7 are 64-bit only.
+   - Oracle 11g is only supported for the Enterprise edition.
+   - SQLite is not encouraged for production use.
 
-Supported Platforms
+Mobile 
+^^^^^^
+
+- iOS 9.0+
+- Android 4.0+
+
+Web Browser 
+^^^^^^^^^^^
+
+- IE11+ (except Compatibility Mode)
+- Firefox 14+
+- Chrome 18+
+- Safari 5+
+
+Hypervisors 
+^^^^^^^^^^^
+
+- Hyper-V
+- VMware ESX
+- Xen
+- KVM
+
+Desktop
+^^^^^^^
+
+- Windows 7+
+- Mac OS X 10.7+ (64-bit only)
+- CentOS 6 & 7 (64-bit only)
+- Debian 7.0 & 8.0 & 9.0
+- Fedora 24 & 25 & 26
+- Ubuntu 16.04 & 16.10 & 17.04
+- openSUSE Leap 42.1 & 42.2 & 42.3
+
+.. note::
+   For Linux distributions, we support, if technically feasible, the latest 2 versions per platform and the previous `LTS`_.
+
+Alternative (But Unsupported) Options
+-------------------------------------
+
+If you are not able to use one or more of the above tools, the following options are also available. 
+
+Web Server
+^^^^^^^^^^
+
+- NGINX with PHP-FPM 
+
+Memory Requirements
 -------------------
 
-* Server: Linux (Debian 7, SUSE Linux Enterprise Server 11 SP3 & 12, 
-  Red Hat Enterprise Linux/Centos 6.5 and 7 (7 is 64-bit only), Ubuntu 12.04 
-  LTS, 14.04 LTS, 14.10)
-* Web server: Apache 2 with mod_php
-* Databases: MySQL/MariaDB 5.5+; Oracle 11g; PostgreSQL
-* PHP 5.4 + required
-* Hypervisors: Hyper-V, VMware ESX, Xen, KVM
-* Desktop: Windows XP SP3 (EoL Q2 2015), Windows 7+, Mac OS X 10.7+ (64-bit 
-  only), Linux (CentOS 6.5, 7 (7 is 64-bit only), Ubuntu 12.04 LTS, 14.04 LTS, 
-  14.10, Fedora 20, 21, openSUSE 12.3, 13, Debian 7 & 8).
-* Mobile apps: iOS 7+, Android 4+
-* Web browser: IE9+ (except Compatibility Mode), Firefox 14+, Chrome 18+, 
-  Safari 5+
+Memory requirements for running an ownCloud server are greatly variable,
+depending on the numbers of users and files, and volume of server activity.
+ownCloud officially requires a minimum of 128MB RAM. But, we recommend a minimum of 512MB. 
 
-See :doc:`source_installation` for minimum software versions for installing 
-ownCloud.
+.. note:: *Consideration for low memory environments*
+   
+  Scanning of files is committed internally in 10k files chunks. 
+  Based on tests, server memory usage for scanning greater than 10k files uses about 75MB of additional memory.
+
+Database Requirements
+---------------------
+
+The following are currently required if you're running ownCloud together with a MySQL or MariaDB database:
+
+* Disabled or ``BINLOG_FORMAT = MIXED`` or ``BINLOG_FORMAT = ROW`` configured Binary Logging (See: :ref:`db-binlog-label`)
+* InnoDB storage engine (The MyISAM storage engine is not supported, see: :ref:`db-storage-engine-label`)
+* "READ COMMITED" transaction isolation level (See: :ref:`db-transaction-label`)
+
+.. Links
+   
+.. _LTS: https://wiki.ubuntu.com/LTS

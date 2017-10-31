@@ -83,8 +83,24 @@
 	opacity: 1;
 }
 
+#app-navigation li.divider {
+	display: block;
+	width: 100%;
+	line-height: 44px;
+	min-height: 44px;
+	padding: 0 12px;
+	overflow: hidden;
+	box-sizing: border-box;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	color: #000;
+	background-color: rgba(240,240,240,.9);
+	font-weight: bold;
+	border-bottom: 1px solid #eee;
+}
+
 #app-navigation .collapse {
-	display: none; /* hide collapse button intially */
+	display: none; /* hide collapse button initially */
 }
 #app-navigation .collapsible > .collapse {
 	position: absolute;
@@ -162,7 +178,6 @@
 		text-overflow: ellipsis;
 		overflow: hidden;
 		display: inline-block;
-		width: 201px; /* fallback for IE8 */
 		width: calc(100% - 49px);
 		line-height: 44px;
 		float: left;
@@ -309,12 +324,6 @@
 .edge #app-navigation .app-navigation-entry-menu:after {
 	border: 1px solid #eee;
 }
-.ie8 .bubble {
-	margin-top: 18px;
-}
-.ie8 .bubble:after {
-	display: none;
-}
 /* miraculous border arrow stuff */
 .bubble:after,
 #app-navigation .app-navigation-entry-menu:after {
@@ -392,7 +401,6 @@
 	#app-navigation .app-navigation-entry-edit input {
 		border-bottom-right-radius: 0;
 		border-top-right-radius: 0;
-		width: 204px; /* fallback for IE8 */
 		width: calc(100% - 36px);
 		padding: 5px;
 		margin-right: 0;
@@ -573,11 +581,11 @@ h3 {
 }
 .appear {
 	opacity: 1;
-	transition: opacity 500ms ease 0s;
+	-webkit-transition: opacity 500ms ease 0s;
 	-moz-transition: opacity 500ms ease 0s;
 	-ms-transition: opacity 500ms ease 0s;
 	-o-transition: opacity 500ms ease 0s;
-	-webkit-transition: opacity 500ms ease 0s;
+	transition: opacity 500ms ease 0s;
 }
 .appear.transparent {
 	opacity: 0;
@@ -631,6 +639,30 @@ em {
 .tabHeaders .tabHeader:hover a {
 	color: #000;
 }
+
+/* So called subtabs */
+
+.subTabHeaders {
+	display: flex;
+}
+
+.subTabHeaders > .subTabHeader {
+	color: #888;
+	background-color: #F8F8F8;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.subTabHeaders > .subTabHeader:not(:last-child) {
+	margin-right: 5px;
+}
+
+.subTabHeaders > .subTabHeader.selected {
+	border-bottom: 1px solid #333;
+	font-weight: 600;
+	color: #000;
+}
+
 .tabsContainer {
 	clear: left;
 }

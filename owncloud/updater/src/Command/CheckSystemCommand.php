@@ -21,13 +21,15 @@
 
 namespace Owncloud\Updater\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use Owncloud\Updater\Utils\Collection;
 
+/**
+ * Class CheckSystemCommand
+ *
+ * @package Owncloud\Updater\Command
+ */
 class CheckSystemCommand extends Command {
 
 	protected $message = 'Checking system health.';
@@ -39,10 +41,23 @@ class CheckSystemCommand extends Command {
 		;
 	}
 
+	/**
+	 * @param InputInterface $input
+	 * @param OutputInterface $output
+	 * @return int
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output){
 		$locator = $this->container['utils.locator'];
 		$fsHelper = $this->container['utils.filesystemhelper'];
-		$occRunner = $this->container['utils.occrunner'];
+		/** @var \Owncloud\Updater\Utils\Registry $registry */
+		$registry = $this->container['utils.registry'];
+		/** @var  \Owncloud\Updater\Utils\AppManager  $appManager */
+		$appManager = $this->container['utils.appmanager'];
+		$registry->set(
+			'notShippedApps',
+			$appManager->getNotShippedApps()
+		);
+		$docLink = $this->container['utils.docLink'];
 
 		$collection = new Collection();
 
@@ -64,14 +79,25 @@ class CheckSystemCommand extends Command {
 		}
 
 		if (count($notReadableFiles) || count($notWritableFiles)){
-			$output->writeln('<info>Please check if owner and permissions fot these files are correct.</info>');
-			$output->writeln('<info>See https://doc.owncloud.org/server/9.0/admin_manual/installation/installation_wizard.html#strong-perms-label for details.</info>');
+			$output->writeln('<info>Please check if owner and permissions for these files are correct.</info>');
+			$output->writeln(
+				sprintf(
+					'<info>See %s for details.</info>',
+					$docLink->getAdminManualUrl('installation/installation_wizard.html#strong-perms-label')
+				)
+			);
 			return 2;
 		} else {
 			$output->writeln(' - file permissions are ok.');
 		}
+
+		return 0;
 	}
 
+	/**
+	 * @param $array
+	 * @return string
+	 */
 	protected function longArrayToString($array){
 		if (count($array)>7){
 			$shortArray = array_slice($array, 0, 7);

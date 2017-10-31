@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Public Link Shares &mdash; ownCloud 10.0.1 User Manual 10.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '10.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0.1 User Manual 10.0.1 documentation" href="../contents.html" />
+    <link rel="up" title="Files &amp; Synchronization" href="index.html" />
+    <link rel="next" title="Desktop and Mobile Synchronization" href="desktop_mobile_sync.html" />
+    <link rel="prev" title="Custom Groups" href="webgui/custom_groups.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New in ownCloud 10.0.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_storage/index.html">External Storage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Files &amp; Synchronization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="access_webdav.html">Accessing ownCloud Files Using WebDAV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webgui/index.html">Using the ownCloud Web Interface</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Public Link Shares</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-public-link-shares">Creating Public Link Shares</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="desktop_mobile_sync.html">Desktop and Mobile Synchronization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="encrypting_files.html">Encrypting Your ownCloud Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery_app.html">Gallery App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deleted_file_management.html">Managing Deleted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="large_file_upload.html">Large File Uploads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="federated_cloud_sharing.html">Using Federation Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version_control.html">Version Control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../session_management.html">Manage Connected Browsers and Devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The Web Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Setting Your Preferences</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="webgui/custom_groups.html" title="Previous Chapter: Custom Groups"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Custom Groups</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="desktop_mobile_sync.html" title="Next Chapter: Desktop and Mobile Synchronization"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Desktop and M... &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="public-link-shares">
+<h1>Public Link Shares<a class="headerlink" href="#public-link-shares" title="Permalink to this headline">¶</a></h1>
+<p>With ownCloud X (10.0), we introduced the ability to create multiple public links per file or folder.
+This offers a lot of flexibility for creating different kinds of share links for a single file or folder, such as <em>different passwords</em>, <em>expiry dates</em>, and <em>permissions</em>.</p>
+<p>As of ownCloud version 10.0.2 you can create <a class="reference internal" href="webgui/sharing.html#create-drop-folder-label"><span>Drop Folders</span></a>, where users can upload files to a central location, but not be able to change any existing ones, nor see other files which already have been uploaded.</p>
+<div class="section" id="creating-public-link-shares">
+<h2>Creating Public Link Shares<a class="headerlink" href="#creating-public-link-shares" title="Permalink to this headline">¶</a></h2>
+<p>To create a public link share, first view the Sharing Panel of the file or folder that you want to create a public link share for, and under <strong>&#8220;Public Links&#8221;</strong> click <strong>&#8220;Create public link&#8221;</strong>.</p>
+<img alt="Create a public link - step one." src="../_images/create-public-link.png" />
+<p>Then, as with other shares, provide the name in the <strong>&#8220;Link Name&#8221;</strong> field, and fill out the options that suit what you want the link to support.
+You can find details of what each option does below.</p>
+<img alt="Create a public link - step two." src="../_images/public-link-settings.png" />
+<p>Finally, click <strong>&#8220;Save&#8221;</strong> to complete creation of the share.
+Now that the share is created, you can:</p>
+<ul class="simple">
+<li>Copy the link to the share and give it out</li>
+<li>Update the share’s settings</li>
+<li>Share the link via social media and email</li>
+<li>Delete the public link</li>
+</ul>
+<div class="section" id="share-settings-explained">
+<h3>Share Settings Explained<a class="headerlink" href="#share-settings-explained" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Setting</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Allow editing</td>
+<td>It also allows renaming, deleting, and moving.</td>
+</tr>
+<tr class="row-odd"><td>Show file listing</td>
+<td>The option allows recipients to list the files in
+the shared folder. If you don&#8217;t give permission to
+view the files you have <a class="reference internal" href="webgui/sharing.html#create-drop-folder-label"><span>a drop folder</span></a>.</td>
+</tr>
+<tr class="row-even"><td>Password</td>
+<td>Sets a password for protecting the link.</td>
+</tr>
+<tr class="row-odd"><td>Expiration</td>
+<td>Sets an expiry date for the link.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="webgui/custom_groups.html" title="Previous Chapter: Custom Groups"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Custom Groups</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="desktop_mobile_sync.html" title="Next Chapter: Desktop and Mobile Synchronization"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Desktop and M... &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

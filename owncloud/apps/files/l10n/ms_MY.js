@@ -1,20 +1,13 @@
 OC.L10N.register(
     "files",
     {
-    "No file was uploaded. Unknown error" : "Tiada fail dimuatnaik. Ralat tidak diketahui.",
-    "There is no error, the file uploaded with success" : "Tiada ralat berlaku, fail berjaya dimuatnaik",
-    "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form" : "Saiz fail yang dimuatnaik melebihi MAX_FILE_SIZE yang ditetapkan dalam borang HTML",
-    "The uploaded file was only partially uploaded" : "Fail yang dimuatnaik tidak lengkap",
-    "No file was uploaded" : "Tiada fail dimuatnaik",
-    "Missing a temporary folder" : "Direktori sementara hilang",
-    "Failed to write to disk" : "Gagal untuk disimpan",
-    "Files" : "Fail-fail",
     "Home" : "Rumah",
     "Close" : "Tutup",
     "Upload cancelled." : "Muatnaik dibatalkan.",
     "Download" : "Muat turun",
     "Rename" : "Namakan",
     "Delete" : "Padam",
+    "Files" : "Fail-fail",
     "Pending" : "Dalam proses",
     "Name" : "Nama",
     "Size" : "Saiz",
@@ -30,12 +23,8 @@ OC.L10N.register(
     "max. possible: " : "maksimum:",
     "Save" : "Simpan",
     "Settings" : "Tetapan",
-    "Cancel upload" : "Batal muat naik",
     "Upload too large" : "Muatnaik terlalu besar",
     "The files you are trying to upload exceed the maximum size for file uploads on this server." : "Fail yang cuba dimuat naik melebihi saiz maksimum fail upload server",
-    "Text file" : "Fail teks",
-    "Upload cancelled." : "Muatnaik dibatalkan.",
-    "You changed %1$s" : "Anda menukar %1$s",
-    "You created %1$s" : "Anda telah membina %1$s"
+    "Text file" : "Fail teks"
 },
 "nplurals=1; plural=0;");

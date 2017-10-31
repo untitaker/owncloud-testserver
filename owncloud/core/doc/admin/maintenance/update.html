@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Upgrading ownCloud with the Updater App &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
+    <title>Upgrading ownCloud with the Updater App &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '9.0',
+        VERSION:     '10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../contents.html" />
     <link rel="up" title="Maintenance" href="index.html" />
     <link rel="next" title="Manual ownCloud Upgrade" href="manual_upgrade.html" />
     <link rel="prev" title="Upgrade ownCloud From Packages" href="package_upgrade.html" />
@@ -66,15 +66,13 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_database/index.html">Database Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_mimetypes/index.html">Mimetypes Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upgrading/index.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Maintenance</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="enable_maintenance.html">Maintenance Mode Configuration</a></li>
 <li class="toctree-l2"><a class="reference internal" href="backup.html">Backing up ownCloud</a></li>
@@ -83,25 +81,18 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="">Upgrading ownCloud with the Updater App</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#setting-permissions-for-updating">Setting Permissions for Updating</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#updater-secret-value-in-config-php">updater.secret value in config.php</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="manual_upgrade.html">Manual ownCloud Upgrade</a></li>
 <li class="toctree-l2"><a class="reference internal" href="restore.html">Restoring ownCloud</a></li>
 <li class="toctree-l2"><a class="reference internal" href="migrating.html">Migrating to a Different Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manually-moving-data-folders.html">How To Manually Move a Data Directory</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Branded ownCloud Clients (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_server_branding/index.html">Enterprise Server Branding (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_file_management/index.html">Enterprise File Management (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appliance/index.html">The ownCloud X Appliance</a></li>
 </ul>
 
 								</ul>
@@ -131,11 +122,17 @@ installation. It is useful for installations that do not have root access,
 such as shared hosting, for installations with a smaller number of users
 and data, and it automates updating
 <a class="reference internal" href="../installation/source_installation.html"><em>manual installations</em></a>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When upgrading from oC 9.0 to 9.1 with existing Calendars or Adressbooks
+please have a look at the <a class="reference internal" href="../release_notes.html"><em>Release Notes</em></a> of oC 9.0 for important info
+about this migration.</p>
+</div>
 <p>New in 9.0, the Updater app has <a class="reference internal" href="#updater-cli-label"><span>command-line options</span></a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p>The Updater app is <strong>not enabled and not supported</strong> in ownCloud
-Enterprise Subscription.</p>
+Enterprise edition.</p>
 <p>The Updater app is <strong>not included</strong> in the
 <a class="reference external" href="https://download.owncloud.org/download/repositories/stable/owncloud/">Linux packages on our Open Build Service</a>,
 but only in the <a class="reference external" href="https://owncloud.org/install/#instructions-server">tar and zip archives</a>. When you install
@@ -176,7 +173,7 @@ Updater. This takes you to the Updater control panel.</li>
 <li>Click Update, and carefully read the messages. If there are any problems it
 will tell you. The most common issue is directory permissions; your HTTP
 user needs write permissions to your whole ownCloud directory. (See
-<a class="reference internal" href="../installation/installation_wizard.html#strong-perms-label"><span>Setting Strong Directory Permissions</span></a>.) Another common issue is SELinux rules
+<a class="reference internal" href="../installation/source_installation.html#strong-perms-label"><span>Set Strong Directory Permissions</span></a>.) Another common issue is SELinux rules
 (see <a class="reference internal" href="../installation/selinux_configuration.html#selinux-config-label"><span>SELinux Configuration</span></a>.) Otherwise you will see messages
 about checking your installation and making backups.</li>
 <li>Click Proceed, and then it performs the remaining steps, which takes a few
@@ -199,16 +196,8 @@ timeouts.</p>
 <div class="highlight-python"><div class="highlight"><pre>$ sudo -u www-data php occ upgrade
 </pre></div>
 </div>
-<p>Before completing the upgrade, ownCloud first runs a simulation by copying all
-database tables to new tables, and then performs the upgrade on them, to ensure
-that the upgrade will complete correctly. The copied tables are deleted after
-the upgrade. This takes twice as much time, which on large installations can be
-many hours, so you can omit this step with the <code class="docutils literal"><span class="pre">--skip-migration-test</span></code>
-option, like this example on Ubuntu:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ sudo -u www-data php occ upgrade --skip-migration-test
-</pre></div>
-</div>
-<p>See <a class="reference internal" href="../configuration_server/occ_command.html"><em>Using the occ Command</em></a> to learn more.</p>
+<p>The optional parameter to skip migration tests during this step was removed in oC 9.2.
+See <a class="reference internal" href="upgrade.html#migration-test-label"><span>Testing a Migration</span></a> for more information.</p>
 <ol class="arabic simple" start="8">
 <li>It runs for a few minutes, and when it is finished displays a success
 message, which disappears after a short time.</li>
@@ -222,15 +211,10 @@ backups from this screen.</p>
 upgrading</em></a>.)</p>
 <div class="section" id="setting-permissions-for-updating">
 <span id="set-updating-permissions-label"></span><h2>Setting Permissions for Updating<a class="headerlink" href="#setting-permissions-for-updating" title="Permalink to this headline">¶</a></h2>
-<p>For hardened security we  highly recommend setting the permissions on your
-ownCloud directory as strictly as possible. These commands should be executed
-immediately after the initial installation. Please follow the steps in
-<a class="reference internal" href="../installation/installation_wizard.html#strong-perms-label"><span>Setting Strong Directory Permissions</span></a>.</p>
-<p>These strict permissions will prevent the Updater app from working, as it needs
-your whole ownCloud directory to be owned by the HTTP user. Run this script to
-set the appropriate permissions for updating. Replace the <code class="docutils literal"><span class="pre">ocpath</span></code> variable
-with the path to your ownCloud directory, and replace the <code class="docutils literal"><span class="pre">htuser</span></code> and
-<code class="docutils literal"><span class="pre">htgroup</span></code> variables with your HTTP user and group.:</p>
+<p>For hardened security, we highly recommend setting the permissions on your ownCloud directory as strictly as possible, immediately after the initial installation.
+However, these strict permissions will prevent the Updater app from working, as it needs your whole ownCloud directory to be owned by the HTTP user.</p>
+<p>So to set the appropriate permissions for updating, run the code below.
+Replace the <code class="docutils literal"><span class="pre">ocpath</span></code> variable with the path to your ownCloud directory, and replace the <code class="docutils literal"><span class="pre">htuser</span></code> and <code class="docutils literal"><span class="pre">htgroup</span></code> variables with your HTTP user and group.</p>
 <div class="highlight-python"><div class="highlight"><pre>#!/bin/bash
 # Sets permissions of the owncloud instance for updating
 
@@ -241,16 +225,15 @@ htgroup=&#39;www-data&#39;
 chown -R ${htuser}:${htgroup} ${ocpath}
 </pre></div>
 </div>
-<p>You can find your HTTP user in your HTTP server configuration files. Or you can
-use <a class="reference internal" href="../issues/general_troubleshooting.html#label-phpinfo"><span>PHP Version and Information</span></a> (Look for the <strong>User/Group</strong> line).</p>
+<p>You can find your HTTP user in your HTTP server configuration files.
+Or you can use <a class="reference internal" href="../issues/general_troubleshooting.html#label-phpinfo"><span>PHP Version and Information</span></a> (Look for the <strong>User/Group</strong> line).</p>
 <ul class="simple">
 <li>The HTTP user and group in Debian/Ubuntu is <code class="docutils literal"><span class="pre">www-data</span></code>.</li>
 <li>The HTTP user and group in Fedora/CentOS is <code class="docutils literal"><span class="pre">apache</span></code>.</li>
 <li>The HTTP user and group in Arch Linux is <code class="docutils literal"><span class="pre">http</span></code>.</li>
 <li>The HTTP user in openSUSE is <code class="docutils literal"><span class="pre">wwwrun</span></code>, and the HTTP group is <code class="docutils literal"><span class="pre">www</span></code>.</li>
 </ul>
-<p>After the update is completed, re-apply the strong directory permissions
-immediately by running the script in <a class="reference internal" href="../installation/installation_wizard.html#strong-perms-label"><span>Setting Strong Directory Permissions</span></a>.</p>
+<p>After the update is completed, re-apply <a class="reference internal" href="../installation/installation_wizard.html#post-installation-steps-label"><span>the strong directory permissions</span></a> immediately.</p>
 </div>
 <div class="section" id="command-line-options">
 <span id="updater-cli-label"></span><h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
@@ -297,6 +280,20 @@ Created checkpoint 9.0.0.12-56d5e4e004964
 checkpoints:</p>
 <div class="highlight-python"><div class="highlight"><pre>2 15 * * * sudo -u www-data php /path/to/owncloud/updater/application.php
 upgrade:checkpoint --create &gt; /dev/null 2&gt;&amp;1
+</pre></div>
+</div>
+</div>
+<div class="section" id="updater-secret-value-in-config-php">
+<h2>updater.secret value in config.php<a class="headerlink" href="#updater-secret-value-in-config-php" title="Permalink to this headline">¶</a></h2>
+<p>When running the updater, you will be prompted to add a hashed secret into your
+config.php file. On the updater web interface, you then need to enter the unhashed
+secret into the web form.</p>
+<p>In case you forgot your password/secret, you can re-create it by changing config.php. You can run this on your shell:</p>
+<div class="highlight-python"><div class="highlight"><pre>php -r &#39;echo password_hash(&quot;Enter a random password here&quot;, PASSWORD_DEFAULT).&quot;\n&quot;;&#39;
+</pre></div>
+</div>
+<p>Please replace <code class="docutils literal"><span class="pre">Enter</span> <span class="pre">a</span> <span class="pre">random</span> <span class="pre">password</span> <span class="pre">here</span></code> with your own. Then add this into your config.php:</p>
+<div class="highlight-python"><div class="highlight"><pre>&#39;updater.secret&#39; =&gt; &#39;The value you got from the above hash command&#39;,
 </pre></div>
 </div>
 </div>

@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Accessing ownCloud Files Using WebDAV &mdash; ownCloud 9.0 User Manual 9.0 documentation</title>
+    <title>Accessing ownCloud Files Using WebDAV &mdash; ownCloud 10.0.1 User Manual 10.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '9.0',
+        VERSION:     '10.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,10 +28,10 @@
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="ownCloud 9.0 User Manual 9.0 documentation" href="../contents.html" />
+    <link rel="top" title="ownCloud 10.0.1 User Manual 10.0.1 documentation" href="../contents.html" />
     <link rel="up" title="Files &amp; Synchronization" href="index.html" />
-    <link rel="next" title="Gallery App" href="gallery_app.html" />
-    <link rel="prev" title="Accessing your Files Using the ownCloud Web Interface" href="access_webgui.html" />
+    <link rel="next" title="Using the ownCloud Web Interface" href="webgui/index.html" />
+    <link rel="prev" title="Files &amp; Synchronization" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -66,11 +66,11 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 User Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New for Users in ownCloud 9.0</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The ownCloud Web Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New in ownCloud 10.0.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../external_storage/index.html">External Storage</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Files &amp; Synchronization</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="access_webgui.html">Accessing your Files Using the ownCloud Web Interface</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Accessing ownCloud Files Using WebDAV</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#owncloud-desktop-and-mobile-clients">ownCloud Desktop and Mobile Clients</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#webdav-configuration">WebDAV Configuration</a></li>
@@ -85,21 +85,21 @@
 <li class="toctree-l3"><a class="reference internal" href="#accessing-files-using-curl">Accessing Files Using cURL</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="gallery_app.html">Gallery App</a></li>
-<li class="toctree-l2"><a class="reference internal" href="deleted_file_management.html">Managing Deleted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webgui/index.html">Using the ownCloud Web Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="public_link_shares.html">Public Link Shares</a></li>
 <li class="toctree-l2"><a class="reference internal" href="desktop_mobile_sync.html">Desktop and Mobile Synchronization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="encrypting_files.html">Encrypting Your ownCloud Files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="federated_cloud_sharing.html">Using Federation Shares</a></li>
-<li class="toctree-l2"><a class="reference internal" href="file_drop.html">Making Anonymous Uploads (ES Only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gallery_app.html">Gallery App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deleted_file_management.html">Managing Deleted Files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="large_file_upload.html">Large File Uploads</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quota.html">Storage Quota</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="federated_cloud_sharing.html">Using Federation Shares</a></li>
 <li class="toctree-l2"><a class="reference internal" href="version_control.html">Version Control</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../pim/index.html">Contacts &amp; Calendar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../documents.html">Collaborative Document Editing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../session_management.html">Manage Connected Browsers and Devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The Web Interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Setting Your Preferences</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../external_storage/index.html">External Storage</a></li>
 </ul>
 
 								</ul>
@@ -113,11 +113,11 @@
             
 <ul class="prevnext-title list-unstyled list-inline">
   <li class="prev">
-    <a href="access_webgui.html" title="Previous Chapter: Accessing your Files Using the ownCloud Web Interface"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Accessing you...</span>
+    <a href="index.html" title="Previous Chapter: Files & Synchronization"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Files & Synch...</span>
     </a>
   </li>
   <li class="next">
-    <a href="gallery_app.html" title="Next Chapter: Gallery App"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Gallery App &raquo;</span>
+    <a href="webgui/index.html" title="Next Chapter: Using the ownCloud Web Interface"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Using the own... &raquo;</span>
     </a>
   </li>
 </ul>
@@ -321,7 +321,7 @@ path of your certificate as in this example:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The Mac OS X Finder suffers from a <a class="reference external" href="http://sabre.io/dav/clients/finder/">series of implementation problems</a> and should only be used if the
-ownCloud server runs on <strong>Apache</strong> and <strong>mod_php</strong>, or <strong>Nginx 1.3.8+</strong>.</p>
+ownCloud server runs on <strong>Apache</strong> and <strong>mod_php</strong>, or <strong>NGINX 1.3.8+</strong>.</p>
 </div>
 <p>To access files through the Mac OS X Finder:</p>
 <ol class="arabic simple">
@@ -558,6 +558,29 @@ longer than 30 minutes using Web Client in Windows 7.</p>
 <h3>Solution<a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h3>
 <p>Workarounds are documented in the <a class="reference external" href="https://support.microsoft.com/kb/2668751">KB2668751</a> article.</p>
 </div>
+<div class="section" id="id12">
+<h3>Problem<a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h3>
+<p>Error 0x80070043 &#8220;The network name cannot be found.&#8221; while adding a network drive.</p>
+</div>
+<div class="section" id="id13">
+<h3>Solution<a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h3>
+<p>Make Windows service <strong>WebClient</strong> start automatically:</p>
+<ol class="arabic simple">
+<li>Open <strong>Control Panel</strong>.</li>
+<li>Go to <strong>Administrative Tools</strong>.</li>
+<li>Launch <strong>Services</strong>.</li>
+<li>Find <strong>WebClient</strong> service.</li>
+<li>Right-click on it and choose <strong>Properties</strong>.</li>
+<li>Select <strong>Startup type</strong>: <strong>Automatic</strong>.</li>
+<li>Click <strong>OK</strong> button.</li>
+</ol>
+<p>Or in command prompt (as Admin):</p>
+<div class="highlight-python"><div class="highlight"><pre>sc config &quot;WebClient&quot; start=auto
+sc start &quot;WebClient&quot;
+</pre></div>
+</div>
+<p>More details <a class="reference external" href="https://github.com/owncloud/documentation/pull/2668">here</a>.</p>
+</div>
 </div>
 <div class="section" id="accessing-files-using-curl">
 <h2>Accessing Files Using cURL<a class="headerlink" href="#accessing-files-using-curl" title="Permalink to this headline">¶</a></h2>
@@ -609,6 +632,53 @@ longer than 30 minutes using Web Client in Windows 7.</p>
 &lt;/d:multistatus&gt;
 </pre></div>
 </div>
+<p id="webdav-api-retrieve-fileid-label">To get the file id of a file, regardless of location, you need to make a PROPFIND request.
+This request requires two things:</p>
+<ol class="arabic simple">
+<li>A PROPFIND XML element in the body of the request method.</li>
+<li>The path to the file that you want to find out more about</li>
+</ol>
+<p>Here’s an example PROPFIND XML element, which we’ll store as <code class="docutils literal"><span class="pre">propfind-fileid.xml</span></code>.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;a:propfind</span> <span class="na">xmlns:a=</span><span class="s">&quot;DAV:&quot;</span> <span class="na">xmlns:oc=</span><span class="s">&quot;http://owncloud.org/ns&quot;</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- retrieve the file&#39;s id --&gt;</span>
+    <span class="nt">&lt;a:prop&gt;&lt;oc:fileid/&gt;&lt;/a:prop&gt;</span>
+<span class="nt">&lt;/a:propfind&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You could pass this directly to the Curl request. However, it can often be easier to create, maintain, and to share, if it&#8217;s created in a standalone file.</p>
+</div>
+<p>With the file created, make the request by running the following Curl command:</p>
+<div class="highlight-xml"><div class="highlight"><pre>curl -u username:password -X PROPFIND \
+  -H &quot;Content-Type: text/xml&quot; \
+  --data-binary &quot;@propfind-fileid.xml&quot; \
+  &#39;http://localhost/remote.php/dav/files/admin/Photos/San%20Francisco.jpg&#39;
+</pre></div>
+</div>
+<p>This will return an XML response payload similar to the following example.
+It contains the relative path to the file and the fileid of the file.</p>
+<div class="highlight-xml"><div class="highlight"><pre><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+<span class="nt">&lt;d:multistatus</span> <span class="na">xmlns:d=</span><span class="s">&quot;DAV:&quot;</span> <span class="na">xmlns:s=</span><span class="s">&quot;http://sabredav.org/ns&quot;</span> <span class="na">xmlns:cal=</span><span class="s">&quot;urn:ietf:params:xml:ns:caldav&quot;</span> <span class="na">xmlns:cs=</span><span class="s">&quot;http://calendarserver.org/ns/&quot;</span> <span class="na">xmlns:card=</span><span class="s">&quot;urn:ietf:params:xml:ns:carddav&quot;</span> <span class="na">xmlns:oc=</span><span class="s">&quot;http://owncloud.org/ns&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;d:response&gt;</span>
+    <span class="nt">&lt;d:href&gt;</span>/remote.php/dav/files/admin/Photos/San%20Francisco.jpg<span class="nt">&lt;/d:href&gt;</span>
+    <span class="nt">&lt;d:propstat&gt;</span>
+      <span class="nt">&lt;d:prop&gt;</span>
+        <span class="nt">&lt;oc:fileid&gt;</span>4<span class="nt">&lt;/oc:fileid&gt;</span>
+      <span class="nt">&lt;/d:prop&gt;</span>
+      <span class="nt">&lt;d:status&gt;</span>HTTP/1.1 200 OK<span class="nt">&lt;/d:status&gt;</span>
+    <span class="nt">&lt;/d:propstat&gt;</span>
+  <span class="nt">&lt;/d:response&gt;</span>
+<span class="nt">&lt;/d:multistatus&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The example above’s been formatted for readability, using <a class="reference external" href="http://vim.wikia.com/wiki/Format_your_xml_document_using_xmllint">xmllint</a>, which
+is part of libxml2. To format it as it is listed above, pipe the previous command to
+<code class="docutils literal"><span class="pre">xmllint</span> <span class="pre">--format</span> <span class="pre">-</span></code>.</p>
+</div>
 </div>
 </div>
 
@@ -616,11 +686,11 @@ longer than 30 minutes using Web Client in Windows 7.</p>
             
 <ul class="prevnext-title list-unstyled list-inline">
   <li class="prev">
-    <a href="access_webgui.html" title="Previous Chapter: Accessing your Files Using the ownCloud Web Interface"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Accessing you...</span>
+    <a href="index.html" title="Previous Chapter: Files & Synchronization"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Files & Synch...</span>
     </a>
   </li>
   <li class="next">
-    <a href="gallery_app.html" title="Next Chapter: Gallery App"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Gallery App &raquo;</span>
+    <a href="webgui/index.html" title="Next Chapter: Using the ownCloud Web Interface"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Using the own... &raquo;</span>
     </a>
   </li>
 </ul>

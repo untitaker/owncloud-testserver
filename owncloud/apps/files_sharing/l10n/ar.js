@@ -1,7 +1,9 @@
 OC.L10N.register(
     "files_sharing",
     {
+    "Uploading..." : "تحميل",
     "Cancel" : "إلغاء",
+    "Share" : "شارك",
     "Shared by" : "تم مشاركتها بواسطة",
     "Sharing" : "مشاركة",
     "A file or folder has been <strong>shared</strong>" : "ملف أو مجلد تم </strong>مشاركته<strong> ",
@@ -15,6 +17,7 @@ OC.L10N.register(
     "Password" : "كلمة المرور",
     "No entries found in this folder" : "لا يوجد مدخلات في هذا المجلد ",
     "Name" : "اسم",
+    "Expiration date" : "تاريخ إنتهاء الصلاحية",
     "Sorry, this link doesn’t seem to work anymore." : "عذرا، يبدو أن هذا الرابط لم يعد يعمل.",
     "Reasons might be:" : "الأسباب الممكنة :",
     "the item was removed" : "تم حذف العنصر المطلوب",

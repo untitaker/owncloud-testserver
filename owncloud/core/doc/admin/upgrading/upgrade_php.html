@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Upgrade PHP on RedHat 7 and Centos 7 &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../contents.html" />
+    <link rel="up" title="Upgrading" href="index.html" />
+    <link rel="next" title="Upgrade Marketplace Applications" href="marketplace_apps.html" />
+    <link rel="prev" title="Upgrading" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Upgrading</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Upgrade PHP on RedHat 7 and Centos 7</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#upgrade-php-to-version-5-6">Upgrade PHP to version 5.6</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#upgrade-php-to-version-7-0">Upgrade PHP to version 7.0</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="marketplace_apps.html">Upgrade Marketplace Applications</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appliance/index.html">The ownCloud X Appliance</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="index.html" title="Previous Chapter: Upgrading"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Upgrading</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="marketplace_apps.html" title="Next Chapter: Upgrade Marketplace Applications"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Upgrade Marke... &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="upgrade-php-on-redhat-7-and-centos-7">
+<h1>Upgrade PHP on RedHat 7 and Centos 7<a class="headerlink" href="#upgrade-php-on-redhat-7-and-centos-7" title="Permalink to this headline">¶</a></h1>
+<p>You should, almost, always upgrade to the latest version of PHP, if and where possible.
+And if you&#8217;re on a version of PHP older than 5.6 you need to upgrade.
+This guide steps you through upgrading your installation of PHP to version 5.6 or 7.0 if you&#8217;re on RedHat or Centos 7.</p>
+<ul class="simple">
+<li><a class="reference internal" href="#upgrade-to-version-56-label"><span>Upgrade PHP to version 5.6</span></a></li>
+<li><a class="reference internal" href="#upgrade-to-version-7-label"><span>Upgrade PHP to version 7.0</span></a></li>
+</ul>
+<div class="section" id="upgrade-php-to-version-5-6">
+<span id="upgrade-to-version-56-label"></span><h2>Upgrade PHP to version 5.6<a class="headerlink" href="#upgrade-php-to-version-5-6" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You should really be upgrading to PHP 7, as version 5.6 is <a class="reference external" href="https://secure.php.net/supported-versions.php">no longer actively supported</a>, and security support ends on 31 Dec, 2018.</p>
+</div>
+<p>You will first need to subscribe to the Red Hat Software Collections channel repository to be able to download and install the PHP 5.6 package in RHEL 7.
+To do that, run the following command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">subscription-manager repos --enable rhel-server-rhscl-7-rpms</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">To know more about registering and subscribing a system to the Red Hat Customer Portal using the Red Hat Subscription-Manager, please refer to <a class="reference external" href="https://access.redhat.com/solutions/253273">the official documentation</a>.</p>
+</div>
+<p>When that&#8217;s completed, then proceed by installing PHP 5.6, along with <cite>the other required PHP packages</cite>.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">yum install rh-php56 rh-php56-php rh-php56-php-gd rh-php56-php-mbstring rh-php56-php-mysqlnd rh-php56-php-intl rh-php56-php-ldap</span>
+</pre></div>
+</div>
+<p>Once they&#8217;re all installed, you next need to enable PHP 5.6 system-wide.
+To do this, run the following command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">cp /opt/rh/rh-php56/enable /etc/profile.d/rh-php56.sh source /opt/rh/rh-php56/enable</span>
+</pre></div>
+</div>
+<p>With PHP 5.6 enabled system-wide, you next need to disable the loading the previous version of PHP 5.4.
+For this example, we&#8217;ll assume that you&#8217;re upgrading from PHP 5.4.
+Here, you disable it from loading by renaming it&#8217;s Apache configuration files.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">mv /etc/httpd/conf.d/php.conf /etc/httpd/conf.d/php54.off</span>
+<span class="go">mv /etc/httpd/conf.modules.d/10-php.conf /etc/httpd/conf.modules.d/10-php54.off</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You could also delete the files if you prefer.</p>
+</div>
+<p>Next, you need to enable loading of the PHP 5.6 Apache shared-object file.
+This you do by copying the shared object along with its two Apache configuration
+files, as in the command below.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">cp /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php56-php.conf /etc/httpd/conf.d/</span>
+<span class="go">cp /opt/rh/httpd24/root/etc/httpd/conf.modules.d/10-rh-php56-php.conf /etc/httpd/conf.modules.d/</span>
+<span class="go">cp /opt/rh/httpd24/root/etc/httpd/modules/librh-php56-php5.so /etc/httpd/modules/</span>
+</pre></div>
+</div>
+<p>With all that done, you lastly need to restart Apache.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">service httpd restart</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="upgrade-php-to-version-7-0">
+<span id="upgrade-to-version-7-label"></span><h2>Upgrade PHP to version 7.0<a class="headerlink" href="#upgrade-php-to-version-7-0" title="Permalink to this headline">¶</a></h2>
+<p>As with <a class="reference internal" href="#upgrade-to-version-56-label"><span>upgrading to PHP 5.6</span></a>, to upgrade to PHP 7 you will first need to subscribe to the Red Hat Software Collections channel repository to download and install the PHP 7 package in RHEL 7 (if you&#8217;ve not done this already).
+This uses the same command as you will find there.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This section assumes that you&#8217;re upgrading from PHP 5.6.</p>
+</div>
+<p>Then, proceed by installing the required PHP 7 modules.
+You can use the command below to save you time.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">yum install rh-php70 rh-php70-php rh-php70-php-gd rh-php70-php-mbstring rh-php70-php-mysqlnd rh-php70-php-intl rh-php70-php-ldap</span>
+</pre></div>
+</div>
+<p>Next, you need to enable PHP 7 and disable PHP 5.6 system-wide.
+To enable PHP 7 system-wide, run the following command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">cp /opt/rh/rh-php70/enable /etc/profile.d/rh-php70.sh source /opt/rh/rh-php70/enable</span>
+</pre></div>
+</div>
+<p>Then, you need to disable loading of the PHP 5.6 Apache modules.
+You can do this either by changing their names, as in the example below, or deleting the files.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">mv /etc/httpd/conf.d/php.conf /etc/httpd/conf.d/php56.off</span>
+<span class="go">mv /etc/httpd/conf.modules.d/10-php.conf /etc/httpd/conf.modules.d/10-php56.off</span>
+</pre></div>
+</div>
+<p>With that done, you next need to copy the PHP 7 Apache modules into place; that being the two Apache configuration files and the shared object file.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">cp /opt/rh/httpd24/root/etc/httpd/conf.d/rh-php70-php.conf /etc/httpd/conf.d/</span>
+<span class="go">cp /opt/rh/httpd24/root/etc/httpd/conf.modules.d/15-rh-php70-php.conf /etc/httpd/conf.modules.d/</span>
+<span class="go">cp /opt/rh/httpd24/root/etc/httpd/modules/librh-php70-php7.so /etc/httpd/modules/</span>
+</pre></div>
+</div>
+<p>Finally, you need to restart Apache to make the changes permanent, as in the command below.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">service httpd restart</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="index.html" title="Previous Chapter: Upgrading"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Upgrading</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="marketplace_apps.html" title="Next Chapter: Upgrade Marketplace Applications"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Upgrade Marke... &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

@@ -1,77 +1,60 @@
 <?php
-	use \OCA\Files_External\Lib\Backend\Backend;
-	use \OCA\Files_External\Lib\DefinitionParameter;
-	use \OCA\Files_External\Service\BackendService;
+	use \OCP\Files\External\Backend\Backend;
+	use \OCP\Files\External\Auth\AuthMechanism;
+	use \OCP\Files\External\IStoragesBackendService;
+
+	$l->t("Enable encryption");
+	$l->t("Enable previews");
+	$l->t("Enable sharing");
+	$l->t("Check for changes");
+	$l->t("Never");
+	$l->t("Once every direct access");
 
 	script('files_external', 'settings');
 	style('files_external', 'settings');
 
 	// load custom JS
 	foreach ($_['backends'] as $backend) {
-		if ($backend->getCustomJs()) {
-			script('files_external', $backend->getCustomJs());
+		/** @var Backend $backend */
+		$scripts = $backend->getCustomJs();
+		foreach ($scripts as $script) {
+			if (is_array($script)) {
+				list($appName, $script) = $script;
+			} else {
+				$appName = 'files_external';
+			}
+			script($appName, $script);
 		}
 	}
 	foreach ($_['authMechanisms'] as $authMechanism) {
-		if ($authMechanism->getCustomJs()) {
-			script('files_external', $authMechanism->getCustomJs());
+		/** @var AuthMechanism $authMechanism */
+		$scripts = $authMechanism->getCustomJs();
+		foreach ($scripts as $script) {
+			script('files_external', $script);
 		}
 	}
 
-	function writeParameterInput($parameter, $options, $classes = []) {
-		$value = '';
-		if (isset($options[$parameter->getName()])) {
-			$value = $options[$parameter->getName()];
-		}
-		$placeholder = $parameter->getText();
-		$is_optional = $parameter->isFlagSet(DefinitionParameter::FLAG_OPTIONAL);
-
-		switch ($parameter->getType()) {
-		case DefinitionParameter::VALUE_PASSWORD: ?>
-			<?php if ($is_optional) { $classes[] = 'optional'; } ?>
-			<input type="password"
-				<?php if (!empty($classes)): ?> class="<?php p(implode(' ', $classes)); ?>"<?php endif; ?>
-				data-parameter="<?php p($parameter->getName()); ?>"
-				value="<?php p($value); ?>"
-				placeholder="<?php p($placeholder); ?>"
-			/>
-			<?php
-			break;
-		case DefinitionParameter::VALUE_BOOLEAN: ?>
-			<?php $checkboxId = uniqid("checkbox_"); ?>
-			<input type="checkbox"
-				id="<?php p($checkboxId); ?>"
-				<?php if (!empty($classes)): ?> class="checkbox <?php p(implode(' ', $classes)); ?>"<?php endif; ?>
-				data-parameter="<?php p($parameter->getName()); ?>"
-				<?php if ($value === true): ?> checked="checked"<?php endif; ?>
-			/>
-			<label for="<?php p($checkboxId); ?>"><?php p($placeholder); ?></label>
-			<?php
-			break;
-		case DefinitionParameter::VALUE_HIDDEN: ?>
-			<input type="hidden"
-				<?php if (!empty($classes)): ?> class="<?php p(implode(' ', $classes)); ?>"<?php endif; ?>
-				data-parameter="<?php p($parameter->getName()); ?>"
-				value="<?php p($value); ?>"
-			/>
-			<?php
-			break;
-		default: ?>
-			<?php if ($is_optional) { $classes[] = 'optional'; } ?>
-			<input type="text"
-				<?php if (!empty($classes)): ?> class="<?php p(implode(' ', $classes)); ?>"<?php endif; ?>
-				data-parameter="<?php p($parameter->getName()); ?>"
-				value="<?php p($value); ?>"
-				placeholder="<?php p($placeholder); ?>"
-			/>
-			<?php
-		}
-	}
 ?>
 <form id="files_external" class="section" data-encryption-enabled="<?php echo $_['encryptionEnabled']?'true': 'false'; ?>">
-	<h2><?php p($l->t('External Storage')); ?></h2>
+	<h2 class="app-name"><?php p($l->t('External Storage')); ?></h2>
+
+	<?php if ($_['visibilityType'] === IStoragesBackendService::VISIBILITY_ADMIN): ?>
+	<p>
+		<input type="checkbox" name="enableExternalStorage" id="enableExternalStorageCheckbox" class="checkbox"
+			   value="1" <?php if ($_['enableExternalStorage']) print_unescaped('checked="checked"'); ?> />
+		<label for="enableExternalStorageCheckbox">
+			<?php p($l->t('Enable external storage'));?>
+		</label>
+	</p>
+	<?php endif; ?>
+	<?php if (!$_['enableExternalStorage']): ?>
+	<p><?php p($l->t('External storage has been disabled by the administrator')); ?></p>
+	<?php endif; ?>
+
+	<div id="files_external_settings" class=" <?php if (!$_['enableExternalStorage']) print('hidden'); ?>">
+
 	<?php if (isset($_['dependencies']) and ($_['dependencies']<>'')) print_unescaped(''.$_['dependencies'].''); ?>
-	<table id="externalStorage" class="grid" data-admin='<?php print_unescaped(json_encode($_['visibilityType'] === BackendService::VISIBILITY_ADMIN)); ?>'>
+	<table id="externalStorage" class="grid" data-admin='<?php print_unescaped(json_encode($_['visibilityType'] === IStoragesBackendService::VISIBILITY_ADMIN)); ?>'>
 		<thead>
 			<tr>
 				<th></th>
@@ -79,14 +62,14 @@
 				<th><?php p($l->t('External storage')); ?></th>
 				<th><?php p($l->t('Authentication')); ?></th>
 				<th><?php p($l->t('Configuration')); ?></th>
-				<?php if ($_['visibilityType'] === BackendService::VISIBILITY_ADMIN) print_unescaped('<th>'.$l->t('Available for').'</th>'); ?>
+				<?php if ($_['visibilityType'] === IStoragesBackendService::VISIBILITY_ADMIN) print_unescaped('<th>'.$l->t('Available for').'</th>'); ?>
 				<th>&nbsp;</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr id="addMountPoint"
-			<?php if ($_['visibilityType'] === BackendService::VISIBILITY_PERSONAL && $_['allowUserMounting'] === false): ?>
+			<?php if ($_['visibilityType'] === IStoragesBackendService::VISIBILITY_PERSONAL && $_['allowUserMounting'] === false): ?>
 				style="display: none;"
 			<?php endif; ?>
 			>
@@ -110,21 +93,25 @@
 								return strcasecmp($a->getText(), $b->getText());
 							});
 						?>
+						<?php
+							$canCreateNewLocalStorage = \OC::$server->getConfig()->getSystemValue('files_external_allow_create_new_local', false);
+						?>
 						<?php foreach ($sortedBackends as $backend): ?>
 							<?php if ($backend->getDeprecateTo()) continue; // ignore deprecated backends ?>
+							<?php if (!$canCreateNewLocalStorage && $backend->getIdentifier() == "local") continue; // if the "files_external_allow_create_new_local" config param isn't set to to true ?>
 							<option value="<?php p($backend->getIdentifier()); ?>"><?php p($backend->getText()); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</td>
 				<td class="authentication" data-mechanisms='<?php p(json_encode($_['authMechanisms'])); ?>'></td>
 				<td class="configuration"></td>
-				<?php if ($_['visibilityType'] === BackendService::VISIBILITY_ADMIN): ?>
+				<?php if ($_['visibilityType'] === IStoragesBackendService::VISIBILITY_ADMIN): ?>
 					<td class="applicable" align="right">
 						<input type="hidden" class="applicableUsers" style="width:20em;" value="" />
 					</td>
 				<?php endif; ?>
 				<td class="mountOptionsToggle hidden">
-					<img class="svg action"
+					<img class="svg"
 						title="<?php p($l->t('Advanced settings')); ?>"
 						alt="<?php p($l->t('Advanced settings')); ?>"
 						src="<?php print_unescaped(image_path('core', 'actions/settings.svg')); ?>"
@@ -132,7 +119,7 @@
 					<input type="hidden" class="mountOptions" value="" />
 				</td>
 				<td class="hidden">
-					<img class="svg action"
+					<img class="svg"
 						alt="<?php p($l->t('Delete')); ?>"
 						title="<?php p($l->t('Delete')); ?>"
 						src="<?php print_unescaped(image_path('core', 'actions/delete.svg')); ?>"
@@ -143,7 +130,7 @@
 	</table>
 	<br />
 
-	<?php if ($_['visibilityType'] === BackendService::VISIBILITY_ADMIN): ?>
+	<?php if ($_['visibilityType'] === IStoragesBackendService::VISIBILITY_ADMIN): ?>
 		<br />
 		<input type="checkbox" name="allowUserMounting" id="allowUserMounting" class="checkbox"
 			value="1" <?php if ($_['allowUserMounting'] == 'yes') print_unescaped(' checked="checked"'); ?> />
@@ -153,18 +140,26 @@
 			<?php p($l->t('Allow users to mount the following external storage')); ?><br />
 			<?php
 				$userBackends = array_filter($_['backends'], function($backend) {
-					return $backend->isAllowedVisibleFor(BackendService::VISIBILITY_PERSONAL);
+					return $backend->isAllowedVisibleFor(IStoragesBackendService::VISIBILITY_PERSONAL);
 				});
 			?>
 			<?php $i = 0; foreach ($userBackends as $backend): ?>
 				<?php if ($deprecateTo = $backend->getDeprecateTo()): ?>
 					<input type="hidden" id="allowUserMountingBackends<?php p($i); ?>" name="allowUserMountingBackends[]" value="<?php p($backend->getIdentifier()); ?>" data-deprecate-to="<?php p($deprecateTo->getIdentifier()); ?>" />
 				<?php else: ?>
-					<input type="checkbox" id="allowUserMountingBackends<?php p($i); ?>" class="checkbox" name="allowUserMountingBackends[]" value="<?php p($backend->getIdentifier()); ?>" <?php if ($backend->isVisibleFor(BackendService::VISIBILITY_PERSONAL)) print_unescaped(' checked="checked"'); ?> />
+					<input type="checkbox" id="allowUserMountingBackends<?php p($i); ?>" class="checkbox" name="allowUserMountingBackends[]" value="<?php p($backend->getIdentifier()); ?>" <?php if ($backend->isVisibleFor(IStoragesBackendService::VISIBILITY_PERSONAL)) print_unescaped(' checked="checked"'); ?> />
 					<label for="allowUserMountingBackends<?php p($i); ?>"><?php p($backend->getText()); ?></label> <br />
 				<?php endif; ?>
 				<?php $i++; ?>
 			<?php endforeach; ?>
+			<br/>
+			<input type="checkbox" name="allowUserMountSharing" id="allowUserMountSharing" class="checkbox"
+				value="1" <?php if ($_['allowUserMountSharing'] === 'yes') print_unescaped(' checked="checked"'); ?> />
+			<label for="allowUserMountSharing"><?php p($l->t('Allow sharing on user-mounted external storages')); ?></label> <span id="userMountSharingMsg" class="msg"></span>
 		</p>
+	<?php else: ?>
+		<input type="hidden" name="allowUserMountSharing" id="allowUserMountSharing"
+			value="<?php p($_['allowUserMountSharing']) ?>" />
 	<?php endif; ?>
+	</div>
 </form>

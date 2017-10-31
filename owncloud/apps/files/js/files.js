@@ -59,7 +59,6 @@
 				return;
 			}
 			if (response.data !== undefined && response.data.uploadMaxFilesize !== undefined) {
-				$('#max_upload').val(response.data.uploadMaxFilesize);
 				$('#free_space').val(response.data.freeSpace);
 				$('#upload.button').attr('data-original-title', response.data.maxHumanFilesize);
 				$('#usedSpacePercent').val(response.data.usedSpacePercent);
@@ -71,7 +70,6 @@
 				return;
 			}
 			if (response[0].uploadMaxFilesize !== undefined) {
-				$('#max_upload').val(response[0].uploadMaxFilesize);
 				$('#upload.button').attr('data-original-title', response[0].maxHumanFilesize);
 				$('#usedSpacePercent').val(response[0].usedSpacePercent);
 				Files.displayStorageWarnings();
@@ -103,7 +101,12 @@
 				throw t('files', '"{name}" is an invalid file name.', {name: name});
 			} else if (trimmedName.length === 0) {
 				throw t('files', 'File name cannot be empty.');
+			} else if (trimmedName.indexOf("/") >= 0) {
+				throw t('files', 'File name cannot contain "/".');
+			} else if (OC.fileIsBlacklisted(trimmedName)) {
+				throw t('files', '"{name}" has a forbidden file type/extension.', {name: name});
 			}
+
 			return true;
 		},
 		displayStorageWarnings: function() {
@@ -116,21 +119,34 @@
 				ownerDisplayName = $('#ownerDisplayName').val();
 			if (usedSpacePercent > 98) {
 				if (owner !== oc_current_user) {
-					OC.Notification.showTemporary(t('files', 'Storage of {owner} is full, files can not be updated or synced anymore!',
-						{ owner: ownerDisplayName }));
+					OC.Notification.show(t('files', 'Storage of {owner} is full, files can not be updated or synced anymore!', 
+						{owner: ownerDisplayName}), {type: 'error'}
+					);
 					return;
 				}
-				OC.Notification.show(t('files', 'Your storage is full, files can not be updated or synced anymore!'));
+				OC.Notification.show(t('files', 
+					'Your storage is full, files can not be updated or synced anymore!'), 
+					{type : 'error'}
+				);
 				return;
 			}
 			if (usedSpacePercent > 90) {
 				if (owner !== oc_current_user) {
-					OC.Notification.showTemporary(t('files', 'Storage of {owner} is almost full ({usedSpacePercent}%)',
-						{ usedSpacePercent: usedSpacePercent,  owner: ownerDisplayName }));
+					OC.Notification.show(t('files', 'Storage of {owner} is almost full ({usedSpacePercent}%)', 
+						{
+							usedSpacePercent: usedSpacePercent,  
+							owner: ownerDisplayName
+						}),
+						{  
+							type: 'error'
+						}
+					);
 					return;
 				}
 				OC.Notification.show(t('files', 'Your storage is almost full ({usedSpacePercent}%)',
-					{usedSpacePercent: usedSpacePercent}));
+					{usedSpacePercent: usedSpacePercent}), 
+					{type : 'error'}
+				);
 			}
 		},
 
@@ -154,7 +170,11 @@
 			}
 
 			if (_.isArray(filename)) {
-				filename = JSON.stringify(filename);
+				var filesPart = '';
+				_.each(filename, function(name) {
+					filesPart += '&files[]=' + encodeURIComponent(name);
+				});
+				return this.getAjaxUrl('download', {dir: dir}) + filesPart;
 			}
 
 			var params = {
@@ -225,17 +245,6 @@
 
 			// TODO: move file list related code (upload) to OCA.Files.FileList
 			$('#file_action_panel').attr('activeAction', false);
-
-			// Triggers invisible file input
-			$('#upload a').on('click', function() {
-				$(this).parent().children('#file_upload_start').trigger('click');
-				return false;
-			});
-
-			// Trigger cancelling of file upload
-			$('#uploadprogresswrapper .stop').on('click', function() {
-				OC.Upload.cancelUploads();
-			});
 
 			// drag&drop support using jquery.fileupload
 			// TODO use OC.dialogs
@@ -385,19 +394,49 @@ var dragOptions={
 	cursorAt: { left: 24, top: 18 },
 	helper: createDragShadow,
 	cursor: 'move',
+
 	start: function(event, ui){
 		var $selectedFiles = $('td.filename input:checkbox:checked');
 		if (!$selectedFiles.length) {
 			$selectedFiles = $(this);
 		}
-		$selectedFiles.closest('tr').fadeTo(250, 0.2).addClass('dragging');
+		$selectedFiles.closest('tr').addClass('animate-opacity dragging');
+		$selectedFiles.closest('tr').filter('.ui-droppable').droppable( 'disable' );
+
 	},
 	stop: function(event, ui) {
 		var $selectedFiles = $('td.filename input:checkbox:checked');
 		if (!$selectedFiles.length) {
 			$selectedFiles = $(this);
 		}
-		$selectedFiles.closest('tr').fadeTo(250, 1).removeClass('dragging');
+
+		var $tr = $selectedFiles.closest('tr');
+		$tr.removeClass('dragging');
+		$tr.filter('.ui-droppable').droppable( 'enable' );
+
+		setTimeout(function() {
+			$tr.removeClass('animate-opacity');
+		}, 300);
+	},
+	drag: function(event, ui) {
+		var scrollingArea = FileList.$container;
+		var currentScrollTop = $(scrollingArea).scrollTop();
+		var scrollArea = Math.min(Math.floor($(window).innerHeight() / 2), 100);
+
+		var bottom = $(window).innerHeight() - scrollArea;
+		var top = $(window).scrollTop() + scrollArea;
+		if (event.pageY < top) {
+			$('html, body').animate({
+
+				scrollTop: $(scrollingArea).scrollTop(currentScrollTop - 10)
+			}, 400);
+
+		} else if (event.pageY > bottom) {
+			$('html, body').animate({
+				scrollTop: $(scrollingArea).scrollTop(currentScrollTop + 10)
+			}, 400);
+		}
+
 	}
 };
 // sane browsers support using the distance option
@@ -442,4 +481,3 @@ function fileDownloadPath(dir, file) {
 
 // for backward compatibility
 window.Files = OCA.Files.Files;
-

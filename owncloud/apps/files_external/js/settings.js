@@ -33,17 +33,11 @@ var MOUNT_OPTIONS_DROPDOWN_TEMPLATE =
 	'			<option value="1" selected="selected">{{t "files_external" "Once every direct access"}}</option>' +
 	'		</select>' +
 	'	</div>' +
+	'	<div class="optionRow">' +
+	'		<input id="mountOptionsEncoding" name="encoding_compatibility" type="checkbox" value="true"/>' +
+	'		<label for="mountOptionsEncoding">{{mountOptionsEncodingLabel}}</label>' +
+	'	</div>' +
 	'</div>';
-
-	/* TODO the current l10n extrator can't handle JS functions within handlebar
-	   templates therefore they are duplicated here
-	t("files_external", "Enable encryption")
-	t("files_external", "Enable previews")
-	t("files_external", "Enable sharing")
-	t("files_external", "Check for changes")
-	t("files_external", "Never")
-	t("files_external", "Once every direct access")
-	 */
 
 /**
  * Returns the selection of applicable users in the given configuration row
@@ -305,7 +299,8 @@ StorageConfig.prototype = {
 			mountPoint: this.mountPoint,
 			backend: this.backend,
 			authMechanism: this.authMechanism,
-			backendOptions: this.backendOptions
+			backendOptions: this.backendOptions,
+			testOnly: true
 		};
 		if (this.id) {
 			data.id = this.id;
@@ -332,6 +327,7 @@ StorageConfig.prototype = {
 		$.ajax({
 			type: 'GET',
 			url: OC.generateUrl(this._url + '/{id}', {id: this.id}),
+			data: {'testOnly': true},
 			success: options.success,
 			error: options.error
 		});
@@ -486,9 +482,9 @@ MountOptionsDropdown.prototype = {
 	 *
 	 * @param {Object} $container container
 	 * @param {Object} mountOptions mount options
-	 * @param {Array} enabledOptions enabled mount options
+	 * @param {Array} visibleOptions enabled mount options
 	 */
-	show: function($container, mountOptions, enabledOptions) {
+	show: function($container, mountOptions, visibleOptions) {
 		if (MountOptionsDropdown._last) {
 			MountOptionsDropdown._last.hide();
 		}
@@ -499,10 +495,12 @@ MountOptionsDropdown.prototype = {
 			MountOptionsDropdown._template = template;
 		}
 
-		var $el = $(template());
+		var $el = $(template({
+			mountOptionsEncodingLabel: t('files_external', 'Compatibility with Mac NFD encoding (slow)'),
+		}));
 		this.$el = $el;
 
-		this.setOptions(mountOptions, enabledOptions);
+		this.setOptions(mountOptions, visibleOptions);
 
 		this.$el.appendTo($container);
 		MountOptionsDropdown._last = this;
@@ -548,9 +546,9 @@ MountOptionsDropdown.prototype = {
 	 * Sets the mount options to the dropdown controls
 	 *
 	 * @param {Object} options mount options
-	 * @param {Array} enabledOptions enabled mount options
+	 * @param {Array} visibleOptions enabled mount options
 	 */
-	setOptions: function(options, enabledOptions) {
+	setOptions: function(options, visibleOptions) {
 		var $el = this.$el;
 		_.each(options, function(value, key) {
 			var $optionEl = $el.find('input, select').filterAttr('name', key);
@@ -566,7 +564,7 @@ MountOptionsDropdown.prototype = {
 		$el.find('.optionRow').each(function(i, row){
 			var $row = $(row);
 			var optionId = $row.find('input, select').attr('name');
-			if (enabledOptions.indexOf(optionId) === -1) {
+			if (visibleOptions.indexOf(optionId) === -1) {
 				$row.hide();
 			} else {
 				$row.show();
@@ -656,7 +654,6 @@ MountConfigListView.prototype = _.extend({
 	 * @param {int} [options.userListLimit] page size in applicable users dropdown
 	 */
 	initialize: function($el, options) {
-		var self = this;
 		this.$el = $el;
 		this._isPersonal = ($el.data('admin') !== true);
 		if (this._isPersonal) {
@@ -670,6 +667,7 @@ MountConfigListView.prototype = _.extend({
 		}
 
 		this._encryptionEnabled = options.encryptionEnabled;
+		this._allowUserMountSharing = options.allowUserMountSharing;
 
 		// read the backend config that was carefully crammed
 		// into the data-configurations attribute of the select
@@ -694,7 +692,11 @@ MountConfigListView.prototype = _.extend({
 		var self = this;
 		this.$el.find('tbody tr:not(#addMountPoint)').each(function(i, tr) {
 			var authMechanism = $(tr).find('.selectAuthMechanism').val();
-			callback($(tr), authMechanism, self._allAuthMechanisms[authMechanism]['scheme']);
+			if (authMechanism !== undefined) {
+				var onCompletion = jQuery.Deferred();
+				callback($(tr), authMechanism, self._allAuthMechanisms[authMechanism]['scheme'], onCompletion);
+				onCompletion.resolve();
+			}
 		});
 		this.on('selectAuthMechanism', callback);
 	},
@@ -856,7 +858,7 @@ MountConfigListView.prototype = _.extend({
 		this.configureAuthMechanism($tr, storageConfig.authMechanism, onCompletion);
 
 		if (storageConfig.backendOptions) {
-			$td.children().each(function() {
+			$td.find('input, select').each(function() {
 				var input = $(this);
 				var val = storageConfig.backendOptions[input.data('parameter')];
 				if (val !== undefined) {
@@ -893,7 +895,8 @@ MountConfigListView.prototype = _.extend({
 				'encrypt': true,
 				'previews': true,
 				'enable_sharing': false,
-				'filesystem_check_changes': 1
+				'filesystem_check_changes': 1,
+				'encoding_compatibility': false
 			}));
 		}
 
@@ -911,6 +914,7 @@ MountConfigListView.prototype = _.extend({
 			$.ajax({
 				type: 'GET',
 				url: OC.generateUrl('apps/files_external/userglobalstorages'),
+				data: {'testOnly' : true},
 				contentType: 'application/json',
 				success: function(result) {
 					var onCompletion = jQuery.Deferred();
@@ -945,6 +949,7 @@ MountConfigListView.prototype = _.extend({
 						}
 					});
 					onCompletion.resolve();
+					$("#body-settings").trigger("mountConfigLoaded");
 				}
 			});
 		}
@@ -965,6 +970,7 @@ MountConfigListView.prototype = _.extend({
 					self.recheckStorageConfig($tr);
 				});
 				onCompletion.resolve();
+				$("#body-settings").trigger("mountConfigLoaded");
 			}
 		});
 	},
@@ -1001,7 +1007,7 @@ MountConfigListView.prototype = _.extend({
 			newElement = $('<input type="password" class="'+classes.join(' ')+'" data-parameter="'+parameter+'" placeholder="'+ trimmedPlaceholder+'" />');
 		} else if (placeholder.type === MountConfigListView.ParameterTypes.BOOLEAN) {
 			var checkboxId = _.uniqueId('checkbox_');
-			newElement = $('<input type="checkbox" id="'+checkboxId+'" class="'+classes.join(' ')+'" data-parameter="'+parameter+'" /><label for="'+checkboxId+'">'+ trimmedPlaceholder+'</label>');
+			newElement = $('<div><label><input type="checkbox" id="'+checkboxId+'" class="'+classes.join(' ')+'" data-parameter="'+parameter+'" />'+ trimmedPlaceholder+'</label></div>');
 		} else if (placeholder.type === MountConfigListView.ParameterTypes.HIDDEN) {
 			newElement = $('<input type="hidden" class="'+classes.join(' ')+'" data-parameter="'+parameter+'" />');
 		} else {
@@ -1263,11 +1269,19 @@ MountConfigListView.prototype = _.extend({
 		var storage = this.getStorageConfig($tr);
 		var $toggle = $tr.find('.mountOptionsToggle');
 		var dropDown = new MountOptionsDropdown();
-		var enabledOptions = ['previews', 'filesystem_check_changes', 'enable_sharing'];
+		var visibleOptions = [
+			'previews',
+			'filesystem_check_changes',
+			'encoding_compatibility'
+		];
 		if (this._encryptionEnabled) {
-			enabledOptions.push('encrypt');
+			visibleOptions.push('encrypt');
 		}
-		dropDown.show($toggle, storage.mountOptions || [], enabledOptions);
+		if (!this._isPersonal || this._allowUserMountSharing) {
+			visibleOptions.push('enable_sharing');
+		}
+
+		dropDown.show($toggle, storage.mountOptions || [], visibleOptions);
 		$('body').on('mouseup.mountOptionsDropdown', function(event) {
 			var $target = $(event.target);
 			if ($toggle.has($target).length) {
@@ -1297,7 +1311,8 @@ $(document).ready(function() {
 	var enabled = $('#files_external').attr('data-encryption-enabled');
 	var encryptionEnabled = (enabled ==='true')? true: false;
 	var mountConfigListView = new MountConfigListView($('#externalStorage'), {
-		encryptionEnabled: encryptionEnabled
+		encryptionEnabled: encryptionEnabled,
+		allowUserMountSharing: (parseInt($('#allowUserMountSharing').val(), 10) === 1)
 	});
 	mountConfigListView.loadStorages();
 
@@ -1315,6 +1330,13 @@ $(document).ready(function() {
 			$('#userMountingBackends').addClass('hidden');
 		}
 		OC.msg.finishedSaving('#userMountingMsg', {status: 'success', data: {message: t('files_external', 'Saved')}});
+	});
+
+	var $allowUserMountSharing = $('#allowUserMountSharing');
+	$allowUserMountSharing.bind('change', function() {
+		OC.msg.startSaving('#userMountSharingMsg');
+		OC.AppConfig.setValue('core', 'allow_user_mount_sharing', this.checked ? 'yes' : 'no');
+		OC.msg.finishedSaving('#userMountSharingMsg', {status: 'success', data: {message: t('files_external', 'Saved')}});
 	});
 
 	$('input[name="allowUserMountingBackends\\[\\]"]').bind('change', function() {
@@ -1339,6 +1361,34 @@ $(document).ready(function() {
 			$allowUserMounting.prop('checked', false);
 			$allowUserMounting.trigger('change');
 
+		}
+	});
+
+	$('#files_external input[name=enableExternalStorage]').on('change', function(event) {
+		var $target = $(event.target);
+		var checked = $target.is(':checked');
+
+		var saveSetting = function(checked) {
+			var value = checked ? 'yes' : 'no';
+			OC.AppConfig.setValue('core', 'enable_external_storage', value);
+			$('#files_external_settings').toggleClass('hidden', !checked);
+		};
+
+		if (checked === false) {
+			OC.dialogs.confirm(
+				t('files_external', 'Disabling external storage will unmount all storages for all users, are you sure ?'),
+				t('files_external', 'Disable external storage'),
+				function(confirmation) {
+					if (confirmation) {
+						saveSetting(false);
+					} else {
+						$target.prop('checked', true);
+					}
+				},
+				true
+			);
+		} else {
+			saveSetting(true);
 		}
 	});
 
@@ -1367,5 +1417,96 @@ OCA.External.Settings = OCA.External.Settings || {};
 OCA.External.Settings.GlobalStorageConfig = GlobalStorageConfig;
 OCA.External.Settings.UserStorageConfig = UserStorageConfig;
 OCA.External.Settings.MountConfigListView = MountConfigListView;
+
+/**
+ * @namespace OAuth2 namespace which is used to verify a storage adapter
+ *            using AuthMechanism as oauth2::oauth2
+ */
+OCA.External.Settings.OAuth2 = OCA.External.Settings.OAuth2 || {};
+
+/**
+ * This function sends a request to the given backendUrl and gets the OAuth2 URL
+ * for any given backend storage, executes the callback if any, set the data-* parameters
+ * of the storage and REDIRECTS the client to Authentication page
+ *
+ * @param  {String}   backendUrl The backend URL to which request will be sent
+ * @param  {Object}   data       Keys -> (backend_id, client_id, client_secret, redirect, tr)
+ */
+OCA.External.Settings.OAuth2.getAuthUrl = function (backendUrl, data) {
+	var $tr = data['tr'];
+	var configured = $tr.find('[data-parameter="configured"]');
+	var token = $tr.find('.configuration [data-parameter="token"]');
+
+	$.post(backendUrl, {
+			step: 1,
+			client_id: data['client_id'],
+			client_secret: data['client_secret'],
+			redirect: data['redirect'],
+		}, function (result) {
+			if (result && result.status == 'success') {
+				$(configured).val('false');
+				$(token).val('false');
+
+				OCA.External.Settings.mountConfig.saveStorageConfig($tr, function(status) {
+					if (!result.data.url) {
+						OC.dialogs.alert('Auth URL not set',
+							t('files_external', 'No URL provided by backend ' + data['backend_id'])
+						);
+					} else {
+						window.location = result.data.url;
+					}
+				});
+			} else {
+				OC.dialogs.alert(result.data.message,
+					t('files_external', 'Error getting OAuth2 URL for ' + data['backend_id'])
+				);
+			}
+		}
+	);
+}
+
+/**
+ * This function verifies the OAuth2 code returned to the client after verification
+ * by sending request to the backend with the given CODE and if the code is verified
+ * it sets the data-* params to configured and disables the authorize buttons
+ *
+ * @param  {String}   backendUrl The backend URL to which request will be sent
+ * @param  {Object}   data       Keys -> (backend_id, client_id, client_secret, redirect, tr, code)
+ * @return {Promise} jQuery Deferred Promise object
+ */
+OCA.External.Settings.OAuth2.verifyCode = function (backendUrl, data) {
+	var $tr = data['tr'];
+	var configured = $tr.find('[data-parameter="configured"]');
+	var token = $tr.find('.configuration [data-parameter="token"]');
+	var statusSpan = $tr.find('.status span');
+	statusSpan.removeClass().addClass('waiting');
+
+	var deferredObject = $.Deferred();
+	$.post(backendUrl, {
+			step: 2,
+			client_id: data['client_id'],
+			client_secret: data['client_secret'],
+			redirect: data['redirect'],
+			code: data['code'],
+		}, function (result) {
+			if (result && result.status == 'success') {
+				$(token).val(result.data.token);
+				$(configured).val('true');	
+				
+				OCA.External.Settings.mountConfig.saveStorageConfig($tr, function(status) {
+					if (status) {
+						$tr.find('.configuration input.auth-param')
+							.attr('disabled', 'disabled')
+							.addClass('disabled-success')
+					}
+					deferredObject.resolve(status);
+				});
+			} else {
+				deferredObject.reject(result.data.message);
+			}
+		}
+	);
+	return deferredObject.promise();
+}
 
 })();

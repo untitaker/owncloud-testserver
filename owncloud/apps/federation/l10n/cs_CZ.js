@@ -6,8 +6,11 @@ OC.L10N.register(
     "No ownCloud server found" : "Nenalezen žádný ownCloud server",
     "Could not add server" : "Nepodařilo se přidat server",
     "Federation" : "Sdružování",
+    "ownCloud Federation allows you to connect with other trusted ownClouds to exchange the user directory. For example this will be used to auto-complete external users for federated sharing." : "ownCloud Sdružování vám dovoluje přistupovat k seznamům uživatelů na jiných důvěryhodných ownCloudech. Využívá se například k automatickému dokončování při výběru uživatele pro sdílení v rámci sdružení.",
     "Add server automatically once a federated share was created successfully" : "Přidat server automaticky jakmile je úspěšně vytvořeno sdružené sdílení",
+    "Trusted ownCloud Servers" : "Důvěryhodné ownCloud servery",
+    "+ Add ownCloud server" : "+ Přidat ownCloud server",
     "ownCloud Server" : "ownCloud server",
-    "Trusted ownCloud Servers" : "Důvěryhodné ownCloud servery"
+    "Add" : "Přidat"
 },
 "nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;");

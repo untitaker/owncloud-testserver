@@ -1,14 +1,14 @@
 <?php
 /**
  * @author Bart Visscher <bartv@thisnet.nl>
- * @author Björn Schießle <schiessle@owncloud.com>
- * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Björn Schießle <bjoern@schiessle.org>
+ * @author Lukas Reschke <lukas@statuscode.ch>
  * @author Robin Appelman <icewind@owncloud.com>
  * @author Roeland Jago Douma <rullzer@owncloud.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ if (isset($_POST['dir'])) {
 $allFiles = false;
 if (isset($_POST['allfiles']) && (string)$_POST['allfiles'] === 'true') {
 	$allFiles = true;
-	$list = array();
+	$list = [];
 	$dirListing = true;
 	if ($dir === '' || $dir === '/') {
 		$dirListing = false;
@@ -52,8 +52,8 @@ if (isset($_POST['allfiles']) && (string)$_POST['allfiles'] === 'true') {
 	$list = json_decode($files);
 }
 
-$error = array();
-$success = array();
+$error = [];
+$success = [];
 
 $i = 0;
 foreach ($list as $file) {
@@ -71,7 +71,7 @@ foreach ($list as $file) {
 
 	if ( !OCA\Files_Trashbin\Trashbin::restore($path, $filename, $timestamp) ) {
 		$error[] = $filename;
-		\OCP\Util::writeLog('trashbin', 'can\'t restore ' . $filename, \OCP\Util::ERROR);
+		\OCP\Util::writeLog('trashbin', 'can\'t restore ' . $filename, \OCP\Util::DEBUG);
 	} else {
 		$success[$i]['filename'] = $file;
 		$success[$i]['timestamp'] = $timestamp;
@@ -86,9 +86,9 @@ if ( $error ) {
 		$filelist .= $e.', ';
 	}
 	$l = OC::$server->getL10N('files_trashbin');
-	$message = $l->t("Couldn't restore %s", array(rtrim($filelist, ', ')));
-	OCP\JSON::error(array("data" => array("message" => $message,
-										  "success" => $success, "error" => $error)));
+	$message = $l->t("Couldn't restore %s", [rtrim($filelist, ', ')]);
+	OCP\JSON::error(["data" => ["message" => $message,
+										  "success" => $success, "error" => $error]]);
 } else {
-	OCP\JSON::success(array("data" => array("success" => $success)));
+	OCP\JSON::success(["data" => ["success" => $success]]);
 }

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tagging Files &mdash; ownCloud 10.0.1 User Manual 10.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '10.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0.1 User Manual 10.0.1 documentation" href="../../contents.html" />
+    <link rel="up" title="Using the ownCloud Web Interface" href="index.html" />
+    <link rel="next" title="Storage Quota" href="quota.html" />
+    <link rel="prev" title="Comments" href="comments.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New in ownCloud 10.0.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external_storage/index.html">External Storage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Files &amp; Synchronization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../access_webdav.html">Accessing ownCloud Files Using WebDAV</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Using the ownCloud Web Interface</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="overview.html">WebUI Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="navigating.html">Navigating the WebUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sharing.html">Sharing Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="comments.html">Comments</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Tagging Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quota.html">Storage Quota</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_groups.html">Custom Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../public_link_shares.html">Public Link Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../desktop_mobile_sync.html">Desktop and Mobile Synchronization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../encrypting_files.html">Encrypting Your ownCloud Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gallery_app.html">Gallery App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deleted_file_management.html">Managing Deleted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_file_upload.html">Large File Uploads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../federated_cloud_sharing.html">Using Federation Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_control.html">Version Control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../session_management.html">Manage Connected Browsers and Devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../webinterface.html">The Web Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../userpreferences.html">Setting Your Preferences</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="comments.html" title="Previous Chapter: Comments"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Comments</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="quota.html" title="Next Chapter: Storage Quota"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Storage Quota &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="tagging-files">
+<h1>Tagging Files<a class="headerlink" href="#tagging-files" title="Permalink to this headline">¶</a></h1>
+<div class="figure">
+<img alt="Files popup menu." src="../../_images/file_popup-menu.png" />
+</div>
+<p>In ownCloud, you can assign one or more tags to files and folders. To do so, go
+to the &#8220;<strong>Details</strong>&#8221; view, inside <a class="reference internal" href="overview.html#the-overflow-menu-label"><span>The Overflow Menu</span></a>. There, you&#8217;ll see a text
+field, with the placeholder text &#8220;<strong>Collaborative tags</strong>&#8221; if no tags have yet
+been added, below the file&#8217;s icon, name, and other details.</p>
+<p>In that field, type the tag&#8217;s name.
+If you want to use multiple words, there is no need to use single or double-quotes.
+Type as many words as you want for the tag name.
+When you press the return key your tag will be saved.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All tags are system tags, so they are shared by all users on your ownCloud
+server.</p>
+</div>
+<div class="figure">
+<img alt="Creating file tags." src="../../_images/files_page-7.png" />
+</div>
+<p>When you place the cursor inside the tags field, and as you type the tag name,
+a list of the system tags will appear. If you type a new tag name, the visible
+tags list will be filtered, based on the text that you&#8217;ve typed.</p>
+<p>If you see a tag in the list which is what you had intended to type, or is
+a better fit than what you had in mind, click on it, and it will be added to the
+file or folder&#8217;s tag list. This can save you a lot of time and effort.</p>
+<div class="section" id="untag-a-file-or-folder">
+<h2>Untag a File or Folder<a class="headerlink" href="#untag-a-file-or-folder" title="Permalink to this headline">¶</a></h2>
+<p>If a file or folder is already tagged, the tag names in the popup list will have
+a check mark to the left of the tag&#8217;s name. To remove that tag from the file or
+folder, click the tag&#8217;s name. You will see that the check mark disappears.</p>
+</div>
+<div class="section" id="edit-tags">
+<h2>Edit Tags<a class="headerlink" href="#edit-tags" title="Permalink to this headline">¶</a></h2>
+<p>To edit a tag, click the pencil icon on the far right-hand side of the tag&#8217;s
+name, in the tags popup list. This will display a text box, containing the tag&#8217;s
+name. Be sure that you want to change the tag&#8217;s name, as it will be updated for
+all users.</p>
+</div>
+<div class="section" id="delete-tags">
+<h2>Delete Tags<a class="headerlink" href="#delete-tags" title="Permalink to this headline">¶</a></h2>
+<p>To delete a tag, as above, click the pencil icon on the far right-hand side of
+the tag&#8217;s name, in the tags popup list. Next to the text box containing the
+tag&#8217;s name, you will also see a delete icon.</p>
+<p>Click this to remove the tag from
+the system tag&#8217;s list. As with renaming a tag, remember that deleting a tag
+removes it for all users. So please be sure that you want to do this.</p>
+</div>
+<div class="section" id="filter-by-tag">
+<h2>Filter By Tag<a class="headerlink" href="#filter-by-tag" title="Permalink to this headline">¶</a></h2>
+<p>To filter by tag, use the <strong>Tags</strong> filter on the left sidebar of the Files
+page. There are three types of tags:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Tag</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Visible</td>
+<td>All users may see, rename, and apply these tags to files and folders</td>
+</tr>
+<tr class="row-odd"><td>Restricted</td>
+<td>Tags are assignable and editable only to the users and groups which
+have permission to use them. Other users can filter files by
+restricted tags, but cannot tag files with them or rename them.
+The tags are marked (restricted)</td>
+</tr>
+<tr class="row-even"><td>Invisible</td>
+<td>Visible only to ownCloud admins</td>
+</tr>
+</tbody>
+</table>
+<p>When you use the <strong>Tag</strong> filter on your Files page you&#8217;ll see something like the
+following image. If you do not have Admin rights then you will not see any
+invisible tags.</p>
+<div class="figure">
+<img alt="Viewing file tags." src="../../_images/files_page-8.png" />
+</div>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="comments.html" title="Previous Chapter: Comments"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Comments</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="quota.html" title="Next Chapter: Storage Quota"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Storage Quota &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

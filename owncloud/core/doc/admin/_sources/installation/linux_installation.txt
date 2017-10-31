@@ -1,47 +1,54 @@
-===================================
-Preferred Linux Installation Method
-===================================
+=============================
+Preferred Installation Method
+=============================
 
-Changes in 9.0
---------------
+For production environments, we recommend the installation from the tar archive. 
+This applies in particular to scenarios, where the Web server, storage and database are on separate machines. 
+In this constellation, all dependencies and requirements are managed by the package management 
+of your operating system, while the ownCloud code itself is maintained in a sequence of simple steps 
+as documented in our instructions for the :doc:`Manual Installation on Linux <source_installation>` and the :doc:`Manual ownCloud Upgrade <../maintenance/manual_upgrade>`.
+
+The package installation is for single-server setups only.
+
+Changes in the Linux Distribution Packages 9
+--------------------------------------------
 
 Linux distribution packages (from `Open Build Service`_) have been divided into 
-multiple packages for ownCloud 9: ``owncloud-deps`` and ``owncloud-files``. 
+multiple packages: ``owncloud``, ``owncloud-deps`` and ``owncloud-files``. 
 
-The ``owncloud-files`` package installs only ownCloud, with no Apache, database, 
-or PHP dependencies. 
+- **owncloud-files (recommended):** This package installs only ownCloud. It does not install *Apache*, *a database*, or any *PHP dependencies*. 
+- **owncloud:** This package installs ownCloud, complete with all dependencies.
+- **owncloud-deps:** This packages install only ownCloud's dependencies (*Apache*, *PHP*, and *MySQL*). It is not intended to be installed by itself, but rather is pulled in by the ``owncloud`` metapackage. 
 
-The ``owncloud-deps`` packages install all dependencies: Apache, PHP, and MySQL. 
-``owncloud-deps`` is not intended to be installed by itself, but rather is 
-pulled in by the metapackage ``owncloud``. 
+.. note:: The ``owncloud`` package is a meta-package that only installs ownCloud’s dependencies, such as Apache, and the required PHP modules. We don't recommend it, as it can be harmful, such as in environments where several applications are hosted simultaneously. As such we recommend using ``owncloud-files`` (which actually installs ownCloud) and further recommend administrators manage both the environment as well as `ownCloud's dependencies <https://doc.owncloud.org/server/10.0/admin_manual/installation/source_installation.html>`_.
 
-Install ``owncloud`` to get a complete installation with dependencies.
+.. note:: ``owncloud-files`` is available for the following distributions, but not ``owncloud-deps``.
 
-Split packages are available for the following Linux distributions:
-
-* CentOS 7                      
-* Debian 8 
-* RHEL 7 
-* SLES 12 
-* Ubuntu 14.04, 15.10
-* openSUSE 13.2, Leap 42.1
-
-``owncloud-files`` is available for the following distributions, but not 
-``owncoud-deps``. You will have to install your own LAMP stack first. This 
+You will have to install your own LAMP stack first. This 
 allows you to create your own custom LAMP stack without dependency conflicts 
 with the ownCloud package. Browse 
-`<http://download.owncloud.org/download/repositories/9.0/owncloud/>`_ to find 
+`<http://download.owncloud.org/download/repositories/9.1/owncloud/>`_ to find 
 the ``owncloud-files`` package for your distro:
 
-* CentOS 6
-* Debian 7
-* RHEL 6
-* Ubuntu 12.04, 14.10
+* Ubuntu 14.04, 16.04
+* Debian 7, 8
+* RHEL 6, 7
+* CentOS 6 SCL, 7
+* SLES 12, 12 SP1
+* openSUSE 13.2, Leap 42.1
 
-Repositories for Fedora, openSUSE Tumbleweed and Ubuntu 15.04 were dropped. If 
-you use Fedora, install ``owncloud-files`` over your own LAMP stack. openSUSE 
-users can rely on LEAP packages for Tumbleweed, and Ubuntu 15.04 users can use 
-the 15.10 packages.
+ownCloud packages with dependencies are available for the following Linux distributions:
+
+* Ubuntu 14.04 & 16.04
+* Debian 7 & 8
+* RHEL 6 & 7
+* CentOS 7.2 & 7.3
+* SLES 11SP4 & 12SP2
+* openSUSE Leap 42.2 & 42.3
+
+Repositories for Fedora, openSUSE Tumbleweed and Ubuntu 15.04 were dropped. 
+If you use Fedora, use the tar archive with your own LAMP stack. openSUSE 
+users can rely on LEAP packages for Tumbleweed.
 
 Follow the instructions on the download page to install ownCloud. Then run the 
 Installation Wizard to complete your installation. (see 
@@ -53,51 +60,30 @@ Installation Wizard to complete your installation. (see
 See the :doc:`system_requirements` for the recommended ownCloud setup and 
 supported platforms.
 
-Repos: Stable or Version?
--------------------------
+Repositories
+~~~~~~~~~~~~
 
-You may use either of the following repositories for ownCloud 9:
+You may use either of the following repositories for ownCloud, substituting ``<version>`` for the version of ownCloud that you want to install, or ``stable``:
 
-* `<https://download.owncloud.org/download/repositories/stable/owncloud/>`_
-* `<https://download.owncloud.org/download/repositories/9.0/owncloud/>`_
+* ``https://download.owncloud.org/download/repositories/<version>/owncloud/``
 
-When you use the Stable repo, you never have to change it as it always tracks 
-the current stable ownCloud version through all major releases: 8.2, 9.0, 
-and so on. (Major releases are indicated by the second number, so 8.0, 8.1, 
-8.2, and 9.0 were all major releases.)
+- If you use ``stable``, you never have to change it, as it always tracks the current stable ownCloud version through all major releases. Major releases are indicated by the second number, so 8.0, 8.1, 8.2, and 9.0 were all major releases.
+- If you wish to track a specific major release, such as 9.0 or 9.1, then substitute ``<version>`` with that instead. Doing so avoids you accidentally upgrading to the next major release before you're ready.
 
-If you wish to track a specific major release, such as 8.2 or 9.0, then use 
-that repo. That way you won't accidentally find yourself looking at an upgrade 
-to the next major release before you're ready.
+Installing ownCloud Enterprise Edition
+--------------------------------------
 
-Installing ownCloud Enterprise Subscription
--------------------------------------------
+See :doc:`../enterprise/installation/install` for instructions on 
+installing ownCloud Enterprise edition.
 
-See :doc:`../enterprise_installation/linux_installation` for instructions on 
-installing ownCloud Enterprise Subscription.
-
-Downgrading Not Supported
--------------------------
+Downgrading
+-----------
 
 Downgrading is not supported and risks corrupting your data! If you want to 
 revert to an older ownCloud version, install it from scratch and then restore 
 your data from backup. Before doing this, file a support ticket (if you have 
 paid support) or ask for help in the ownCloud forums to see if your issue can be 
 resolved without downgrading.
-
-BINLOG_FORMAT = STATEMENT
--------------------------
-
-If your ownCloud installation fails and you see this in your ownCloud log::
-
- An unhandled exception has been thrown: exception ‘PDOException’ with message 
- 'SQLSTATE[HY000]: General error: 1665 Cannot execute statement: impossible to 
- write to binary log since BINLOG_FORMAT = STATEMENT and at least one table 
- uses a storage engine limited to row-based logging. InnoDB is limited to 
- row-logging when transaction isolation level is READ COMMITTED or READ 
- UNCOMMITTED.'
-
-See :ref:`db-binlog-label`.
 
 Additional Installation Guides and Notes
 ----------------------------------------
@@ -134,5 +120,5 @@ on how to correctly configure your environment if you have binary logging enable
 
 
 .. _Open Build Service: 
-   https://download.owncloud.org/download/repositories/9.0/owncloud/
+   https://download.owncloud.org/download/repositories/10.0/owncloud/
    

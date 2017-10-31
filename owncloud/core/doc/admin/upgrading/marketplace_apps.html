@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Upgrade Marketplace Applications &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../contents.html" />
+    <link rel="up" title="Upgrading" href="index.html" />
+    <link rel="next" title="Configuration" href="../configuration/index.html" />
+    <link rel="prev" title="Upgrade PHP on RedHat 7 and Centos 7" href="upgrade_php.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Upgrading</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="upgrade_php.html">Upgrade PHP on RedHat 7 and Centos 7</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Upgrade Marketplace Applications</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#single-server-environment">Single-Server Environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#clustered-multi-server-environment">Clustered/Multi-Server Environment</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appliance/index.html">The ownCloud X Appliance</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="upgrade_php.html" title="Previous Chapter: Upgrade PHP on RedHat 7 and Centos 7"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Upgrade PHP o...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../configuration/index.html" title="Next Chapter: Configuration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Configuration &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="upgrade-marketplace-applications">
+<h1>Upgrade Marketplace Applications<a class="headerlink" href="#upgrade-marketplace-applications" title="Permalink to this headline">¶</a></h1>
+<p>To upgrade Marketplace applications, please refer to the documentation below, as applicable for your ownCloud setup.</p>
+<div class="section" id="single-server-environment">
+<h2>Single-Server Environment<a class="headerlink" href="#single-server-environment" title="Permalink to this headline">¶</a></h2>
+<p>To upgrade Marketplace applications when running ownCloud in a single server environment, you can use use the <a class="reference internal" href="../configuration/server/occ_command.html#apps-commands-label"><span>Market app</span></a>, specifically by running <code class="docutils literal"><span class="pre">market:upgrade</span></code>.
+This will install new versions of your installed apps if updates are available in the marketplace.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The user running the update command, which will likely be your webserver user, needs write permission for the <code class="docutils literal"><span class="pre">/apps</span></code> folder.
+If they don’t have write permission, the command may report that the update was successful, however it may silently fail.</p>
+</div>
+</div>
+<div class="section" id="clustered-multi-server-environment">
+<h2>Clustered/Multi-Server Environment<a class="headerlink" href="#clustered-multi-server-environment" title="Permalink to this headline">¶</a></h2>
+<p>The <span class="xref std std-ref">Market app</span>, both the UI and command line, are not, <em>currently</em>, designed to operate on clustered installations.
+Given that, you will have to update the applications on each server in the cluster individually.
+There are several ways to do this.
+But here is a concise approach:</p>
+<ol class="arabic simple">
+<li>Download the latest server release (whether <a class="reference external" href="https://download.owncloud.org/community/owncloud-10.0.2.tar.bz2">the tarball</a> or <a class="reference external" href="https://download.owncloud.org/community/owncloud-10.0.2.zip">the zip archive</a>).</li>
+<li>Download your installed apps from <cite>the ownCloud marketplace</cite>.</li>
+<li>Combine them together into one installation source, such as <em>a Docker or VM image</em>, or <em>an Ansible script</em>, etc.</li>
+<li>Apply the combined upgrade across all the cluster nodes in your ownCloud setup.</li>
+</ol>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="upgrade_php.html" title="Previous Chapter: Upgrade PHP on RedHat 7 and Centos 7"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Upgrade PHP o...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../configuration/index.html" title="Next Chapter: Configuration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Configuration &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

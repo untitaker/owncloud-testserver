@@ -1,10 +1,13 @@
 <?php
 /**
- * @author Joas Schilling <nickvergessen@owncloud.com>
- * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Christoph Wurst <christoph@owncloud.com>
+ * @author Claudemir Todo Bom <claudemir@todobom.com>
+ * @author Joas Schilling <coding@schilljs.com>
+ * @author Lukas Reschke <lukas@statuscode.ch>
+ * @author Thomas Citharel <tcit@tcit.fr>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -34,6 +37,7 @@ $authBackend = new Auth(
 	\OC::$server->getSession(),
 	\OC::$server->getUserSession(),
 	\OC::$server->getRequest(),
+	\OC::$server->getTwoFactorAuthManager(),
 	'principals/'
 );
 $principalBackend = new Principal(
@@ -42,19 +46,23 @@ $principalBackend = new Principal(
 	'principals/'
 );
 $db = \OC::$server->getDatabaseConnection();
-$calDavBackend = new CalDavBackend($db, $principalBackend);
+$config = \OC::$server->getConfig();
+$random = \OC::$server->getSecureRandom();
+$calDavBackend = new CalDavBackend($db, $principalBackend, $config, $random, true);
+
+$debugging = \OC::$server->getConfig()->getSystemValue('debug', false);
 
 // Root nodes
 $principalCollection = new \Sabre\CalDAV\Principal\Collection($principalBackend);
-$principalCollection->disableListing = true; // Disable listing
+$principalCollection->disableListing = !$debugging; // Disable listing
 
 $addressBookRoot = new CalendarRoot($principalBackend, $calDavBackend);
-$addressBookRoot->disableListing = true; // Disable listing
+$addressBookRoot->disableListing = !$debugging; // Disable listing
 
-$nodes = array(
+$nodes = [
 	$principalCollection,
 	$addressBookRoot,
-);
+];
 
 // Fire up server
 $server = new \Sabre\DAV\Server($nodes);
@@ -66,10 +74,15 @@ $server->addPlugin(new MaintenancePlugin());
 $server->addPlugin(new \Sabre\DAV\Auth\Plugin($authBackend, 'ownCloud'));
 $server->addPlugin(new \Sabre\CalDAV\Plugin());
 
-$acl = new LegacyDAVACL();
-$server->addPlugin($acl);
+$server->addPlugin(new LegacyDAVACL());
+if ($debugging) {
+	$server->addPlugin(new Sabre\DAV\Browser\Plugin());
+}
 
+$server->addPlugin(new \Sabre\DAV\Sync\Plugin());
 $server->addPlugin(new \Sabre\CalDAV\ICSExportPlugin());
+$server->addPlugin(new \OCA\DAV\CalDAV\Schedule\Plugin());
+$server->addPlugin(new OCA\DAV\CalDAV\Schedule\IMipPlugin( \OC::$server->getMailer(), \OC::$server->getLogger()));
 $server->addPlugin(new ExceptionLoggerPlugin('caldav', \OC::$server->getLogger()));
 
 // And off we go!

@@ -9,12 +9,15 @@ OC.L10N.register(
     "Port" : "Port",
     "Region" : "Regioun",
     "URL" : "URL",
-    "Host" : "Host",
     "Location" : "Uert",
     "ownCloud" : "ownCloud",
+    "Host" : "Host",
     "Share" : "Deelen",
     "Name" : "Numm",
+    "Enable encryption" : "Verschlësselung aschalten",
+    "External Storage" : "Externt Lager",
     "Folder name" : "Dossiers Numm:",
+    "Advanced settings" : "Erweidert Astellungen",
     "Delete" : "Läschen"
 },
 "nplurals=2; plural=(n != 1);");

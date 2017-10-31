@@ -21,7 +21,6 @@
 
 namespace Owncloud\Updater\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,6 +31,11 @@ use Owncloud\Updater\Utils\Fetcher;
 use Owncloud\Updater\Utils\ConfigReader;
 use \Owncloud\Updater\Controller\DownloadController;
 
+/**
+ * Class DetectCommand
+ *
+ * @package Owncloud\Updater\Command
+ */
 class DetectCommand extends Command {
 
 	/**
@@ -79,6 +83,11 @@ class DetectCommand extends Command {
 		;
 	}
 
+	/**
+	 * @param InputInterface $input
+	 * @param OutputInterface $output
+	 * @return int
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output){
 		$registry = $this->container['utils.registry'];
 		$registry->set('feed', false);
@@ -104,6 +113,7 @@ class DetectCommand extends Command {
 				return $input->getOption('exit-if-none') ? 4 : null;
 			}
 
+			/** @var \Owncloud\Updater\Utils\Feed $feed */
 			$feed = $feedData['data']['feed'];
 			if (!$feed->isValid()){
 				// Feed is empty. Means there are no updates
@@ -121,7 +131,7 @@ class DetectCommand extends Command {
 			);
 
 			if ($input->getOption('only-check')){
-				return;
+				return 0;
 			}
 
 			$action = $this->ask($input, $output);
@@ -143,7 +153,7 @@ class DetectCommand extends Command {
 				$output->writeln('Downloading has been completed. Exiting.');
 				return 64;
 			}
-		} catch (\GuzzleHttp\Exception\ClientException $e){
+		} catch (ClientException $e){
 			$this->getApplication()->getLogger()->error($e->getMessage());
 			$output->writeln('<error>Network error</error>');
 			$output->writeln(
@@ -160,6 +170,8 @@ class DetectCommand extends Command {
 			$output->writeln('<error>'.$e->getMessage().'</error>');
 			return 2;
 		}
+
+		return 0;
 	}
 
 	/**

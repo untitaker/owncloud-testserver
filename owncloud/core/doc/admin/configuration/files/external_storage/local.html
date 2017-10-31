@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Local &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../../../contents.html" />
+    <link rel="up" title="Configuring External Storage (GUI)" href="../external_storage_configuration_gui.html" />
+    <link rel="next" title="OpenStack Object Storage" href="openstack.html" />
+    <link rel="prev" title="Google Drive" href="google.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../../../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../../../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../performance/index.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../upgrading/index.html">Upgrading</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Configuration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../database/index.html">Database Configuration</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">File Sharing and Management</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../file_sharing_configuration.html">File Sharing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../federated_cloud_sharing_configuration.html">Configuring Federation Sharing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../big_file_upload_configuration.html">Uploading big files &gt; 512MB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../default_files_configuration.html">Providing Default Files</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../external_storage_configuration_gui.html">Configuring External Storage (GUI)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../external_storage_configuration.html">Configuring External Storage (Configuration File)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="auth_mechanisms.html">External Storage Authentication mechanisms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../encryption_configuration.html">Encryption Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../files_locking_transactional.html">Transactional File Locking</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../previews_configuration.html">Previews Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../file_versioning.html">Controlling File Versions and Aging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../trashbin_options.html">Managing the Trashbin</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../ldap/ldap_proxy_cache_server_setup.html">How To Install and Configure an LDAP Proxy-Cache Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mimetypes/index.html">Mimetypes Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../server/index.html">Server Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user/index.html">User Management</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../appliance/index.html">The ownCloud X Appliance</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="google.html" title="Previous Chapter: Google Drive"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Google Drive</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="openstack.html" title="Next Chapter: OpenStack Object Storage"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">OpenStack Obj... &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="local">
+<h1>Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h1>
+<p>Local storage provides the ability to mount any directory on your ownCloud server that is:</p>
+<ul class="simple">
+<li>Outside of your ownCloud <code class="docutils literal"><span class="pre">data/</span></code> directory</li>
+<li>Both readable and writable by your HTTP server user</li>
+</ul>
+<p>Since this is a significant security risk, Local storage is only configurable via the ownCloud admin settings.
+Non-admin users cannot create Local storage mounts.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See <a class="reference internal" href="../../../installation/source_installation.html#strong-perms-label"><span>Set Strong Directory Permissions</span></a> for information on correct file permissions, and find your HTTP user <a class="reference internal" href="../../../issues/general_troubleshooting.html#label-phpinfo"><span>PHP Version and Information</span></a>.</p>
+</div>
+<p>To manage Local storage, navigate to <code class="docutils literal"><span class="pre">admin</span></code>, and then to <code class="docutils literal"><span class="pre">Storage</span></code>.
+You can see an example in the screenshot below.</p>
+<div class="figure">
+<img alt="../../../_images/local.png" src="../../../_images/local.png" />
+</div>
+<p>In the <strong>Folder name</strong> field enter the folder name that you want to appear on your ownCloud Files page.
+In the <strong>Configuration</strong> field enter the full file path of the directory you want to mount.
+In the <strong>Available for</strong> field enter the users or groups who have permission to access the mount;  by default all users have access.</p>
+<p>In addition to these steps, you have to ensure that Local storage is enabled in your ownCloud installation’s <code class="docutils literal"><span class="pre">config/config.php</span></code> file.
+It should have the following configuration:</p>
+<div class="highlight-php"><div class="highlight"><pre><span class="x">&#39;files_external_allow_create_new_local&#39; =&gt; &#39;true&#39;,</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See <a class="reference internal" href="../external_storage_configuration_gui.html"><em>Configuring External Storage (GUI)</em></a> for additional mount options and information, and <a class="reference internal" href="auth_mechanisms.html"><em>External Storage Authentication mechanisms</em></a> for more information on authentication schemes.</p>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="google.html" title="Previous Chapter: Google Drive"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Google Drive</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="openstack.html" title="Next Chapter: OpenStack Object Storage"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">OpenStack Obj... &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

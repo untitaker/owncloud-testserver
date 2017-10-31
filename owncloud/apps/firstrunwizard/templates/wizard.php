@@ -4,7 +4,7 @@
 	<img class="svg" src="<?php print_unescaped(OCP\Util::imagePath('core', 'actions/close.svg')); ?>">
 </a>
 <h1><?php p($l->t('A safe home for all your data')); ?></h1>
-<?php if ($_['edition'] === ''): ?>
+<?php if ($_['edition'] === \OC_Util::EDITION_COMMUNITY): ?>
 <p><?php p($l->t('Access & share your files, calendars, contacts, mail & more from any device, on your terms'));?></p>
 <?php else: ?>
 <p><?php p($theme->getSlogan()); ?></p>
@@ -24,7 +24,7 @@
 		alt="<?php p($l->t('iOS app'));?>" style="height:60px"/>
 </a>
 
-<?php if ($_['edition'] === ''): ?>
+<?php if ($_['edition'] === \OC_Util::EDITION_COMMUNITY): ?>
 <h2><?php p($l->t('Connect your desktop apps to %s', array($theme->getName()))); ?></h2>
 <a target="_blank" class="button" href="<?php p(link_to_docs('user-sync-calendars')) ?>">
 	<img class="appsmall appsmall-calendar svg" alt=""
@@ -59,7 +59,7 @@
 	and <a href="http://owncloud.org/promote"
 		target="_blank">spread the word</a>!')); ?>
 <?php else: ?>
-© 2011-<?php p(date('Y')) ?> <a href="https://owncloud.com" target="_blank">ownCloud Inc.</a>
+© <?php p(date('Y')) ?> <a href="<?php p($theme->getBaseUrl()); ?>" target="_blank"><?php p($theme->getEntity()); ?></a>
 <?php endif; ?>
 </p>
 

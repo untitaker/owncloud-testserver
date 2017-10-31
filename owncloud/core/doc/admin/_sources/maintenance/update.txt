@@ -8,10 +8,14 @@ such as shared hosting, for installations with a smaller number of users
 and data, and it automates updating 
 :doc:`manual installations <../installation/source_installation>`.
 
+.. warning:: When upgrading from oC 9.0 to 9.1 with existing Calendars or Adressbooks
+   please have a look at the :doc:`../release_notes` of oC 9.0 for important info
+   about this migration.
+
 New in 9.0, the Updater app has :ref:`command-line options <updater_cli_label>`.
 
 .. note:: The Updater app is **not enabled and not supported** in ownCloud 
-   Enterprise Subscription. 
+   Enterprise edition. 
    
    The Updater app is **not included** in the 
    `Linux packages on our Open Build Service 
@@ -84,17 +88,9 @@ steps:
 This example is for Ubuntu Linux::
 
      $ sudo -u www-data php occ upgrade
- 
-Before completing the upgrade, ownCloud first runs a simulation by copying all 
-database tables to new tables, and then performs the upgrade on them, to ensure 
-that the upgrade will complete correctly. The copied tables are deleted after 
-the upgrade. This takes twice as much time, which on large installations can be 
-many hours, so you can omit this step with the ``--skip-migration-test`` 
-option, like this example on Ubuntu::
 
- $ sudo -u www-data php occ upgrade --skip-migration-test 
-
-See :doc:`../configuration_server/occ_command` to learn more.
+The optional parameter to skip migration tests during this step was removed in oC 9.2.
+See :ref:`migration_test_label` for more information.
 
 8.  It runs for a few minutes, and when it is finished displays a success 
     message, which disappears after a short time.
@@ -113,16 +109,13 @@ upgrading <manual_upgrade>`.)
 Setting Permissions for Updating
 --------------------------------
    
-For hardened security we  highly recommend setting the permissions on your 
-ownCloud directory as strictly as possible. These commands should be executed 
-immediately after the initial installation. Please follow the steps in 
-:ref:`strong_perms_label`.
-    
-These strict permissions will prevent the Updater app from working, as it needs 
-your whole ownCloud directory to be owned by the HTTP user. Run this script to 
-set the appropriate permissions for updating. Replace the ``ocpath`` variable 
-with the path to your ownCloud directory, and replace the ``htuser`` and 
-``htgroup`` variables with your HTTP user and group.::
+For hardened security, we highly recommend setting the permissions on your ownCloud directory as strictly as possible, immediately after the initial installation.    
+However, these strict permissions will prevent the Updater app from working, as it needs your whole ownCloud directory to be owned by the HTTP user. 
+
+So to set the appropriate permissions for updating, run the code below. 
+Replace the ``ocpath`` variable with the path to your ownCloud directory, and replace the ``htuser`` and ``htgroup`` variables with your HTTP user and group.
+
+::
 
     #!/bin/bash
     # Sets permissions of the owncloud instance for updating
@@ -133,16 +126,15 @@ with the path to your ownCloud directory, and replace the ``htuser`` and
     
     chown -R ${htuser}:${htgroup} ${ocpath}
 
-You can find your HTTP user in your HTTP server configuration files. Or you can 
-use :ref:`label-phpinfo` (Look for the **User/Group** line).
+You can find your HTTP user in your HTTP server configuration files. 
+Or you can use :ref:`label-phpinfo` (Look for the **User/Group** line).
 
 * The HTTP user and group in Debian/Ubuntu is ``www-data``.
 * The HTTP user and group in Fedora/CentOS is ``apache``.
 * The HTTP user and group in Arch Linux is ``http``.
 * The HTTP user in openSUSE is ``wwwrun``, and the HTTP group is ``www``.
 
-After the update is completed, re-apply the strong directory permissions 
-immediately by running the script in :ref:`strong_perms_label`.
+After the update is completed, re-apply :ref:`the strong directory permissions <post_installation_steps_label>` immediately.
 
 .. _updater_cli_label:
 
@@ -194,3 +186,19 @@ checkpoints::
  2 15 * * * sudo -u www-data php /path/to/owncloud/updater/application.php 
  upgrade:checkpoint --create > /dev/null 2>&1
  
+ 
+updater.secret value in config.php
+----------------------------------
+When running the updater, you will be prompted to add a hashed secret into your
+config.php file. On the updater web interface, you then need to enter the unhashed
+secret into the web form.
+
+In case you forgot your password/secret, you can re-create it by changing config.php. You can run this on your shell::
+
+  php -r 'echo password_hash("Enter a random password here", PASSWORD_DEFAULT)."\n";'
+  
+Please replace ``Enter a random password here`` with your own. Then add this into your config.php::
+
+  'updater.secret' => 'The value you got from the above hash command',
+
+

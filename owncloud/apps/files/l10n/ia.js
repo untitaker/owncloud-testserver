@@ -2,15 +2,17 @@ OC.L10N.register(
     "files",
     {
     "Unknown error" : "Error Incognite",
-    "The uploaded file was only partially uploaded" : "Le file incargate solmente esseva incargate partialmente",
-    "No file was uploaded" : "Nulle file esseva incargate.",
-    "Missing a temporary folder" : "Manca un dossier temporari",
-    "Files" : "Files",
+    "Saved" : "Salveguardate",
     "Home" : "Domo",
     "Close" : "Clauder",
+    "Uploading..." : "Incargante...",
+    "..." : "...",
     "Download" : "Discargar",
+    "Rename" : "Renominar",
     "Delete" : "Deler",
     "Unshare" : "Leva compartir",
+    "Files" : "Files",
+    "Details" : "Detalios",
     "Name" : "Nomine",
     "Size" : "Dimension",
     "Modified" : "Modificate",
@@ -37,10 +39,6 @@ OC.L10N.register(
     "Save" : "Salveguardar",
     "Settings" : "Configurationes",
     "Upload too large" : "Incargamento troppo longe",
-    "Text file" : "File de texto",
-    "You changed %1$s" : "Tu modificava %1$s",
-    "You created %1$s" : "Tu creava %1$s",
-    "You deleted %1$s" : "Tu  deleva %1$s",
-    "You restored %1$s" : "Tu restabiliva %1$s"
+    "Text file" : "File de texto"
 },
 "nplurals=2; plural=(n != 1);");

@@ -9,6 +9,7 @@ OC.L10N.register(
     "Shared with you" : "Zurekin elkarbanatuta",
     "Shared with others" : "Beste batzuekin elkarbanatuta",
     "Shared by link" : "Lotura bidez elkarbanatuta",
+    "Uploading..." : "Igotzen...",
     "Nothing shared with you yet" : "Oraindik ez da ezer partekatu zurekin",
     "Files and folders others share with you will show up here" : "Zurekin partekatutako fitxategi eta karpetak hemen agertuko dira",
     "Nothing shared yet" : "Oraindik ez da ezer partekatu",
@@ -22,6 +23,7 @@ OC.L10N.register(
     "Add remote share" : "Gehitu urrutiko parte hartzea",
     "No ownCloud installation (7 or higher) found at {remote}" : "Ez da ownClouden instalaziorik (7 edo haundiago) aurkitu {remote}n",
     "Invalid ownCloud url" : "ownCloud url baliogabea",
+    "Share" : "Partekatu",
     "Shared by" : "Honek elkarbanatuta",
     "Sharing" : "Partekatzea",
     "A file or folder has been <strong>shared</strong>" : "Fitxategia edo karpeta <strong>konpartitu</strong> da",
@@ -40,6 +42,7 @@ OC.L10N.register(
     "No entries found in this folder" : "Karpeta honetan ez da sarreraik aurkitu",
     "Name" : "Izena",
     "Share time" : "Elkarbanatze unea",
+    "Expiration date" : "Muga data",
     "Sorry, this link doesn’t seem to work anymore." : "Barkatu, lotura ez dirudi eskuragarria dagoenik.",
     "Reasons might be:" : "Arrazoiak hurrengoak litezke:",
     "the item was removed" : "fitxategia ezbatua izan da",
@@ -49,11 +52,6 @@ OC.L10N.register(
     "Add to your ownCloud" : "Gehitu zure ownCloud-era",
     "Download" : "Deskargatu",
     "Download %s" : "Deskargatu %s",
-    "Direct link" : "Lotura zuzena",
-    "Federated Cloud Sharing" : "Federatutako Hodei Partekatzea",
-    "Allow users on this server to send shares to other servers" : "Baimendu zerbitzari honetako erabiltzaileak beste zerbitzariekin partekatzera",
-    "Allow users on this server to receive shares from other servers" : "Baimendu zerbitzari honetako erabiltzaileak beste zerbitzarietatik partekatutakoak jasotzen",
-    "Public shared file %1$s was downloaded" : "Publikoki partekatutako %1$s fitxategia deskargatu da",
-    "Public shared folder %1$s was downloaded" : "Publikoki partekatutako %1$s karpeta deskargatu da"
+    "Direct link" : "Lotura zuzena"
 },
 "nplurals=2; plural=(n != 1);");

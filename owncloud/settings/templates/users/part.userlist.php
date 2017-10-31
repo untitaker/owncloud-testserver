@@ -12,6 +12,7 @@
 		<?php if(is_array($_['subadmins']) || $_['subadmins']): ?>
 			<th id="headerSubAdmins" scope="col"><?php p($l->t('Group Admin for')); ?></th>
 		<?php endif;?>
+			<th class="enabled" scope="col"><?php p($l->t('Enabled')); ?></th>
 			<th id="headerQuota" scope="col"><?php p($l->t('Quota')); ?></th>
 			<th class="storageLocation" scope="col"><?php p($l->t('Storage Location')); ?></th>
 			<th class="userBackend" scope="col"><?php p($l->t('User Backend')); ?></th>
@@ -26,22 +27,29 @@
 			<td class="avatar"><div class="avatardiv"></div></td>
 		<?php endif; ?>
 			<th class="name" scope="row"></th>
-			<td class="displayName"><span></span> <img class="svg action"
+			<td class="displayName"><span></span> <img class="action"
 				src="<?php p(image_path('core', 'actions/rename.svg'))?>"
 				alt="<?php p($l->t("change full name"))?>" title="<?php p($l->t("change full name"))?>"/>
 			</td>
-			<td class="password"><span>●●●●●●●</span> <img class="svg action"
+			<td class="password"><span>●●●●●●●</span> <img class="action"
 				src="<?php print_unescaped(image_path('core', 'actions/rename.svg'))?>"
 				alt="<?php p($l->t("set new password"))?>" title="<?php p($l->t("set new password"))?>"/>
 			</td>
-			<td class="mailAddress"><span></span> <img class="svg action"
+			<td class="mailAddress"><span></span><div class="loading-small hidden"></div> <img class="action"
 				src="<?php p(image_path('core', 'actions/rename.svg'))?>"
 				alt="<?php p($l->t('change email address'))?>" title="<?php p($l->t('change email address'))?>"/>
 			</td>
-			<td class="groups"></td>
+			<td class="groups"><div class="groupsListContainer multiselect button"
+				><span class="title groupsList"></span><span class="icon-triangle-s"></span></div>
+			</td>
 		<?php if(is_array($_['subadmins']) || $_['subadmins']): ?>
-			<td class="subadmins"></td>
+			<td class="subadmins"><div class="groupsListContainer multiselect button"
+				><span class="title groupsList"></span><span class="icon-triangle-s"></span></div>
+			</td>
 		<?php endif;?>
+			<td class="enabled">
+				<input type="checkbox" class="isEnabled" checked="checked">
+			</td>
 			<td class="quota">
 				<select class="quota-user" data-inputtitle="<?php p($l->t('Please enter storage quota (ex: "512 MB" or "12 GB")')) ?>">
 					<option	value='default'>

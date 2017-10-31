@@ -218,6 +218,13 @@ var OCdialogs = {
 					self.$filePicker = null;
 				}
 			});
+
+			// We can access primary class only from oc-dialog.
+			// Hence this is one of the approach to get the choose button.
+			var getOcDialog = self.$filePicker.closest('.oc-dialog');
+			var buttonEnableDisable = getOcDialog.find('.primary');
+			buttonEnableDisable.prop("disabled", "true");
+
 			if (!OC.Util.hasSVGSupport()) {
 				OC.Util.replaceSVG(self.$filePicker.parent());
 			}
@@ -235,7 +242,7 @@ var OCdialogs = {
 	 * Displays raw dialog
 	 * You better use a wrapper instead ...
 	*/
-	message:function(content, title, dialogType, buttons, callback, modal) {
+	message:function(content, title, dialogType, buttons, callback, modal, cssClass) {
 		return $.when(this._getMessageTemplate()).then(function($tmpl) {
 			var dialogName = 'oc-dialog-' + OCdialogs.dialogsCounter + '-content';
 			var dialogId = '#' + dialogName;
@@ -245,46 +252,52 @@ var OCdialogs = {
 				message: content,
 				type: dialogType
 			});
+
 			if (modal === undefined) {
 				modal = false;
 			}
+
 			$('body').append($dlg);
 			var buttonlist = [];
-			switch (buttons) {
-			case OCdialogs.YES_NO_BUTTONS:
-				buttonlist = [{
-					text: t('core', 'No'),
-					click: function(){
-						if (callback !== undefined) {
-							callback(false);
+			if (_.isArray(buttons)) {
+				buttonlist = buttons;
+			} else {
+				switch (buttons) {
+				case OCdialogs.YES_NO_BUTTONS:
+					buttonlist = [{
+						text: t('core', 'No'),
+						click: function(){
+							if (callback !== undefined) {
+								callback(false);
+							}
+							$(dialogId).ocdialog('close');
 						}
-						$(dialogId).ocdialog('close');
-					}
-				},
-				{
-					text: t('core', 'Yes'),
-					click: function(){
-						if (callback !== undefined) {
-							callback(true);
-						}
-						$(dialogId).ocdialog('close');
 					},
-					defaultButton: true
-				}];
-				break;
-			case OCdialogs.OK_BUTTON:
-				var functionToCall = function() {
-					$(dialogId).ocdialog('close');
-					if(callback !== undefined) {
-						callback();
-					}
-				};
-				buttonlist[0] = {
-					text: t('core', 'Ok'),
-					click: functionToCall,
-					defaultButton: true
-				};
-				break;
+					{
+						text: t('core', 'Yes'),
+						click: function(){
+							if (callback !== undefined) {
+								callback(true);
+							}
+							$(dialogId).ocdialog('close');
+						},
+						defaultButton: true
+					}];
+					break;
+				case OCdialogs.OK_BUTTON:
+					var functionToCall = function() {
+						$(dialogId).ocdialog('close');
+						if(callback !== undefined) {
+							callback();
+						}
+					};
+					buttonlist[0] = {
+						text: t('core', 'Ok'),
+						click: functionToCall,
+						defaultButton: true
+					};
+					break;
+				}
 			}
 
 			$(dialogId).ocdialog({
@@ -292,6 +305,11 @@ var OCdialogs = {
 				modal: modal,
 				buttons: buttonlist
 			});
+
+			if (cssClass != undefined) {
+				$(dialogId).addClass(cssClass);
+			}
+
 			OCdialogs.dialogsCounter++;
 		})
 		.fail(function(status, error) {
@@ -812,18 +830,33 @@ var OCdialogs = {
 		var self = event.data;
 		var dir = $(event.target).data('dir');
 		self._fillFilePicker(dir);
+		var getOcDialog = this.closest('.oc-dialog');
+		var buttonEnableDisable = $('.primary', getOcDialog);
+		if (this.$filePicker.data('mimetype') === "http/unix-directory") {
+			buttonEnableDisable.prop("disabled", false);
+		} else {
+			buttonEnableDisable.prop("disabled", true);
+		}
 	},
 	/**
 	 * handle clicks made in the filepicker
 	*/
 	_handlePickerClick:function(event, $element) {
+		var getOcDialog = this.$filePicker.closest('.oc-dialog');
+		var buttonEnableDisable = getOcDialog.find('.primary');
 		if ($element.data('type') === 'file') {
 			if (this.$filePicker.data('multiselect') !== true || !event.ctrlKey) {
 				this.$filelist.find('.filepicker_element_selected').removeClass('filepicker_element_selected');
 			}
 			$element.toggleClass('filepicker_element_selected');
+			buttonEnableDisable.prop("disabled", false);
 		} else if ( $element.data('type') === 'dir' ) {
 			this._fillFilePicker(this.$filePicker.data('path') + '/' + $element.data('entryname'));
+			if (this.$filePicker.data('mimetype') === "httpd/unix-directory") {
+				buttonEnableDisable.prop("disabled", false);
+			} else {
+				buttonEnableDisable.prop("disabled", true);
+			}
 		}
 	}
 };

@@ -20,8 +20,6 @@
  *
  */
 
-namespace OCA\Notifications\AppInfo;
-
 use OCA\Notifications\App;
 use OCA\Notifications\Handler;
 use OCP\Util;
@@ -34,12 +32,24 @@ use OCP\Util;
 		)
 	);
 });
+\OC::$server->getNotificationManager()->registerNotifier(
+	function() {
+		return new \OCA\Notifications\Notifier();
+	}, function () {
+	$l = \OC::$server->getL10N('notifications');
+	return [
+		'id' => 'notifications',
+		'name' => $l->t('Admin notifications'),
+	];
+
+});
 
 // Only display the app on index.php except for public shares
 $request = \OC::$server->getRequest();
-if (\OC::$server->getUserSession()->getUser() !== null
+if (\OC::$server->getUserSession() !== null && \OC::$server->getUserSession()->getUser() !== null
 	&& substr($request->getScriptName(), 0 - strlen('/index.php')) === '/index.php'
-	&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/') {
+	&& substr($request->getPathInfo(), 0, strlen('/s/')) !== '/s/'
+	&& substr($request->getPathInfo(), 0, strlen('/login/')) !== '/login/') {
 	Util::addScript('notifications', 'app');
 	Util::addScript('notifications', 'notification');
 	Util::addStyle('notifications', 'styles');

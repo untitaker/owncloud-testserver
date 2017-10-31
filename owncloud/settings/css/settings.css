@@ -100,6 +100,51 @@ input#identity {
 table.nostyle label { margin-right: 2em; }
 table.nostyle td { padding: 0.2em 0; }
 
+#sessions table,
+#apppasswords table {
+	width: 100%;
+	min-height: 150px;
+	padding-top: 25px;
+}
+#sessions table th,
+#apppasswords table th {
+	font-weight: 800;
+}
+#sessions table th,
+#sessions table td,
+#apppasswords table th,
+#apppasswords table td {
+	padding: 10px;
+}
+
+#sessions .token-list td,
+#apppasswords .token-list td {
+	border-top: 1px solid #DDD;
+	text-overflow: ellipsis;
+	max-width: 200px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+#sessions .token-list td a.icon-delete,
+#apppasswords .token-list td a.icon-delete {
+	display: block;
+	opacity: 0.6;
+}
+
+#new-app-login-name,
+#new-app-password {
+	width: 186px;
+	font-family: monospace;
+	background-color: lightyellow;
+}
+.app-password-row {
+	display: table-row;
+}
+.app-password-label {
+	display: table-cell;
+	padding-right: 1em;
+}
+
 /* USERS */
 #newgroup-init a span { margin-left: 20px; }
 #newgroup-init a span:before {
@@ -122,10 +167,6 @@ table.nostyle td { padding: 0.2em 0; }
 	top: 3px;
 	height: 32px;
 	width: 32px;
-}
-
-.ie8 #newgroup-form .icon-add {
-	height: 30px;
 }
 
 .isgroup .groupname {
@@ -183,6 +224,7 @@ span.usersLastLoginTooltip { white-space: nowrap; }
 	position: relative;
 }
 #userlist .mailAddress,
+#userlist .enabled,
 #userlist .storageLocation,
 #userlist .userBackend,
 #userlist .lastLogin {
@@ -192,6 +234,23 @@ span.usersLastLoginTooltip { white-space: nowrap; }
 /* because of accessibility the name cell is <th> - therefore we enforce the black color */
 #userlist th.name {
 	color: #000000;
+}
+
+#userlist .mailAddress .loading-small {
+	width: 16px;
+	height: 16px;
+	margin-left: -26px;
+	position: relative;
+	top: 3px;
+}
+
+#newuser .groups {
+	display: inline;
+}
+
+#newuser .groupsListContainer.hidden,
+#userlist .groupsListContainer.hidden {
+	display: none;
 }
 
 tr:hover>td.password>span, tr:hover>td.displayName>span { margin:0; cursor:pointer; }
@@ -235,10 +294,6 @@ input.userFilter {width: 200px;}
 #headerAvatar {
 	width: 32px;
 }
-
-
-.ie8 table.hascontrols{border-collapse:collapse;width: 100%;}
-.ie8 table.hascontrols tbody tr{border-collapse:collapse;border: 1px solid #ddd !important;}
 
 /* used to highlight a user row in red */
 #userlist tr.row-warning {
@@ -305,13 +360,33 @@ span.version {
 #apps-list {
 	position: relative;
 	height: 100%;
+	min-height: 100px;
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+}
+#apps-list .section {
+	flex: 0 0 auto;
+	box-sizing: border-box;
+	width: 300px;
+	/*height: 200px;*/
 }
 .section {
 	position: relative;
+	padding: 20px;
 }
 .section h2.app-name {
 	margin-bottom: 8px;
 }
+
+.section h2.app-name.has-documentation {
+	display: inline-block;
+}
+
+.section ul {
+	margin-left: 20px;
+}
+
 .app-image {
 	float: left;
 	padding-right: 10px;
@@ -328,7 +403,6 @@ span.version {
 	padding: 10px;
 	border-radius: 3px;
 }
-.app-name,
 .app-version,
 .app-score,
 .app-level {
@@ -409,14 +483,22 @@ table.grid td.date{
 
 #shareAPI p { padding-bottom: 0.8em; }
 #shareAPI input#shareapiExpireAfterNDays {width: 25px;}
+#shareAPI .nocheckbox {
+	padding-left: 20px;
+}
 #shareAPI .indent {
 	padding-left: 28px;
 }
 #shareAPI .double-indent {
 	padding-left: 56px;
 }
-#fileSharingSettings h3 {
+#shareAPI
+#fileSharingSettings h2 {
 	display: inline-block;
+}
+
+#shareApiDefaultPermissionsSection label {
+	margin-right: 20px;
 }
 
 /* correctly display help icons next to headings */
@@ -495,18 +577,6 @@ span.indeterminate {
 	margin-top: -7px;
 }
 
-.ie8 .strengthify-wrapper {
-	left: 389px;
-}
-
-.onlyInIE8 {
-	display: none;
-}
-
-.ie8 .onlyInIE8 {
-	display: inline;
-}
-
 /* OPERA hack for strengthify*/
 doesnotexist:-o-prefocus, .strengthify-wrapper {
 	left: 185px;
@@ -562,4 +632,58 @@ doesnotexist:-o-prefocus, .strengthify-wrapper {
 
 #warning {
 	color: red;
+}
+
+
+/**
+ * Icons for settings sections
+ */
+li > a.icon-search {
+	background-image: url(../../core/img/actions/search.svg);
+}
+
+li > a.icon-share {
+	background-image: url(../../core/img/actions/share.svg);
+}
+
+li > a.icon-folder {
+	background-image: url(../../core/img/filetypes/folder.svg);
+}
+
+li > a.icon-list {
+	background-image: url(../../core/img/actions/menu.svg);
+}
+
+li > a.icon-password {
+	background-image: url(../../core/img/actions/password.svg);
+}
+
+li > a.icon-more {
+	background-image: url(../../core/img/actions/more.svg);
+}
+
+li > a.icon-upload {
+	background-image: url(../../core/img/actions/upload.svg);
+}
+
+li > a.icon-user {
+	background-image: url(../../core/img/actions/user.svg);
+}
+
+li > a.icon-workflows {
+	background-image: url(../../core/img/actions/play-next.svg);
+}
+
+#app-navigation li.divider {
+	background: none;
+}
+
+
+
+li > a.icon-settings {
+	background-image: url(../../core/img/actions/settings.svg);
+}
+
+div.app-settings .section {
+	margin-bottom: 0px;
 }

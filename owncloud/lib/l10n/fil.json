@@ -1,8 +1,7 @@
 { "translations": {
-    "_%n day ago_::_%n days ago_" : ["",""],
-    "_%n month ago_::_%n months ago_" : ["",""],
-    "_%n year ago_::_%n years ago_" : ["",""],
-    "_%n hour ago_::_%n hours ago_" : ["",""],
-    "_%n minute ago_::_%n minutes ago_" : ["",""]
-},"pluralForm" :"nplurals=2; plural=(n > 1);"
+    "seconds ago" : "(na) segundo ang nakalipas",
+    "Username" : "Username",
+    "Password" : "Password",
+    "Help" : "Tulong"
+},"pluralForm" :"nplurals=2; plural=(n == 1 || n==2 || n==3) || (n % 10 != 4 || n % 10 != 6 || n % 10 != 9);"
 }

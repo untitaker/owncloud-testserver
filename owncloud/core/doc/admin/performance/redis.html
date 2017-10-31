@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tuning Redis &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../contents.html" />
+    <link rel="up" title="Performance" href="index.html" />
+    <link rel="next" title="Upgrading" href="../upgrading/index.html" />
+    <link rel="prev" title="Performance" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Performance</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Tuning Redis</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tcp-backlog">TCP-Backlog</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transparent-huge-pages-thp">Transparent Huge Pages (THP)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#redis-latency-problems">Redis Latency Problems</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../upgrading/index.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appliance/index.html">The ownCloud X Appliance</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="index.html" title="Previous Chapter: Performance"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Performance</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../upgrading/index.html" title="Next Chapter: Upgrading"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Upgrading &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="tuning-redis">
+<h1>Tuning Redis<a class="headerlink" href="#tuning-redis" title="Permalink to this headline">¶</a></h1>
+<p>Here is a brief guide for tuning Redis to improve the performance of your ownCloud installation, when working with large instances.</p>
+<div class="section" id="tcp-backlog">
+<h2>TCP-Backlog<a class="headerlink" href="#tcp-backlog" title="Permalink to this headline">¶</a></h2>
+<p>If you raised the TCP-backlog setting, the following warning appears in the Redis logs:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">WARNING: The TCP backlog setting of 20480 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of..</span>
+</pre></div>
+</div>
+<p>If so, please consider that newer versions of Redis have their own TCP-backlog value set to <code class="docutils literal"><span class="pre">511</span></code>, and that you have to increase if you have many connections.
+In high requests-per-second environments, you need a significant backlog to avoid slow clients connection issues.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The Linux kernel will silently truncate the TCP-backlog setting to the value of <code class="docutils literal"><span class="pre">/proc/sys/net/core/somaxconn</span></code>.
+So make sure to raise both the value of <code class="docutils literal"><span class="pre">somaxconn</span></code> and <code class="docutils literal"><span class="pre">tcp_max_syn_backlog</span></code>, to get the desired effect.</p>
+</div>
+<p>To fix this warning, set the value of <code class="docutils literal"><span class="pre">net.core.somaxconn</span></code> to <code class="docutils literal"><span class="pre">65535</span></code> in <code class="docutils literal"><span class="pre">/etc/rc.local</span></code>, so that it persists upon reboot, by running the following command.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">sudo echo sysctl -w net.core.somaxconn=65535 &gt;&gt; /etc/rc.local</span>
+</pre></div>
+</div>
+<p>After the next reboot, 65535 connections will be allowed, instead of the default value.</p>
+</div>
+<div class="section" id="transparent-huge-pages-thp">
+<h2>Transparent Huge Pages (THP)<a class="headerlink" href="#transparent-huge-pages-thp" title="Permalink to this headline">¶</a></h2>
+<p>If you are experiencing latency problems with Redis, the following warning may appear in your Redis logs:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">WARNING you have Transparent Huge Pages (THP) support enabled in your kernel. This creates both latency and memory usage issues with Redis.</span>
+</pre></div>
+</div>
+<p>If so, unfortunately, when a Linux kernel has <a class="reference external" href="https://www.kernel.org/doc/Documentation/vm/transhuge.txt">Transparent Huge Pages</a> enabled, Redis incurs a significant latency penalty after the fork call is used, to persist information to disk.
+Transparent Huge Pages are the cause of the following issue:</p>
+<ol class="arabic simple">
+<li>A fork call is made, resulting in two processes with shared huge pages being created.</li>
+<li>In a busy instance, a few event loops cause commands to target a few thousand pages, causing the copy-on-write of almost the entire process memory.</li>
+<li>Big latency and memory usage result.</li>
+</ol>
+<p>As a result, make sure to disable Transparent Huge Pages using the following command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="redis-latency-problems">
+<h2>Redis Latency Problems<a class="headerlink" href="#redis-latency-problems" title="Permalink to this headline">¶</a></h2>
+<p>If you are having issues with Redis latency, please refer to <a class="reference external" href="https://redis.io/topics/latency">the official Redis guide</a> on how to handle them.</p>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="index.html" title="Previous Chapter: Performance"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Performance</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../upgrading/index.html" title="Next Chapter: Upgrading"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Upgrading &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

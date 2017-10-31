@@ -1,9 +1,10 @@
 <?php
 /**
- * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Joas Schilling <coding@schilljs.com>
+ * @author Thomas Müller <thomas.mueller@tmit.eu>
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -77,14 +78,13 @@ $mapperListener = function(MapperEvent $event) use ($activityManager) {
 $eventDispatcher->addListener(MapperEvent::EVENT_ASSIGN, $mapperListener);
 $eventDispatcher->addListener(MapperEvent::EVENT_UNASSIGN, $mapperListener);
 
-$l = \OC::$server->getL10N('systemtags');
-
-\OCA\Files\App::getNavigationManager()->add(
-	array(
+\OCA\Files\App::getNavigationManager()->add(function () {
+	$l = \OC::$server->getL10N('systemtags');
+	return [
 		'id' => 'systemtagsfilter',
 		'appname' => 'systemtags',
 		'script' => 'list.php',
 		'order' => 25,
 		'name' => $l->t('Tags')
-	)
-);
+	];
+});

@@ -25,16 +25,6 @@ script('core', [
 		<?php endforeach; ?>
 	</fieldset>
 	<?php endif; ?>
-	<?php if(!$_['htaccessWorking']): ?>
-	<fieldset class="warning">
-		<legend><strong><?php p($l->t('Security warning'));?></strong></legend>
-		<p><?php p($l->t('Your data directory and files are probably accessible from the internet because the .htaccess file does not work.'));?><br>
-		<?php print_unescaped($l->t(
-			'For information how to properly configure your server, please see the <a href="%s" target="_blank">documentation</a>.',
-			link_to_docs('admin-install')
-		)); ?></p>
-	</fieldset>
-	<?php endif; ?>
 	<fieldset id="adminaccount">
 		<legend><?php print_unescaped($l->t( 'Create an <strong>admin account</strong>' )); ?></legend>
 		<p class="grouptop">
@@ -45,20 +35,19 @@ script('core', [
 			<label for="adminlogin" class="infield"><?php p($l->t( 'Username' )); ?></label>
 		</p>
 		<p class="groupbottom">
-			<input type="password" name="adminpass" data-typetoggle="#show" id="adminpass"
+			<input type="password" name="adminpass" data-typetoggle="#showadminpass" id="adminpass"
 				placeholder="<?php p($l->t( 'Password' )); ?>"
 				value="<?php p($_['adminpass']); ?>"
 				autocomplete="off" autocapitalize="off" autocorrect="off" required>
 			<label for="adminpass" class="infield"><?php p($l->t( 'Password' )); ?></label>
-			<input type="checkbox" id="show" name="show">
-			<label for="show" class="svg"></label>
-			<div class="strengthify-wrapper"></div>
+			<input type="checkbox" id="showadminpass" name="showadminpass">
+			<label for="showadminpass"></label>
 		</p>
 	</fieldset>
 
 	<?php if(!$_['directoryIsSet'] OR !$_['dbIsSet'] OR count($_['errors']) > 0): ?>
 	<fieldset id="advancedHeader">
-		<legend><a id="showAdvanced"><?php p($l->t( 'Storage & database' )); ?> <img class="svg" src="<?php print_unescaped(image_path('', 'actions/caret.svg')); ?>" /></a></legend>
+		<legend><a id="showAdvanced"><?php p($l->t( 'Storage & database' )); ?> <img src="<?php print_unescaped(image_path('', 'actions/caret.svg')); ?>" /></a></legend>
 	</fieldset>
 	<?php endif; ?>
 
@@ -83,9 +72,9 @@ script('core', [
 		<?php foreach($_['databases'] as $type => $label): ?>
 		<?php if(count($_['databases']) === 1): ?>
 		<p class="info">
-			<?php p($l->t( 'Only %s is available.', array($label) )); ?>
+			<?php p($l->t( 'Only %s is available.', [$label])); ?>
 			<?php p($l->t( 'Install and activate additional PHP modules to choose other database types.' )); ?><br>
-			<a href="<?php print_unescaped(link_to_docs('admin-source_install')); ?>" target="_blank">
+			<a href="<?php print_unescaped(link_to_docs('admin-source_install')); ?>" target="_blank" rel="noreferrer">
 				<?php p($l->t( 'For more details check out the documentation.' )); ?> ↗</a>
 		</p>
 		<input type="hidden" id="dbtype" name="dbtype" value="<?php p($type) ?>">
@@ -109,13 +98,13 @@ script('core', [
 					autocomplete="off" autocapitalize="off" autocorrect="off">
 			</p>
 			<p class="groupmiddle">
-				<input type="password" name="dbpass" id="dbpass" data-typetoggle="#dbpassword"
+				<input type="password" name="dbpass" id="dbpass" data-typetoggle="#showdbpass"
 					placeholder="<?php p($l->t( 'Database password' )); ?>"
 					value="<?php p($_['dbpass']); ?>"
 					autocomplete="off" autocapitalize="off" autocorrect="off">
 				<label for="dbpass" class="infield"><?php p($l->t( 'Database password' )); ?></label>
-				<input type="checkbox" id="dbpassword" name="dbpassword">
-				<label for="dbpassword"></label>
+				<input type="checkbox" id="showdbpass" name="showdbpass">
+				<label for="showdbpass"></label>
 			</p>
 			<p class="groupmiddle">
 				<label for="dbname" class="infield"><?php p($l->t( 'Database name' )); ?></label>
@@ -143,6 +132,9 @@ script('core', [
 					value="<?php p($_['dbhost']); ?>"
 					autocomplete="off" autocapitalize="off" autocorrect="off">
 			</p>
+			<p class="info">
+				<?php p($l->t( 'Please specify the port number along with the host name (e.g., localhost: 5432).' )); ?>
+			</p>
 		</div>
 		</fieldset>
 		<?php endif; ?>
@@ -162,8 +154,8 @@ script('core', [
 	<div class="buttons"><input type="submit" class="primary" value="<?php p($l->t( 'Finish setup' )); ?>" data-finishing="<?php p($l->t( 'Finishing …' )); ?>"></div>
 
 	<p class="info">
-		<span class="icon-info-white svg"></span>
+		<span class="icon-info-white"></span>
 		<?php p($l->t('Need help?'));?>
-		<a target="_blank" href="<?php p(link_to_docs('admin-install')); ?>"><?php p($l->t('See the documentation'));?> ↗</a>
+		<a target="_blank" rel="noreferrer" href="<?php p(link_to_docs('admin-install')); ?>"><?php p($l->t('See the documentation'));?> ↗</a>
 	</p>
 </form>

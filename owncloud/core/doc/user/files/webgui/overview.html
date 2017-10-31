@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WebUI Overview &mdash; ownCloud 10.0.1 User Manual 10.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '10.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0.1 User Manual 10.0.1 documentation" href="../../contents.html" />
+    <link rel="up" title="Using the ownCloud Web Interface" href="index.html" />
+    <link rel="next" title="Navigating the WebUI" href="navigating.html" />
+    <link rel="prev" title="Using the ownCloud Web Interface" href="index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New in ownCloud 10.0.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external_storage/index.html">External Storage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Files &amp; Synchronization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../access_webdav.html">Accessing ownCloud Files Using WebDAV</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Using the ownCloud Web Interface</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="">WebUI Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="navigating.html">Navigating the WebUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sharing.html">Sharing Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="comments.html">Comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tagging.html">Tagging Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quota.html">Storage Quota</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_groups.html">Custom Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../public_link_shares.html">Public Link Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../desktop_mobile_sync.html">Desktop and Mobile Synchronization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../encrypting_files.html">Encrypting Your ownCloud Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gallery_app.html">Gallery App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deleted_file_management.html">Managing Deleted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_file_upload.html">Large File Uploads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../federated_cloud_sharing.html">Using Federation Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_control.html">Version Control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../session_management.html">Manage Connected Browsers and Devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../webinterface.html">The Web Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../userpreferences.html">Setting Your Preferences</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="index.html" title="Previous Chapter: Using the ownCloud Web Interface"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Using the own...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="navigating.html" title="Next Chapter: Navigating the WebUI"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Navigating th... &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="webui-overview">
+<h1>WebUI Overview<a class="headerlink" href="#webui-overview" title="Permalink to this headline">¶</a></h1>
+<p>You can access your files with the ownCloud Web interface, as well as: <em>create</em>, <em>preview</em>, <em>edit</em>, <em>delete</em>, <em>share</em>, and <em>re-share</em> files.</p>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">Your ownCloud administrator has the option to disable these features. If any
+of them are missing on your system ask your server administrator.</p>
+</div>
+<div class="figure">
+<img alt="The Files view screen." src="../../_images/files_page.png" />
+</div>
+<div class="section" id="file-controls">
+<h2>File Controls<a class="headerlink" href="#file-controls" title="Permalink to this headline">¶</a></h2>
+<p>When you mouseover, or hover over, a file in the Files view, as in the image
+below, ownCloud displays three file controls.
+These are:</p>
+<ol class="arabic simple">
+<li><a class="reference internal" href="#marking-favorites">Marking Favorites</a></li>
+<li><a class="reference internal" href="#sharing-files">Sharing Files</a></li>
+<li><a class="reference internal" href="#the-overflow-menu">The Overflow Menu</a></li>
+</ol>
+<div class="figure">
+<img alt="File controls" src="../../_images/files_file-controls.png" />
+</div>
+<div class="section" id="marking-favorites">
+<h3>Marking Favorites<a class="headerlink" href="#marking-favorites" title="Permalink to this headline">¶</a></h3>
+<p>Click the star to the left of the file icon to mark it as a favorite, and
+quickly find all of your favorites with the Favorites filter on the left
+sidebar.</p>
+<div class="figure">
+<img alt="Marking files as favorites." src="../../_images/files_mark-as-favorite.png" />
+</div>
+</div>
+<div class="section" id="sharing-files">
+<h3>Sharing Files<a class="headerlink" href="#sharing-files" title="Permalink to this headline">¶</a></h3>
+<p>The sharing files control is a shortcut to the file and folder sharing
+functionality within ownCloud. ownCloud sharing supports:</p>
+<ul class="simple">
+<li>Sharing files and folders with users or groups</li>
+<li>Creating public shares with hyperlinks</li>
+<li>Listing recipients of existing shares</li>
+<li>Deleting existing shares</li>
+</ul>
+</div>
+<div class="section" id="the-overflow-menu">
+<span id="the-overflow-menu-label"></span><h3>The Overflow Menu<a class="headerlink" href="#the-overflow-menu" title="Permalink to this headline">¶</a></h3>
+<p>The Overflow Menu allows you to:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#display-file-details">Display File Details</a></li>
+<li>Rename files</li>
+<li>Download files</li>
+<li>Delete files</li>
+</ul>
+<div class="figure">
+<img alt="Overflow menu." src="../../_images/files_page-3.png" />
+</div>
+<div class="section" id="display-file-details">
+<h4>Display File Details<a class="headerlink" href="#display-file-details" title="Permalink to this headline">¶</a></h4>
+<p>When you display details about a file, by clicking &#8220;Details&#8221; in the Overflow Menu, a set of tabs (or views) are available. These are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">View</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Details</td>
+<td>This shows details about a file, such as its name, size,
+and when it was created or last updated.</td>
+</tr>
+<tr class="row-odd"><td>Activity</td>
+<td>This shows a history of activity on the file, such as when
+it was created, updated, and shared.</td>
+</tr>
+<tr class="row-even"><td>Sharing</td>
+<td>It&#8217;s here that shares are managed. To know more, refer to
+the <a class="reference internal" href="#sharing-files">Sharing Files</a> section.</td>
+</tr>
+<tr class="row-odd"><td>Version</td>
+<td>This shows a history of all the versions of the file. This is
+not available for folders.</td>
+</tr>
+</tbody>
+</table>
+<p>You can see an example of the Activity view in the image below.</p>
+<div class="figure">
+<img alt="Details screen." src="../../_images/files_page-4.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="index.html" title="Previous Chapter: Using the ownCloud Web Interface"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Using the own...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="navigating.html" title="Next Chapter: Navigating the WebUI"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Navigating th... &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

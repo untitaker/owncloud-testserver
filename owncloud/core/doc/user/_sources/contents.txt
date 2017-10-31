@@ -5,16 +5,13 @@ Table of Contents
 =================
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 3
     
     index
     whats_new
-    webinterface
-    files/index
     pim/index
-    documents
-    userpreferences
     external_storage/index
-    
-..  removed from 9?    
-..  bookmarks    
+    files/index
+    session_management
+    webinterface
+    userpreferences

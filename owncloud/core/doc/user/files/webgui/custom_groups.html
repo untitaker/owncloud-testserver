@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Custom Groups &mdash; ownCloud 10.0.1 User Manual 10.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '10.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0.1 User Manual 10.0.1 documentation" href="../../contents.html" />
+    <link rel="up" title="Using the ownCloud Web Interface" href="index.html" />
+    <link rel="next" title="Public Link Shares" href="../public_link_shares.html" />
+    <link rel="prev" title="Storage Quota" href="quota.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New in ownCloud 10.0.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external_storage/index.html">External Storage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Files &amp; Synchronization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../access_webdav.html">Accessing ownCloud Files Using WebDAV</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Using the ownCloud Web Interface</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="overview.html">WebUI Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="navigating.html">Navigating the WebUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sharing.html">Sharing Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="comments.html">Comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tagging.html">Tagging Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quota.html">Storage Quota</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Custom Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../public_link_shares.html">Public Link Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../desktop_mobile_sync.html">Desktop and Mobile Synchronization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../encrypting_files.html">Encrypting Your ownCloud Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gallery_app.html">Gallery App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deleted_file_management.html">Managing Deleted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_file_upload.html">Large File Uploads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../federated_cloud_sharing.html">Using Federation Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_control.html">Version Control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../session_management.html">Manage Connected Browsers and Devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../webinterface.html">The Web Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../userpreferences.html">Setting Your Preferences</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="quota.html" title="Previous Chapter: Storage Quota"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Storage Quota</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../public_link_shares.html" title="Next Chapter: Public Link Shares"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Public Link S... &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="custom-groups">
+<h1>Custom Groups<a class="headerlink" href="#custom-groups" title="Permalink to this headline">¶</a></h1>
+<p>In previous versions of ownCloud, if you wanted to share a file or a folder with more than one person, you had to share it  either with many people individually, or share to one or more groups.
+However, you could only share with groups which your ownCloud administrator had already created.</p>
+<p>This wasn&#8217;t the most efficient way to work.
+To address that, as of ownCloud 10.0, you can now create your own groups on-the-fly, through a feature called &#8220;Custom Groups&#8221;.
+Here&#8217;s how to use it.</p>
+<div class="section" id="creating-custom-groups">
+<h2>Creating Custom Groups<a class="headerlink" href="#creating-custom-groups" title="Permalink to this headline">¶</a></h2>
+<p>Assuming that your ownCloud administrator&#8217;s already <a class="reference external" href="https://doc.owncloud.com/server/10.0/admin_manual/configuration/user/user_configuration.html#enabling-custom-groups">enabled custom groups</a>; under the admin menu, in the top right-hand corner, click &#8220;<strong>Settings</strong>&#8221; (1).
+Then, in the main menu on the settings page, in &#8220;<strong>Personal</strong>&#8221; section, click the option: &#8220;<strong>Customgroups</strong>&#8221; (2).
+This will take you to the &#8220;<strong>Custom Groups</strong>&#8221; admin page.</p>
+<img alt="The Custom Groups administration panel" src="../../_images/owncloud-create-custom-group-annotated.png" />
+<p>To create a new custom group, in the text field at the top where you see the placeholder text: &#8220;<strong>Group name</strong>&#8221;, add the group name and click &#8220;<strong>Create group</strong>&#8221;.
+After a moment or two, you’ll see the new custom group appear in the groups list.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Please be aware of two things: 1) Custom groups are visible <strong>only</strong> to members of the group, but <strong>not</strong> to anyone outside the group and 2) ownCloud administrators can see and modify all custom groups of an instance.</p>
+</div>
+</div>
+<div class="section" id="managing-group-members">
+<h2>Managing Group Members<a class="headerlink" href="#managing-group-members" title="Permalink to this headline">¶</a></h2>
+<img alt="Manage members in a custom group" src="../../_images/custom-group-manage-group-members.png" />
+<p>To add or remove users in a custom group, click your role (1), which will likely be &#8220;<strong>Member</strong>&#8221; (at least at first), and you&#8217;ll see a panel appear on the right-hand side listing the group&#8217;s users and their roles.
+In the &#8220;<strong>Add user to this group field</strong>&#8221; at the top of the panel (2), start typing the name of the user that you want to add.</p>
+<p>After a moment or two, you&#8217;ll see a list of users that match what you&#8217;ve typed appear (if there are any) in a popup list.
+Click the one that you want, and they&#8217;ll be added to the group.
+Finally, you’ll see a confirmation at the top of the page (3), indicating that the user’s been added to the custom group.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Members can only use a group for sharing, whereas group admins can manage a group&#8217;s members, change a group&#8217;s name, change members&#8217; roles, and delete groups.</p>
+</div>
+</div>
+<div class="section" id="sharing-with-the-group">
+<h2>Sharing with the Group<a class="headerlink" href="#sharing-with-the-group" title="Permalink to this headline">¶</a></h2>
+<img alt="Sharing files and folders with custom groups" src="../../_images/owncloud-share-to-custom-group.png" />
+<p>To share a file or folder with your custom group, open the sharing panel (1).
+Then, in the &#8220;<strong>User and Groups</strong>&#8221; field (2), type part of the name of the custom group and wait a moment or two.</p>
+<p>The name of the group should be displayed in a popup list, which you can see in the screenshot above.
+Click on it, and the file or folder will then be shared with your custom group with all permissions initially set.</p>
+</div>
+<div class="section" id="changing-group-names">
+<h2>Changing Group Names<a class="headerlink" href="#changing-group-names" title="Permalink to this headline">¶</a></h2>
+<p>If you want to change the name of the custom group, mouseover the group&#8217;s name in the custom groups list, where you will see a pencil appear to the right of the existing name.
+Click it, and a text field will appear, pre-populated with the existing name.
+Change the name and click enter, and the name will be changed.</p>
+<img alt="Rename a custom group" src="../../_images/rename-custom-group.png" />
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="quota.html" title="Previous Chapter: Storage Quota"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Storage Quota</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../public_link_shares.html" title="Next Chapter: Public Link Shares"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Public Link S... &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

@@ -16,8 +16,7 @@
 	 * @classdesc Client to access files on the server
 	 *
 	 * @param {Object} options
-	 * @param {String} options.host host name
-	 * @param {int} [options.port] port
+	 * @param {String} options.host host name including port
 	 * @param {boolean} [options.useHTTPS] whether to use https
 	 * @param {String} [options.root] root path
 	 * @param {String} [options.userName] user name
@@ -31,17 +30,21 @@
 			this._root = this._root.substr(0, this._root.length - 1);
 		}
 
-		var url = 'http://';
+		var url = Client.PROTOCOL_HTTP + '://';
 		if (options.useHTTPS) {
-			url = 'https://';
+			url = Client.PROTOCOL_HTTPS + '://';
 		}
 
 		url += options.host + this._root;
+		this._host = options.host;
 		this._defaultHeaders = options.defaultHeaders || {
 				'X-Requested-With': 'XMLHttpRequest',
 				'requesttoken': OC.requestToken
 			};
 		this._baseUrl = url;
+
+		this._rootSections = _.filter(this._root.split('/'), function(section) { return section !== '';});
+		this._rootSections = _.map(this._rootSections, window.decodeURIComponent);
 
 		var clientOptions = {
 			baseUrl: this._baseUrl,
@@ -62,6 +65,19 @@
 
 	Client.NS_OWNCLOUD = 'http://owncloud.org/ns';
 	Client.NS_DAV = 'DAV:';
+
+	Client.PROPERTY_GETLASTMODIFIED	= '{' + Client.NS_DAV + '}getlastmodified';
+	Client.PROPERTY_GETETAG	= '{' + Client.NS_DAV + '}getetag';
+	Client.PROPERTY_GETCONTENTTYPE	= '{' + Client.NS_DAV + '}getcontenttype';
+	Client.PROPERTY_RESOURCETYPE	= '{' + Client.NS_DAV + '}resourcetype';
+	Client.PROPERTY_INTERNAL_FILEID	= '{' + Client.NS_OWNCLOUD + '}fileid';
+	Client.PROPERTY_PERMISSIONS	= '{' + Client.NS_OWNCLOUD + '}permissions';
+	Client.PROPERTY_SIZE	= '{' + Client.NS_OWNCLOUD + '}size';
+	Client.PROPERTY_GETCONTENTLENGTH	= '{' + Client.NS_DAV + '}getcontentlength';
+
+	Client.PROTOCOL_HTTP	= 'http';
+	Client.PROTOCOL_HTTPS	= 'https';
+
 	Client._PROPFIND_PROPERTIES = [
 		/**
 		 * Modified time
@@ -228,6 +244,33 @@
 		},
 
 		/**
+		 * Parse sub-path from href
+		 *
+		 * @param {String} path href path
+		 * @return {String} sub-path section
+		 */
+		_extractPath: function(path) {
+			var pathSections = path.split('/');
+			pathSections = _.filter(pathSections, function(section) { return section !== '';});
+
+			var i = 0;
+			for (i = 0; i < this._rootSections.length; i++) {
+				if (this._rootSections[i] !== decodeURIComponent(pathSections[i])) {
+					// mismatch
+					return null;
+				}
+			}
+
+			// build the sub-path from the remaining sections
+			var subPath = '';
+			while (i < pathSections.length) {
+				subPath += '/' + decodeURIComponent(pathSections[i]);
+				i++;
+			}
+			return subPath;
+		},
+
+		/**
 		 * Parse Webdav result
 		 *
 		 * @param {Object} response XML object
@@ -235,16 +278,11 @@
 		 * @return {Array.<FileInfo>} array of file info
 		 */
 		_parseFileInfo: function(response) {
-			var path = response.href;
-			if (path.substr(0, this._root.length) === this._root) {
-				path = path.substr(this._root.length);
+			var path = this._extractPath(response.href);
+			// invalid subpath
+			if (path === null) {
+				return null;
 			}
-
-			if (path.charAt(path.length - 1) === '/') {
-				path = path.substr(0, path.length - 1);
-			}
-
-			path = decodeURIComponent(path);
 
 			if (response.propStat.length === 0 || response.propStat[0].status !== 'HTTP/1.1 200 OK') {
 				return null;
@@ -253,33 +291,33 @@
 			var props = response.propStat[0].properties;
 
 			var data = {
-				id: props['{' + Client.NS_OWNCLOUD + '}fileid'],
+				id: props[Client.PROPERTY_INTERNAL_FILEID],
 				path: OC.dirname(path) || '/',
 				name: OC.basename(path),
-				mtime: (new Date(props['{' + Client.NS_DAV + '}getlastmodified'])).getTime()
+				mtime: (new Date(props[Client.PROPERTY_GETLASTMODIFIED])).getTime()
 			};
 
-			var etagProp = props['{' + Client.NS_DAV + '}getetag'];
+			var etagProp = props[Client.PROPERTY_GETETAG];
 			if (!_.isUndefined(etagProp)) {
 				data.etag = this._parseEtag(etagProp);
 			}
 
-			var sizeProp = props['{' + Client.NS_DAV + '}getcontentlength'];
+			var sizeProp = props[Client.PROPERTY_GETCONTENTLENGTH];
 			if (!_.isUndefined(sizeProp)) {
 				data.size = parseInt(sizeProp, 10);
 			}
 
-			sizeProp = props['{' + Client.NS_OWNCLOUD + '}size'];
+			sizeProp = props[Client.PROPERTY_SIZE];
 			if (!_.isUndefined(sizeProp)) {
 				data.size = parseInt(sizeProp, 10);
 			}
 
-			var contentType = props['{' + Client.NS_DAV + '}getcontenttype'];
+			var contentType = props[Client.PROPERTY_GETCONTENTTYPE];
 			if (!_.isUndefined(contentType)) {
 				data.mimetype = contentType;
 			}
 
-			var resType = props['{' + Client.NS_DAV + '}resourcetype'];
+			var resType = props[Client.PROPERTY_RESOURCETYPE];
 			var isFile = true;
 			if (!data.mimetype && resType) {
 				var xmlvalue = resType[0];
@@ -290,7 +328,7 @@
 			}
 
 			data.permissions = OC.PERMISSION_READ;
-			var permissionProp = props['{' + Client.NS_OWNCLOUD + '}permissions'];
+			var permissionProp = props[Client.PROPERTY_PERMISSIONS];
 			if (!_.isUndefined(permissionProp)) {
 				var permString = permissionProp || '';
 				data.mountType = null;
@@ -343,9 +381,14 @@
 		 */
 		_parseResult: function(responses) {
 			var self = this;
-			return _.map(responses, function(response) {
-				return self._parseFileInfo(response);
-			});
+			var fileInfos = [];
+			for (var i = 0; i < responses.length; i++) {
+				var fileInfo = self._parseFileInfo(responses[i]);
+				if (fileInfo !== null) {
+					fileInfos.push(fileInfo);
+				}
+			}
+			return fileInfos;
 		},
 
 		/**
@@ -357,6 +400,26 @@
 		 */
 		_isSuccessStatus: function(status) {
 			return status >= 200 && status <= 299;
+		},
+
+		/**
+		 * Parse the Sabre exception out of the given response, if any
+		 *
+		 * @param {Object} response object
+		 * @return {Object} array of parsed message and exception (only the first one)
+		 */
+		_getSabreException: function(response) {
+			var result = {};
+			var xml = response.xhr.responseXML;
+			var messages = xml.getElementsByTagNameNS('http://sabredav.org/ns', 'message');
+			var exceptions = xml.getElementsByTagNameNS('http://sabredav.org/ns', 'exception');
+			if (messages.length) {
+				result.message = messages[0].textContent;
+			}
+			if (exceptions.length) {
+				result.exception = exceptions[0].textContent;
+			}
+			return result;
 		},
 
 		/**
@@ -412,7 +475,8 @@
 					}
 					deferred.resolve(result.status, results);
 				} else {
-					deferred.reject(result.status);
+					result = _.extend(result, self._getSabreException(result));
+					deferred.reject(result.status, result);
 				}
 			});
 			return promise;
@@ -424,6 +488,7 @@
 		 *
 		 * @param {Object} filter filter criteria
 		 * @param {Object} [filter.systemTagIds] list of system tag ids to filter by
+		 * @param {bool} [filter.favorite] set it to filter by favorites
 		 * @param {Object} [options] options
 		 * @param {Array} [options.properties] list of Webdav properties to retrieve
 		 *
@@ -441,7 +506,7 @@
 				properties = options.properties;
 			}
 
-			if (!filter || !filter.systemTagIds || !filter.systemTagIds.length) {
+			if (!filter || (!filter.systemTagIds && _.isUndefined(filter.favorite))) {
 				throw 'Missing filter argument';
 			}
 
@@ -467,6 +532,9 @@
 			_.each(filter.systemTagIds, function(systemTagIds) {
 				body += '        <oc:systemtag>' + escapeHTML(systemTagIds) + '</oc:systemtag>\n';
 			});
+			if (filter.favorite) {
+				body += '        <oc:favorite>' + (filter.favorite ? '1': '0') + '</oc:favorite>\n';
+			}
 			body += '    </oc:filter-rules>\n';
 
 			// end of root
@@ -482,7 +550,8 @@
 					var results = self._parseResult(result.body);
 					deferred.resolve(result.status, results);
 				} else {
-					deferred.reject(result.status);
+					result = _.extend(result, self._getSabreException(result));
+					deferred.reject(result.status, result);
 				}
 			});
 			return promise;
@@ -521,7 +590,8 @@
 					if (self._isSuccessStatus(result.status)) {
 						deferred.resolve(result.status, self._parseResult([result.body])[0]);
 					} else {
-						deferred.reject(result.status);
+						result = _.extend(result, self._getSabreException(result));
+						deferred.reject(result.status, result);
 					}
 				}
 			);
@@ -551,7 +621,8 @@
 					if (self._isSuccessStatus(result.status)) {
 						deferred.resolve(result.status, result.body);
 					} else {
-						deferred.reject(result.status);
+						result = _.extend(result, self._getSabreException(result));
+						deferred.reject(result.status, result);
 					}
 				}
 			);
@@ -600,7 +671,8 @@
 					if (self._isSuccessStatus(result.status)) {
 						deferred.resolve(result.status);
 					} else {
-						deferred.reject(result.status);
+						result = _.extend(result, self._getSabreException(result));
+						deferred.reject(result.status, result);
 					}
 				}
 			);
@@ -624,7 +696,8 @@
 					if (self._isSuccessStatus(result.status)) {
 						deferred.resolve(result.status);
 					} else {
-						deferred.reject(result.status);
+						result = _.extend(result, self._getSabreException(result));
+						deferred.reject(result.status, result);
 					}
 				}
 			);
@@ -660,10 +733,11 @@
 		 * @param {String} destinationPath destination path
 		 * @param {boolean} [allowOverwrite=false] true to allow overwriting,
 		 * false otherwise
+		 * @param {Object} [headers=null] additional headers
 		 *
 		 * @return {Promise} promise
 		 */
-		move: function(path, destinationPath, allowOverwrite) {
+		move: function(path, destinationPath, allowOverwrite, headers) {
 			if (!path) {
 				throw 'Missing argument "path"';
 			}
@@ -674,9 +748,9 @@
 			var self = this;
 			var deferred = $.Deferred();
 			var promise = deferred.promise();
-			var headers = {
+			headers = _.extend({}, headers, {
 				'Destination' : this._buildUrl(destinationPath)
-			};
+			});
 
 			if (!allowOverwrite) {
 				headers['Overwrite'] = 'F';
@@ -687,11 +761,12 @@
 				this._buildUrl(path),
 				headers
 			).then(
-				function(response) {
-					if (self._isSuccessStatus(response.status)) {
-						deferred.resolve(response.status);
+				function(result) {
+					if (self._isSuccessStatus(result.status)) {
+						deferred.resolve(result.status);
 					} else {
-						deferred.reject(response.status);
+						result = _.extend(result, self._getSabreException(result));
+						deferred.reject(result.status, result);
 					}
 				}
 			);
@@ -705,8 +780,57 @@
 		 */
 		addFileInfoParser: function(parserFunction) {
 			this._fileInfoParsers.push(parserFunction);
-		}
+		},
 
+		/**
+		 * Returns the dav.Client instance used internally
+		 *
+		 * @since 10.0
+		 * @return {dav.Client}
+		 */
+		getClient: function() {
+			return this._client;
+		},
+
+		/**
+		 * Returns the user name
+		 *
+		 * @since 10.0
+		 * @return {String} userName
+		 */
+		getUserName: function() {
+			return this._client.userName;
+		},
+
+		/**
+		 * Returns the password
+		 *
+		 * @since 10.0
+		 * @return {String} password
+		 */
+		getPassword: function() {
+			return this._client.password;
+		},
+
+		/**
+		 * Returns the base URL
+		 *
+		 * @since 10.0
+		 * @return {String} base URL
+		 */
+		getBaseUrl: function() {
+			return this._client.baseUrl;
+		},
+
+		/**
+		 * Returns the host
+		 *
+		 * @since 10.0.3
+		 * @return {String} base URL
+		 */
+		getHost: function() {
+			return this._host;
+		}
 	};
 
 	/**
@@ -743,7 +867,6 @@
 
 		var client = new OC.Files.Client({
 			host: OC.getHost(),
-			port: OC.getPort(),
 			root: OC.linkToRemoteBase('webdav'),
 			useHTTPS: OC.getProtocol() === 'https'
 		});
@@ -753,4 +876,3 @@
 
 	OC.Files.Client = Client;
 })(OC, OC.Files.FileInfo);
-

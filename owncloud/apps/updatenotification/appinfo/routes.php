@@ -1,8 +1,9 @@
 <?php
 /**
- * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Joas Schilling <coding@schilljs.com>
+ * @author Lukas Reschke <lukas@statuscode.ch>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -19,7 +20,7 @@
  *
  */
 
-namespace OCA\UpdateNotification\AppInfo;
+use OCA\UpdateNotification\AppInfo\Application;
 
 $application = new Application();
 $application->registerRoutes($this, ['routes' => [

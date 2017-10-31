@@ -27,12 +27,17 @@
     "Ok" : "ਠੀਕ ਹੈ",
     "Cancel" : "ਰੱਦ ਕਰੋ",
     "Error" : "ਗਲ",
+    "Remove" : "ਹਟਾਓ",
     "Password" : "ਪਾਸਵਰ",
-    "Send" : "ਭੇਜੋ",
+    "Allow editing" : "ਸੰਪਾਦਨ ਦੀ ਇਜ਼ਾਜਤ",
+    "create" : "ਬਣਾਓ",
+    "change" : "ਬਦਲੋ",
+    "delete" : "ਹਟਾਓ",
     "Share" : "ਸਾਂਝਾ ਕਰੋ",
     "Warning" : "ਚੇਤਾਵਨੀ",
     "Delete" : "ਹਟਾਓ",
     "Rename" : "ਨਾਂ ਬਦਲੋ",
+    "Help" : "ਮਦਦ",
     "Username" : "ਯੂਜ਼ਰ-ਨਾਂ",
     "Search" : "ਖੋਜ"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"

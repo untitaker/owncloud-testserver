@@ -82,6 +82,8 @@
 		 */
 		_linkShareId: null,
 
+		_linkSharesCollection: null,
+
 		initialize: function(attributes, options) {
 			if(!_.isUndefined(options.configModel)) {
 				this.configModel = options.configModel;
@@ -91,59 +93,32 @@
 				this.fileInfoModel = options.fileInfoModel;
 			}
 
+			this._linkSharesCollection = new OC.Share.SharesCollection();
+
 			_.bindAll(this, 'addShare');
 		},
 
 		defaults: {
-			allowPublicUploadStatus: false,
 			permissions: 0,
 			linkShare: {}
 		},
 
 		/**
-		 * Saves the current link share information.
+		 * Returns the collection of link shares
 		 *
-		 * This will trigger an ajax call and refetch the model afterwards.
-		 *
-		 * TODO: this should be a separate model
+		 * @return {OC.Share.SharesCollection} shares collection
 		 */
-		saveLinkShare: function(attributes, options) {
-			options = options || {};
-			attributes = _.extend({}, attributes);
-
-			var shareId = null;
-			var call;
-
-			// oh yeah...
-			if (attributes.expiration) {
-				attributes.expireDate = attributes.expiration;
-				delete attributes.expiration;
-			}
-
-			if (this.get('linkShare') && this.get('linkShare').isLinkShare) {
-				shareId = this.get('linkShare').id;
-
-				// note: update can only update a single value at a time
-				call = this.updateShare(shareId, attributes, options);
-			} else {
-				attributes = _.defaults(attributes, {
-					password: '',
-					passwordChanged: false,
-					permissions: OC.PERMISSION_READ,
-					expireDate: this.configModel.getDefaultExpirationDateString(),
-					shareType: OC.Share.SHARE_TYPE_LINK
-				});
-
-				call = this.addShare(attributes, options);
-			}
-
-			return call;
+		getLinkSharesCollection: function() {
+			return this._linkSharesCollection;
 		},
 
-		removeLinkShare: function() {
-			if (this.get('linkShare')) {
-				return this.removeShare(this.get('linkShare').id);
-			}
+		/**
+		 * Returns the file info for the file/folder on which this share information relate to
+		 *
+		 * @return {OC.Files.FileInfoModel} file info model
+		 */
+		getFileInfo: function() {
+			return this.fileInfoModel;
 		},
 
 		addShare: function(attributes, options) {
@@ -151,27 +126,25 @@
 			options = options || {};
 			attributes = _.extend({}, attributes);
 
+			var defaultPermissions = OC.getCapabilities()['files_sharing']['default_permissions'] || OC.PERMISSION_ALL;
+
 			// Default permissions are Edit (CRUD) and Share
 			// Check if these permissions are possible
-			var permissions = OC.PERMISSION_READ;
-			if (shareType === OC.Share.SHARE_TYPE_REMOTE) {
-				permissions = OC.PERMISSION_CREATE | OC.PERMISSION_UPDATE | OC.PERMISSION_READ;
-			} else {
-				if (this.updatePermissionPossible()) {
-					permissions = permissions | OC.PERMISSION_UPDATE;
-				}
-				if (this.createPermissionPossible()) {
-					permissions = permissions | OC.PERMISSION_CREATE;
-				}
-				if (this.deletePermissionPossible()) {
-					permissions = permissions | OC.PERMISSION_DELETE;
-				}
-				if (this.configModel.get('isResharingAllowed') && (this.sharePermissionPossible())) {
-					permissions = permissions | OC.PERMISSION_SHARE;
-				}
+			var possiblePermissions = OC.PERMISSION_READ;
+			if (this.updatePermissionPossible()) {
+				possiblePermissions = possiblePermissions | OC.PERMISSION_UPDATE;
+			}
+			if (this.createPermissionPossible()) {
+				possiblePermissions = possiblePermissions | OC.PERMISSION_CREATE;
+			}
+			if (this.deletePermissionPossible()) {
+				possiblePermissions = possiblePermissions | OC.PERMISSION_DELETE;
+			}
+			if (this.configModel.get('isResharingAllowed') && (this.sharePermissionPossible())) {
+				possiblePermissions = possiblePermissions | OC.PERMISSION_SHARE;
 			}
 
-			attributes.permissions = permissions;
+			attributes.permissions = defaultPermissions & possiblePermissions;
 			if (_.isUndefined(attributes.path)) {
 				attributes.path = this.fileInfoModel.getFullPath();
 			}
@@ -191,7 +164,7 @@
 			}).fail(function(xhr) {
 				var msg = t('core', 'Error');
 				var result = xhr.responseJSON;
-				if (result.ocs && result.ocs.meta) {
+				if (result && result.ocs && result.ocs.meta) {
 					msg = result.ocs.meta.message;
 				}
 
@@ -272,13 +245,6 @@
 		/**
 		 * @returns {boolean}
 		 */
-		isPublicUploadAllowed: function() {
-			return this.get('allowPublicUploadStatus');
-		},
-
-		/**
-		 * @returns {boolean}
-		 */
 		isFolder: function() {
 			return this.get('itemType') === 'folder';
 		},
@@ -313,11 +279,7 @@
 		 * @return {bool} true if a link share exists, false otherwise
 		 */
 		hasLinkShare: function() {
-			var linkShare = this.get('linkShare');
-			if (linkShare && linkShare.isLinkShare) {
-				return true;
-			}
-			return false;
+			return this._linkSharesCollection.length > 0;
 		},
 
 		/**
@@ -339,6 +301,14 @@
 		 */
 		getReshareWith: function() {
 			return this.get('reshare').share_with;
+		},
+
+		/**
+		 * @returns {string}
+		 */
+		getReshareWithDisplayName: function() {
+			var reshare = this.get('reshare');
+			return reshare.share_with_displayname || reshare.share_with;
 		},
 
 		/**
@@ -411,12 +381,6 @@
 			if(!_.isObject(share)) {
 				throw "Unknown Share";
 			}
-			if(   share.share_type === OC.Share.SHARE_TYPE_REMOTE
-			   && (   permission === OC.PERMISSION_SHARE
-				   || permission === OC.PERMISSION_DELETE))
-			{
-				return false;
-			}
 			return (share.permissions & permission) === permission;
 		},
 
@@ -456,40 +420,6 @@
 					}
 				}
 			);
-		},
-
-		/**
-		 * Send the link share information by email
-		 *
-		 * @param {string} recipientEmail recipient email address
-		 */
-		sendEmailPrivateLink: function(recipientEmail) {
-			var deferred = $.Deferred();
-			var itemType = this.get('itemType');
-			var itemSource = this.get('itemSource');
-			var linkShare = this.get('linkShare');
-
-			$.post(
-				OC.generateUrl('core/ajax/share.php'), {
-					action: 'email',
-					toaddress: recipientEmail,
-					link: linkShare.link,
-					itemType: itemType,
-					itemSource: itemSource,
-					file: this.fileInfoModel.get('name'),
-					expiration: linkShare.expiration || ''
-				},
-				function(result) {
-					if (!result || result.status !== 'success') {
-						// FIXME: a model should not show dialogs
-						OC.dialogs.alert(result.data.message, t('core', 'Error while sending notification'));
-						deferred.reject();
-					} else {
-						deferred.resolve();
-					}
-			});
-
-			return deferred.promise();
 		},
 
 		/**
@@ -601,6 +531,33 @@
 			}
 		},
 
+		/**
+		 * Group reshares into a single super share element.
+		 * Does this by finding the most precise share and
+		 * combines the permissions to be the most permissive.
+		 *
+		 * @param {Array} reshares
+		 * @return {Object} reshare
+		 */
+		_groupReshares: function(reshares) {
+			if (!reshares || !reshares.length) {
+				return false;
+			}
+
+			var superShare = reshares.shift();
+			var combinedPermissions = superShare.permissions;
+			_.each(reshares, function(reshare) {
+				// use share have higher priority than group share
+				if (reshare.share_type === OC.Share.SHARE_TYPE_USER && superShare.share_type === OC.Share.SHARE_TYPE_GROUP) {
+					superShare = reshare;
+				}
+				combinedPermissions |= reshare.permissions;
+			});
+
+			superShare.permissions = combinedPermissions;
+			return superShare;
+		},
+
 		fetch: function() {
 			var model = this;
 			this.trigger('request', this);
@@ -618,7 +575,7 @@
 
 				var reshare = false;
 				if (data2[0].ocs.data.length) {
-					reshare = data2[0].ocs.data[0];
+					reshare = model._groupReshares(data2[0].ocs.data);
 				}
 
 				model.set(model.parse({
@@ -685,16 +642,6 @@
 				permissions = permissions & data.reshare.permissions;
 			}
 
-			var allowPublicUploadStatus = false;
-			if(!_.isUndefined(data.shares)) {
-				$.each(data.shares, function (key, value) {
-					if (value.share_type === OC.Share.SHARE_TYPE_LINK) {
-						allowPublicUploadStatus = (value.permissions & OC.PERMISSION_CREATE) ? true : false;
-						return true;
-					}
-				});
-			}
-
 			/** @type {OC.Share.Types.ShareInfo[]} **/
 			var shares = _.map(data.shares, function(share) {
 				// properly parse some values because sometimes the server
@@ -711,7 +658,7 @@
 
 			this._legacyFillCurrentShares(shares);
 
-			var linkShare = { isLinkShare: false };
+			var linkShares = [];
 			// filter out the share by link
 			shares = _.reject(shares,
 				/**
@@ -732,42 +679,21 @@
 							return share;
 						}
 
-						var link = window.location.protocol + '//' + window.location.host;
-						if (!share.token) {
-							// pre-token link
-							var fullPath = this.fileInfoModel.get('path') + '/' +
-								this.fileInfoModel.get('name');
-							var location = '/' + OC.currentUser + '/files' + fullPath;
-							var type = this.fileInfoModel.isDirectory() ? 'folder' : 'file';
-							link += OC.linkTo('', 'public.php') + '?service=files&' +
-								type + '=' + encodeURIComponent(location);
-						} else {
-							link += OC.generateUrl('/s/') + share.token;
-						}
-						linkShare = {
-							isLinkShare: true,
-							id: share.id,
-							token: share.token,
-							password: share.share_with,
-							link: link,
-							permissions: share.permissions,
-							// currently expiration is only effective for link shares.
-							expiration: share.expiration,
-							stime: share.stime
-						};
-
+						linkShares.push(share);
 						return share;
 					}
 				},
 				this
 			);
 
+			// populate link shares collection with found link shares
+			this._linkSharesCollection.set(linkShares, {parse: true});
+
+			// use the old crappy way for other shares for now
 			return {
 				reshare: data.reshare,
 				shares: shares,
-				linkShare: linkShare,
-				permissions: permissions,
-				allowPublicUploadStatus: allowPublicUploadStatus
+				permissions: permissions
 			};
 		},
 
@@ -789,6 +715,20 @@
 				}
 			}
 			return time;
+		},
+
+		/**
+		 * Returns a list of share types from the existing shares.
+		 *
+		 * @return {Array.<int>} array of share types
+		 */
+		getShareTypes: function() {
+			var result;
+			result = _.pluck(this.getSharesWithCurrentItem(), 'share_type');
+			if (this.hasLinkShare()) {
+				result.push(OC.Share.SHARE_TYPE_LINK);
+			}
+			return _.uniq(result);
 		}
 	});
 

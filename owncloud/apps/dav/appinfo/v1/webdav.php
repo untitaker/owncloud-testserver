@@ -1,10 +1,12 @@
 <?php
 /**
- * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Christoph Wurst <christoph@owncloud.com>
+ * @author Lukas Reschke <lukas@statuscode.ch>
  * @author Roeland Jago Douma <rullzer@owncloud.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
+ * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -23,6 +25,7 @@
 
 // no php execution timeout for webdav
 set_time_limit(0);
+ignore_user_abort(true);
 
 // Turn off output buffering to prevent memory problems
 \OC_Util::obEnd();
@@ -42,6 +45,7 @@ $authBackend = new \OCA\DAV\Connector\Sabre\Auth(
 	\OC::$server->getSession(),
 	\OC::$server->getUserSession(),
 	\OC::$server->getRequest(),
+	\OC::$server->getTwoFactorAuthManager(),
 	'principals/'
 );
 $requestUri = \OC::$server->getRequest()->getRequestUri();
@@ -50,6 +54,10 @@ $server = $serverFactory->createServer($baseuri, $requestUri, $authBackend, func
 	// use the view for the logged in user
 	return \OC\Files\Filesystem::getView();
 });
+
+// allow setup of additional auth backends
+$event = new \OCP\SabrePluginEvent($server);
+\OC::$server->getEventDispatcher()->dispatch('OCA\DAV\Connector\Sabre::authInit', $event);
 
 // And off we go!
 $server->exec();

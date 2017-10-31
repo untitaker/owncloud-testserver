@@ -2,14 +2,16 @@ OC.L10N.register(
     "files",
     {
     "Unknown error" : "不明錯誤",
-    "Files" : "文件",
     "All files" : "所有文件",
+    "Saved" : "已儲存",
     "Home" : "主頁",
     "Close" : "關閉",
     "Download" : "下載",
     "Rename" : "重新命名",
     "Delete" : "刪除",
     "Unshare" : "取消分享",
+    "Files" : "文件",
+    "Details" : "詳述",
     "Name" : "名稱",
     "Size" : "大小",
     "{dirs} and {files}" : "{dirs} 和 {files}",
@@ -28,10 +30,6 @@ OC.L10N.register(
     "%2$s deleted %1$s" : "%2$s 刪除了 %1$s",
     "Save" : "儲存",
     "Settings" : "設定",
-    "WebDAV" : "WebDAV",
-    "Cancel upload" : "取消上戴",
-    "You changed %1$s" : "你改變了%1$s",
-    "You created %1$s" : "你新增了%1$s",
-    "You deleted %1$s" : "你刪除了%1$s"
+    "WebDAV" : "WebDAV"
 },
 "nplurals=1; plural=0;");

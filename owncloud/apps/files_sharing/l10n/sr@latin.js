@@ -8,6 +8,7 @@ OC.L10N.register(
     "Shared with you" : "Deljeno sa Vama",
     "Shared with others" : "Deljeno sa ostalima",
     "Shared by link" : "Deljeno pomoću prečice",
+    "Uploading..." : "Otpremam…",
     "Nothing shared with you yet" : "Još ništa nije deljeno sa Vama",
     "Files and folders others share with you will show up here" : "Fajlovi i direktorijumi koji drugi dele sa Vama će se pojaviti ovde",
     "Nothing shared yet" : "Još ništa nije deljeno",
@@ -21,6 +22,7 @@ OC.L10N.register(
     "Add remote share" : "Dodaj udaljeni deljeni resurs",
     "No ownCloud installation (7 or higher) found at {remote}" : "Nije pronađena ownCloud instalacija (7 ili noviji) na {remote}",
     "Invalid ownCloud url" : "Neispravan ownCloud url",
+    "Share" : "Deljenje",
     "Shared by" : "Deljeno od strane",
     "A file or folder has been <strong>shared</strong>" : "Fijl ili direktorijum je <strong>podeljen</strong>",
     "A file or folder was shared from <strong>another server</strong>" : "Fajl ili direktorijum je deljen sa <strong>drugog servera</strong>",
@@ -42,6 +44,7 @@ OC.L10N.register(
     "No entries found in this folder" : "Nema unosa u ovom direktorijumu",
     "Name" : "Ime",
     "Share time" : "Vreme deljenja",
+    "Expiration date" : "Datum isteka",
     "Sorry, this link doesn’t seem to work anymore." : "Žao nam je, ali ova prečica više ne radi.",
     "Reasons might be:" : "Razlozi mogu biti:",
     "the item was removed" : "stavka je uklonjena",
@@ -51,10 +54,6 @@ OC.L10N.register(
     "Add to your ownCloud" : "Dodaj na svoj ownCloud",
     "Download" : "Preuzmi",
     "Download %s" : "Preuzmi %s",
-    "Direct link" : "Direktna prečica",
-    "Allow users on this server to send shares to other servers" : "Dozvoli korisnicima na ovom serveru da šalju deljene resurse na druge servere",
-    "Allow users on this server to receive shares from other servers" : "Dozvoli korisnicima na ovom serveru da primaju deljene resurse sa drugih servera",
-    "Public shared file %1$s was downloaded" : "Javni deljeni fajl %1$s je preuzet",
-    "Public shared folder %1$s was downloaded" : "Javni deljeni direktorijum %1$s je preuzet"
+    "Direct link" : "Direktna prečica"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

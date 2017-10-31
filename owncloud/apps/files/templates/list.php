@@ -1,12 +1,10 @@
 <div id="controls">
 		<div class="actions creatable hidden">
 			<div id="uploadprogresswrapper">
-				<div id="uploadprogressbar"></div>
-				<button class="stop icon-close" style="display:none">
-					<span class="hidden-visually">
-						<?php p($l->t('Cancel upload'))?>
-					</span>
-				</button>
+				<div id="uploadprogressbar">
+					<em class="label outer" style="display:none"><span class="desktop"><?php p($l->t('Uploading...'));?></span><span class="mobile"><?php p($l->t('...'));?></span></em>
+				</div>
+				<input type="button" class="stop icon-close" style="display:none" value="" />
 			</div>
 		</div>
 		<div id="file_action_panel"></div>
@@ -17,8 +15,6 @@
 			 through ajax instead (updateStorageStatistics).
 	*/ ?>
 	<input type="hidden" name="permissions" value="" id="permissions">
-	<input type="hidden" id="max_upload" name="MAX_FILE_SIZE" value="<?php isset($_['uploadMaxFilesize']) ? p($_['uploadMaxFilesize']) : '' ?>">
-	<input type="hidden" id="upload_limit" value="<?php isset($_['uploadLimit']) ? p($_['uploadLimit']) : '' ?>">
 	<input type="hidden" id="free_space" value="<?php isset($_['freeSpace']) ? p($_['freeSpace']) : '' ?>">
 	<?php if(isset($_['dirToken'])):?>
 	<input type="hidden" id="publicUploadRequestToken" name="requesttoken" value="<?php p($_['requesttoken']) ?>" />
@@ -77,8 +73,7 @@
 </table>
 <input type="hidden" name="dir" id="dir" value="" />
 <div class="hiddenuploadfield">
-	<input type="file" id="file_upload_start" class="hiddenuploadfield" name="files[]"
-		data-url="<?php print_unescaped(OCP\Util::linkTo('files', 'ajax/upload.php')); ?>" />
+	<input type="file" id="file_upload_start" class="hiddenuploadfield" name="files[]" />
 </div>
 <div id="editor"></div><!-- FIXME Do not use this div in your app! It is deprecated and will be removed in the future! -->
 <div id="uploadsize-message" title="<?php p($l->t('Upload too large'))?>">

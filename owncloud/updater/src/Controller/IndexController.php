@@ -22,19 +22,25 @@
 
 namespace Owncloud\Updater\Controller;
 
-use League\Plates\Extension\URI;
 use Owncloud\Updater\Utils\Checkpoint;
 use Owncloud\Updater\Utils\ConfigReader;
-use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\BufferedOutput;
+use Pimple\Container;
 use Owncloud\Updater\Formatter\HtmlOutputFormatter;
 use Owncloud\Updater\Http\Request;
 use League\Plates\Engine;
 use League\Plates\Extension\Asset;
+use League\Plates\Extension\URI;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Input\StringInput;
 
+/**
+ * Class IndexController
+ *
+ * @package Owncloud\Updater\Controller
+ */
 class IndexController {
 
-	/** @var \Pimple\Container */
+	/** @var Container */
 	protected $container;
 
 	/** @var Request */
@@ -44,10 +50,10 @@ class IndexController {
 	protected $command;
 
 	/**
-	 * @param \Pimple\Container $container
+	 * @param Container $container
 	 * @param Request|null $request
 	 */
-	public function __construct(\Pimple\Container $container,
+	public function __construct(Container $container,
 								Request $request = null) {
 		$this->container = $container;
 		if (is_null($request)){
@@ -59,18 +65,42 @@ class IndexController {
 		$this->command = $this->request->postParameter('command');
 	}
 
+	/**
+	 * @return string
+	 */
 	public function dispatch() {
+		/** @var ConfigReader $configReader */
+		$configReader = $this->container['utils.configReader'];
+
 		// strip index.php and query string (if any) to get a real base url
 		$baseUrl = preg_replace('/(index\.php.*|\?.*)$/', '', $_SERVER['REQUEST_URI']);
 		$templates = new Engine(CURRENT_DIR . '/src/Resources/views/');
 		$templates->loadExtension(new Asset(CURRENT_DIR . '/pub/', false));
 		$templates->loadExtension(new URI($baseUrl));
-
+		
 		// Check if the user is logged-in
 		if(!$this->isLoggedIn()) {
 			return $this->showLogin($templates);
 		}
-
+		
+		try {
+			$fullEndpoint = $this->getEndpoint();
+			$this->container['application']->setEndpoint($fullEndpoint);
+			$this->container['application']->setAuthToken($this->request->header('X_Updater_Auth'));
+			$this->container['application']->initConfig();
+			$this->container['application']->assertOwnCloudFound();
+		} catch (\Exception $e){
+			$content = $templates->render(
+				'partials/error',
+				[
+					'title' => 'Updater',
+					'version' => $this->container['application']->getVersion(),
+					'error' => $e->getMessage()
+				]
+			);
+			return $content;
+		}
+		
 		if (is_null($this->command)){
 			/** @var Checkpoint $checkpoint */
 			$checkpoint = $this->container['utils.checkpoint'];
@@ -90,12 +120,14 @@ class IndexController {
 		return $content;
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function isLoggedIn() {
 		/** @var ConfigReader $configReader */
-		$configReader = $this->container['utils.configReader'];
-		$configReader->init();
-		$storedSecret = isset($configReader->get(['system'])['updater.secret']) ? $configReader->get(['system'])['updater.secret'] : null;
-		if(is_null($storedSecret)) {
+		$locator = $this->container['utils.locator'];
+		$storedSecret = $locator->getSecretFromConfig();
+		if ($storedSecret === '') {
 			die('updater.secret is undefined in config/config.php. Either browse the admin settings in your ownCloud and click "Open updater" or define a strong secret using <pre>php -r \'echo password_hash("MyStrongSecretDoUseYourOwn!", PASSWORD_DEFAULT)."\n";\'</pre> and set this in the config.php.');
 		}
 		$sentAuthHeader = ($this->request->header('X_Updater_Auth') !== null) ? $this->request->header('X_Updater_Auth') : '';
@@ -107,6 +139,10 @@ class IndexController {
 		return false;
 	}
 
+	/**
+	 * @param Engine $templates
+	 * @return string
+	 */
 	public function showLogin(Engine $templates) {
 		// If it is a request with invalid token just return "false" so that we can catch this
 		$token = ($this->request->header('X_Updater_Auth') !== null) ? $this->request->header('X_Updater_Auth') : '';
@@ -123,6 +159,9 @@ class IndexController {
 		return $content;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function ajaxAction() {
 		$application = $this->container['application'];
 
@@ -135,7 +174,8 @@ class IndexController {
 		$output->setFormatter(new HtmlOutputFormatter($formatter));
 
 		$application->setAutoExit(false);
-		// Some commands  dump things out instead of returning a value
+
+		// Some commands dump things out instead of returning a value
 		ob_start();
 		$errorCode = $application->run($input, $output);
 		if (!$result = $output->fetch()){
@@ -151,6 +191,18 @@ class IndexController {
 			'environment' => '',
 			'error_code' => $errorCode
 		];
+	}
+	
+	protected function getEndpoint(){
+		$endpoint = preg_replace('/(updater\/|updater\/index.php)$/', '', $this->request->getRequestUri());
+		$fullEndpoint = sprintf(
+			'%s://%s%sindex.php/occ/',
+			$this->request->getServerProtocol(),
+			$this->request->getHost(),
+			$endpoint !== '' ? $endpoint : '/'
+		);
+		
+		return $fullEndpoint;
 	}
 
 }

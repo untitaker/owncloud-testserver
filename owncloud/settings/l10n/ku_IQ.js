@@ -12,6 +12,9 @@ OC.L10N.register(
     "Email" : "ئیمه‌یل",
     "Password" : "وشەی تێپەربو",
     "New password" : "وشەی نهێنی نوێ",
-    "Username" : "ناوی به‌کارهێنه‌ر"
+    "Name" : "ناو",
+    "Username" : "ناوی به‌کارهێنه‌ر",
+    "Admin" : "به‌ڕێوه‌به‌ری سه‌ره‌كی",
+    "Error" : "هه‌ڵه"
 },
 "nplurals=2; plural=(n != 1);");

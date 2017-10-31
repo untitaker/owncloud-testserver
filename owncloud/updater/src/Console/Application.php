@@ -22,7 +22,9 @@
 
 namespace Owncloud\Updater\Console;
 
+use Owncloud\Updater\Utils\DocLink;
 use Owncloud\Updater\Utils\Locator;
+use Owncloud\Updater\Utils\OccRunner;
 use Pimple\Container;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -31,7 +33,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Command\Command;
-use \Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * Class Application
@@ -49,6 +51,11 @@ class Application extends \Symfony\Component\Console\Application {
 	/** @var ConsoleLogger */
 	protected $fallbackLogger;
 
+	/** @var  string */
+	protected $endpoint;
+
+	/** @var  string */
+	protected $authToken;
 
 	/** @var array */
 	protected $allowFailure = [
@@ -77,6 +84,34 @@ class Application extends \Symfony\Component\Console\Application {
 	}
 
 	/**
+	 * @param string $endpoint
+	 */
+	public function setEndpoint($endpoint){
+		$this->endpoint = $endpoint;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getEndpoint(){
+		return $this->endpoint;
+	}
+
+	/**
+	 * @param $token
+	 */
+	public function setAuthToken($token){
+		$this->authToken = $token;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getAuthToken(){
+		return $this->authToken;
+	}
+
+	/**
 	 * Get logger instance
 	 * @return \Psr\Log\LoggerInterface
 	 */
@@ -92,6 +127,27 @@ class Application extends \Symfony\Component\Console\Application {
 		}
 
 		return $this->fallbackLogger;
+	}
+
+	public function initConfig(){
+		$configReader = $this->diContainer['utils.configReader'];
+		try {
+			$configReader->init();
+		} catch (\UnexpectedValueException $e){
+			// try fallback to localhost
+			preg_match_all('/https?:\/\/([^\/]*).*$/', $this->getEndpoint(), $matches);
+			if (isset($matches[1][0])){
+				$newEndPoint = str_replace($matches[1][0], 'localhost', $this->getEndpoint());
+				$this->setEndpoint($newEndPoint);
+				try {
+					$configReader->init();
+				} catch (\UnexpectedValueException $e){
+					// fallback to CLI
+					$this->diContainer['utils.occrunner']->setCanUseProcess(true);
+					$configReader->init();
+				}
+			}
+		}
 	}
 
 	/**
@@ -113,11 +169,19 @@ class Application extends \Symfony\Component\Console\Application {
 	 * @throws \Exception
 	 */
 	public function doRun(InputInterface $input, OutputInterface $output){
+		$commandName = $this->getCommandName($input);
 		try{
-			$configReader = $this->diContainer['utils.configReader'];
-			$commandName = $this->getCommandName($input);
+			$this->assertOwnCloudFound();
 			try{
-				$configReader->init();
+				$this->initConfig();
+				if (!isset($this->diContainer['utils.docLink'])) {
+					$this->diContainer['utils.docLink'] = function ($c) {
+						/** @var Locator $locator */
+						$locator = $c['utils.locator'];
+						$installedVersion = implode('.', $locator->getInstalledVersion());
+						return new DocLink($installedVersion);
+					};
+				}
 			} catch (ProcessFailedException $e){
 				if (!in_array($commandName, $this->allowFailure)){
 					$this->logException($e);
@@ -130,13 +194,17 @@ class Application extends \Symfony\Component\Console\Application {
 				}
 			}
 			// TODO: check if the current command needs a valid OC instance
-			$this->assertOwnCloudFound();
-			
-			return parent::doRun($input, $output);
+			if (!isset($this->diContainer['logger'])) {
+				$locator = $this->diContainer['utils.locator'];
+				$this->initLogger($locator->getDataDir());
+			}
 		} catch (\Exception $e){
-			$this->logException($e);
-			throw $e;
+			if (!in_array($commandName, $this->allowFailure)){
+				$this->logException($e);
+				throw $e;
+			}
 		}
+		return parent::doRun($input, $output);
 	}
 
 	/**
@@ -151,8 +219,9 @@ class Application extends \Symfony\Component\Console\Application {
 			$command->setContainer($this->getContainer());
 			$commandName = $this->getCommandName($input);
 			$this->getLogger()->info('Execution of ' . $commandName . ' command started');
-			if (!empty($command->getMessage())){
-				$message = sprintf('<info>%s</info>', $command->getMessage());
+			$message = $command->getMessage();
+			if (!empty($message)){
+				$message = sprintf('<info>%s</info>', $message);
 				$output->writeln($message);
 			}
 			$exitCode = parent::doRunCommand($command, $input, $output);
@@ -186,28 +255,25 @@ class Application extends \Symfony\Component\Console\Application {
 	 * Check for ownCloud instance
 	 * @throws \RuntimeException
 	 */
-	protected function assertOwnCloudFound(){
+	public function assertOwnCloudFound(){
 		$container = $this->getContainer();
 		/** @var Locator $locator */
 		$locator = $container['utils.locator'];
 		$fsHelper = $container['utils.filesystemhelper'];
-
-		// assert minimum version
-		$installedVersion = implode('.', $locator->getInstalledVersion());
-		if (version_compare($installedVersion, '9.0.0', '<')){
-			throw new \RuntimeException("Minimum ownCloud version 9.0.0 is required for the updater - $installedVersion was found in " . $locator->getOwncloudRootPath());
-		}
+		/** @var OccRunner $occRunner */
+		$occRunner = $container['utils.occrunner'];
 
 		// has to be installed
 		$file = $locator->getPathToConfigFile();
-		if (!file_exists($file) || !is_file($file)){
-			throw new \RuntimeException('ownCloud in ' . dirname(dirname($file)) . ' is not installed.');
-		}
+		$this->assertFileExists($file, 'ownCloud in ' . dirname(dirname($file)) . ' is not installed.');
 
 		// version.php should exist
 		$file = $locator->getPathToVersionFile();
-		if (!file_exists($file) || !is_file($file)){
-			throw new \RuntimeException('ownCloud is not found in ' . dirname($file));
+		$this->assertFileExists($file, 'ownCloud is not found in ' . dirname($file));
+
+		$status = $occRunner->runJson('status');
+		if (!isset($status['installed'])  || $status['installed'] != 'true'){
+			throw new \RuntimeException('ownCloud in ' . dirname($file) . ' is not installed.');
 		}
 
 		// datadir should exist
@@ -221,8 +287,10 @@ class Application extends \Symfony\Component\Console\Application {
 			throw new \RuntimeException('Datadirectory ' . $dataDir . ' is not writable.');
 		}
 
-		if (!isset($this->diContainer['logger'])) {
-			$this->initLogger($dataDir);
+		// assert minimum version
+		$installedVersion = implode('.', $locator->getInstalledVersion());
+		if (version_compare($installedVersion, '9.0.0', '<')){
+			throw new \RuntimeException("Minimum ownCloud version 9.0.0 is required for the updater - $installedVersion was found in " . $locator->getOwnCloudRootPath());
 		}
 
 		if (!$fsHelper->fileExists($locator->getUpdaterBaseDir())){
@@ -234,6 +302,16 @@ class Application extends \Symfony\Component\Console\Application {
 		}
 		if (!$fsHelper->fileExists($locator->getCheckpointDir())){
 			$fsHelper->mkdir($locator->getCheckpointDir());
+		}
+	}
+
+	/**
+	 * @param string $path
+	 * @param string $message
+	 */
+	protected function assertFileExists($path, $message){
+		if (!file_exists($path) || !is_file($path)){
+			throw new \RuntimeException($message);
 		}
 	}
 }

@@ -1,9 +1,9 @@
 <link rel="stylesheet" href="<?=$this->uri() . '/pub/' . $this->asset('css/main.css')?>" />
-<script src="<?=$this->uri() . '/pub/' . $this->asset('js/vendor/jquery.min.js')?>"></script>
+<script src="<?=$this->uri() . '/pub/' . $this->asset('js/vendor/jquery/jquery.min.js')?>"></script>
 <script src="<?=$this->uri() . '/pub/' . $this->asset('js/main.js')?>"></script>
 <div id="meta-information" data-endpoint="<?= $this->uri() ?>"></div>
 <header role="banner"><div id="header">
-		<a href="#" id="owncloud" tabindex="1">
+		<a href="<?= preg_replace('/\/updater\/.*$/', '', $this->uri()) ?>" id="owncloud" tabindex="1">
 			<div class="logo-icon svg">
 				<h1 class="hidden-visually">ownCloud</h1>
 			</div>
@@ -80,6 +80,7 @@
 							<td class="item"></td>
 							<td class="item"></td>
 						</tr>
+						<?php /** @var $checkpoints [] */ ?>
 						<?php foreach ($checkpoints as $checkpoint){ ?>
 						<tr>
 							<td class="item"><?= $this->e($checkpoint['title']) ?></td>

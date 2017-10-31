@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuration &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../contents.html" />
+    <link rel="next" title="Database Configuration" href="database/index.html" />
+    <link rel="prev" title="Upgrade Marketplace Applications" href="../upgrading/marketplace_apps.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upgrading/index.html">Upgrading</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database/index.html">Database Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/index.html">File Sharing and Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html">How To Install and Configure an LDAP Proxy-Cache Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mimetypes/index.html">Mimetypes Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/index.html">Server Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/index.html">User Management</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appliance/index.html">The ownCloud X Appliance</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="../upgrading/marketplace_apps.html" title="Previous Chapter: Upgrade Marketplace Applications"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Upgrade Marke...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="database/index.html" title="Next Chapter: Database Configuration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Database Conf... &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="database/index.html">Database Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="database/db_conversion.html">Converting Database Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database/linux_database_configuration.html">Database Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="files/index.html">File Sharing and Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="files/file_sharing_configuration.html">File Sharing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/federated_cloud_sharing_configuration.html">Configuring Federation Sharing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/big_file_upload_configuration.html">Uploading big files &gt; 512MB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/default_files_configuration.html">Providing Default Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/external_storage_configuration_gui.html">Configuring External Storage (GUI)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/external_storage_configuration.html">Configuring External Storage (Configuration File)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/external_storage/auth_mechanisms.html">External Storage Authentication mechanisms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/encryption_configuration.html">Encryption Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/files_locking_transactional.html">Transactional File Locking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/previews_configuration.html">Previews Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/file_versioning.html">Controlling File Versions and Aging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="files/trashbin_options.html">Managing the Trashbin</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html">How To Install and Configure an LDAP Proxy-Cache Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html#background">Background</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html#how-to-setup-the-server">How To Setup the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html#install-openldap">1. Install OpenLDAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html#configure-the-server">2. Configure the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html#enable-the-configuration-file">3. Enable the configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html#open-the-log">4. Open the log</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html#perform-a-test-search">5. Perform a test search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html#configure-owncloud-ldap-app">6. Configure ownCloud LDAP App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ldap/ldap_proxy_cache_server_setup.html#cache-multiple-active-directory-servers">Cache Multiple Active Directory Servers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mimetypes/index.html">Mimetypes Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mimetypes/index.html#mimetype-aliases">Mimetype Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mimetypes/index.html#mimetype-mapping">Mimetype Mapping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mimetypes/index.html#icon-retrieval">Icon retrieval</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="server/index.html">Server Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="server/security_setup_warnings.html">Warnings on Admin Page</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/import_ssl_cert.html">Importing System-wide and Personal SSL Certificates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/occ_command.html">Using the occ Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/activity_configuration.html">Configuring the Activity App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/antivirus_configuration.html">Virus Scanner Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/caching_configuration.html">Memory Caching</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/background_jobs_configuration.html">Background Jobs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/config_sample_php_parameters.html">Config.php Parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/email_configuration.html">Email Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/excluded_blacklisted_files.html">Excluding Directories and Blacklisting Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/external_sites.html">Linking External Sites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/custom_client_repos.html">Custom Client Download Repositories</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/knowledgebase_configuration.html">Knowledge Base Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/language_configuration.html">Language Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/logging_configuration.html">Logging Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/harden_server.html">Hardening and Security Guidance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/security/password-policy.html">Password Policy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/reverse_proxy_configuration.html">Reverse Proxy Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/thirdparty_php_configuration.html">Using Third Party PHP Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/js_css_asset_management_configuration.html">JavaScript and CSS Asset Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/automatic_configuration.html">Automatic Configuration Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/oc_server_tuning.html">ownCloud Server Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/index_php_less_urls.html">Enable index.php-less URLs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user/index.html">User Management</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user/user_configuration.html">User Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/reset_admin_password.html">Resetting a Lost Admin Password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/reset_user_password.html">Resetting a User Password</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/user_auth_ftp_smb_imap.html">User Authentication with IMAP, SMB, and FTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/user_auth_ldap.html">User Authentication with LDAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user/user_provisioning_api.html">User Provisioning API</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="../upgrading/marketplace_apps.html" title="Previous Chapter: Upgrade Marketplace Applications"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Upgrade Marke...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="database/index.html" title="Next Chapter: Database Configuration"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Database Conf... &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

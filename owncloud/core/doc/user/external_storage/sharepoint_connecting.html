@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Connecting to SharePoint (Enterprise only) &mdash; ownCloud 9.0 User Manual 9.0 documentation</title>
+    <title>Connecting to SharePoint (Enterprise only) &mdash; ownCloud 10.0.1 User Manual 10.0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '9.0',
+        VERSION:     '10.0.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,8 +28,9 @@
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="ownCloud 9.0 User Manual 9.0 documentation" href="../contents.html" />
+    <link rel="top" title="ownCloud 10.0.1 User Manual 10.0.1 documentation" href="../contents.html" />
     <link rel="up" title="External Storage" href="index.html" />
+    <link rel="next" title="Files &amp; Synchronization" href="../files/index.html" />
     <link rel="prev" title="Configuring External Storage" href="external_storage.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -65,13 +66,9 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 User Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New for Users in ownCloud 9.0</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The ownCloud Web Interface</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../files/index.html">Files &amp; Synchronization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">What&#8217;s New in ownCloud 10.0.1</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pim/index.html">Contacts &amp; Calendar</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../documents.html">Collaborative Document Editing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Setting Your Preferences</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">External Storage</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="external_storage.html">Configuring External Storage</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Connecting to SharePoint (Enterprise only)</a><ul>
@@ -81,6 +78,10 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../files/index.html">Files &amp; Synchronization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../session_management.html">Manage Connected Browsers and Devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../webinterface.html">The Web Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../userpreferences.html">Setting Your Preferences</a></li>
 </ul>
 
 								</ul>
@@ -95,6 +96,10 @@
 <ul class="prevnext-title list-unstyled list-inline">
   <li class="prev">
     <a href="external_storage.html" title="Previous Chapter: Configuring External Storage"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Configuring E...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../files/index.html" title="Next Chapter: Files & Synchronization"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Files & Synch... &raquo;</span>
     </a>
   </li>
 </ul>
@@ -137,12 +142,16 @@ SharePoint libraries that use the same authentication, enter your credentials
 in <code class="docutils literal"><span class="pre">Sharepoint</span> <span class="pre">Personal</span> <span class="pre">Configuration</span></code>. Then follow these steps to add your
 libraries:</p>
 <ul class="simple">
-<li>Enter the name of your local mountpoint in the <code class="docutils literal"><span class="pre">Local</span> <span class="pre">Folder</span> <span class="pre">Name</span></code> column.
-This can be an existing folder, or automatically create a new one.</li>
+<li>Enter the name of your local mountpoint in the <code class="docutils literal"><span class="pre">Local</span> <span class="pre">Folder</span> <span class="pre">Name</span></code> column.</li>
+</ul>
+<p>This can be an existing folder, or automatically create a new one.</p>
+<ul class="simple">
 <li>Enter your SharePoint server URL.</li>
-<li>Click the little refresh icon to the left of the <code class="docutils literal"><span class="pre">Document</span> <span class="pre">Library</span></code> field.
-If your credentials and URL are correct you&#8217;ll get a dropdown list of SharePoint
-libraries to choose from.</li>
+<li>Click the little refresh icon to the left of the <code class="docutils literal"><span class="pre">Document</span> <span class="pre">Library</span></code> field.</li>
+</ul>
+<p>If your credentials and URL are correct you&#8217;ll get a dropdown list of SharePoint
+libraries to choose from.</p>
+<ul class="simple">
 <li>Select the document library you want to mount.</li>
 <li>Select &#8220;Use user credentials&#8221;.</li>
 <li>Click the <code class="docutils literal"><span class="pre">Save</span></code> button, and you&#8217;re done</li>
@@ -161,6 +170,10 @@ button.</p>
 <ul class="prevnext-title list-unstyled list-inline">
   <li class="prev">
     <a href="external_storage.html" title="Previous Chapter: Configuring External Storage"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Configuring E...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../files/index.html" title="Next Chapter: Files & Synchronization"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Files & Synch... &raquo;</span>
     </a>
   </li>
 </ul>

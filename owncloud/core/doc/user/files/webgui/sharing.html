@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Sharing Files &mdash; ownCloud 10.0.1 User Manual 10.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '10.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0.1 User Manual 10.0.1 documentation" href="../../contents.html" />
+    <link rel="up" title="Using the ownCloud Web Interface" href="index.html" />
+    <link rel="next" title="Comments" href="comments.html" />
+    <link rel="prev" title="Navigating the WebUI" href="navigating.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New in ownCloud 10.0.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external_storage/index.html">External Storage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Files &amp; Synchronization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../access_webdav.html">Accessing ownCloud Files Using WebDAV</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Using the ownCloud Web Interface</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="overview.html">WebUI Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="navigating.html">Navigating the WebUI</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Sharing Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="comments.html">Comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tagging.html">Tagging Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quota.html">Storage Quota</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_groups.html">Custom Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../public_link_shares.html">Public Link Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../desktop_mobile_sync.html">Desktop and Mobile Synchronization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../encrypting_files.html">Encrypting Your ownCloud Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gallery_app.html">Gallery App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deleted_file_management.html">Managing Deleted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_file_upload.html">Large File Uploads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../federated_cloud_sharing.html">Using Federation Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_control.html">Version Control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../session_management.html">Manage Connected Browsers and Devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../webinterface.html">The Web Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../userpreferences.html">Setting Your Preferences</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="navigating.html" title="Previous Chapter: Navigating the WebUI"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Navigating th...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="comments.html" title="Next Chapter: Comments"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Comments &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="sharing-files">
+<h1>Sharing Files<a class="headerlink" href="#sharing-files" title="Permalink to this headline">¶</a></h1>
+<p>Clicking the share icon on any file or folder opens the Details view on the
+right, where the Share tab has focus.</p>
+<div class="section" id="sharing-status-icons">
+<h2>Sharing Status Icons<a class="headerlink" href="#sharing-status-icons" title="Permalink to this headline">¶</a></h2>
+<p>Any folder that has been shared is marked with the <code class="docutils literal"><span class="pre">Shared</span></code> overlay icon.
+Public link shares are marked with a chain link. Un-shared folders are blank.</p>
+<div class="figure">
+<img alt="Share status icons." src="../../_images/files_page-5.png" />
+</div>
+<p>If your ownCloud server is the Enterprise edition, you may also have access to
+Sharepoint and Windows Network Drive file shares. These have special status
+icons. An icon with a red plugin and background means you have to enter a login
+to get access to the share.</p>
+<div class="figure">
+<img alt="../../_images/files_share-options.png" src="../../_images/files_share-options.png" />
+</div>
+</div>
+<div class="section" id="creating-shares">
+<h2>Creating Shares<a class="headerlink" href="#creating-shares" title="Permalink to this headline">¶</a></h2>
+<p>To share a file or folder, immediately below the Share tab, you will see a text
+field. In this field, you can enter any number of users (whether local to your
+ownCloud server or remote) or groups who you would like to share the file or
+folder with.</p>
+<p>If username auto-completion is enabled, when you start typing the user or group
+name ownCloud will automatically complete it for you, if possible.</p>
+<p>After a file or folder has been shared, <a class="reference internal" href="#share-permissions">Share Permissions</a> can be set on
+it. In the image below, you can see that the directory &#8220;event-Photos&#8221; is shared
+with the user &#8220;pierpont&#8221;, who can <em>share</em>, <em>edit</em>, <em>create</em>, <em>change</em>, and
+<em>delete</em> the directory.</p>
+<div class="figure">
+<img alt="Sharing files." src="../../_images/files_page-2.png" />
+</div>
+<div class="section" id="sharing-files-with-guest-users">
+<h3>Sharing Files with Guest Users<a class="headerlink" href="#sharing-files-with-guest-users" title="Permalink to this headline">¶</a></h3>
+<p>Users can also share files and folders with guest users.
+To do so, your ownCloud administrator will need to have installed the Guest application.</p>
+<p>If it&#8217;s already installed, in the &#8220;<strong>User and Groups</strong>&#8221; field of the Sharing panel, type the username of a user who is not already a user in your ownCloud installation.
+You will then see a popup appear with the suffix <code class="docutils literal"><span class="pre">(guest)</span></code>, as in the screenshot below.</p>
+<img alt="Sharing with guest users." src="../../_images/share-with-guest-users.png" />
+<p>After you click the username in the list, you&#8217;ll see a modal dialog appear, where you can add the new user to the list of guest users.</p>
+<img alt="Add a guest user modal dialog." src="../../_images/add-user-to-guests.png" />
+<p>The Name field will be pre-filled with the username you supplied.
+All you need to do is add the user&#8217;s email address, and click &#8220;<strong>Save and Share</strong>&#8221;.
+After you do that, the content will be shared with the user with all permissions applied, except for the ability to share with other users.</p>
+<img alt="Content shared with a guest user." src="../../_images/content-shared-with-guest-user.png" />
+</div>
+</div>
+<div class="section" id="updating-shares">
+<h2>Updating Shares<a class="headerlink" href="#updating-shares" title="Permalink to this headline">¶</a></h2>
+<p>To change any of the properties of a share, again, you first need to view the
+Share tab. From there, you can:</p>
+<ul class="simple">
+<li>Delete a user&#8217;s access to a share</li>
+<li>Give more users access to a share</li>
+<li>Change a user&#8217;s share permissions</li>
+<li>Add or remove password protection</li>
+<li>Set or remove a share&#8217;s expiration date</li>
+</ul>
+<p>As this functionality is already described in other parts of the <a class="reference internal" href="#sharing-files">Sharing
+Files</a> section, it won&#8217;t be specifically covered here.</p>
+</div>
+<div class="section" id="deleting-shares">
+<h2>Deleting Shares<a class="headerlink" href="#deleting-shares" title="Permalink to this headline">¶</a></h2>
+<p>Despite the name of this section, you don&#8217;t actually delete a share. Rather
+what you do is remove the access of user&#8217;s to whom it&#8217;s already been shared
+with. When all users access to a shared resource has been removed, the resource
+is no longer shared.</p>
+<p>To do that, you need to click on the rubbish bin icon, on the far right-hand
+side of the name of each user it&#8217;s been shared with, who should no longer have
+access to it.</p>
+</div>
+<div class="section" id="password-protecting-files">
+<h2>Password Protecting Files<a class="headerlink" href="#password-protecting-files" title="Permalink to this headline">¶</a></h2>
+<p>It&#8217;s also possible to password protect shared files and folders. If you want to
+do so, then you need to enable this functionality. Specifically, click the
+checkbox labeled &#8220;<em>Password protect</em>&#8221; under the &#8220;<em>Share Link</em>&#8221; section.</p>
+<p>When you do so, you&#8217;ll see a password field appear. In there, add the password
+that the user will need to enter to access the shared resource and press the
+return key.</p>
+</div>
+<div class="section" id="using-private-links">
+<h2>Using Private Links<a class="headerlink" href="#using-private-links" title="Permalink to this headline">¶</a></h2>
+<p>Another way to access a file or folder is via a private link.
+It’s a handy way of creating a permanent link for yourself or to point others to a file or folder, within a share, more efficiently.
+To access the private link, in the Sharing Panel for a file or folder, next to its name you’ll see a small link icon (1), as in the screenshot below.</p>
+<img alt="Obtaining a private link for a shared file or folder" src="../../_images/private-link.png" />
+<p>If you click it, a new textbox will appear above the &#8220;<strong>Collaborative tags</strong>&#8221; field, populated with the link’s URI (2).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Only people who have access to the file or folder can use the link.</p>
+</div>
+</div>
+<div class="section" id="changing-the-share-expiration-date">
+<h2>Changing The Share Expiration Date<a class="headerlink" href="#changing-the-share-expiration-date" title="Permalink to this headline">¶</a></h2>
+<p>In older versions of ownCloud, you could set an expiration date on both local
+and public shares. Since the most recent version three, key, changes have been
+made:</p>
+<ul class="simple">
+<li>You can <em>only</em> set an expiration date on public shares</li>
+<li>Local shares do not expire when public shares expire</li>
+<li>A local share can only be &#8220;expired&#8221; (or deleted) by clicking the trash can icon</li>
+</ul>
+</div>
+<div class="section" id="creating-or-connecting-to-federation-share-links">
+<h2>Creating or Connecting to Federation Share Links<a class="headerlink" href="#creating-or-connecting-to-federation-share-links" title="Permalink to this headline">¶</a></h2>
+<p>Federated Cloud Sharing allows you to mount file shares from remote ownCloud
+servers, and manage them just like a local share. In ownCloud 8 the process
+for creating a new sharing link is easier and more streamlined. See
+<a class="reference internal" href="../federated_cloud_sharing.html"><em>Using Federation Shares</em></a> to learn to how to create and connect to new
+Federated Cloud shares.</p>
+</div>
+<div class="section" id="share-permissions">
+<h2>Share Permissions<a class="headerlink" href="#share-permissions" title="Permalink to this headline">¶</a></h2>
+<p>Shares can have a combination of the following five permission types:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="13%" />
+<col width="87%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Permission</th>
+<th class="head">Definition</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>can share</td>
+<td>Allows the users you share with to re-share</td>
+</tr>
+<tr class="row-odd"><td>can edit</td>
+<td>Allows the users you share with to edit your shared files, and to
+collaborate using the Documents app</td>
+</tr>
+<tr class="row-even"><td>create</td>
+<td>Allows the users you share with to create new files and add them
+to the share</td>
+</tr>
+<tr class="row-odd"><td>change</td>
+<td>Allows uploading a new version of a shared file and replacing it</td>
+</tr>
+<tr class="row-even"><td>delete</td>
+<td>Allows the users you share with to delete shared files</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="creating-drop-folders">
+<span id="create-drop-folder-label"></span><h2>Creating Drop Folders<a class="headerlink" href="#creating-drop-folders" title="Permalink to this headline">¶</a></h2>
+<p>As of ownCloud version 10.0.2, users can create upload-only, public shares (otherwise known as &#8220;Drop Folders&#8221;).
+Drop Folders allow users to upload files to a central location, but don’t allow them to either see or change any existing files, which already have been uploaded.</p>
+<img alt="Create a Drop Folder" src="../../_images/create-drop-folder.png" />
+<p>To create one:</p>
+<ol class="arabic simple">
+<li>View the sharing panel of the folder that you want to share as a Drop Folder, and under <strong>&#8220;Public Links&#8221;</strong> select <strong>&#8220;Create public link&#8221;</strong>.</li>
+<li>As with other shares, provide the name in the <strong>&#8220;Link Name&#8221;</strong> field.</li>
+<li>Check <strong>&#8220;Allow editing&#8221;</strong>, un-check <strong>&#8220;Show file listing&#8221;</strong>, and then un-check <strong>&#8220;Allow editing&#8221;</strong>.</li>
+<li>Finally, click <strong>&#8220;Save&#8221;</strong> to complete creation of the share.</li>
+</ol>
+<p>Now, as with other public links, you can copy the link to the share and give it out, as and when necessary.</p>
+</div>
+<div class="section" id="using-drop-folders">
+<h2>Using Drop Folders<a class="headerlink" href="#using-drop-folders" title="Permalink to this headline">¶</a></h2>
+<img alt="Using Drop Folders" src="../../_images/use-drop-folders.png" />
+<p>When users open the share link, they will see a page where they can either click to select files to share, or drag-and-drop files directly to share them.
+After the file&#8217;s been successfully uploaded, they’ll see (where possible) a preview of the file that has been uploaded.</p>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="navigating.html" title="Previous Chapter: Navigating the WebUI"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Navigating th...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="comments.html" title="Next Chapter: Comments"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Comments &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

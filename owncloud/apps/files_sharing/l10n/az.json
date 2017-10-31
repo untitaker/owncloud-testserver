@@ -8,6 +8,7 @@
     "Shared with you" : "Sizinlə yayımlanan",
     "Shared with others" : "Hər kəsə yayımlanmış",
     "Shared by link" : "Link tərəfindən paylaşılıb",
+    "Uploading..." : "Serverə yüklənir...",
     "Nothing shared with you yet" : "Hələki sizinlə heç bir şey paylaşılmayıb",
     "Files and folders others share with you will show up here" : "Digərlərinin sizinlə paylaşdığı fayllar və qovluqlar burda göstəriləcək",
     "Nothing shared yet" : "Paylaşılan heçnə yoxdur",
@@ -22,6 +23,7 @@
     "You can upload into this folder" : "Siz bu qovluğun içinə yükləyə bilərsiniz",
     "No ownCloud installation (7 or higher) found at {remote}" : "Yüklənmiş (7 yada yuxarı) ownCloud {uzaq} unvanında tapılmadı ",
     "Invalid ownCloud url" : "Yalnış ownCloud url-i",
+    "Share" : "Paylaş",
     "Shared by" : "Tərəfindən yayımlanıb",
     "Sharing" : "Paylaşılır",
     "A file or folder has been <strong>shared</strong>" : "Fayl və ya direktoriya <strong>yayımlandı</strong>",
@@ -53,12 +55,6 @@
     "Add to your ownCloud" : "Öz ownCloud-nuza əlavə edin",
     "Download" : "Yüklə",
     "Download %s" : "Endir %s",
-    "Direct link" : "Birbaşa link",
-    "Federated Cloud Sharing" : "Federal Cloud Paylaşım",
-    "Open documentation" : "Sənədləri aç",
-    "Allow users on this server to send shares to other servers" : "Bu serverdən digər serverlərə istifadəçilər tərəfindən paylaşımın göndərilməsinə izin vermək",
-    "Allow users on this server to receive shares from other servers" : "Digər serverlərdən bu serverə istifadəçilər tərəfindən paylaşımın ötürülməsinə izin vermək",
-    "Public shared file %1$s was downloaded" : "Ümumi paylaşılmış fayl %1$s endirilmişdir",
-    "Public shared folder %1$s was downloaded" : "Ümumi paylaşılmış qovluq %1$s endirilmişdir"
+    "Direct link" : "Birbaşa link"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

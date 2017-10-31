@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Navigating the WebUI &mdash; ownCloud 10.0.1 User Manual 10.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '10.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0.1 User Manual 10.0.1 documentation" href="../../contents.html" />
+    <link rel="up" title="Using the ownCloud Web Interface" href="index.html" />
+    <link rel="next" title="Sharing Files" href="sharing.html" />
+    <link rel="prev" title="WebUI Overview" href="overview.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What&#8217;s New in ownCloud 10.0.1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pim/index.html">Contacts &amp; Calendar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../external_storage/index.html">External Storage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Files &amp; Synchronization</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../access_webdav.html">Accessing ownCloud Files Using WebDAV</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Using the ownCloud Web Interface</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="overview.html">WebUI Overview</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Navigating the WebUI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sharing.html">Sharing Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="comments.html">Comments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tagging.html">Tagging Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quota.html">Storage Quota</a></li>
+<li class="toctree-l3"><a class="reference internal" href="custom_groups.html">Custom Groups</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../public_link_shares.html">Public Link Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../desktop_mobile_sync.html">Desktop and Mobile Synchronization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../encrypting_files.html">Encrypting Your ownCloud Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gallery_app.html">Gallery App</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../deleted_file_management.html">Managing Deleted Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_file_upload.html">Large File Uploads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../federated_cloud_sharing.html">Using Federation Shares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../version_control.html">Version Control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../session_management.html">Manage Connected Browsers and Devices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../webinterface.html">The Web Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../userpreferences.html">Setting Your Preferences</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="overview.html" title="Previous Chapter: WebUI Overview"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; WebUI Overview</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="sharing.html" title="Next Chapter: Sharing Files"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Sharing Files &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="navigating-the-webui">
+<h1>Navigating the WebUI<a class="headerlink" href="#navigating-the-webui" title="Permalink to this headline">¶</a></h1>
+<p>Navigating through folders in ownCloud is as simple as clicking on a folder to open it and using the back button on your browser to move to a previous level.
+This section walks you through how to navigate the ownCloud UI.</p>
+<div class="section" id="create-and-upload-files-and-directories">
+<h2>Create and Upload Files and Directories<a class="headerlink" href="#create-and-upload-files-and-directories" title="Permalink to this headline">¶</a></h2>
+<p>At the top of the Files view is a navigation bar.
+This contains links to uploading new files, and creating new files and folders.</p>
+<div class="figure">
+<img alt="The New file/folder/upload menu." src="../../_images/files_page-6.png" />
+</div>
+<p>To upload or create new files or folders directly in an ownCloud folder click on the <em>New</em> button in the navigation bar (this is the <code class="docutils literal"><span class="pre">+</span></code> button).
+There, as in the image above, you can see links to:</p>
+<ul class="simple">
+<li><strong>Upload a new file:</strong> This uploads files from your computer into ownCloud. You can also upload files by dragging and dropping them from your file manager.</li>
+<li><strong>Create a new text file:</strong> This creates a new text file and adds the file to your current folder.</li>
+<li><strong>Create a new folder:</strong> This creates a new folder in the current folder.</li>
+</ul>
+</div>
+<div class="section" id="select-files-or-folders">
+<h2>Select Files or Folders<a class="headerlink" href="#select-files-or-folders" title="Permalink to this headline">¶</a></h2>
+<div class="figure">
+<img alt="The files view." src="../../_images/files_view_mouseover.png" />
+</div>
+<p>You can select one or more files or folders by hovering over them (as in the image below) and clicking on their checkboxes.
+To select all files in the current directory, click on the checkbox located at the
+top of the files listing.</p>
+<div class="figure">
+<img alt="The files view with all files selected." src="../../_images/files_view_select_all.png" />
+</div>
+<p>When you select multiple files, you can delete all of them, or download them as
+a ZIP file by using the <code class="docutils literal"><span class="pre">Delete</span></code> or <code class="docutils literal"><span class="pre">Download</span></code> buttons that appear at the
+top.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If the <code class="docutils literal"><span class="pre">Download</span></code> button is not visible, the administrator has
+disabled this feature.</p>
+</div>
+</div>
+<div class="section" id="filter-the-files-view">
+<h2>Filter the Files View<a class="headerlink" href="#filter-the-files-view" title="Permalink to this headline">¶</a></h2>
+<p>The left sidebar on the Files page contains several filters for quickly sorting
+and managing your files.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="77%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Option</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>All files</td>
+<td>The default view; displays all files that you have access to</td>
+</tr>
+<tr class="row-odd"><td>Favorites</td>
+<td>Files or folders marked with the yellow star</td>
+</tr>
+<tr class="row-even"><td>Shared with you</td>
+<td>Displays all files shared with you by another user or group</td>
+</tr>
+<tr class="row-odd"><td>Shared with others</td>
+<td>Displays all files that you have shared with other users or
+groups</td>
+</tr>
+<tr class="row-even"><td>Shared by link</td>
+<td>Displays all files that are shared by you via public link</td>
+</tr>
+<tr class="row-odd"><td>External Storage</td>
+<td>Files that you have access to on external storage devices
+and services such as Dropbox, Google, and Amazon S3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="move-files">
+<h2>Move Files<a class="headerlink" href="#move-files" title="Permalink to this headline">¶</a></h2>
+<p>You can move files and folders by dragging and dropping them into any directory.</p>
+<div class="section" id="play-videos">
+<h3>Play Videos<a class="headerlink" href="#play-videos" title="Permalink to this headline">¶</a></h3>
+<p>You can play videos in ownCloud with the Video Player app, by clicking once on
+the file. Please note, video streaming by the native ownCloud video player
+depends on your Web browser and the video&#8217;s format.</p>
+<div class="figure">
+<img alt="Watching a movie." src="../../_images/video_player_2.png" />
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If your ownCloud administrator has enabled video streaming, and it doesn&#8217;t work in your Web browser, it may be a browser-related issue.
+See <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility">https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats#Browser_compatibility</a> for supported multimedia formats in Web browsers.</p>
+</div>
+</div>
+<div class="section" id="settings">
+<h3>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h3>
+<p>The <strong>Settings</strong> gear icon, in the lower left-hand corner of the ownCloud window, allows you to show or hide hidden files in your ownCloud Web interface.
+These are also called dotfiles, because they are prefixed with a dot, e.g. <code class="docutils literal"><span class="pre">.mailfile</span></code>.</p>
+<p>The dot tells your operating system to hide these files in your file browsers, unless you choose to display them.
+Usually, these are configuration files, so having the option to hide them reduces clutter.</p>
+<div class="figure">
+<img alt="Hiding or displaying hidden files." src="../../_images/hidden_files.png" />
+</div>
+</div>
+<div class="section" id="preview-files">
+<h3>Preview Files<a class="headerlink" href="#preview-files" title="Permalink to this headline">¶</a></h3>
+<p>ownCloud can display thumbnail previews for <em>images</em>, <em>MP3 covers</em>, and <em>text files</em>, if this is enabled by your server administrator.
+You can also display <em>uncompressed text</em>, <em>OpenDocument</em>, <em>videos</em>, and <em>image</em> files in the ownCloud embedded viewers by clicking on the file name.
+There may be other file types you can preview if your ownCloud administrator has enabled them.
+If ownCloud cannot display a file, it will start a download process and downloads the file to your computer.</p>
+</div>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="overview.html" title="Previous Chapter: WebUI Overview"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; WebUI Overview</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="sharing.html" title="Next Chapter: Sharing Files"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Sharing Files &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

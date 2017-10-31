@@ -1,11 +1,9 @@
 <?php
 /**
- * @author Björn Schießle <schiessle@owncloud.com>
- * @author Joas Schilling <nickvergessen@owncloud.com>
- * @author Morris Jobke <hey@morrisjobke.de>
+ * @author Björn Schießle <bjoern@schiessle.org>
  * @author Roeland Jago Douma <rullzer@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -31,6 +29,3 @@ if (version_compare($installedVersion, '0.9.1', '<')) {
 	$m->removeReShares();
 	$m->updateInitiatorInfo();
 }
-
-\OC::$server->getJobList()->add('OCA\Files_sharing\Lib\DeleteOrphanedSharesJob');
-\OC::$server->getJobList()->add('OCA\Files_sharing\ExpireSharesJob');

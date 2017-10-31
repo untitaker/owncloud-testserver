@@ -11,11 +11,26 @@
 (function() {
 	var TEMPLATE_ITEM =
 		'<li data-revision="{{timestamp}}">' +
+		'<div>' +
+		'<div class="preview-container">' +
 		'<img class="preview" src="{{previewUrl}}"/>' +
+		'</div>' +
+		'<div class="version-container">' +
+		'<div>' +
 		'<a href="{{downloadUrl}}" class="downloadVersion"><img src="{{downloadIconUrl}}" />' +
 		'<span class="versiondate has-tooltip" title="{{formattedTimestamp}}">{{relativeTimestamp}}</span>' +
 		'</a>' +
+		'</div>' +
+		'{{#hasDetails}}' +
+		'<div class="version-details">' +
+		'<span class="size has-tooltip" title="{{altSize}}">{{humanReadableSize}}</span>' +
+		'</div>' +
+		'{{/hasDetails}}' +
+		'</div>' +
+		'{{#canRevert}}' +
 		'<a href="#" class="revertVersion" title="{{revertLabel}}"><img src="{{revertIconUrl}}" /></a>' +
+		'{{/canRevert}}' +
+		'</div>' +
 		'</li>';
 
 	var TEMPLATE =
@@ -109,11 +124,17 @@
 				},
 
 				error: function() {
-					OC.Notification.showTemporary(
-						t('files_version', 'Failed to revert {file} to revision {timestamp}.', {
+					fileInfoModel.trigger('busy', fileInfoModel, false);
+					self.$el.find('.versions').removeClass('hidden');
+					self._toggleLoading(false);
+					OC.Notification.show(t('files_version', 'Failed to revert {file} to revision {timestamp}.', 
+						{
 							file: versionModel.getFullPath(),
 							timestamp: OC.Util.formatDate(versionModel.get('timestamp') * 1000)
-						})
+						}),
+						{
+							type: 'error'
+						}
 					);
 				}
 			});
@@ -175,14 +196,19 @@
 
 		_formatItem: function(version) {
 			var timestamp = version.get('timestamp') * 1000;
+			var size = version.has('size') ? version.get('size') : 0;
 			return _.extend({
 				formattedTimestamp: OC.Util.formatDate(timestamp),
 				relativeTimestamp: OC.Util.relativeModifiedDate(timestamp),
+				humanReadableSize: OC.Util.humanFileSize(size, true),
+				altSize: n('files', '%n byte', '%n bytes', size),
+				hasDetails: version.has('size'),
 				downloadUrl: version.getDownloadUrl(),
 				downloadIconUrl: OC.imagePath('core', 'actions/download'),
 				revertIconUrl: OC.imagePath('core', 'actions/history'),
 				previewUrl: version.getPreviewUrl(),
 				revertLabel: t('files_versions', 'Restore'),
+				canRevert: (this.collection.getFileInfo().get('permissions') & OC.PERMISSION_UPDATE) !== 0
 			}, version.attributes);
 		},
 

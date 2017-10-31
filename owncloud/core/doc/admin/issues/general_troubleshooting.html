@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>General Troubleshooting &mdash; ownCloud 9.0 Server Administration Manual 9.0 documentation</title>
+    <title>General Troubleshooting &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
     
     <link rel="stylesheet" href="../_static/" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '9.0',
+        VERSION:     '10.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
-    <link rel="top" title="ownCloud 9.0 Server Administration Manual 9.0 documentation" href="../contents.html" />
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../contents.html" />
     <link rel="up" title="Issues and Troubleshooting" href="index.html" />
     <link rel="next" title="Code Signing" href="code_signing.html" />
     <link rel="prev" title="Issues and Troubleshooting" href="index.html" />
@@ -66,40 +66,32 @@
 <li><a href="../contents.html">Table of Contents</a></li>
 									</ul>
                   <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../index.html">ownCloud 9.0 Server Administration Manual Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">ownCloud 9.0 Release Notes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New for Admins in ownCloud 9.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_server/index.html">ownCloud Server Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_user/index.html">User Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_files/index.html">File Sharing and Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_database/index.html">Database Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration_mimetypes/index.html">Mimetypes Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upgrading/index.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../operations/index.html">Operations</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Issues and Troubleshooting</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">General Troubleshooting</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#bugs">Bugs</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id1">General Troubleshooting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#missing-data-directory">Missing Data Directory</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#troubleshooting-web-server-and-php-problems">Troubleshooting Web server and PHP problems</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#troubleshooting-webdav">Troubleshooting WebDAV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#troubleshooting-contacts-calendar">Troubleshooting Contacts &amp; Calendar</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#client-sync-stalls">Client Sync Stalls</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#other-issues">Other issues</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="code_signing.html">Code Signing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="impersonate_users.html">Impersonating Users</a></li>
 </ul>
 </li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_installation/index.html">Enterprise Subscription Installation (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_clients/index.html">Creating Branded ownCloud Clients (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_server_branding/index.html">Enterprise Server Branding (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_external_storage/index.html">External Storage (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_user_management/index.html">User Management (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_file_management/index.html">Enterprise File Management (ES Only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_logging/index.html">Enterprise Logging Apps (ES only)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../enterprise_firewall/index.html">Enterprise Firewall (ES only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appliance/index.html">The ownCloud X Appliance</a></li>
 </ul>
 
 								</ul>
@@ -127,11 +119,11 @@
 <p>If you have trouble installing, configuring or maintaining ownCloud, please
 refer to our community support channels:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://forum.owncloud.org">The ownCloud Forums</a></li>
+<li><a class="reference external" href="https://central.owncloud.org">The ownCloud Forums</a></li>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The ownCloud forums have a <a class="reference external" href="https://forum.owncloud.org/viewforum.php?f=17">FAQ page</a> where each topic corresponds
+<p class="last">The ownCloud forums have a <a class="reference external" href="https://central.owncloud.org/c/faq">FAQ category</a> where each topic corresponds
 to typical mistakes or frequently occurring issues</p>
 </div>
 <ul class="simple">
@@ -144,7 +136,7 @@ helping each other out. Consider helping others out where you can, to contribute
 back for the help you get. This is the only way to keep a community like
 ownCloud healthy and sustainable!</p>
 <p>If you are using ownCloud in a business or otherwise large scale deployment,
-note that ownCloud Inc. offers the <a class="reference external" href="https://owncloud.com/lp/community-or-enterprise/">Enterprise Subscription</a> with commercial
+note that ownCloud Inc. offers the <a class="reference external" href="https://owncloud.com/lp/community-or-enterprise/">Enterprise Edition</a> with commercial
 support options.</p>
 <div class="section" id="bugs">
 <h2>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h2>
@@ -153,7 +145,8 @@ support options.</p>
 <li>Search for a solution (see the options above)</li>
 <li>Double-check your configuration</li>
 </ul>
-<p>If you can&#8217;t find a solution, please use our <a class="reference external" href="https://doc.owncloud.org/server/9.0/developer_manual/bugtracker/index.html">bugtracker</a>.</p>
+<p>If you can&#8217;t find a solution, please use our <a class="reference external" href="https://doc.owncloud.org/server/10.0/developer_manual/bugtracker/index.html">bugtracker</a>. You can generate a
+configuration report with the <a class="reference internal" href="../configuration/server/occ_command.html#config-commands-label"><span>occ config command</span></a>, with passwords automatically obscured.</p>
 </div>
 <div class="section" id="id1">
 <h2>General Troubleshooting<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
@@ -164,7 +157,7 @@ supported browser versions.</p>
 <h3>Disable 3rdparty / non-shipped apps<a class="headerlink" href="#disable-3rdparty-non-shipped-apps" title="Permalink to this headline">¶</a></h3>
 <p>It might be possible that 3rd party / non-shipped apps are causing various
 different issues. Always disable 3rd party apps before upgrades, and for
-troubleshooting. Please refer to the <a class="reference internal" href="../configuration_server/occ_command.html#apps-commands-label"><span>Apps Commands</span></a> on how
+troubleshooting. Please refer to the <a class="reference internal" href="../configuration/server/occ_command.html#apps-commands-label"><span>Apps Commands</span></a> on how
 to disable an app from command line.</p>
 </div>
 <div class="section" id="owncloud-logfiles">
@@ -172,7 +165,7 @@ to disable an app from command line.</p>
 <p>In a standard ownCloud installation the log level is set to <code class="docutils literal"><span class="pre">Normal</span></code>. To find
 any issues you need to raise the log level to <code class="docutils literal"><span class="pre">All</span></code> in your <code class="docutils literal"><span class="pre">config.php</span></code>
 file, or to <strong>Everything</strong> on your ownCloud Admin page. Please see
-<a class="reference internal" href="../configuration_server/logging_configuration.html"><em>Logging Configuration</em></a> for more information on
+<a class="reference internal" href="../configuration/server/logging_configuration.html"><em>Logging Configuration</em></a> for more information on
 these log levels.</p>
 <p>Some logging - for example JavaScript console logging - needs debugging
 enabled. Edit <code class="file docutils literal"><span class="pre">config/config.php</span></code> and change <code class="docutils literal"><span class="pre">'debug'</span> <span class="pre">=&gt;</span> <span class="pre">false,</span></code> to
@@ -235,12 +228,9 @@ for more information.</li>
 <code class="docutils literal"><span class="pre">SQLite</span></code>
 which can&#8217;t handle a lot of parallel requests. Please consider converting to
 another database like described in
-<a class="reference internal" href="../configuration_database/db_conversion.html"><em>Converting Database Type</em></a>.</li>
-<li><code class="docutils literal"><span class="pre">SQLSTATE[HY000]:</span> <span class="pre">General</span> <span class="pre">error:</span> <span class="pre">2006</span> <span class="pre">MySQL</span> <span class="pre">server</span> <span class="pre">has</span> <span class="pre">gone</span> <span class="pre">away</span></code> -&gt; The
-database request takes too long and therefore the MySQL server times out. Its
-also possible that the server is dropping a packet that is too large. Please
-refer to the manual of your database for how to raise the config options
-<code class="docutils literal"><span class="pre">wait_timeout</span></code> and/or <code class="docutils literal"><span class="pre">max_allowed_packet</span></code>.</li>
+<a class="reference internal" href="../configuration/database/db_conversion.html"><em>Converting Database Type</em></a>.</li>
+<li><code class="docutils literal"><span class="pre">SQLSTATE[HY000]:</span> <span class="pre">General</span> <span class="pre">error:</span> <span class="pre">2006</span> <span class="pre">MySQL</span> <span class="pre">server</span> <span class="pre">has</span> <span class="pre">gone</span> <span class="pre">away</span></code> -&gt; Please
+refer to <a class="reference internal" href="../configuration/database/linux_database_configuration.html#db-troubleshooting-label"><span>Troubleshooting</span></a> for more information.</li>
 <li><code class="docutils literal"><span class="pre">SQLSTATE[HY000]</span> <span class="pre">[2002]</span> <span class="pre">No</span> <span class="pre">such</span> <span class="pre">file</span> <span class="pre">or</span> <span class="pre">directory</span></code> -&gt; There is a problem
 accessing your SQLite database file in your data directory
 (<code class="docutils literal"><span class="pre">data/owncloud.db</span></code>). Please check the permissions of this folder/file or
@@ -254,9 +244,22 @@ if it exists at all. If you&#8217;re using MySQL please start your database.</li
 or <code class="docutils literal"><span class="pre">mod_proxy_fcgi</span></code> are not passing the needed authentication headers to
 PHP and so the login to ownCloud via WebDAV, CalDAV and CardDAV clients is
 failing. Information on how to correctly configure your environment can be
-found at the <a class="reference external" href="https://forum.owncloud.org/viewtopic.php?f=17&amp;t=30646">forums</a>.</li>
+found at the <a class="reference external" href="https://central.owncloud.org/t/no-basic-authentication-headers-were-found-message/819">forums</a>.</li>
 </ul>
 </div>
+</div>
+<div class="section" id="missing-data-directory">
+<h2>Missing Data Directory<a class="headerlink" href="#missing-data-directory" title="Permalink to this headline">¶</a></h2>
+<p>During the normal course of operations, the ownCloud data directory may be
+temporarily unavailable for a variety of reasons.
+These can include network timeouts on mounted network disks, unintentional
+unmounting of the partition on which the directory sits, or a corruption of the
+RAID setup.
+If you have experienced this, here’s how ownCloud works and what you can expect.</p>
+<p>During normal operation, ownCloud&#8217;s data directory contains a hidden file, named <code class="docutils literal"><span class="pre">.ocdata</span></code>.
+The purpose of this file is for setups where the data folder is mounted (such as via NFS) and for some reason the mount disappeared.
+If the directory isn’t available, the data folder would, in effect, be completely empty and the &#8221;.ocdata&#8221; would be missing.
+When this happens, ownCloud will return a <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes#5xx_Server_Error">503 Service not available</a> error, to prevent clients believing that the files are gone.</p>
 </div>
 <div class="section" id="troubleshooting-web-server-and-php-problems">
 <h2>Troubleshooting Web server and PHP problems<a class="headerlink" href="#troubleshooting-web-server-and-php-problems" title="Permalink to this headline">¶</a></h2>
@@ -281,7 +284,7 @@ need to restart your Web server.</li>
 </ul>
 </div>
 <div class="section" id="web-server-and-php-modules">
-<h3>Web server and PHP modules<a class="headerlink" href="#web-server-and-php-modules" title="Permalink to this headline">¶</a></h3>
+<h3>Web Server and PHP Modules<a class="headerlink" href="#web-server-and-php-modules" title="Permalink to this headline">¶</a></h3>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Lighttpd is not supported with ownCloud, and some ownCloud features
@@ -294,20 +297,19 @@ these modules:</p>
 <li>Apache</li>
 </ol>
 <ul class="simple">
-<li>mod_pagespeed</li>
-<li>mod_evasive</li>
-<li>mod_security</li>
-<li>mod_reqtimeout</li>
-<li>mod_deflate</li>
 <li>libapache2-mod-php5filter (use libapache2-mod-php5 instead)</li>
-<li>mod_spdy together with libapache2-mod-php5 / mod_php (use fcgi or php-fpm
-instead)</li>
 <li>mod_dav</li>
-<li>mod_xsendfile / X-Sendfile (causing broken downloads if not configured
-correctly)</li>
+<li>mod_deflate</li>
+<li>mod_evasive</li>
+<li>mod_pagespeed</li>
+<li>mod_proxy_html (can cause broken PDF downloads)</li>
+<li>mod_reqtimeout</li>
+<li>mod_security</li>
+<li>mod_spdy together with libapache2-mod-php5 / mod_php (use fcgi or php-fpm instead)</li>
+<li>mod_xsendfile / X-Sendfile (causing broken downloads if not configured correctly)</li>
 </ul>
 <ol class="arabic simple" start="2">
-<li>NginX</li>
+<li>NGINX</li>
 </ol>
 <ul class="simple">
 <li>ngx_pagespeed</li>
@@ -324,6 +326,8 @@ correctly)</li>
 </div>
 <div class="section" id="troubleshooting-webdav">
 <span id="trouble-webdav-label"></span><h2>Troubleshooting WebDAV<a class="headerlink" href="#troubleshooting-webdav" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>General troubleshooting<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
 <p>ownCloud uses SabreDAV, and the SabreDAV documentation is comprehensive and
 helpful.</p>
 <p>See:</p>
@@ -340,8 +344,33 @@ clients, and possible problems with each one)</li>
 <li><a class="reference external" href="http://sabre.io/dav/clients/finder/">Finder, OS X&#8217;s built-in WebDAV client</a>
 (Describes problems with Finder on various Web servers)</li>
 </ul>
-<p>There is also a well maintained FAQ thread available at the <a class="reference external" href="https://forum.owncloud.org/viewtopic.php?f=17&amp;t=7536">ownCloud Forums</a>
+<p>There is also a well maintained FAQ thread available at the <a class="reference external" href="https://central.owncloud.org/t/how-to-fix-caldav-carddav-webdav-problems/852">ownCloud Forums</a>
 which contains various additional information about WebDAV problems.</p>
+</div>
+<div class="section" id="error-0x80070043-the-network-name-cannot-be-found-while-adding-a-network-drive">
+<h3>Error 0x80070043 &#8220;The network name cannot be found.&#8221; while adding a network drive<a class="headerlink" href="#error-0x80070043-the-network-name-cannot-be-found-while-adding-a-network-drive" title="Permalink to this headline">¶</a></h3>
+<p>The windows native WebDAV client might fail with the following error message:</p>
+<div class="highlight-python"><div class="highlight"><pre>Error 0x80070043 &quot;The network name cannot be found.&quot; while adding a network drive
+</pre></div>
+</div>
+<p>A known workaround for this issue is to update your Web server configuration. For Apache
+you need to add something like the following (please update the path accordingly) to your
+main Web server / Vhost configuration or the <code class="docutils literal"><span class="pre">.htaccess</span></code> placed in your document root:</p>
+<div class="highlight-python"><div class="highlight"><pre>RewriteEngine On
+RewriteCond %{REQUEST_URI} ^(/)$ [NC]
+RewriteCond %{REQUEST_METHOD} ^(OPTIONS)$
+RewriteRule .* https://%{SERVER_NAME}/owncloud/remote.php/webdav/ [R=301,L]
+</pre></div>
+</div>
+<p>For NGINX an example config addition could be:</p>
+<div class="highlight-python"><div class="highlight"><pre>location = / {
+    if ($http_user_agent = DavClnt) {
+        return 401;
+    }
+}
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="troubleshooting-contacts-calendar">
 <h2>Troubleshooting Contacts &amp; Calendar<a class="headerlink" href="#troubleshooting-contacts-calendar" title="Permalink to this headline">¶</a></h2>
@@ -363,8 +392,7 @@ running ownCloud at the document root of your Web server the correct URL is:</p>
 <p><code class="docutils literal"><span class="pre">https://example.com/owncloud/remote.php/dav</span></code></p>
 <p>For the first case the <code class="file docutils literal"><span class="pre">.htaccess</span></code> file shipped with ownCloud should do
 this work for your when running Apache. You only need to make sure that your
-Web server is using this file. When running NGINX please refer to
-<a class="reference external" href="https://github.com/owncloud/documentation/wiki/NGINX-Configuration">NGINX configuration</a></p>
+Web server is using this file.</p>
 <p>If your ownCloud instance is installed in a subfolder called <code class="docutils literal"><span class="pre">owncloud</span></code> and
 you&#8217;re running Apache create or edit the <code class="file docutils literal"><span class="pre">.htaccess</span></code> file within the
 document root of your Web server and add the following lines:</p>
@@ -394,6 +422,15 @@ to support HTTP/1.1.</dd>
 Please refer to <a class="reference internal" href="#trouble-webdav-label"><span>Troubleshooting WebDAV</span></a> above for troubleshooting steps.</dd>
 </dl>
 </div>
+</div>
+<div class="section" id="client-sync-stalls">
+<h2>Client Sync Stalls<a class="headerlink" href="#client-sync-stalls" title="Permalink to this headline">¶</a></h2>
+<p>One known reason is stray locks. These should expire automatically after an hour. If stray
+locks don&#8217;t expire (identified by e.g. repeated <code class="docutils literal"><span class="pre">file.txt</span> <span class="pre">is</span> <span class="pre">locked</span></code> and/or <code class="docutils literal"><span class="pre">Exception\\\\FileLocked</span></code>
+messages in your <code class="file docutils literal"><span class="pre">data/owncloud.log</span></code>), make sure that you are running system cron and
+not Ajax cron (See <a class="reference internal" href="../configuration/server/background_jobs_configuration.html"><em>Background Jobs</em></a>).
+See <a class="reference external" href="https://github.com/owncloud/core/issues/22116">https://github.com/owncloud/core/issues/22116</a> and <a class="reference external" href="https://central.owncloud.org/t/file-is-locked-how-to-unlock/985">https://central.owncloud.org/t/file-is-locked-how-to-unlock/985</a>
+for some discussion and additional info of this issue.</p>
 </div>
 <div class="section" id="other-issues">
 <h2>Other issues<a class="headerlink" href="#other-issues" title="Permalink to this headline">¶</a></h2>

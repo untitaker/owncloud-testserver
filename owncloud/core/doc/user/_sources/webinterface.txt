@@ -1,6 +1,6 @@
-==========================
-The ownCloud Web Interface
-==========================
+=================
+The Web Interface
+=================
 
 You can connect to your ownCloud server using any Web browser; just point it to 
 your ownCloud server and enter your username and password. Supported Web 
@@ -9,7 +9,7 @@ browsers are:
 * Firefox 14+
 * Chrome 18+
 * Safari 5+
-* IE9+ (except Compatibility Mode)
+* IE11+ (except Compatibility Mode)
 
   .. figure:: images/oc_connect.png
      :alt: ownCloud login screen.
@@ -69,6 +69,7 @@ The ownCloud user interface contains the following fields and functions:
   * Server usage and space availability
   * Password management
   * Name, email, and profile picture settings
+  * Manage connected browsers and devices
   * Group memberships
   * Interface language settings
   * Manage notifications

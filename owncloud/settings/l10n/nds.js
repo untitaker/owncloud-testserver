@@ -1,19 +1,23 @@
 OC.L10N.register(
     "settings",
     {
-    "External Storage" : "Externer Speicher",
+    "Couldn't send reset email. Please contact your administrator." : "E-Mail zum Zurücksetzen konnte nicht gesendet werden. Bitte wende Dich an Deinem Administrator.",
     "Saved" : "Gespeichert",
+    "Email sent" : "eMail gesendet",
     "Delete" : "Löschen",
     "Very weak password" : "Sehr schwaches Passwort",
     "Weak password" : "Schwaches Passwort",
     "So-so password" : "Mittelstarkes Passwort",
     "Good password" : "Gutes Passwort",
     "Strong password" : "Starkes Passwort",
-    "None" : "Keine(r)",
     "Enable encryption" : "Verschlüsselung aktivieren",
+    "None" : "Keine(r)",
     "Port" : "Port",
     "Cancel" : "Abbrechen",
     "Password" : "Passwort",
-    "Username" : "Benutzername"
+    "Name" : "Name",
+    "Username" : "Benutzername",
+    "Personal" : "Persönlich",
+    "Error" : "Fehler"
 },
 "nplurals=2; plural=(n != 1);");

@@ -62,7 +62,7 @@
 			OC.registerMenu(this.$button, this.$container);
 			this.$button.on('click', this._onNotificationsButtonClick);
 
-			this.$container.on('click', '.action-button', _.bind(this._onClickAction, this));
+			this.$container.on('click', '.notification-action-button', _.bind(this._onClickAction, this));
 			this.$container.on('click', '.notification-delete', _.bind(this._onClickDismissNotification, this));
 
 			// Setup the background checker
@@ -202,7 +202,7 @@
 		},
 
 		/**
-		 * Handles removing the Notification from the UI when no longer in JSON
+		 * Handles errors when requesting the notifications
 		 * @param {XMLHttpRequest} xhr
 		 */
 		_onFetchError: function(xhr) {
@@ -210,7 +210,7 @@
 				// 404 Not Found - stop polling
 				this._shutDownNotifications();
 			} else {
-				OC.Notification.showTemporary('Failed to perform request for notifications');
+				OC.Notification.showTemporary('Failed to request notifications. Please try to refresh the page manually.');
 			}
 		},
 
@@ -263,7 +263,8 @@
 			var n = new Notification(notification.getSubject(), {
 				title: notification.getSubject(),
 				lang: OC.getLocale(),
-				body: notification.getMessage(),
+				body: notification.getRawMessage(),
+				icon: notification.getIcon(),
 				tag: notification.getId()
 			});
 			setTimeout(n.close.bind(n), 5000);

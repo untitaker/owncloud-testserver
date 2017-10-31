@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Deployment Considerations &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../contents.html" />
+    <link rel="up" title="Installation" href="index.html" />
+    <link rel="next" title="Preferred Installation Method" href="linux_installation.html" />
+    <link rel="prev" title="Deployment Recommendations" href="deployment_recommendations.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="system_requirements.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment_recommendations.html">Deployment Recommendations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Deployment Considerations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#hardware">Hardware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#software">Software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#file-storage">File Storage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#session-storage">Session Storage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="linux_installation.html">Preferred Installation Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="source_installation.html">Manual Installation on Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation_wizard.html">The Installation Wizard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="command_line_installation.html">Command Line Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuration_notes_and_tips.html">Configuration Notes &amp; Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="troubleshooting.html">Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changing_the_web_route.html">Changing Your ownCloud URL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apps_management_installation.html">Installing and Managing Apps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apps_supported.html">Supported Apps in ownCloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="selinux_configuration.html">SELinux Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="nginx_configuration.html">NGINX Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upgrading/index.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../issues/index.html">Issues and Troubleshooting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appliance/index.html">The ownCloud X Appliance</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="deployment_recommendations.html" title="Previous Chapter: Deployment Recommendations"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Deployment Re...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="linux_installation.html" title="Next Chapter: Preferred Installation Method"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Preferred Ins... &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="deployment-considerations">
+<h1>Deployment Considerations<a class="headerlink" href="#deployment-considerations" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="hardware">
+<h2>Hardware<a class="headerlink" href="#hardware" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Solid-state drives (SSDs) for I/O.</li>
+<li>Separate hard disks for storage and database, SSDs for databases.</li>
+<li>Multiple network interfaces to distribute server synchronisation and backend
+traffic across multiple subnets.</li>
+</ul>
+<div class="section" id="single-machine-scale-up-deployment">
+<h3>Single Machine / Scale-Up Deployment<a class="headerlink" href="#single-machine-scale-up-deployment" title="Permalink to this headline">¶</a></h3>
+<p>The single-machine deployment is widely used in the community.</p>
+<p>Pros:</p>
+<ul class="simple">
+<li>Easy setup: no session storage daemon, use tmpfs and memory caching to
+enhance performance, local storage.</li>
+<li>No network latency to consider.</li>
+<li>To scale buy a bigger CPU, more memory, larger hard drive, or additional hard
+drives.</li>
+</ul>
+<p>Cons:</p>
+<ul class="simple">
+<li>Fewer high availability options.</li>
+<li>The amount of data in ownCloud tends to continually grow. Eventually a
+single machine will not scale; I/O performance decreases and becomes a
+bottleneck with multiple up- and downloads, even with solid-state drives.</li>
+</ul>
+</div>
+<div class="section" id="scale-out-deployment">
+<h3>Scale-Out Deployment<a class="headerlink" href="#scale-out-deployment" title="Permalink to this headline">¶</a></h3>
+<p>Provider setup:</p>
+<ul class="simple">
+<li>DNS round robin to HAProxy servers (2-n, SSL offloading, cache static
+resources)</li>
+<li>Least load to Apache servers (2-n)</li>
+<li>Memcached/Redis for shared session storage (2-n)</li>
+<li>Database cluster with single Master, multiple slaves and proxy to split
+requests accordingly (2-n)</li>
+<li>GPFS or Ceph via phprados (2-n, 3 to be safe, Ceph 10+ nodes to see speed
+benefits under load)</li>
+</ul>
+<p>Pros:</p>
+<ul class="simple">
+<li>Components can be scaled as needed.</li>
+<li>High availability.</li>
+<li>Test migrations easier.</li>
+</ul>
+<p>Cons:</p>
+<ul class="simple">
+<li>More complicated to setup.</li>
+<li>Network becomes the bottleneck (10GB Ethernet recommended).</li>
+<li>Currently DB filecache table will grow rapidly, making migrations painful in
+case the table is altered.</li>
+</ul>
+</div>
+<div class="section" id="what-about-nginx-php-fpm">
+<h3>What About NGINX / PHP-FPM?<a class="headerlink" href="#what-about-nginx-php-fpm" title="Permalink to this headline">¶</a></h3>
+<p>Could be used instead of HAproxy as the load balancer.
+But on uploads stores the whole file on disk before handing it over to PHP-FPM.</p>
+</div>
+<div class="section" id="a-single-master-db-is-single-point-of-failure-does-not-scale">
+<h3>A Single Master DB is Single Point of Failure, Does Not Scale<a class="headerlink" href="#a-single-master-db-is-single-point-of-failure-does-not-scale" title="Permalink to this headline">¶</a></h3>
+<p>When master fails another slave can become master. However, the increased
+complexity carries some risks: Multi-master has the risk of split brain, and
+deadlocks. ownCloud tries to solve the problem of deadlocks with high-level
+file locking.</p>
+</div>
+</div>
+<div class="section" id="software">
+<h2>Software<a class="headerlink" href="#software" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="operating-system">
+<h3>Operating System<a class="headerlink" href="#operating-system" title="Permalink to this headline">¶</a></h3>
+<p>We are dependent on distributions that offer an easy way to install the various
+components in up-to-date versions. ownCloud has a partnership with RedHat
+and SUSE for customers who need commercial support. Canonical, the parent
+company of Ubuntu Linux, also offers enterprise service and support. Debian
+and Ubuntu are free of cost, and include newer software packages. CentOS is the
+community-supported free-of-cost Red Hat Enterprise Linux clone. openSUSE is
+community-supported, and includes many of the same system administration tools
+as SUSE Linux Enterprise Server.</p>
+</div>
+<div class="section" id="web-server">
+<h3>Web server<a class="headerlink" href="#web-server" title="Permalink to this headline">¶</a></h3>
+<p>Taking Apache and NGINX as the contenders, Apache with mod_php is currently the
+best option, as NGINX does not support all features necessary for enterprise
+deployments. Mod_php is recommended instead of PHP_FPM, because in scale-out
+deployments separate PHP pools are simply not necessary.</p>
+</div>
+<div class="section" id="relational-database">
+<h3>Relational Database<a class="headerlink" href="#relational-database" title="Permalink to this headline">¶</a></h3>
+<p>More often than not the customer already has an opinion on what database to
+use. In general, the recommendation is to use what their database administrator
+is most familiar with. Taking into account what we are seeing at customer
+deployments, we recommend MySQL/MariaDB in a master-slave deployment with a
+MySQL proxy in front of them to send updates to master, and selects to the
+slave(s).</p>
+<p>The second best option is PostgreSQL (alter table does not lock table, which
+makes migration less painful) although we have yet to find a customer who uses a
+master-slave setup.</p>
+<p>What about the other DBMS?</p>
+<ul class="simple">
+<li>Sqlite is adequate for simple testing, and for low-load single-user
+deployments. It is not adequate for production systems.</li>
+<li>Microsoft SQL Server is not a supported option.</li>
+<li>Oracle DB is the de facto standard at large enterprises and is fully
+supported with ownCloud Enterprise Edition only.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="file-storage">
+<h2>File Storage<a class="headerlink" href="#file-storage" title="Permalink to this headline">¶</a></h2>
+<p>While many customers are starting with NFS, sooner or later that requires scale-out storage. Currently the options are GPFS or GlusterFS, or an object store protocol like S3 (supported in Enterprise Edition only) or Swift. S3 also allows access to Ceph Storage.</p>
+</div>
+<div class="section" id="session-storage">
+<h2>Session Storage<a class="headerlink" href="#session-storage" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Redis: provides persistence, nice graphical inspection tools available,
+supports ownCloud high-level file locking.</li>
+<li>If Shibboleth is a requirement you must use Memcached, and it can also be
+used to scale-out shibd session storage (see <a class="reference external" href="https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPStorageService#NativeSPStorageService-MemcacheStorageService">Memcache StorageService</a>).</li>
+</ul>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="deployment_recommendations.html" title="Previous Chapter: Deployment Recommendations"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Deployment Re...</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="linux_installation.html" title="Next Chapter: Preferred Installation Method"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Preferred Ins... &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

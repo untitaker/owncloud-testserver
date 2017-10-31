@@ -6,9 +6,10 @@ OC.L10N.register(
     "Password" : "Passwort",
     "Save" : "Speichern",
     "Port" : "Port",
-    "Host" : "Host",
     "Location" : "Ort",
+    "Host" : "Host",
     "Share" : "Freigeben",
+    "Name" : "Name",
     "Folder name" : "Ordner Name",
     "Delete" : "Löschen"
 },

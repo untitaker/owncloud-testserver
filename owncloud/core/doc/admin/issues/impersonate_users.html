@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Impersonating Users &mdash; ownCloud 10.0 Server Administration Manual 10.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/main.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '10.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.1.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="ownCloud 10.0 Server Administration Manual 10.0 documentation" href="../contents.html" />
+    <link rel="up" title="Issues and Troubleshooting" href="index.html" />
+    <link rel="next" title="Enterprise Features" href="../enterprise/index.html" />
+    <link rel="prev" title="Code Signing" href="code_signing.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d2d44">
+
+  </head>
+  <body role="document">
+
+
+<div class="wrap container not-front">
+  <div class="content row">
+  <main class="main">
+    <div class="row page-content-header">
+      <div class="col-md-5 col-md-offset-7">
+      
+        <form class="headersearch" style="margin-bottom:-3px;" action="../search.html" method="get">
+        <input type="text" value="" name="q" id="q" class="form-control" /> 
+        <button  class="btn btn-default" type="submit" id="searchsubmit">Search</button>
+        </form>
+      
+      </div>
+    </div>
+    
+			<div class="row">
+				<div class="col-md-3">
+					<div class="sidebar">
+							<div class="menu-support-container">
+								<ul id="menu-support" class="menu">
+									<ul>
+										
+<li><a href="../contents.html">Table of Contents</a></li>
+									</ul>
+                  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new_admin.html">What&#8217;s New in ownCloud 10.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/index.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upgrading/index.html">Upgrading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration/index.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance/index.html">Maintenance</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Issues and Troubleshooting</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="general_troubleshooting.html">General Troubleshooting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code_signing.html">Code Signing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Impersonating Users</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#installing-the-application">Installing the Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#impersonating-a-user">Impersonating a User</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ending-an-impersonation">Ending an Impersonation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#restrict-impersonation-to-groups-group-administrators">Restrict Impersonation to Groups &amp; Group administrators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../enterprise/index.html">Enterprise Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../appliance/index.html">The ownCloud X Appliance</a></li>
+</ul>
+
+								</ul>
+							</div>
+					</div>
+				</div>
+        
+
+				<div class="col-md-9">
+					<div class="page-content">
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="code_signing.html" title="Previous Chapter: Code Signing"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Code Signing</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../enterprise/index.html" title="Next Chapter: Enterprise Features"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Enterprise Fe... &raquo;</span>
+    </a>
+  </li>
+</ul>
+						
+  <div class="section" id="impersonating-users">
+<h1>Impersonating Users<a class="headerlink" href="#impersonating-users" title="Permalink to this headline">¶</a></h1>
+<p>Sometimes you may need to use your ownCloud installation as another user, whether to help users debug an issue or to get a better understanding of what they see when they use their ownCloud account.
+The ability to do so is a feature delivered via an ownCloud app called <a class="reference external" href="https://marketplace.owncloud.com/apps/impersonate">Impersonate</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This functionality is available only to administrators.</p>
+</div>
+<div class="section" id="installing-the-application">
+<h2>Installing the Application<a class="headerlink" href="#installing-the-application" title="Permalink to this headline">¶</a></h2>
+<p>To install it, from the Market in your ownCloud installation, filter down the list of available apps to the <strong>Tools</strong> category, and in the filtered list click on the <strong>Impersonate</strong> app.</p>
+<img alt="The ownCloud Marketplace Impersonate app." src="../_images/impersonate-uninstalled.png" />
+<p>In the bottom right-hand corner of the Impersonate app’s details click the blue <code class="docutils literal"><span class="pre">Install</span></code> button, and the app will install in your ownCloud installation shortly afterward</p>
+<img alt="The ownCloud Marketplace Impersonate app is installed." src="../_images/impersonate-installed.png" />
+</div>
+<div class="section" id="impersonating-a-user">
+<h2>Impersonating a User<a class="headerlink" href="#impersonating-a-user" title="Permalink to this headline">¶</a></h2>
+<p>When installed, you can then impersonate users; in effect, you will be logged in as said user.
+To do so, go to the Users list, where you will now see a new column available called &#8220;<strong>Impersonate</strong>&#8221;, as in the screenshot below.</p>
+<img alt="Picking a user to Impersonate." src="../_images/picking-a-user-to-impersonate.png" />
+<p>Click the gray head icon next to the user that you want to impersonate.
+Doing so will log you in as that user, temporarily pausing your current session.
+You will see a notification at the top of the page that confirms you’re now logged in as (or impersonating) that user.</p>
+<img alt="Impersonating a user." src="../_images/impersonating-a-user.png" />
+<p>Anything that you see until you log out will be what that user would see.</p>
+</div>
+<div class="section" id="ending-an-impersonation">
+<h2>Ending an Impersonation<a class="headerlink" href="#ending-an-impersonation" title="Permalink to this headline">¶</a></h2>
+<p>When you&#8217;re ready to stop impersonating the user, log out and you will return to your normal user session.</p>
+</div>
+<div class="section" id="restrict-impersonation-to-groups-group-administrators">
+<h2>Restrict Impersonation to Groups &amp; Group administrators<a class="headerlink" href="#restrict-impersonation-to-groups-group-administrators" title="Permalink to this headline">¶</a></h2>
+<p>As a security measure, the application lets ownCloud administrators restrict the ability to impersonate users to administrators of specific groups.
+When enabled and configured, only a group&#8217;s administrator can impersonate members of their group.</p>
+<p>For example, if an ownCloud administrator restricts user impersonation only to the group: &#8216;group1&#8217;, then <strong>only</strong> &#8216;group1&#8217;’s administrators can impersonate users belonging to &#8216;group1&#8217;.
+No other users can impersonate other users.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">ownCloud administrators can always impersonate all users of an ownCloud instance when the application is installed.</p>
+</div>
+<p>To enable this option, in the administrator settings panel (<code class="docutils literal"><span class="pre">administrator</span> <span class="pre">-&gt;</span> <span class="pre">Settings</span> <span class="pre">-&gt;</span> <span class="pre">Admin</span></code>) in the &#8220;<strong>Additional</strong>&#8221; section, you&#8217;ll see a section titled: &#8220;<strong>Impersonate Settings</strong>&#8221;; which you can see below.</p>
+<img alt="Impersonate App settings" src="../_images/impersonate-settings.png" />
+<p>Check the checkbox under that, and a textbox will appear.
+If you click in the textbox, you will see a list of available groups on your ownCloud installation.
+As you type, the list will filter down to only ones that match the text entered, as you can see below.</p>
+<img alt="Restricting the ability to impersonate users to specific groups" src="../_images/impersonate-add-groups.png" />
+<p>Choose one or more groups from the list, and they will be added to the textbox.</p>
+</div>
+</div>
+
+
+            
+<ul class="prevnext-title list-unstyled list-inline">
+  <li class="prev">
+    <a href="code_signing.html" title="Previous Chapter: Code Signing"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm">&laquo; Code Signing</span>
+    </a>
+  </li>
+  <li class="next">
+    <a href="../enterprise/index.html" title="Next Chapter: Enterprise Features"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm">Enterprise Fe... &raquo;</span>
+    </a>
+  </li>
+</ul>
+					</div>
+				</div>
+			</div>
+  </main>  
+  </div>
+</div>
+  </body>
+</html>

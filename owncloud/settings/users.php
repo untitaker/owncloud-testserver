@@ -1,15 +1,15 @@
 <?php
 /**
- * @author Arthur Schiwon <blizzz@owncloud.com>
+ * @author Arthur Schiwon <blizzz@arthur-schiwon.de>
  * @author Bart Visscher <bartv@thisnet.nl>
- * @author Björn Schießle <schiessle@owncloud.com>
+ * @author Björn Schießle <bjoern@schiessle.org>
  * @author Clark Tomlinson <fallen013@gmail.com>
  * @author Daniel Molkentin <daniel@molkentin.de>
  * @author Georg Ehrke <georg@owncloud.com>
  * @author Jakob Sack <mail@jakobsack.de>
- * @author Joas Schilling <nickvergessen@owncloud.com>
+ * @author Joas Schilling <coding@schilljs.com>
  * @author Jörn Friedrich Dreyer <jfd@butonic.de>
- * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Lukas Reschke <lukas@statuscode.ch>
  * @author Morris Jobke <hey@morrisjobke.de>
  * @author Robin Appelman <icewind@owncloud.com>
  * @author Robin McCorkell <robin@mccorkell.me.uk>
@@ -17,7 +17,7 @@
  * @author Stephan Peijnik <speijnik@anexia-it.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -39,15 +39,15 @@ OC_Util::checkSubAdminUser();
 \OC::$server->getNavigationManager()->setActiveEntry('core_users');
 
 $userManager = \OC::$server->getUserManager();
-$groupManager = \OC_Group::getManager();
+$groupManager = \OC::$server->getGroupManager();
 
 // Set the sort option: SORT_USERCOUNT or SORT_GROUPNAME
 $sortGroupsBy = \OC\Group\MetaData::SORT_USERCOUNT;
 
 if (\OC_App::isEnabled('user_ldap')) {
 	$isLDAPUsed =
-		   $groupManager->isBackendUsed('\OCA\user_ldap\GROUP_LDAP')
-		|| $groupManager->isBackendUsed('\OCA\user_ldap\Group_Proxy');
+		   $groupManager->isBackendUsed('\OCA\User_LDAP\Group_LDAP')
+		|| $groupManager->isBackendUsed('\OCA\User_LDAP\Group_Proxy');
 	if ($isLDAPUsed) {
 		// LDAP user count can be slow, so we sort by group name here
 		$sortGroupsBy = \OC\Group\MetaData::SORT_GROUPNAME;
@@ -82,8 +82,8 @@ if($isAdmin) {
 	}
 	$subAdmins = $result;
 }else{
-	/* Retrieve group IDs from $groups array, so we can pass that information into OC_Group::displayNamesInGroups() */
-	$gids = array();
+	/* Retrieve group IDs from $groups array, so we can pass that information into \OC::$server->getGroupManager()->displayNamesInGroups() */
+	$gids = [];
 	foreach($groups as $group) {
 		if (isset($group['id'])) {
 			$gids[] = $group['id'];
@@ -98,11 +98,11 @@ $quotaPreset=explode(',', $quotaPreset);
 foreach($quotaPreset as &$preset) {
 	$preset=trim($preset);
 }
-$quotaPreset=array_diff($quotaPreset, array('default', 'none'));
+$quotaPreset=array_diff($quotaPreset, ['default', 'none']);
 
 $defaultQuota=$config->getAppValue('files', 'default_quota', 'none');
 $defaultQuotaIsUserDefined=array_search($defaultQuota, $quotaPreset)===false
-	&& array_search($defaultQuota, array('none', 'default'))===false;
+	&& array_search($defaultQuota, ['none', 'default'])===false;
 
 \OC::$server->getEventDispatcher()->dispatch('OC\Settings\Users::loadAdditionalScripts');
 
@@ -119,6 +119,7 @@ $tmpl->assign('defaultQuotaIsUserDefined', $defaultQuotaIsUserDefined);
 $tmpl->assign('recoveryAdminEnabled', $recoveryAdminEnabled);
 $tmpl->assign('enableAvatars', \OC::$server->getConfig()->getSystemValue('enable_avatars', true) === true);
 
+$tmpl->assign('show_is_enabled', $config->getAppValue('core', 'umgmt_show_is_enabled', 'false'));
 $tmpl->assign('show_storage_location', $config->getAppValue('core', 'umgmt_show_storage_location', 'false'));
 $tmpl->assign('show_last_login', $config->getAppValue('core', 'umgmt_show_last_login', 'false'));
 $tmpl->assign('show_email', $config->getAppValue('core', 'umgmt_show_email', 'false'));

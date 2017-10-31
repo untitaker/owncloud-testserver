@@ -1,13 +1,15 @@
 <?php
 /**
- * @author Joas Schilling <nickvergessen@owncloud.com>
- * @author Lukas Reschke <lukas@owncloud.com>
+ * @author Björn Schießle <bjoern@schiessle.org>
+ * @author Joas Schilling <coding@schilljs.com>
+ * @author Lukas Reschke <lukas@statuscode.ch>
  * @author Morris Jobke <hey@morrisjobke.de>
  * @author Robin Appelman <icewind@owncloud.com>
+ * @author Roeland Jago Douma <rullzer@owncloud.com>
  * @author Thomas Müller <thomas.mueller@tmit.eu>
  * @author Vincent Petry <pvince81@owncloud.com>
  *
- * @copyright Copyright (c) 2016, ownCloud, Inc.
+ * @copyright Copyright (c) 2017, ownCloud GmbH
  * @license AGPL-3.0
  *
  * This code is free software: you can redistribute it and/or modify
@@ -30,9 +32,14 @@ $RUNTIME_APPTYPES = ['filesystem', 'authentication', 'logging'];
 OC_App::loadApps($RUNTIME_APPTYPES);
 
 OC_Util::obEnd();
+\OC::$server->getSession()->close();
 
 // Backends
-$authBackend = new OCA\DAV\Connector\PublicAuth(\OC::$server->getConfig());
+$authBackend = new OCA\DAV\Connector\PublicAuth(
+	\OC::$server->getRequest(),
+	\OC::$server->getShareManager(),
+	\OC::$server->getSession()
+);
 
 $serverFactory = new OCA\DAV\Connector\Sabre\ServerFactory(
 	\OC::$server->getConfig(),
@@ -50,32 +57,38 @@ $linkCheckPlugin = new \OCA\DAV\Files\Sharing\PublicLinkCheckPlugin();
 
 $server = $serverFactory->createServer($baseuri, $requestUri, $authBackend, function (\Sabre\DAV\Server $server) use ($authBackend, $linkCheckPlugin) {
 	$isAjax = (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest');
-	if (OCA\Files_Sharing\Helper::isOutgoingServer2serverShareEnabled() === false && !$isAjax) {
+	$federatedSharingApp = new \OCA\FederatedFileSharing\AppInfo\Application('federatedfilesharing');
+	$federatedShareProvider = $federatedSharingApp->getFederatedShareProvider();
+	if ($federatedShareProvider->isOutgoingServer2serverShareEnabled() === false && !$isAjax) {
 		// this is what is thrown when trying to access a non-existing share
 		throw new \Sabre\DAV\Exception\NotAuthenticated();
 	}
 
 	$share = $authBackend->getShare();
-	$rootShare = \OCP\Share::resolveReShare($share);
-	$owner = $rootShare['uid_owner'];
-	$isWritable = $share['permissions'] & (\OCP\Constants::PERMISSION_UPDATE | \OCP\Constants::PERMISSION_CREATE);
-	$fileId = $share['file_source'];
+	$owner = $share->getShareOwner();
+	$fileId = $share->getNodeId();
 
-	if (!$isWritable) {
-		\OC\Files\Filesystem::addStorageWrapper('readonly', function ($mountPoint, $storage) {
-			return new \OC\Files\Storage\Wrapper\PermissionsMask(array('storage' => $storage, 'mask' => \OCP\Constants::PERMISSION_READ + \OCP\Constants::PERMISSION_SHARE));
-		});
-	}
+	// FIXME: should not add storage wrappers outside of preSetup, need to find a better way
+	$previousLog = \OC\Files\Filesystem::logWarningWhenAddingStorageWrapper(false);
+	\OC\Files\Filesystem::addStorageWrapper('sharePermissions', function ($mountPoint, $storage) use ($share) {
+		return new \OC\Files\Storage\Wrapper\PermissionsMask(['storage' => $storage, 'mask' => $share->getPermissions() | \OCP\Constants::PERMISSION_SHARE]);
+	});
+	\OC\Files\Filesystem::logWarningWhenAddingStorageWrapper($previousLog);
 
 	OC_Util::setupFS($owner);
 	$ownerView = \OC\Files\Filesystem::getView();
-	$path = $ownerView->getPath($fileId);
+	try {
+		$path = $ownerView->getPath($fileId);
+	} catch (\OCP\Files\NotFoundException $e) {
+		throw new \Sabre\DAV\Exception\NotFound();
+	}
 	$fileInfo = $ownerView->getFileInfo($path);
 	$linkCheckPlugin->setFileInfo($fileInfo);
 
 	return new \OC\Files\View($ownerView->getAbsolutePath($path));
 });
 
+$server->addPlugin(new \OCA\DAV\Connector\Sabre\AutorenamePlugin());
 $server->addPlugin($linkCheckPlugin);
 
 // And off we go!

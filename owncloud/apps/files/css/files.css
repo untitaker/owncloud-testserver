@@ -2,6 +2,11 @@
  This file is licensed under the Affero General Public License version 3 or later.
  See the COPYING-README file. */
 
+/* SETTINGS */
+#files-setting-showhidden {
+	padding-bottom: 8px;
+}
+
 /* FILE MENU */
 .actions { padding:5px; height:32px; display: inline-block; float: left; }
 .actions input, .actions button, .actions .button { margin:0; float:left; }
@@ -113,7 +118,6 @@
 }
 #filestable tbody tr:hover,
 #filestable tbody tr:focus,
-#filestable tbody .name:focus,
 #filestable tbody tr:active,
 #filestable tbody tr.highlighted,
 #filestable tbody tr.highlighted .name:focus,
@@ -322,6 +326,21 @@ table td.filename .nametext {
 .has-favorites #fileList td.filename a.name {
 	left: 50px;
 	margin-right: 50px;
+}
+
+.hide-hidden-files #fileList tr.hidden-file,
+.hide-hidden-files #fileList tr.hidden-file.dragging {
+	display: none;
+}
+
+#fileList tr.animate-opacity {
+	-webkit-transition:opacity 250ms;
+	-moz-transition:opacity 250ms;
+	-o-transition:opacity 250ms;
+	transition:opacity 250ms;
+}
+#fileList tr.dragging {
+	opacity: 0.2;
 }
 
 table td.filename .nametext .innernametext {
@@ -822,4 +841,34 @@ html.ie8 #controls .button.new {
 
 .app-files .actions .button.new .icon {
 	margin-bottom: 2px;
+}
+
+.canDrop,
+#filestable tbody tr.canDrop {
+  background-color: rgba(255, 255, 140, 1);
+}
+
+/* Default files-list incl. sharing */
+
+#app-content-files table td.filename .nametext,
+#app-content-sharingin table td.filename .nametext,
+#app-content-sharingout table td.filename .nametext {
+	position: static;
+	left: inherit;
+}
+
+#app-content-files.has-favorites #fileList td.filename a.name,
+#app-content-sharingin.has-favorites #fileList td.filename a.name,
+#app-content-sharingout.has-favorites #fileList td.filename a.name {
+	display: flex;
+	justify-content: space-between;
+	left: 50px;
+	margin-right: 50px;
+}
+
+#app-content-files .fileactions,
+#app-content-sharingin .fileactions,
+#app-content-sharingout .fileactions {
+	position: inherit;
+	right: inherit;
 }
